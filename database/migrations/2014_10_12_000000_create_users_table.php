@@ -23,8 +23,8 @@ class CreateUsersTable extends Migration
             $table->integer('role_id')->foreign('role_id')->references('role_id')->on('roles')->index();
             $table->integer('company_id')->foreign('company_id')->references('company_id')->on('company')->onDelete('cascade')->index();
             $table->integer('security_question_id');
-            $table->text('auth_token')->nullable();
-            $table->integer('auth_type')->nullable()->comment('1-Google,2-Linkedin');
+            $table->string('google_id','255')->nullable();
+            $table->string('linked_id','255')->nullable();
             $table->boolean('is_suspended')->default(0);
             $table->rememberToken();
             $table->timestamps();

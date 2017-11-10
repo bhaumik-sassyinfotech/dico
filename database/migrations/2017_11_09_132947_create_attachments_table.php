@@ -16,7 +16,7 @@ class CreateAttachmentsTable extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->increments('attachment_id')->unsigned();
             $table->integer('type')->comment('1-Post,2-Answer/Comment');
-            $table->integer('type_id');
+            $table->integer('type_id')->index();
             $table->integer('user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();
             $table->string('file_name','255');
             $table->timestamps();

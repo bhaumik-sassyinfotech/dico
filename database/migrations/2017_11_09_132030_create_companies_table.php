@@ -19,7 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('allow_anonymous')->default(0);	
             $table->boolean('allow_add_admin')->default(0);
-            $table->integer('created_user_id');	
+            $table->integer('company_admin');	
             $table->timestamps();
             $table->softDeletes();
         });

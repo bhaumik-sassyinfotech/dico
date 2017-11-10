@@ -15,8 +15,8 @@ class CreateFollowUsersTable extends Migration
     {
         Schema::create('follow_users', function (Blueprint $table) {
             $table->increments('follow_user_id')->unsigned();
-            $table->integer('sender_user_id');
-            $table->integer('receiver_user_id');
+            $table->integer('sender_user_id')->index();
+            $table->integer('receiver_user_id')->index();
             $table->tinyInteger('status')->comment('1=accept , 2=decline , 3=pending');
             $table->timestamps();
             $table->softDeletes();

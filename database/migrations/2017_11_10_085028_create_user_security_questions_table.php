@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommentFlagsTable extends Migration
+class CreateUserSecurityQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateCommentFlagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comment_flags', function (Blueprint $table) {
-            $table->increments('flag_id')->unsigned();
-            $table->integer('comment_id')->foreign('comment_id')->references('comment_id')->on('comments')->onDelete('cascade')->index();
+        Schema::create('user_security_questions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('question_id')->foreign('security_question_id')->references('security_question_id')->on('security_question')->index();
+            $table->string('answer');
             $table->integer('user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();
-            $table->integer('flag_by')->index();
-            $table->string('reason','255');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateCommentFlagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comment_flags');
+        Schema::dropIfExists('user_security_questions');
     }
 }

@@ -13,9 +13,8 @@ class CreateUserTagPostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_tag_posts', function (Blueprint $table) {
+        Schema::create('post_tag_users', function (Blueprint $table) {
             $table->increments('user_tag_post_id')->unsigned();
-            $table->integer('tagged_by');
             $table->integer('post_id')->foreign('post_id')->references('post_id')->on('posts')->onDelete('cascade')->index();
             $table->integer('tagged_user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();;
             $table->integer('position')->nullable();

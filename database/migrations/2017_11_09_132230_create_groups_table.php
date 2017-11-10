@@ -17,8 +17,8 @@ class CreateGroupsTable extends Migration
             $table->increments('groups_id');
             $table->string('group_name','255');
             $table->text('description')->nullable();
-            $table->integer('created_user_id');
-            $table->integer('updated_user_id');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
