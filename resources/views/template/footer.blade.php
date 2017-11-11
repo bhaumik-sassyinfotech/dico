@@ -30,5 +30,6 @@
 <script type='text/javascript' src="{{asset('assets/js/jquery.validate.min.js')}}"></script> 
 <link href="https://datatables.yajrabox.com/css/datatables.bootstrap.css" rel="stylesheet">
 <script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
-<script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>    
+<script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
+<script type='text/javascript' src="{{asset('js/sweetalert.min.js')}}"></script> 
 <script type='text/javascript' src="{{asset('js/custom/custom.js')}}"></script> 

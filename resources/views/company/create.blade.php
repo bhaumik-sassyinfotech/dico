@@ -47,7 +47,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Company Name</label>
+                                <label>Company Name<span>*</span></label>
                                 <input type="text" name="company_name" id="company_name" placeholder="Company Name" class="form-control required">
                             </div>
                         </div>

@@ -15,13 +15,13 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li class='active'><a href="index.htm">Company</a></li>
+                <li class='active'><a href="index.htm">Security Question</a></li>
             </ol>
-            <h1>Company</h1>
+            <h1>Security Question</h1>
             <div class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
-                        <a href="{{ route('company.create') }}" class="btn btn-primary">Add New</a>
+                        <a href="{{ route('security_question.create') }}" class="btn btn-primary">Add New</a>
                     </div>
                 </div>
             </div>
@@ -30,21 +30,11 @@
         <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <form method="POST" id="search-form" class="form-inline" role="form">
-                            <div class="form-group">
-                                <label for="name">Company Name</label>
-                                <input type="text" class="form-control" name="company_name" id="company_name" placeholder="company name">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </form>
-                        <table class="table table-bordered table-striped" id="company_table">
+                        <table class="table table-bordered table-striped" id="security_question_table">
                             <thead>
                                 <tr>
                                     <th>#ID</th>
-                                    <th>Company Name</th>
-                                    <th>Company Descripton</th>
-                                    <th>Allow Anonymous</th>
-                                    <th>Allow Add Admin</th>
+                                    <th>Security Question</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

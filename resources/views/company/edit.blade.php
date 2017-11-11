@@ -28,13 +28,13 @@
             </ol>
             <h1>Company</h1>
             <div>
-                <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('company.index') }}">Company</a> > Create Company</p></div>
+                <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('company.index') }}">Company</a> > Update Company</p></div>
             </div>
         </div>
         <div class="container">
             <div class="panel panel-default">
                 <!-- <form name="company_form" id="company_form" method="post" action="{{route('company.update',$company->company_id)}}">-->
-                {!! Form::model($company, ['method' => 'PUT', 'route' => ['company.update', $company->id],'enctype'=>'multipart/form-data']) !!}
+                {!! Form::model($company, ['method' => 'PUT', 'route' => ['company.update', $company->id],'enctype'=>'multipart/form-data', 'id' => 'company_form']) !!}
                     <div class="new_button">
                         <div class="pull-right extra_button">
                             <input type="submit" name="save" id="save" class="btn btn-primary">

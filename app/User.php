@@ -1,8 +1,6 @@
 <?php
 
 namespace App;
-
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +9,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use softDeletes;
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'name', 'email', 'password',

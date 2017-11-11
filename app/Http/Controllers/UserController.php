@@ -87,4 +87,13 @@ class UserController extends Controller
     {
         //
     }
+    
+    public function userListing(Request $request)
+    {
+//        dd("ab");
+        $users = User::select(['users.*']);
+//        return $users->get();
+        
+        return Datatables::of($users)->make(TRUE);
+    }
 }

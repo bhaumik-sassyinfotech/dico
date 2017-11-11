@@ -30,14 +30,11 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: {
-                    method: 'GET',
-                    url: '{{ route('user.show', ['id'=>'1']) }}',
-                },
+                ajax: '{{ route('user.list') }}',
                 columns: [
-                    {data: 0, name: 'user_id'},
-                    {data: 1, name: 'name'},
-                    {data: 2, name: 'email'},
+                    {name: 'id'},
+                    {name: 'name'},
+                    {name: 'email'},
                 ]
             });
         });

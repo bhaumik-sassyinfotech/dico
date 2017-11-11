@@ -10,6 +10,8 @@
                 </li>
                 <li class="divider"></li>
                 <li><a href="{{ route('company.index') }}"><i class="fa fa-home"></i> <span>Company</span></a></li>
+                <li><a href="{{ route('security_question.index') }}"><i class="fa fa-home"></i> <span>Security Question</span></a></li>
+                <li><a href="{{ route('employee.index') }}"><i class="fa fa-home"></i> <span>Employee</span></a></li>
             </ul>
             <!-- END SIDEBAR MENU -->
         </nav>
