@@ -15,9 +15,9 @@ class CreateUserSecurityQuestionsTable extends Migration
     {
         Schema::create('user_security_questions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('question_id')->foreign('security_question_id')->references('security_question_id')->on('security_question')->index();
+            $table->integer('question_id')->foreign('security_question_id')->references('id')->on('security_question')->index();
             $table->string('answer');
-            $table->integer('user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();
+            $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->timestamps();
         });
     }

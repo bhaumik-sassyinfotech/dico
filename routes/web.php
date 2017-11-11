@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/index');
 });
+
+$this->get('index', 'HomeController@index');
+Route::resource('company', 'CompanyController');
+$this->get('get_company', 'CompanyController@get_company');

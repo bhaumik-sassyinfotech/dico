@@ -14,9 +14,9 @@ class CreateCommentFlagsTable extends Migration
     public function up()
     {
         Schema::create('comment_flags', function (Blueprint $table) {
-            $table->increments('flag_id')->unsigned();
-            $table->integer('comment_id')->foreign('comment_id')->references('comment_id')->on('comments')->onDelete('cascade')->index();
-            $table->integer('user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();
+            $table->increments('id')->unsigned();
+            $table->integer('comment_id')->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade')->index();
+            $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->integer('flag_by')->index();
             $table->string('reason','255');
             $table->timestamps();

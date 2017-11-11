@@ -14,7 +14,7 @@ class CreateCompaniesTable extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->increments('company_id')->unsigned();
+            $table->increments('id')->unsigned();
             $table->string('company_name','255')->unique();
             $table->text('description')->nullable();
             $table->boolean('allow_anonymous')->default(0);	

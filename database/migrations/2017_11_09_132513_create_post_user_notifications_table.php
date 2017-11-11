@@ -14,7 +14,7 @@ class CreatePostUserNotificationsTable extends Migration
     public function up()
     {
         Schema::create('post_user_notifications', function (Blueprint $table) {
-            $table->increments('post_users_id');
+            $table->increments('id');
             $table->integer('post_id');
             $table->integer('user_id');
             $table->boolean('allow_notification')->default(1);

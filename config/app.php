@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost/dico/'),
 
     /*
     |--------------------------------------------------------------------------
@@ -178,7 +178,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
     /*

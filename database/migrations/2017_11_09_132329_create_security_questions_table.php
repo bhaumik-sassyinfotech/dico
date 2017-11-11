@@ -14,7 +14,7 @@ class CreateSecurityQuestionsTable extends Migration
     public function up()
     {
         Schema::create('security_questions', function (Blueprint $table) {
-            $table->increments('security_question_id');
+            $table->increments('id');
             $table->string('question','255');
             $table->timestamps();
             $table->softDeletes();

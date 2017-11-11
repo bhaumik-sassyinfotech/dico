@@ -14,12 +14,12 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->increments('post_id');
-            $table->integer('group_id')->foreign('group_id')->references('group_id')->on('groups')->onDelete('cascade')->index();
+            $table->increments('id');
+            $table->integer('group_id')->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->index();
             $table->string('post_title','255');
             $table->text('post_description')->nullable();
             $table->enum('post_type',['idea,question,challenge']);
-            $table->integer('user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();
+            $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->boolean('is_anonymous')->default(0);	
             $table->boolean('status')->default(1);
             $table->enum('idea_status',['approve,deny,amend'])->nullable();

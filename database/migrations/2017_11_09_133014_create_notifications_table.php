@@ -14,8 +14,8 @@ class CreateNotificationsTable extends Migration
     public function up()
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->increments('notification_id')->unsigned();
-            $table->integer('user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();
+            $table->increments('id')->unsigned();
+            $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->text('notification_description');
             $table->boolean('is_read')->default(0)->comment('0 = unseen , 1 = seen');
             $table->integer('send_to');

@@ -14,7 +14,7 @@ class CreateMeetingsTable extends Migration
     public function up()
     {
         Schema::create('meetings', function (Blueprint $table) {
-            $table->increments('meeting_id')->unsigned();
+            $table->increments('id')->unsigned();
             $table->string('meeting_title','255');
             $table->tinyInteger('meeting_privacy')->comment('public , private');
             $table->string('meeting_attende','255')->nullable();

@@ -14,9 +14,9 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
-             $table->increments('comment_id')->unsigned();
-            $table->integer('user_id')->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->index();
-            $table->integer('post_id')->foreign('post_id')->references('post_id')->on('posts')->onDelete('cascade')->index();
+             $table->increments('id')->unsigned();
+            $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
+            $table->integer('post_id')->foreign('post_id')->references('id')->on('posts')->onDelete('cascade')->index();
             $table->string('comment_text','255');
             $table->boolean('is_anonymous')->default(0);
             $table->boolean('is_correct')->default(0);
