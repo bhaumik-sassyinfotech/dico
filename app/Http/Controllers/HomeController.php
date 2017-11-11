@@ -15,7 +15,7 @@ class HomeController extends Controller
     //protected $table = 'room';
     public function __construct(Request $request)
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
