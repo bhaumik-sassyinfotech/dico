@@ -158,9 +158,19 @@ class UserController extends Controller
     public function userListing(Request $request)
     {
         //$users = User::whereNull('deleted_at')->where('id', '!=' , Auth::user()->id)->get();
+        $auth = Auth::user();
+        $roleId = $auth->role_id;
         $users = new User;
-        $res = $users->select('*',DB::raw('CASE WHEN is_active = "1" THEN "Yes" ELSE "No" END AS active,CASE WHEN is_suspended = "1" THEN "Yes" ELSE "No" END AS suspended,CASE WHEN role_id = "2" THEN "Admin" WHEN role_id = "3" THEN "Employee" END AS role'))
-                ->whereIn('role_id',[2,3])->where('id', '!=' , Auth::user()->id)->whereNULL('deleted_at');
+        $query = $users->select('*',DB::raw('CASE WHEN is_active = "1" THEN "Yes" ELSE "No" END AS active,CASE WHEN is_suspended = "1" THEN "Yes" ELSE "No" END AS suspended,CASE WHEN role_id = "2" THEN "Admin" WHEN role_id = "3" THEN "Employee" END AS role'));
+        if($roleId == 1)
+        {
+            $query = $query->whereIn('role_id',[2,3]);
+        } else if($roleId == 2)
+        {
+            $query = $query->whereIn('role_id',[3])->where('company_id','=',$auth->company_id);
+        }
+        $res = $query->where('id', '!=' , Auth::user()->id)->whereNULL('deleted_at');
+        
         return Datatables::of($res)->filter(function ($query) use ($request) {
                 if ($request->has('user_name')) {
                     $query->where('name', 'like', "%{$request->get('user_name')}%");

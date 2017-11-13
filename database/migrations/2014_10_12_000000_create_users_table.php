@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_active')->default(1);
             $table->integer('role_id')->foreign('role_id')->references('id')->on('roles')->index();
             $table->integer('company_id')->foreign('company_id')->references('id')->on('company')->onDelete('cascade')->index();
-            $table->integer('security_question_id');
+            $table->tinyInteger('first_login')->default(0)->comment('0 = security question not set , 1 = security question set');
             $table->string('google_id','255')->nullable();
             $table->string('linked_id','255')->nullable();
             $table->boolean('is_suspended')->default(0);

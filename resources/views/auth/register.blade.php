@@ -60,24 +60,6 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
-                        
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Role<span>*</span></label>
-                                <select id="role_id" name="role_id" class="form-control">
-                                    <option value="">------ Select ------</option>
-                                <?php
-                                    if(!empty($roles)) {
-                                        foreach($roles as $role) {
-                                            ?>
-                                    <option value="{{$role->id}}">{{$role->role_name}}</option>
-                                            <?php
-                                        }
-                                    }
-                                ?>
-                                </select>    
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">

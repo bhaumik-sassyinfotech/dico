@@ -21,6 +21,10 @@ class Admin
         {
             return redirect('/');
         }
+        if(Auth::user()->first_login == 0)
+        {
+            return redirect()->route('security.firstLogin');
+        }
         return $next($request);
     }
 }

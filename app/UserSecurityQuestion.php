@@ -9,4 +9,6 @@ class UserSecurityQuestion extends Model
 {
     //
     use softDeletes;
+    protected $dates = ['deleted_at'];
+    protected $fillable = ['question_id','answer','user_id'];
 }

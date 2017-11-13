@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\SecurityQuestion;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use Redirect;
 use Config;
@@ -86,5 +87,7 @@ class SecurityQuestionController extends Controller {
                     return '<a href="'.route('security_question.edit' , [ $row->id ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                 })->rawColumns(['actions'])->make(true);
     }
+    
+    
 }
 ?>

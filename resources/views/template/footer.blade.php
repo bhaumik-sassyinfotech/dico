@@ -32,4 +32,5 @@
 <script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
 <script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
 <script type='text/javascript' src="{{asset('js/sweetalert.min.js')}}"></script> 
-<script type='text/javascript' src="{{asset('js/custom/custom.js')}}"></script> 
+<script type='text/javascript' src="{{asset('js/custom/custom.js')}}"></script>
+<script type='text/javascript' src="{{asset('js/custom/custom_bm.js')}}"></script>
