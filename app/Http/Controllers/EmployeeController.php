@@ -10,6 +10,7 @@ use Validator;
 use Redirect;
 use Config;
 use Carbon;
+use Auth;
 use Yajra\Datatables\Datatables;
 
 
@@ -34,12 +35,14 @@ class EmployeeController extends Controller {
     public function index()
     {
         //dd("here");
+        
+       // dd(Auth::user()->company_id);
         return view('employee.index');
     }
     
     public function create() {
         $roles = Role::whereIn('id',[2,3])->get();
-        $company = Company::where('id',1)->first();
+        $company = Company::where('id',Auth::user()->company_id)->first();
         return view('employee.create',compact('roles','company'));
     }
 
@@ -79,7 +82,7 @@ class EmployeeController extends Controller {
     public function edit($id) {
         $employee = User::where('id',$id)->first();
         $roles = Role::whereIn('id',[2,3])->get();
-        $company = Company::where('id',1)->first();
+        $company = Company::where('id',Auth::user()->company_id)->first();
         return view('employee.edit', compact('employee','roles','company'));
     }
     
@@ -112,7 +115,7 @@ class EmployeeController extends Controller {
     public function get_company_employee(Request $request) {
         $employee = new User;
         $res = $employee->select('*',DB::raw('CASE WHEN is_active = "1" THEN "Yes" ELSE "No" END AS active,CASE WHEN is_suspended = "1" THEN "Yes" ELSE "No" END AS suspended'))
-                ->whereIn('role_id',[2,3])->where('company_id',1)->whereNULL('deleted_at');
+                ->whereIn('role_id',[2,3])->where('id', '!=' , Auth::user()->id)->where('company_id',Auth::user()->company_id)->whereNULL('deleted_at');
         return Datatables::of($res)->filter(function ($query) use ($request) {
                 if ($request->has('employee_name')) {
                     $query->where('name', 'like', "%{$request->get('employee_name')}%");

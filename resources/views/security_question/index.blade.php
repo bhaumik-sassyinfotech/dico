@@ -14,9 +14,6 @@
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
-            <ol class="breadcrumb">
-                <li class='active'><a href="index.htm">Security Question</a></li>
-            </ol>
             <h1>Security Question</h1>
             <div class="options">
                 <div class="btn-toolbar">

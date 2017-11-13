@@ -5,6 +5,7 @@
         <div class="navbar-header pull-left">
             <a class="navbar-brand" href="index.htm">Avant</a>
         </div>
+        
 
         <ul class="nav navbar-nav pull-right toolbar">
         	<li class="dropdown">
@@ -22,7 +23,11 @@
         					<li><a href="#">Account <i class="pull-right fa fa-cog"></i></a></li>
         					<li><a href="#">Help <i class="pull-right fa fa-question-circle"></i></a></li>
         					<li class="divider"></li>
-        					<li><a href="#" class="text-right">Sign Out</a></li>
+        					<li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-right">Sign Out </a>
+                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                        {{ csrf_field() }}
+                                                    </form>
+                                                </li>
         				</ul>
         			</li>
         		</ul>

@@ -10,12 +10,13 @@ Route::resource('employee', 'EmployeeController');
 $this->get('get_company', 'CompanyController@get_company');
 $this->get('get_security_question','SecurityQuestionController@get_security_question');
 $this->get('get_employee', 'EmployeeController@get_company_employee');
+//$this->get('logout', 'Auth\LoginController@logout')->name('auth.logout');
 Auth::routes();
     
-    Route::group([ 'middleware' => 'admin' ] , function () {
-        Route::match(['get','post'],'user/list','UserController@userListing')->name('user.list');
-        Route::resource('user','UserController');
-    });
-    
-    Route::get('/home' , 'HomeController@index')->name('home');        
+Route::group([ 'middleware' => 'admin' ] , function () {
+    Route::match(['get','post'],'user/list','UserController@userListing')->name('user.list');
+    Route::resource('user','UserController');
+});
+
+Route::get('/home' , 'HomeController@index')->name('home');        
     ?>

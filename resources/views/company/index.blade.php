@@ -14,9 +14,6 @@
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
-            <ol class="breadcrumb">
-                <li class='active'><a href="index.htm">Company</a></li>
-            </ol>
             <h1>Company</h1>
             <div class="options">
                 <div class="btn-toolbar">

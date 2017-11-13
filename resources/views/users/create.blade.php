@@ -24,44 +24,54 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li class='active'><a href="{{ route('employee.index') }}">Employee</a></li>
+                <li class='active'><a href="{{ route('user.index') }}">User</a></li>
             </ol>
-            <h1>Employee</h1>
+            <h1>User</h1>
             <div>
-                <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('employee.index') }}">Employee</a> > Create Employee</p></div>
+                <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('user.index') }}">User</a> > Create User</p></div>
             </div>
         </div>
         <div class="container">
             <div class="panel panel-default">
-                <form name="employee_form" id="employee_form" method="post" action="{{route('employee.store')}}">
+                <form name="user_form" id="user_form" method="post" action="{{route('user.store')}}">
                      {{ csrf_field() }}
                     <div class="new_button">
                         <div class="pull-right extra_button">
                             <input type="submit" name="save" id="save" class="btn btn-primary">
                         </div>
                         <div class="pull-right extra_button">
-                                <a href="{{ route('employee.index') }}" class="btn btn-default" >Back</a>
+                                <a href="{{ route('user.index') }}" class="btn btn-default" >Back</a>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
                     <div class="panel-body">
-                        <input type="hidden" name="company_id" id="company_id" value="{{$company->id}}">
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label>Company Name<span>*</span></label>
-                                <input type="text" name="company_name" id="company_name" placeholder="Company Name" readonly="" value="{{$company->company_name}}" class="form-control">
+                                <select id="company_id" name="company_id" class="form-control">
+                                    <option value="">------ Select ------</option>
+                                <?php
+                                    if(!empty($companies)) {
+                                        foreach($companies as $company) {
+                                            ?>
+                                    <option value="{{$company->id}}">{{$company->company_name}}</option>
+                                            <?php
+                                        }
+                                    }
+                                ?>
+                                </select>    
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Employee Name<span>*</span></label>
-                                <input type="text" name="employee_name" id="employee_name" placeholder="Employee Name" class="form-control required">
+                                <label>User Name<span>*</span></label>
+                                <input type="text" name="user_name" id="user_name" placeholder="User Name" class="form-control required">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Employee Email<span>*</span></label>
-                                <input type="text" name="employee_email" id="employee_email" placeholder="Employee Email" class="form-control">
+                                <label>User Email<span>*</span></label>
+                                <input type="text" name="user_email" id="user_email" placeholder="User Email" class="form-control">
                             </div>
                         </div>
                         <div class="row">

@@ -110,3 +110,63 @@ $('#employee-search-form').on('submit', function(e) {
         e.preventDefault();
 });    
 //============================================================//
+//====================== User Module ========================//
+var userTable = $('#users-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "http://localhost/dico/public/user/list",
+            data: function (d) {
+            d.user_name = $('input[name=user_name]').val();
+            d.user_email = $('input[name=user_email]').val();
+            d.role_id = $('#role_id :selected').val();
+        }
+        },
+        columns : [
+                {data : 'id'},
+                {data : 'name'},
+                {data : 'email'},
+                {data : 'role'},
+                {data : 'active'},
+                {data : 'suspended'},
+                {data : 'actions'}
+        ],
+        searching : false              
+    });
+$("#user_form").validate({
+        rules: {
+            user_name: {
+                required: true,
+            },
+            user_email: {
+                required: true,
+                email: true
+            },
+            company_id: {
+                required: true
+            },
+            role_id: {
+                required: true
+            }
+        },
+        messages: {
+            user_name: {
+                required: 'This field is required',
+            },
+            user_email: {
+                required: 'This field is required',
+                email: 'Enter valid email',
+            },
+            company_id: {
+                required: 'This field is required',
+            },
+            role_id: {
+                required: 'This field is required'
+            }
+        }
+    }); 
+    $('#user-search-form').on('submit', function(e) {
+        userTable.draw();
+        e.preventDefault();
+});    
+//============================================================//
