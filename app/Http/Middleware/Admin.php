@@ -21,7 +21,8 @@ class Admin
         {
             return redirect('/');
         }
-        if(Auth::user()->first_login == 0)
+        
+        if(Auth::user()->first_login == 0 && Auth::user()->role_id > 1)
         {
             return redirect()->route('security.firstLogin');
         }
