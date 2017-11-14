@@ -9,4 +9,5 @@ class SecurityQuestion extends Model
 {
     //
     use softDeletes;
+    protected $dates = ['deleted_at'];
 }

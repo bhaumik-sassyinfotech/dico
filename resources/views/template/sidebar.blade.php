@@ -13,6 +13,7 @@
                 <li><a href="{{ route('security_question.index') }}"><i class="fa fa-home"></i> <span>Security Question</span></a></li>
                 <li style="display: none;"><a href="{{ route('employee.index') }}"><i class="fa fa-home"></i> <span>Employee</span></a></li>
                 <li><a href="{{ route('user.index') }}"><i class="fa fa-home"></i> <span>User</span></a></li>
+                <li><a href="{{ route('group.index') }}"><i class="fa fa-users"></i> <span>Group</span></a></li>
             </ul>
             <!-- END SIDEBAR MENU -->
         </nav>

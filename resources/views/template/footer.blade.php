@@ -7,7 +7,7 @@
         </div>
 </footer>
 <script type='text/javascript' src="{{asset('assets/js/jquery-1.10.2.min.js')}}"></script> 
-<script type='text/javascript' src="{{asset('assets/js/jqueryui-1.10.3.min.js')}}"></script> 
+<script type='text/javascript' src="{{asset('assets/js/jqueryui-1.10.3.min.js')}}"></script>
 <script type='text/javascript' src="{{asset('assets/js/bootstrap.min.js')}}"></script> 
 <script type='text/javascript' src="{{asset('assets/js/enquire.js')}}"></script> 
 <script type='text/javascript' src="{{asset('assets/js/jquery.cookie.js')}}"></script> 
@@ -31,6 +31,7 @@
 <link href="https://datatables.yajrabox.com/css/datatables.bootstrap.css" rel="stylesheet">
 <script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
 <script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
-<script type='text/javascript' src="{{asset('js/sweetalert.min.js')}}"></script> 
+<script type='text/javascript' src="{{asset('js/sweetalert.min.js')}}"></script>
+<script src="{{ asset('js/select2.js') }}"></script>
 <script type='text/javascript' src="{{asset('js/custom/custom.js')}}"></script>
 <script type='text/javascript' src="{{asset('js/custom/custom_bm.js')}}"></script>

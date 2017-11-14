@@ -17,6 +17,11 @@
         Route::get('get_employee' , 'EmployeeController@get_company_employee');
         Route::match([ 'get' , 'post' ] , 'user/list' , 'UserController@userListing')->name('user.list');
         Route::resource('user' , 'UserController');
+        
+        /*Group*/
+        Route::match(['get','post'],'group/list','GroupController@groupListing');
+        Route::post('group/companyUsers','GroupController@companyUsers');
+        Route::resource('group' , 'GroupController');
     });
     
     Route::get('/home' , 'HomeController@index')->name('home');

@@ -1,3 +1,4 @@
+
 /*Dropdown while adding security question when user is logging in for the first time*/
 var previous = previous_val = 0;
 $(".sec_question").on('focus', function () {
@@ -26,4 +27,39 @@ $(".sec_question").on('focus', function () {
     });
     // Make sure the previous value is updated
     previous = this.value;
+});
+
+$(document).ready(function () {
+    $('#users_listing').select2();
+});
+$("#createUserGroup").validate();
+/*Ajax Call to fetch user of the company selected*/
+$("#company_listing").change(function() {
+    var that = $(this);
+    var dataString = { _token: CSRF_TOKEN , company_id: that.val() };
+    $.ajax({
+        url: 'companyUsers',
+        data: dataString,
+        method: "POST",
+        success: function (response) {
+            $("#users_listing").empty();
+            var userData = response.data;
+            $.each(userData,function (key , val) {
+                $("#users_listing").append("<option value='"+val.id+"'>"+val.name+"</option>");
+            });
+        }
+    });
+});
+/*group listing >> View -> admin\group\index */
+var groupTable = $('#group_table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: SITE_URL+'/group/list',
+    columns : [
+        {data : 'id'},
+        {data : 'group_name'},
+        {data : 'description'},
+        {data : 'group_users_count.cnt'},
+    ],
+    searching : false
 });

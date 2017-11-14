@@ -27,8 +27,10 @@
 <link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/form-markdown/css/bootstrap-markdown.min.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/codeprettifier/prettify.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/form-toggle/toggles.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('css/sweetalert.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('css/sweetalert.css')}}" />
+<link href="{{asset('css/select2.css')}}" rel="stylesheet" />
 <script type="text/javascript">
     var SITE_URL = '<?php echo url('/'); ?>';
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";
+    var CSRF_TOKEN = "{{ csrf_token() }}";
 </script>    
