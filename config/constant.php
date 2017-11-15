@@ -7,5 +7,6 @@ return [
 'NOT_DELETE'=>'This role already assign to existing users.!',
 'DESIMAL_PRICE'=>'regex:/^\d*(\.\d{1,2})?$/',
 'NAMEWITHDESH'=>'regex:/^[A-Za-z._-]+$/',        
-'NOT_FOUND'=>'not found.',    
+'NOT_FOUND'=>'not found.', 
+'OLD_PASSWORD_NOT_MATCH' => 'old password does not match.',    
 ];

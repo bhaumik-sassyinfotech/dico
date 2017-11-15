@@ -9,17 +9,17 @@
 
         <ul class="nav navbar-nav pull-right toolbar">
         	<li class="dropdown">
-        		<a href="#" class="dropdown-toggle username" data-toggle="dropdown"><span class="hidden-xs">John McCartney <i class="fa fa-caret-down"></i></span><img src="{{asset('assets/demo/avatar/dangerfield.png')}}" alt="Dangerfield" /></a>
+        		<a href="#" class="dropdown-toggle username" data-toggle="dropdown"><span class="hidden-xs">John McCartney <i class="fa fa-caret-down"></i></span><img src="{{asset('public/assets/demo/avatar/dangerfield.png')}}" alt="Dangerfield" /></a>
         		<ul class="dropdown-menu userinfo arrow">
         			<li class="username">
                         <a href="#">
-        				    <div class="pull-left"><img src="{{asset('assets/demo/avatar/dangerfield.png')}}" alt="Jeff Dangerfield"/></div>
+        				    <div class="pull-left"><img src="{{asset('public/assets/demo/avatar/dangerfield.png')}}" alt="Jeff Dangerfield"/></div>
         				    <div class="pull-right"><h5>Howdy, John!</h5><small>Logged in as <span>john275</span></small></div>
                         </a>
         			</li>
         			<li class="userlinks">
         				<ul class="dropdown-menu">
-        					<li><a href="#">Edit Profile <i class="pull-right fa fa-pencil"></i></a></li>
+        					<li><a href="{{url('edit_profile')}}">Edit Profile <i class="pull-right fa fa-pencil"></i></a></li>
         					<li><a href="#">Account <i class="pull-right fa fa-cog"></i></a></li>
         					<li><a href="#">Help <i class="pull-right fa fa-question-circle"></i></a></li>
         					<li class="divider"></li>
@@ -42,32 +42,32 @@
                     <div class="scrollthis">
     			        <li><a href="#" class="active">
     			        	<span class="time">6 mins</span>
-    			        	<img src="{{asset('assets/demo/avatar/doyle.png')}}" alt="avatar" />
+    			        	<img src="{{asset('public/assets/demo/avatar/doyle.png')}}" alt="avatar" />
     			        	<div><span class="name">Alan Doyle</span><span class="msg">Please mail me the files by tonight.</span></div>
     			        </a></li>
     			        <li><a href="#">
     			        	<span class="time">12 mins</span>
-    			        	<img src="{{asset('assets/demo/avatar/paton.png')}}" alt="avatar" />
+    			        	<img src="{{asset('public/assets/demo/avatar/paton.png')}}" alt="avatar" />
     			        	<div><span class="name">Polly Paton</span><span class="msg">Uploaded all the files to server. Take a look.</span></div>
     			        </a></li>
     			        <li><a href="#">
     			        	<span class="time">9 hrs</span>
-    			        	<img src="{{asset('assets/demo/avatar/corbett.png')}}" alt="avatar" />
+    			        	<img src="{{asset('public/assets/demo/avatar/corbett.png')}}" alt="avatar" />
     			        	<div><span class="name">Simon Corbett</span><span class="msg">I am signing off for today.</span></div>
     			        </a></li>
     			        <li><a href="#">
     			        	<span class="time">2 days</span>
-    			        	<img src="{{asset('assets/demo/avatar/tennant.png')}}" alt="avatar" />
+    			        	<img src="{{asset('public/assets/demo/avatar/tennant.png')}}" alt="avatar" />
     			        	<div><span class="name">David Tennant</span><span class="msg">How are you doing?</span></div>
     			        </a></li>
                         <li><a href="#">
                             <span class="time">6 mins</span>
-                            <img src="{{asset('assets/demo/avatar/doyle.png')}}" alt="avatar" />
+                            <img src="{{asset('public/assets/demo/avatar/doyle.png')}}" alt="avatar" />
                             <div><span class="name">Alan Doyle</span><span class="msg">Please mail me the files by tonight.</span></div>
                         </a></li>
                         <li><a href="#">
                             <span class="time">12 mins</span>
-                            <img src="{{asset('assets/demo/avatar/paton.png')}}" alt="avatar" />
+                            <img src="{{asset('public/assets/demo/avatar/paton.png')}}" alt="avatar" />
                             <div><span class="name">Polly Paton</span><span class="msg">Uploaded all the files to server. Take a look.</span></div>
                         </a></li>
                     </div>

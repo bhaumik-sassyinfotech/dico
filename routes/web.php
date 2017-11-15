@@ -17,7 +17,11 @@
         Route::get('get_employee' , 'EmployeeController@get_company_employee');
         Route::match([ 'get' , 'post' ] , 'user/list' , 'UserController@userListing')->name('user.list');
         Route::resource('user' , 'UserController');
-        
+        Route::get('edit_profile' , 'UserController@edit_profile');
+        Route::post('update_profile' , 'UserController@update_profile');
+        Route::post('security_update_profile' , 'UserController@security_update_profile');
+        Route::post('changepassword_update_profile','UserController@changepassword_update_profile');
+        Route::post('notification_update_profile','UserController@notification_update_profile');
         /*Group*/
         Route::match(['get','post'],'group/list','GroupController@groupListing');
         Route::post('group/companyUsers','GroupController@companyUsers');

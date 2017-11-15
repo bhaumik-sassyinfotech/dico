@@ -2,7 +2,7 @@ var companyTable = $('#company_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: 'http://localhost/dico/public/get_company',
+        url: SITE_URL+'/get_company',
         data: function (d) {
             d.company_name = $('input[name=company_name]').val();
         }
@@ -37,7 +37,7 @@ $("#company_form").validate({
  $('#security_question_table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: 'http://localhost/dico/public/get_security_question',
+    ajax: SITE_URL+'/get_security_question',
     columns : [
             {data : 'id'},
             {data : 'question'},
@@ -63,7 +63,7 @@ $("#security_question_form").validate({
     processing: true,
     serverSide: true,
     ajax: {
-        url: 'http://localhost/dico/public/get_employee',
+        url: SITE_URL+'/get_employee',
         data: function (d) {
             d.employee_name = $('input[name=employee_name]').val();
             d.employee_email = $('input[name=employee_email]').val();
@@ -115,7 +115,7 @@ var userTable = $('#users-table').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: "http://localhost/dico/public/user/list",
+            url: SITE_URL+"/user/list",
             data: function (d) {
             d.user_name = $('input[name=user_name]').val();
             d.user_email = $('input[name=user_email]').val();
@@ -169,4 +169,72 @@ $("#user_form").validate({
         userTable.draw();
         e.preventDefault();
 });    
+//============================================================//
+//=================== Update Profile ========================//
+$('#general_profile_form').validate({
+        rules: {
+            name: {
+                required: true,
+            },
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            name: {
+                required: 'This field is required',
+            },
+            email: {
+                required: 'This field is required',
+                email: 'Enter valid email',
+            }
+        }
+    }); 
+$('#security_profile_form').validate(); 
+$('#changepassword_form').validate({
+    rules: {
+        old_password: {
+            required: true,
+            minlength:6,
+        },
+        new_password: {
+            required: true,
+            minlength:6,
+        },
+        confirm_password: {
+            required: true,
+            minlength:6,
+            equalTo: "#new_password",
+        }
+    },
+    messages: {
+            old_password: {
+                required: 'This field is required',
+                minlength: 'Please enter atleast 6 characters',
+            },
+            new_password: {
+                required: 'This field is required',
+                minlength: 'Please enter atleast 6 characters',
+            },
+            confirm_password: {
+                required: 'This field is required',
+                minlength: 'Please enter atleast 6 characters',
+                equalTo: "Enter Confirm Password Same as Password",
+            }
+        }
+});
+    function uploadimage(input, id)
+    {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#" + id).attr('height', '150');
+                $("#" + id).attr('width', '150');
+                document.getElementById(id).src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    }    
 //============================================================//

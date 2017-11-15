@@ -22,7 +22,12 @@ class SecurityQuestionController extends Controller {
     //protected $table = 'room';
     public function __construct(Request $request)
     {
-        //$this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            if(Auth::user()->role_id != 1) {
+               return redirect('/index');
+            }
+            return $next($request);
+        });
     }
 
     /**

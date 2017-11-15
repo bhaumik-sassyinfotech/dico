@@ -11,4 +11,5 @@
 </div>
 </body>
 @include('template.footer')
+@stack('scripts')
 </html>

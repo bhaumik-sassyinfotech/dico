@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserSecurityQuestion extends Model
 {
     //
-    use softDeletes;
-    protected $dates = ['deleted_at'];
+   // use softDeletes;
+    //protected $dates = ['deleted_at'];
     protected $fillable = ['question_id','answer','user_id'];
 }

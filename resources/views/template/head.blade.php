@@ -6,11 +6,11 @@
 	<meta name="author" content="The Red Team">
 
     <!-- <link href="assets/less/styles.less" rel="stylesheet/less" media="all">  -->
-    <link rel="stylesheet" href="{{asset('assets/css/styles.css?=140')}}">
+    <link rel="stylesheet" href="{{asset('public/assets/css/styles.css?=140')}}">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
 
-    <link href="{{asset('assets/demo/variations/default.css')}}" rel='stylesheet' type='text/css' media='all' id='styleswitcher'> 
-    <link href="{{asset('assets/demo/variations/default.css')}}" rel='stylesheet' type='text/css' media='all' id='headerswitcher'> 
+    <link href="{{asset('public/assets/demo/variations/default.css')}}" rel='stylesheet' type='text/css' media='all' id='styleswitcher'> 
+    <link href="{{asset('public/assets/demo/variations/default.css')}}" rel='stylesheet' type='text/css' media='all' id='headerswitcher'> 
     
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries. Placeholdr.js enables the placeholder attribute -->
 	<!--[if lt IE 9]>
@@ -22,13 +22,13 @@
 
 	<!-- The following CSS are included as plugins and can be removed if unused-->
 
-<link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/form-daterangepicker/daterangepicker-bs3.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/fullcalendar/fullcalendar.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/form-markdown/css/bootstrap-markdown.min.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/codeprettifier/prettify.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('assets/plugins/form-toggle/toggles.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('css/sweetalert.css')}}" />
-<link href="{{asset('css/select2.css')}}" rel="stylesheet" />
+<link rel='stylesheet' type='text/css' href="{{asset('public/assets/plugins/form-daterangepicker/daterangepicker-bs3.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('public/assets/plugins/fullcalendar/fullcalendar.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('public/assets/plugins/form-markdown/css/bootstrap-markdown.min.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('public/assets/plugins/codeprettifier/prettify.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('public/assets/plugins/form-toggle/toggles.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('public/css/sweetalert.css')}}" />
+<link href="{{asset('public/css/select2.css')}}" rel="stylesheet" />
 <script type="text/javascript">
     var SITE_URL = '<?php echo url('/'); ?>';
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";
