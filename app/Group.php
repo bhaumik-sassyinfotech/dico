@@ -17,10 +17,11 @@ class Group extends Model
     }
     public function groupUsersCount()
     {
-//        return $this->hasMany('App\GroupUser','group_id','id')->count('id')->groupBy('group_id');
+//        return $this->hasMany('App\GroupUser','group_id','id');
         return $this->hasOne('App\GroupUser')
             ->selectRaw('group_id, count(*) as cnt')
             ->groupBy('group_id');
     }
+    
     
 }

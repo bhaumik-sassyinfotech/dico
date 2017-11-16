@@ -14,7 +14,7 @@
     <div id="page-content">
         <div id='wrap'>
             <div id="page-heading">
-                <h1>Security Question</h1>
+                <h1>Group</h1>
                 <div class="options">
                     <div class="btn-toolbar">
                         <div class="btn-group hidden-xs">
@@ -34,7 +34,7 @@
                                     <th>Group Name</th>
                                     <th>Group Description</th>
                                     <th>Total members</th>
-                                    {{--<th>Action</th>--}}
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                         </table>

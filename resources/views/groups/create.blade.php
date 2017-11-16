@@ -36,43 +36,48 @@
             </div>
             <div class="container">
                 <div class="panel panel-default">
-                    {{ Form::open([ 'name' => 'createUserGroup','route' => 'group.store' , 'id' => 'createUserGroup'] ) }}
-                    <div class="form-group">
-                        <div class="col-md-6">
-                            <label for="group_name">Group name:*</label>
-                            <input type="text" name="group_name" id="group_name" class="form-control required" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="group_description"> Group Description:</label>
-                            <textarea name="group_description" id="group_description" class="form-control required"></textarea>
+                    <div class="panel panel-body">
+                        <div class="row">
+                            {{ Form::open([ 'name' => 'createUserGroup','route' => 'group.store' , 'id' => 'createUserGroup'] ) }}
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="group_name">Group name:*</label>
+                                    <input type="text" name="group_name" id="group_name" class="form-control required"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="group_description"> Group Description:</label>
+                                    <textarea name="group_description" id="group_description"
+                                              class="form-control required"></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label for="company_listing">Company:* </label>
+                                    <select name="company_listing" class="form-control required" id="company_listing">
+                                        <option value="">Select Company:*</option>
+                                        @foreach($companies as $company)
+                                            <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="users_listing">Select Users:* </label>
+                                    <select name="users_listing[]" id="users_listing" class="form-control required"
+                                            multiple="multiple">
+                                        <option value="">Select company first</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    {{ Form::submit('Save',['class' => 'btn btn-success']) }}
+                                </div>
+                            </div>
+                            {{ Form::close() }}
                         </div>
                     </div>
-                    <br>
-                    <div class="form-group">
-                        <div class="col-md-6">
-                            <label for="company_listing">Company:* </label>
-                            <select name="company_listing" class="form-control required" id="company_listing">
-                                <option value="">Select Company:*</option>
-                                @foreach($companies as $company)
-                                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="users_listing">Select Users:* </label>
-                            <select name="users_listing[]" id="users_listing" class="form-control required"
-                                    multiple="multiple">
-                                <option value="">Select company first</option>
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            {{ Form::submit('Save',['class' => 'btn btn-success']) }}
-                        </div>
-                    </div>
-                    {{ Form::close() }}
                 </div>
 
             </div>

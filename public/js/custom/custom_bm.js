@@ -55,11 +55,99 @@ var groupTable = $('#group_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: SITE_URL+'/group/list',
+    searching : false,
     columns : [
-        {data : 'id'},
+        {data : 'row'},
         {data : 'group_name'},
         {data : 'description'},
-        {data : 'group_users_count.cnt'},
-    ],
-    searching : false
+        {data : 'group_users_count'},
+        {data: 'actions'}
+    ]
+});
+
+var groupEditTable = $("#group_users_edit_table").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url:SITE_URL+'/group/editUsers',
+        data: function(d)
+        {
+            d.group_id = $("#group_id").val()
+        }
+    },
+    searching : false,
+    columns : [
+        {data : 'row'},
+        {data : 'user_detail.name'},
+        {data : 'admin'},
+        {data: 'action'}
+    ]
+});
+/*promote to admin ajax call for updating user in a group to admin */
+$(document).on('click','.promoteToAdmin',function (event) {
+    event.preventDefault();
+    var that = $(this);
+    var  group_user_id = that.data('groupUserId');
+    var groupId = $("#group_id").val();
+    var dataString = {_token: CSRF_TOKEN , groupUserId: group_user_id, group_id: groupId , makeAdmin:1 };
+
+    $.ajax({
+        url: SITE_URL+'/group/editUsers',
+        method:'POST',
+        data:dataString,
+        success:function (response) {
+
+            var status = response.status;
+
+            if(status == 1)
+            {
+                groupEditTable.draw();
+            }
+        }
+    });
+});
+
+$(document).on('click','.demoteToUser',function (event) {
+    event.preventDefault();
+    var that = $(this);
+    var group_user_id = that.data('groupUserId');
+    var groupId = $("#group_id").val();
+    var dataString = {_token: CSRF_TOKEN , groupUserId: group_user_id, group_id: groupId , removeAsAdmin:1 };
+
+    $.ajax({
+        url: SITE_URL+'/group/editUsers',
+        method:'POST',
+        data:dataString,
+        success:function (response) {
+
+            var status = response.status;
+
+            if(status == 1)
+            {
+                groupEditTable.draw();
+            }
+        }
+    });
+});
+
+$(document).on('click','.removeUser',function (event) {
+    event.preventDefault();
+    var that = $(this);
+    var group_user_id = that.data('groupUserId');
+    var groupId = $("#group_id").val();
+    var dataString = {_token: CSRF_TOKEN , groupUserId: group_user_id, group_id: groupId , removeFromGroup:1 };
+    $.ajax({
+        url: SITE_URL+'/group/editUsers',
+        method:'POST',
+        data:dataString,
+        success:function (response) {
+
+            var status = response.status;
+
+            if(status == 1)
+            {
+                groupEditTable.draw();
+            }
+        }
+    });
 });

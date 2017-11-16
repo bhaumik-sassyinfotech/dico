@@ -28,4 +28,11 @@ class User extends Authenticatable
     public function company() {
         return $this->hasMany('App\Models\Company');
     }
+    
+    /*to check user details of a given group */
+    public function groupUserDetails()
+    {
+        return $this->hasOne('App\GroupUser','user_id','id');
+    }
+    
 }

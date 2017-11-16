@@ -24,6 +24,7 @@
         Route::post('notification_update_profile','UserController@notification_update_profile');
         /*Group*/
         Route::match(['get','post'],'group/list','GroupController@groupListing');
+        Route::match(['get','post'],'group/editUsers','GroupController@groupUsersEdit');
         Route::post('group/companyUsers','GroupController@companyUsers');
         Route::resource('group' , 'GroupController');
     });
