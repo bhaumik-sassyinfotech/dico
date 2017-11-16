@@ -28,8 +28,9 @@
             </div>
             <div class="container">
                 <div class="panel panel-default">
-                    {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_update_form']) !!}
+
                     <input type="hidden" id="group_id" value="{{ $groupId }}">
+                    <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
                     <div class="new_button">
                         <div class="pull-right extra_button">
                             <input type="submit" name="save" id="save" class="btn btn-primary">
@@ -53,6 +54,7 @@
                             </div>
                         </div>
                         <br>
+                        {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_update_form']) !!}
                         <div class="form-group">
                             <div class="col-md-6">
                                 <label for="company_listing">Company:* </label>
@@ -64,19 +66,34 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-md-4">
+                                <label for="company_users">Add Users</label>
+                                <select name="company_users[]" id="company_users" class="form-control" multiple="multiple">
+                                    @foreach($companyEmployee as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" style="width: 100%">&nbsp;</label>
+                                <button id="add_user" class="btn btn-success">Add to group</button>
+                            </div>
                         </div>
+                        {!! Form::close() !!}
                         <br>
                         <div class="form-group">
-                            <table class="table table-bordered table-striped" id="group_users_edit_table">
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-striped" id="group_users_edit_table">
                                 <thead>
                                 <tr>
                                     <th>#ID</th>
                                     <th>Name</th>
                                     <th>Admin</th>
-                                    <th>Actions</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                             </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -84,7 +101,3 @@
         </div>
     </div>
 @stop
-@section('javascript')
-    <script type="text/javascript">
-    </script>
-@endsection

@@ -123,9 +123,9 @@
             $companies       = Company::all();
             $groupData       = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
-            $companyEmployee = User::where('company_id' , $groupData->company_id)->get();
+            $companyEmployee = User::where('company_id' , $groupData->company_id)->whereNotIn('id' , $groupUsers)->get();
             
-            return view('groups.edit' , compact('groupData' , 'groupUsers' , 'companies' , 'companyEmployee' , 'groupId'));
+            return view('groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
         }
         
         /**
@@ -194,57 +194,75 @@
         {
             $responseData = [ 'msg' => 'please try again.' , 'status' => 0 , 'data' => [] ];
             $query        = $users = $groupUsers = $groupUserId = [];
-//            $company_id = $request->get('company_id')=1;
-            $company_id = 1;
-//            $group_id = $request->get('group_id')=25;
+            
+            $company_id = $request->get('company_id');
+            
             $group_id = $request->get('group_id');
-//            dd($group_id);
+            
             $groupUserId = $request->get('groupUserId');
             
             $groupUser = GroupUser::find($groupUserId);
+            
+            
             if ( $request->get('makeAdmin') == 1 )
             {
                 $groupUser->is_admin = 1;
-                if($groupUser->save())
+                if ( $groupUser->save() )
                 {
-                    return Response::json([ 'msg' => 'User has been promoted to group admin' , 'status' => 1]);
+                    return Response::json([ 'msg' => 'User has been promoted to group admin' , 'status' => 1 ]);
                 }
             } else if ( $request->get('removeAsAdmin') == 1 )
             {
                 $groupUser->is_admin = 0;
-                if($groupUser->save())
+                if ( $groupUser->save() )
                 {
-                    return Response::json([ 'msg' => 'User has been relegated' , 'status' => 1]);
+                    return Response::json([ 'msg' => 'User has been relegated' , 'status' => 1 ]);
                 }
             } else if ( $request->get('removeFromGroup') == 1 )
             {
-                if($groupUser->delete())
+                if ( $groupUser->delete() )
+                    return Response::json([ 'msg' => 'User has been deleted.' , 'status' => 1 ]);
+                else
+                    return Response::json([ 'msg' => 'There has been some error deleting user.' , 'status' => 1 ]);
+            } else if ( $request->get('getGroupUsers') == 1 )
+            {
+                $groupUserIds = GroupUser::where('group_id',$group_id)->get()->pluck('user_id')->prepend(1)->toArray(); // select user_id which are already in the group
+                $users        = User::whereNotIn('id' , $groupUserIds)->get()->toArray();
+                
+                return Response::json([ 'msg' => 'Users listing.' , 'data' => $users , 'status' => 1 ]);
+            } else if($request->get('addGroupUsers') == 1)
+            {
+                $users_list = $request->get('users_list');
+                $insertData = [];
+                $now = Carbon::now();
+                foreach ($users_list as $user)
                 {
-                    return Response::json([ 'msg' => 'User has been deleted.' , 'status' => 1]);
+                    $insertData[] = [ 'company_id' => $company_id , 'user_id' => $user , 'group_id' => $group_id , 'updated_at' => $now , 'created_at' => $now ];
                 }
+                
+                GroupUser::insert($insertData);
+                return Response::json([ 'msg' => 'Users added to the group.' , 'status' => 1 ]);
             }
-//            return $query;
-            $groupUsers  = GroupUser::select('group_users.*')->with(['userDetail'])->where('group_id' , 25)->where('company_id' , $company_id)->get();
+           $groupUsers = GroupUser::select(['group_users.*'])->with([ 'userDetail' ])->where('group_id' , $group_id)->where('company_id' , $company_id);
             
-            $rowCount    = 0;
+            $rowCount = 0;
             
             return DataTables::of($groupUsers)->addColumn('row' , function ($row) use (&$rowCount) {
                 $rowCount += 1;
                 
                 return $rowCount;
-            })->addColumn('admin' , function ($row)  {
+            })->addColumn('admin' , function ($row) {
                 $btn = '';
                 if ( $row->is_admin == 1 )
                 {
-                    return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger demoteToUser">Relegate to User</a>';
+                    return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger demoteToUser">Relegate to user</a>';
                 } else
                 {
-                    return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-success promoteToAdmin">Promote to Admin</a>';
+                    return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-success promoteToAdmin">Promote to admin</a>';
                 }
-//                    $makeAdmin = '<a href="#" data-user-id="'++'"
             })->addColumn('action' , function ($row) {
                 
-                $removeBtn = '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser">Remove</a>';
+                $removeBtn = '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a>';
                 
                 return $removeBtn;
 //                    $makeAdmin = '<a href="#" data-user-id="'++'"
