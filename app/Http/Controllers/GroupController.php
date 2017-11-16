@@ -23,10 +23,28 @@
          *
          * @return \Illuminate\Http\Response
          */
+        public $folder;
+        public function __construct(Request $request)
+        {
+            $this->middleware(function ($request, $next) {
+                if(Auth::user()->role_id == 3) {
+                   return redirect('/index');
+                }
+                if(Auth::user()->role_id == 1) {
+                    $this->folder = 'superadmin';
+                }else if(Auth::user()->role_id == 2) {
+                    $this->folder = 'companyadmin';
+                }else if(Auth::user()->role_id == 3) {
+                    $this->folder = 'employee';
+                }
+                return $next($request);
+            });
+
+        }
         public function index()
         {
             //
-            return view('groups.index');
+            return view($this->folder.'.groups.index');
 //        return redirect()->route('group.create');
         }
         
@@ -41,7 +59,7 @@
 //        dd("create");
             $companies = Company::all();
             
-            return view('groups.create' , compact('companies'));
+            return view($this->folder.'.groups.create' , compact('companies'));
         }
         
         /**
@@ -125,7 +143,7 @@
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->whereNotIn('id' , $groupUsers)->get();
             
-            return view('groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
+            return view($this->folder.'.groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
         }
         
         /**

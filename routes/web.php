@@ -22,6 +22,8 @@
         Route::post('security_update_profile' , 'UserController@security_update_profile');
         Route::post('changepassword_update_profile','UserController@changepassword_update_profile');
         Route::post('notification_update_profile','UserController@notification_update_profile');
+        Route::get('follow/{id}' , 'UserController@follow');
+        
         /*Group*/
         Route::match(['get','post'],'group/list','GroupController@groupListing');
         Route::match(['get','post'],'group/editUsers','GroupController@groupUsersEdit');

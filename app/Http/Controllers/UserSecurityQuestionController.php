@@ -16,6 +16,22 @@
          *
          * @return \Illuminate\Http\Response
          */
+        public $folder;
+    public function __construct(Request $request)
+    {
+        $this->middleware(function ($request, $next) {
+            
+            if(Auth::user()->role_id == 1) {
+                $this->folder = 'superadmin';
+            }else if(Auth::user()->role_id == 2) {
+                $this->folder = 'companyadmin';
+            }else if(Auth::user()->role_id == 3) {
+                $this->folder = 'employee';
+            }
+            return $next($request);
+        });
+        
+    }
         public function index()
         {
             //
@@ -116,6 +132,6 @@
             }
             $questions = SecurityQuestion::all();
             
-            return view('security_question.add' , compact('questions'));
+            return view($this->folder.'.security_question.add' , compact('questions'));
         }
     }

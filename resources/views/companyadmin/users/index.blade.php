@@ -1,4 +1,5 @@
 @extends('template.default')
+<title>DICO - User</title>
 @section('content')
 
 @if(session()->has('success'))

@@ -1,4 +1,5 @@
 @extends('template.default')
+<title>DICO - Profile</title>
 @section('content')
 
 @if(session()->has('success'))
@@ -39,7 +40,8 @@
                                                 <li><a href="#security_tab" data-toggle="tab">Security</a></li>
                                             <?php } ?>
                                             <li><a href="#changepassword_tab" data-toggle="tab">Change Password</a></li>
-                                            <li><a href="#notification_tab" data-toggle="tab">Notification</a></li>
+                                            <?php if ($user->role_id != 1) { ?>
+                                            <li><a href="#notification_tab" data-toggle="tab">Notification</a></li><?php }  ?>
                                         </ul>
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="general_tab">

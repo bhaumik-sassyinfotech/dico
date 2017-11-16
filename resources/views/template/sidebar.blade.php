@@ -9,13 +9,25 @@
                     </form>
                 </li>
                 <li style="display: none;" class="divider"></li>
-                <?php if(Auth::user()->role_id == 1) { ?>
-                <li><a href="{{ route('company.index') }}"><i class="fa fa-home"></i> <span>Company</span></a></li>
-                <li><a href="{{ route('security_question.index') }}"><i class="fa fa-home"></i> <span>Security Question</span></a></li>
-                <?php } ?>
-                <li style="display: none;"><a href="{{ route('employee.index') }}"><i class="fa fa-home"></i> <span>Employee</span></a></li>
-                <li><a href="{{ route('user.index') }}"><i class="fa fa-home"></i> <span>User</span></a></li>
+                <?php 
+                    if(Auth::user()->role_id == 1) { 
+                ?>
+                <li><a href="{{ route('company.index') }}"><i class="fa fa-building-o" aria-hidden="true"></i> <span>Company</span></a></li>
+                <li><a href="{{ route('security_question.index') }}"><i class="fa fa-lock" aria-hidden="true"></i><span>Security Question</span></a></li>
+                <li><a href="{{ route('user.index') }}"><i class="fa fa-user" aria-hidden="true"></i><span>User</span></a></li>
                 <li><a href="{{ route('group.index') }}"><i class="fa fa-users"></i> <span>Group</span></a></li>
+                <?php }
+                    else if(Auth::user()->role_id == 2) {
+                ?>
+                <li><a href="{{ route('user.index') }}"><i class="fa fa-user" aria-hidden="true"></i><span>User</span></a></li>
+                <li style="display: none;"><a href="{{ route('employee.index') }}"><i class="fa fa-home"></i> <span>Employee</span></a></li>
+                <li><a href="{{ route('group.index') }}"><i class="fa fa-users"></i> <span>Group</span></a></li>
+                 <?php } 
+                    else if(Auth::user()->role_id == 3) {
+                        
+                    }
+                 ?>
+                
             </ul>
             <!-- END SIDEBAR MENU -->
         </nav>

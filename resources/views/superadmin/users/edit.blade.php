@@ -1,4 +1,5 @@
 @extends('template.default')
+<title>DICO - User</title>
 @section('content')
 
 @if(session()->has('success'))
@@ -24,13 +25,19 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li class='active'><a href="{{ route('user.index') }}">User</a></li>
+                <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                <li><a href="{{ route('user.index') }}">User</a></li>
+                <li class="active">Update User</li>
             </ol>
             <h1>User</h1>
-            <div>
+            <?php /*<div>
                 <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('user.index') }}">User</a> > Update User</p></div>
+            </div>*/?>
+            <div class="pull-right extra_button">
+                <a href="{{ url('/follow/'.$user->id) }}" class="btn btn-primary" >Follow</a>
             </div>
         </div>
+        
         <div class="container">
             <div class="panel panel-default">
                 {!! Form::model($user, ['method' => 'PUT', 'route' => ['user.update', $user->id],'enctype'=>'multipart/form-data', 'id' => 'user_form']) !!}
@@ -47,7 +54,7 @@
                     <div class="row">
                         <div class="col-xs-12 form-group">
                             <label>Company Name<span>*</span></label>
-                            <select id="company_id" name="company_id" class="form-control">
+                            <select id="company_id" name="company_id" class="form-control" readonly>
                                 <option value="">------ Select ------</option>
                                 <?php
                                 if (!empty($companies)) {

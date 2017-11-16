@@ -1,4 +1,5 @@
 @extends('template.default')
+<title>DICO - SecurityQuestion</title>
 @section('content')
 
 @if(session()->has('success'))
@@ -24,12 +25,14 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li class='active'><a href="index.htm">Security Question</a></li>
+                <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                <li><a href="{{ route('security_question.index') }}">Security Question</a></li>
+                <li class="active">Update Security Question</li>
             </ol>
             <h1>Security Question</h1>
-            <div>
+            <?php /*<div>
                 <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('security_question.index') }}">Security Question</a> > Update Security Question</p></div>
-            </div>
+            </div>*/?>
         </div>
         <div class="container">
             <div class="panel panel-default">
@@ -46,7 +49,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Question</label>
+                                <label>Question<span>*</span></label>
                                 <input type="text" name="question" id="question" value="{{$security_question->question}}" placeholder="Security Question" class="form-control required">
                             </div>
                         </div>

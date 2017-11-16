@@ -38,11 +38,11 @@ class CompanyController extends Controller {
     public function index()
     {
         //dd("here");
-        return view('company.index');
+        return view('superadmin.company.index');
     }
     
     public function create() {
-        return view('company.create');
+        return view('superadmin.company.create');
     }
 
     public function store(Request $request) {
@@ -78,7 +78,7 @@ class CompanyController extends Controller {
     public function edit($id) {
         $obj = new Company;
         $company = $obj->where('id',$id)->first();
-        return view('company.edit', compact('company'));
+        return view('superadmin.company.edit', compact('company'));
     }
     
     public function update(Request $request, $id) {

@@ -38,11 +38,11 @@ class SecurityQuestionController extends Controller {
     public function index()
     {
         //dd("here");
-        return view('security_question.index');
+        return view('superadmin.security_question.index');
     }
     
     public function create() {
-        return view('security_question.create');
+        return view('superadmin.security_question.create');
     }
 
     public function store(Request $request) {
@@ -64,7 +64,7 @@ class SecurityQuestionController extends Controller {
     public function edit($id) {
         $obj = new SecurityQuestion;
         $security_question = $obj->where('id',$id)->first();
-        return view('security_question.edit', compact('security_question'));
+        return view('superadmin.security_question.edit', compact('security_question'));
     }
     
     public function update(Request $request, $id) {

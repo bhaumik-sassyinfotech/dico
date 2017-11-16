@@ -26,7 +26,7 @@ class User extends Authenticatable
     ];
     
     public function company() {
-        return $this->hasMany('App\Models\Company');
+        return $this->hasMany('App\Company');
     }
     
     /*to check user details of a given group */
@@ -35,4 +35,11 @@ class User extends Authenticatable
         return $this->hasOne('App\GroupUser','user_id','id');
     }
     
+    /*public function followers() {
+        return $this->hasMany('App\FollowUser','receiver_user_id','id');
+    }
+    
+    public function following() {
+        return $this->belongsToMany('App\User','follow_users','sender_user_id','id');
+    }*/
 }

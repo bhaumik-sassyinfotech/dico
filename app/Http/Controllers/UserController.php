@@ -8,6 +8,7 @@ use App\Role;
 use App\Company;
 use App\SecurityQuestion;
 use App\UserSecurityQuestion;
+use App\FollowUser;
 use DB;
 use Validator;
 use Redirect;
@@ -24,9 +25,42 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
+    public $folder;
+    public function __construct(Request $request)
+    {
+        $this->middleware(function ($request, $next) {
+            if(Auth::user()->role_id == 3) {
+               return redirect('/index');
+            }
+            if(Auth::user()->role_id == 1) {
+                $this->folder = 'superadmin';
+            }else if(Auth::user()->role_id == 2) {
+                $this->folder = 'companyadmin';
+            }else if(Auth::user()->role_id == 3) {
+                $this->folder = 'employee';
+            }
+            return $next($request);
+        });
+        
+    }
+    
     public function index() {
-        $roles = Role::whereIn('id', [2, 3])->get();
-        return view('users.index', compact('roles'));
+        if(Auth::user()) { 
+            $company_id = Auth::user()->company_id;
+            $usercompany = Company::whereNull('deleted_at')->where('id',$company_id)->first();
+            if($usercompany) {
+                if($usercompany->allow_add_admin == 1) {
+                    $role_id = [2,3];
+                } else {
+                    $role_id = [3];
+                } 
+                $roles = Role::whereIn('id', $role_id)->get();
+                $companies = Company::whereNull('deleted_at')->get();
+                return view($this->folder.'.users.index', compact('roles', 'companies'));
+            }
+        } else {
+            return redirect('/index');
+        }
     }
 
     /**
@@ -35,9 +69,23 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $roles = Role::whereIn('id', [2, 3])->get();
-        $companies = Company::whereNull('deleted_at')->get();
-        return view('users.create', compact('roles', 'companies'));
+         if(Auth::user()) { 
+            $company_id = Auth::user()->company_id;
+            $usercompany = Company::whereNull('deleted_at')->where('id',$company_id)->first();
+            if($usercompany) {
+                if($usercompany->allow_add_admin == 1) {
+                    $role_id = [2,3];
+                } else {
+                    $role_id = [3];
+                } 
+                $roles = Role::whereIn('id', $role_id)->get();
+                $companies = Company::whereNull('deleted_at')->get();
+                return view($this->folder.'.users.create', compact('roles', 'companies'));
+            }
+        } else {
+            return redirect('/index');
+        }
+        
     }
 
     /**
@@ -104,10 +152,24 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        $user = User::where('id', $id)->first();
-        $roles = Role::whereIn('id', [2, 3])->get();
-        $companies = Company::whereNull('deleted_at')->get();
-        return view('users.edit', compact('user', 'roles', 'companies'));
+        if(Auth::user()) { 
+            $company_id = Auth::user()->company_id;
+            $usercompany = Company::whereNull('deleted_at')->where('id',$company_id)->first();
+            if($usercompany) {
+                if($usercompany->allow_add_admin == 1) {
+                    $role_id = [2,3];
+                } else {
+                    $role_id = [3];
+                } 
+                $user = User::where('id', $id)->first();
+                //dd($user);
+                $roles = Role::whereIn('id', $role_id)->get();
+                $companies = Company::whereNull('deleted_at')->get();
+                return view($this->folder.'.users.edit', compact('user','roles', 'companies'));
+            }
+        } else {
+            return redirect('/index');
+        }
     }
 
     /**
@@ -168,7 +230,8 @@ class UserController extends Controller {
             if ($roleId == 1) {
                 $query = $query->whereIn('role_id', [2, 3]);
             } else if ($roleId == 2) {
-                $query = $query->whereIn('role_id', [3])->where('company_id', '=', $auth->company_id);
+                //$query = $query->whereIn('role_id', [3])->where('company_id', '=', $auth->company_id);
+                $query = $query->where('role_id','!=', 1)->where('company_id', '=', $auth->company_id);
             }
             $res = $query->where('id', '!=', Auth::user()->id)->whereNULL('deleted_at');
 
@@ -181,6 +244,9 @@ class UserController extends Controller {
             }
             if ($request->has('role_id')) {
                 $query->where('role_id', 'like', "%{$request->get('role_id')}%");
+            }
+            if ($request->has('company_id')) {
+                $query->where('company_id', 'like', "%{$request->get('company_id')}%");
             }
             })->addColumn('actions', function ( $row ) {
                 return '<a href="' . route('user.edit', [$row->id]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
@@ -196,7 +262,7 @@ class UserController extends Controller {
             $user = User::where('id', $user_id)->first();
             $questions = SecurityQuestion::all();
             $userquestions = UserSecurityQuestion::where('user_id', $user_id)->get();
-            return view('users.edit_profile', compact('user', 'questions', 'userquestions'));
+            return view($this->folder.'.users.edit_profile', compact('user', 'questions', 'userquestions'));
         } else {
             return redirect('/index');
         }
@@ -324,5 +390,28 @@ class UserController extends Controller {
     }
     public function notification_update_profile(Request $request) {
         
+    }
+    public function follow($id = null) {
+        try {
+            if(Auth::user()) { 
+                $user_id = Auth::user()->id;
+                $follow = new FollowUser;
+                $follow->sender_user_id = $user_id;
+                $follow->receiver_user_id = $id;
+                $follow->status = 3;
+                $follow->created_at = Carbon\Carbon::now();
+                if ($follow->save()) {
+                    return redirect()->route('user.index')->with('success', 'Following request send successfully.');
+                } else {
+                    return redirect()->route('user.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                }
+            }else {
+                return redirect('/index');
+            }
+        }
+          catch (\exception $e) {
+            //$e->getMessage();
+            return Redirect::back()->with('err_msg', $e->getMessage());
+        }
     }
 }
