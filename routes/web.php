@@ -16,6 +16,7 @@
         Route::get('get_security_question' , 'SecurityQuestionController@get_security_question');
         Route::get('get_employee' , 'EmployeeController@get_company_employee');
         Route::match([ 'get' , 'post' ] , 'user/list' , 'UserController@userListing')->name('user.list');
+        Route::match(['get','post'],'/user/getCompanyGroups','UserController@getCompanyGroups')->name('getCompanyGroups');
         Route::resource('user' , 'UserController');
         Route::get('edit_profile' , 'UserController@edit_profile');
         Route::post('update_profile' , 'UserController@update_profile');

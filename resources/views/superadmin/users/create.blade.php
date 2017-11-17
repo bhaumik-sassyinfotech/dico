@@ -62,7 +62,7 @@
                                         }
                                     }
                                 ?>
-                                </select>    
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -91,7 +91,7 @@
                                         }
                                     }
                                 ?>
-                                </select>    
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -106,8 +106,16 @@
                                 <input type="checkbox" name="is_suspended" id="is_suspended">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                            <label class="control-label" for="user_groups">Group:</label>
+                            <select name="user_groups[]" id="user_groups" class="form-control" multiple="multiple">
+
+                            </select>
+                            </div>
+                        </div>
                     </div>
-                </form>     
+                </form>
             </div>
         </div>
     </div>
