@@ -18,6 +18,7 @@ class CreateGroupsTable extends Migration
             $table->string('group_name','255');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('company_id')->default(0);
+            $table->unsignedBigInteger('group_owner')->default(0);
             $table->bigInteger('created_by');
             $table->bigInteger('updated_by');
             $table->timestamps();

@@ -39,20 +39,19 @@
                     <div class="panel panel-body">
                         <div class="row">
                             {{ Form::open([ 'name' => 'createUserGroup','route' => 'group.store' , 'id' => 'createUserGroup'] ) }}
-                            <div class="form-group">
+                            <div class="form-group container">
                                 <div class="col-md-6">
                                     <label for="group_name">Group name:*</label>
                                     <input type="text" name="group_name" id="group_name" class="form-control required"/>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="group_description"> Group Description:</label>
+                                    <label for="group_description"> Group Description:* </label>
                                     <textarea name="group_description" id="group_description"
                                               class="form-control required"></textarea>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group">
-                                <div class="col-md-6">
+                            <div class="form-group container ">
+                                <div class="col-md-3">
                                     <label for="company_listing">Company:* </label>
                                     <select name="company_listing" class="form-control required" id="company_listing">
                                         <option value="">Select Company:*</option>
@@ -61,16 +60,22 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-md-3">
+                                    <label for="group_owner">Group owner:* </label>
+                                    <select name="group_owner" id="group_owner" class="form-control required">
+                                        <option value="">Select user</option>
+                                    </select>
+                                </div>
                                 <div class="col-md-6">
-                                    <label for="users_listing">Select Users:* </label>
+                                    <label for="users_listing">Users:* </label>
                                     <select name="users_listing[]" id="users_listing" class="form-control required"
                                             multiple="multiple">
                                         <option value="">Select company first</option>
                                     </select>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group">
+
+                            <div class="form-group container">
                                 <div class="col-md-12">
                                     {{ Form::submit('Save',['class' => 'btn btn-success']) }}
                                 </div>

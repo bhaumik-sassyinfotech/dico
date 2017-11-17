@@ -33,4 +33,9 @@
     var SITE_URL = '<?php echo url('/'); ?>';
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";
     var CSRF_TOKEN = "{{ csrf_token() }}";
-</script>    
+</script>
+<style type="text/css">
+	.error {
+		color:#ff4a4a;
+	}
+</style>

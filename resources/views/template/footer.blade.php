@@ -35,3 +35,4 @@
 <script src="{{ asset('public/js/select2.js') }}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom_bm.js')}}"></script>
+<script type='text/javascript' src="{{asset('public/js/custom/common.js')}}"></script>

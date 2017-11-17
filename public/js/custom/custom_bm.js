@@ -30,25 +30,28 @@ $(".sec_question").on('focus', function () {
 
 $(document).ready(function () {
     $('#users_listing').select2();
-    $("#company_users").select2();
+    $("#company_listing,#company_users,#group_owner").select2();
 });
 $("#createUserGroup").validate();
 /*Ajax Call to fetch user of the company selected*/
 $("#company_listing").change(function () {
     var that = $(this);
     var dataString = {_token: CSRF_TOKEN, company_id: that.val()};
-    $.ajax({
-        url: 'companyUsers',
-        data: dataString,
-        method: "POST",
-        success: function (response) {
-            $("#users_listing").empty();
-            var userData = response.data;
-            $.each(userData, function (key, val) {
-                $("#users_listing").append("<option value='" + val.id + "'>" + val.name + "</option>");
-            });
-        }
-    });
+    if(that.val() != "")
+    {
+        $.ajax({
+            url: 'companyUsers',
+            data: dataString,
+            method: "POST",
+            success: function (response) {
+                $("#users_listing,#group_owner").empty().append($("<option></option>").val("").html("Select user"));
+                var userData = response.data;
+                $.each(userData, function (key, val) {
+                    $("#users_listing,#group_owner").append("<option value='" + val.id + "'>" + val.name + "</option>");
+                });
+            }
+        });
+    }
 });
 /*group listing >> View -> admin\group\index */
 var groupTable = $('#group_table').DataTable({
@@ -78,7 +81,7 @@ var groupEditTable = $("#group_users_edit_table").DataTable({
     searching: false,
     columns: [
         {data: 'row'},
-        {data: 'user_detail.name'},
+        {data: 'user_detail.name' , name:'userDetail.name' },
         {data: 'admin'},
         {data: 'action'}
     ]
@@ -209,6 +212,8 @@ $(document).on('click', '.removeUser', function (event) {
         });
 });
 $("#add_user").click(function(event){
+    //
+    $("#group_users_edit_form").validate();
     event.preventDefault();
     var users = $("#company_users").val();
     var companyId = $("#company_id").val();
@@ -244,7 +249,6 @@ function companyUsers() {
             var status = response.status;
             if(status === 1)
             {
-
                 $.each(users,function (key,value) {
                     userSelect.append($("<option></option>").html(value.name).val(value.id));
                 });

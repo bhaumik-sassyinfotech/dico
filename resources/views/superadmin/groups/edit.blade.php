@@ -28,7 +28,7 @@
             </div>
             <div class="container">
                 <div class="panel panel-default">
-
+                    {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_users_edit_form']) !!}
                     <input type="hidden" id="group_id" value="{{ $groupId }}">
                     <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
                     <div class="new_button">
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <br>
-                        {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_update_form']) !!}
+
                         <div class="form-group">
                             <div class="col-md-6">
                                 <label for="company_listing">Company:* </label>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="company_users">Add Users</label>
-                                <select name="company_users[]" id="company_users" class="form-control" multiple="multiple">
+                                <select name="company_users[]" id="company_users" class="form-control required" multiple="multiple">
                                     @foreach($companyEmployee as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach

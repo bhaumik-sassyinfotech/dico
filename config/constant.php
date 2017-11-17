@@ -1,6 +1,7 @@
 <?php 
 return [
 'TRY_MESSAGE'=>'Please try again.',
+'CREATED_MESSAGE'=>'has been created successfully!!',
 'ADDED_MESSAGE'=>'has been added successfully!!',
 'UPDATE_MESSAGE'=>'has been updated successfully!!',
 'DELETE_MESSAGE'=>'has been deleted successfully!!',

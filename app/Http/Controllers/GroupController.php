@@ -24,27 +24,34 @@
          * @return \Illuminate\Http\Response
          */
         public $folder;
+        
         public function __construct(Request $request)
         {
-            $this->middleware(function ($request, $next) {
-                if(Auth::user()->role_id == 3) {
-                   return redirect('/index');
+            $this->middleware(function ($request , $next) {
+                if ( Auth::user()->role_id == 3 )
+                {
+                    return redirect('/index');
                 }
-                if(Auth::user()->role_id == 1) {
+                if ( Auth::user()->role_id == 1 )
+                {
                     $this->folder = 'superadmin';
-                }else if(Auth::user()->role_id == 2) {
+                } else if ( Auth::user()->role_id == 2 )
+                {
                     $this->folder = 'companyadmin';
-                }else if(Auth::user()->role_id == 3) {
+                } else if ( Auth::user()->role_id == 3 )
+                {
                     $this->folder = 'employee';
                 }
+                
                 return $next($request);
             });
-
+            
         }
+        
         public function index()
         {
             //
-            return view($this->folder.'.groups.index');
+            return view($this->folder . '.groups.index');
 //        return redirect()->route('group.create');
         }
         
@@ -59,7 +66,7 @@
 //        dd("create");
             $companies = Company::all();
             
-            return view($this->folder.'.groups.create' , compact('companies'));
+            return view($this->folder . '.groups.create' , compact('companies'));
         }
         
         /**
@@ -74,13 +81,14 @@
             DB::beginTransaction();
             try
             {
-                $user               = Auth::user();
-                $group              = new Group;
-                $group->group_name  = $request->group_name;
-                $group->description = $request->group_description;
-                $group->company_id  = $request->company_listing;
-                $group->created_by  = $user->id;
-                $group->updated_by  = $user->id;
+                $user                  = Auth::user();
+                $group                 = new Group;
+                $group->group_name     = $request->group_name;
+                $group->description    = $request->group_description;
+                $group->company_id     = $request->company_listing;
+                $group->group_owner_id = $request->group_owner;
+                $group->created_by     = $user->id;
+                $group->updated_by     = $user->id;
                 if ( $group->save() )
                 {
                     if ( !empty($request->users_listing) )
@@ -99,7 +107,7 @@
                         {
                             DB::commit();
                             
-                            return redirect()->route('group.index')->with('success' , "Group " . Config::get('constant.ADDED_MESSAGE'));
+                            return redirect()->route('group.index')->with('success' , "Group " . Config::get('constant.CREATED_MESSAGE'));
                         }
                     }
                 }
@@ -143,7 +151,7 @@
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->whereNotIn('id' , $groupUsers)->get();
             
-            return view($this->folder.'.groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
+            return view($this->folder . '.groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
         }
         
         /**
@@ -154,9 +162,20 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function update(Request $request , Group $group)
+        public function update($groupId , Request $request)
         {
             //
+            $data               = [ 'msg' => 'Please try again.' , 'status' => 0 ];
+            $group              = Group::find($groupId);
+            $group->group_name  = $request->group_name;
+            $group->description = $request->group_description;
+            if ( $group->save() )
+            {
+                $data[ 'msg' ]    = 'Group details has been updated successfully.';
+                $data[ 'status' ] = 1;
+            }
+            
+            return redirect(route('group.index'))->with([ 'success' => $data[ 'msg' ] , $data ]);
         }
         
         /**
@@ -217,10 +236,10 @@
             
             $group_id = $request->get('group_id');
             
-            $groupUserId = $request->get('groupUserId');
-            
-            $groupUser = GroupUser::find($groupUserId);
-            
+            $groupUserId  = $request->get('groupUserId');
+            $groupUser    = GroupUser::find($groupUserId);
+            $groupDetails = Group::where('id' , $group_id)->first();
+            $groupUsers   = GroupUser::select([ 'group_users.*' ])->with([ 'userDetail' ])->where('group_id' , $group_id);
             
             if ( $request->get('makeAdmin') == 1 )
             {
@@ -244,24 +263,26 @@
                     return Response::json([ 'msg' => 'There has been some error deleting user.' , 'status' => 1 ]);
             } else if ( $request->get('getGroupUsers') == 1 )
             {
-                $groupUserIds = GroupUser::where('group_id',$group_id)->get()->pluck('user_id')->prepend(1)->toArray(); // select user_id which are already in the group
+                $groupUserIds = GroupUser::where('group_id' , $group_id)->get()->pluck('user_id')->prepend(1)->toArray(); // select user_id which are already in the group
                 $users        = User::whereNotIn('id' , $groupUserIds)->get()->toArray();
                 
                 return Response::json([ 'msg' => 'Users listing.' , 'data' => $users , 'status' => 1 ]);
-            } else if($request->get('addGroupUsers') == 1)
+            } else if ( $request->get('addGroupUsers') == 1 )
             {
                 $users_list = $request->get('users_list');
                 $insertData = [];
-                $now = Carbon::now();
-                foreach ($users_list as $user)
+                $now        = Carbon::now();
+                foreach ( $users_list as $user )
                 {
-                    $insertData[] = [ 'company_id' => $company_id , 'user_id' => $user , 'group_id' => $group_id , 'updated_at' => $now , 'created_at' => $now ];
+                    $insertData[] = [ 'user_id' => $user , 'group_id' => $group_id , 'updated_at' => $now , 'created_at' => $now ];
                 }
                 
-                GroupUser::insert($insertData);
-                return Response::json([ 'msg' => 'Users added to the group.' , 'status' => 1 ]);
+                $result = GroupUser::insert($insertData);
+                if ( $result )
+                    return Response::json([ 'msg' => 'Users added to the group.' , 'status' => 1 ]);
+                else
+                    return Response::json([ 'msg' => 'There was some error adding users to group.' , 'status' => 0 ]);
             }
-           $groupUsers = GroupUser::select(['group_users.*'])->with([ 'userDetail' ])->where('group_id' , $group_id)->where('company_id' , $company_id);
             
             $rowCount = 0;
             
@@ -269,21 +290,25 @@
                 $rowCount += 1;
                 
                 return $rowCount;
-            })->addColumn('admin' , function ($row) {
+            })->addColumn('admin' , function ($row) use ($groupDetails) {
                 $btn = '';
-                if ( $row->is_admin == 1 )
+                if ( $row->user_id == $groupDetails->group_owner )
+                {
+                    return "Group Owner";
+                } else if ( $row->is_admin == 1 )
                 {
                     return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger demoteToUser">Relegate to user</a>';
                 } else
                 {
                     return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-success promoteToAdmin">Promote to admin</a>';
                 }
-            })->addColumn('action' , function ($row) {
-                
-                $removeBtn = '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a>';
+            })->addColumn('action' , function ($row) use ($groupDetails) {
+                $removeBtn = '';
+                if ( $row->user_id != $groupDetails->group_owner )
+                    $removeBtn = '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a>';
                 
                 return $removeBtn;
-//                    $makeAdmin = '<a href="#" data-user-id="'++'"
+//
             })->rawColumns([ 'admin' , 'action' ])->make(TRUE);
         }
     }
