@@ -239,3 +239,47 @@ $('#changepassword_form').validate({
 
     }    
 //============================================================//
+//====================== Points Module ========================//
+$('#points_form').validate({
+    rules: {
+        activity: {
+            required: true,
+        },
+        points: {
+            required: true,
+            number: true
+        }
+    },
+    messages: {
+        activity: {
+            required: 'This field is required',
+        },
+        points: {
+            required: 'This field is required',
+            number: 'Please enter numbers only',
+        }
+    }
+});
+var pointsTable = $('#points_table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL+'/get_points',
+        data: function (d) {
+            d.activity = $('input[name=activity]').val();
+        }
+    },
+    columns : [
+            {data : 'id'},
+            {data : 'activity'},
+            {data : 'points'},
+            {data : 'notes'},
+            {data : 'actions'},
+    ],
+    searching : false              
+});
+$('#points-search-form').on('submit', function(e) {
+        pointsTable.draw();
+        e.preventDefault();
+}); 
+//============================================================//

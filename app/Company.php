@@ -15,7 +15,7 @@ class Company extends Model
     protected $table = 'companies';
     use softDeletes;
     
-    protected $primaryKey = 'company_id';
+    protected $primaryKey = 'id';
     
     protected $fillable = [
         'company_name',

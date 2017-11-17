@@ -35,11 +35,11 @@ class User extends Authenticatable
         return $this->hasOne('App\GroupUser','user_id','id');
     }
     
-    /*public function followers() {
+    public function followers() {
         return $this->hasMany('App\FollowUser','receiver_user_id','id');
     }
     
     public function following() {
-        return $this->belongsToMany('App\User','follow_users','sender_user_id','id');
-    }*/
+        return $this->hasMany('App\FollowUser','receiver_user_id','id');
+    }
 }

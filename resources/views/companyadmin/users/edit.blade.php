@@ -33,6 +33,23 @@
             <?php /*<div>
                 <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('user.index') }}">User</a> > Update User</p></div>
             </div>*/?>
+            <div class="pull-right extra_button">
+                <?php
+                    if(!empty($user->following) && count($user->following) > 0) {
+                        if($user->following[0]->status == 1) {
+                ?>
+                <a href="{{ url('/unfollow/'.$user->id) }}" class="btn btn-primary" >Unfollow</a>
+                <?php 
+                        }else {
+                        ?>
+                        <a href="{{ url('/follow/'.$user->id) }}" class="btn btn-primary" >Follow</a>
+                        <?php
+                        }
+                } else {
+                ?>
+                <a href="{{ url('/follow/'.$user->id) }}" class="btn btn-primary" >Follow</a>
+                <?php } ?>
+            </div>
         </div>
         <div class="container">
             <div class="panel panel-default">

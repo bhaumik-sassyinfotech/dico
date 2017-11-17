@@ -17,19 +17,23 @@
         Route::get('get_employee' , 'EmployeeController@get_company_employee');
         Route::match([ 'get' , 'post' ] , 'user/list' , 'UserController@userListing')->name('user.list');
         Route::resource('user' , 'UserController');
-        Route::get('edit_profile' , 'UserController@edit_profile');
-        Route::post('update_profile' , 'UserController@update_profile');
+        Route::get('edit_profile' , 'DashboardController@edit_profile');
+        Route::post('update_profile' , 'DashboardController@update_profile');
         Route::post('security_update_profile' , 'UserController@security_update_profile');
         Route::post('changepassword_update_profile','UserController@changepassword_update_profile');
         Route::post('notification_update_profile','UserController@notification_update_profile');
         Route::get('follow/{id}' , 'UserController@follow');
-        
+        Route::get('unfollow/{id}' , 'UserController@unfollow');
         /*Group*/
         Route::match(['get','post'],'group/list','GroupController@groupListing');
         Route::match(['get','post'],'group/editUsers','GroupController@groupUsersEdit');
         Route::post('group/companyUsers','GroupController@companyUsers');
         Route::resource('group' , 'GroupController');
+        
+        
+        Route::resource('points' , 'PointsController');
+        Route::get('get_points' , 'PointsController@get_points');
     });
     
-    Route::get('/home' , 'HomeController@index')->name('home');
+    Route::get('/home' , 'DashboardController@index')->name('home');
 ?>

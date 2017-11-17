@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Company;
+use App\Point;
+use App\CompanyPoint;
 use DB;
 use Validator;
 use Redirect;
@@ -46,32 +48,40 @@ class CompanyController extends Controller {
     }
 
     public function store(Request $request) {
-         
-        $this->validate($request, [
-            'company_name' => 'required|max:255|unique:companies,company_name'
-        ]);
-        if($request->input('allow_anonymous')) {
-            $allow_anonymous = 1;
-        } else {
-            $allow_anonymous = 0;
-        }
-        if($request->input('allow_add_admin')) {
-            $allow_add_admin = 1;
-        } else {
-            $allow_add_admin = 0;
-        }
-
-        $company = new Company;
-        $company->company_name = $request->input('company_name');
-        $company->description = $request->input('company_description');
-        $company->allow_anonymous = $allow_anonymous;
-        $company->allow_add_admin = $allow_add_admin;
-        $company->company_admin = 1;//$request->input('company_admin');
-        $company->created_at = Carbon\Carbon::now();
-        if ($company->save()) {
-            return redirect()->route('company.index')->with('success', 'Company '.Config::get('constant.ADDED_MESSAGE'));
-        } else {
-           return redirect()->route('company.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+        try {
+            $this->validate($request, [
+                'company_name' => 'required|max:255|unique:companies,company_name'
+            ]);
+            if($request->input('allow_anonymous')) {
+                $allow_anonymous = 1;
+            } else {
+                $allow_anonymous = 0;
+            }
+            if($request->input('allow_add_admin')) {
+                $allow_add_admin = 1;
+            } else {
+                $allow_add_admin = 0;
+            }
+            DB::beginTransaction();
+            $company = new Company;
+            $company->company_name = $request->input('company_name');
+            $company->description = $request->input('company_description');
+            $company->allow_anonymous = $allow_anonymous;
+            $company->allow_add_admin = $allow_add_admin;
+            $company->company_admin = 1;//$request->input('company_admin');
+            $company->created_at = Carbon\Carbon::now();
+            $company->save();
+            $points = Point::select('activity','points','notes',DB::raw($company->id.' as company_id'))->whereNull('deleted_at')->get()->toArray();
+            $company_points = CompanyPoint::insert($points);
+            DB::commit();
+            if ($company_points) {
+                return redirect()->route('company.index')->with('success', 'Company '.Config::get('constant.ADDED_MESSAGE'));
+            } else {
+               return redirect()->route('company.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+            }
+        }catch (\exception $e) {
+            DB::rollback();
+            return Redirect::back()->with('err_msg', $e->getMessage());
         }
     }
     
@@ -82,27 +92,31 @@ class CompanyController extends Controller {
     }
     
     public function update(Request $request, $id) {
-        $this->validate($request, [
-            'company_name' => 'required|max:255|unique:companies,company_name,'.$id
-        ]);
-        $company = new Company;
-        if($request->input('allow_anonymous')) {
-            $allow_anonymous = 1;
-        } else {
-            $allow_anonymous = 0;
-        }
-        if($request->input('allow_add_admin')) {
-            $allow_add_admin = 1;
-        } else {
-            $allow_add_admin = 0;
-        }
-        
-        $postData = array('company_name'=>$request->input('company_name'),'description'=>$request->input('company_description'),'allow_anonymous'=>$allow_anonymous,'allow_add_admin'=>$allow_add_admin,'company_admin'=>1,'updated_at'=>Carbon\Carbon::now());
-        $res = $company->where('id', $id)->update($postData);
-        if ($res) {
-            return redirect()->route('company.index')->with('success', 'Company '.Config::get('constant.UPDATE_MESSAGE'));
-        } else {
-            return redirect()->route('company.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+        try{
+            $this->validate($request, [
+                'company_name' => 'required|max:255|unique:companies,company_name,'.$id
+            ]);
+            $company = new Company;
+            if($request->input('allow_anonymous')) {
+                $allow_anonymous = 1;
+            } else {
+                $allow_anonymous = 0;
+            }
+            if($request->input('allow_add_admin')) {
+                $allow_add_admin = 1;
+            } else {
+                $allow_add_admin = 0;
+            }
+
+            $postData = array('company_name'=>$request->input('company_name'),'description'=>$request->input('company_description'),'allow_anonymous'=>$allow_anonymous,'allow_add_admin'=>$allow_add_admin,'company_admin'=>1,'updated_at'=>Carbon\Carbon::now());
+            $res = $company->where('id', $id)->update($postData);
+            if ($res) {
+                return redirect()->route('company.index')->with('success', 'Company '.Config::get('constant.UPDATE_MESSAGE'));
+            } else {
+                return redirect()->route('company.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+            }
+        }catch (\exception $e) {
+            return Redirect::back()->with('err_msg', $e->getMessage());
         }
     }
     
