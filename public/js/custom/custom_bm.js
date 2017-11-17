@@ -31,6 +31,7 @@ $(".sec_question").on('focus', function () {
 $(document).ready(function () {
     $('#users_listing').select2();
     $("#company_listing,#company_users,#group_owner").select2();
+    $("#user_groups").select2();
 });
 $("#createUserGroup").validate();
 /*Ajax Call to fetch user of the company selected*/
@@ -43,7 +44,8 @@ $("#company_listing").change(function () {
             url: 'companyUsers',
             data: dataString,
             method: "POST",
-            success: function (response) {
+            success: function (response)
+            {
                 $("#users_listing,#group_owner").empty().append($("<option></option>").val("").html("Select user"));
                 var userData = response.data;
                 $.each(userData, function (key, val) {
@@ -257,5 +259,34 @@ function companyUsers() {
     });
 }
 
+/*show group of the company selected*/
+$("#company_id").change(function () {
+    var that = $(this);
+    var groupDropDown = $("#user_groups");
+    var company_id = that.val();
+    var dataString = { _token: CSRF_TOKEN, companyId: company_id };
+    $.ajax({
+        method: "POST",
+        url: SITE_URL+'/user/getCompanyGroups',
+        data: dataString,
+        success: function(response)
+        {
+            groupDropDown.empty();
+            var status = response.status;
+            if(status == 1)
+            {
+                var groups = response.data;
+                $.each(groups,function(key,val){
+                    groupDropDown.append($("<option></option>").val(val.id).html(val.group_name));
+                });
+            } else if(status == 0)
+            {
+                console.error(response.msg);
+            } else{
+                console.log("some other error occured");
+            }
+        }
+    })
 
+});
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
+use App\GroupUser;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
@@ -10,6 +12,7 @@ use App\SecurityQuestion;
 use App\UserSecurityQuestion;
 use App\FollowUser;
 use DB;
+use Illuminate\Http\Response;
 use Validator;
 use Redirect;
 use Config;
@@ -69,17 +72,21 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-         if(Auth::user()) { 
+         if(Auth::user())
+         {
             $company_id = Auth::user()->company_id;
             $usercompany = Company::whereNull('deleted_at')->where('id',$company_id)->first();
-            if($usercompany) {
-                if($usercompany->allow_add_admin == 1) {
+            if($usercompany)
+            {
+                if($usercompany->allow_add_admin == 1)
+                {
                     $role_id = [2,3];
                 } else {
                     $role_id = [3];
-                } 
+                }
                 $roles = Role::whereIn('id', $role_id)->get();
                 $companies = Company::whereNull('deleted_at')->get();
+                
                 return view($this->folder.'.users.create', compact('roles', 'companies'));
             }
         } else {
@@ -96,6 +103,7 @@ class UserController extends Controller {
      */
     public function store(Request $request) {
         try {
+            $now = Carbon\Carbon::now();
             $this->validate($request, [
                 'user_name' => 'required',
                 'user_email' => 'required|email|unique:users,email',
@@ -122,7 +130,19 @@ class UserController extends Controller {
             $user->is_suspended = $is_suspended;
             $user->password = Hash::make('123456');
             $user->created_at = Carbon\Carbon::now();
+            
             if ($user->save()) {
+                if(!empty($request->user_groups))
+                {// add user in the groups selected
+                    $userId = $user->id;
+                    $grp = [];
+                    foreach ($request->user_groups as $data)
+                    {
+                        $grp[] = ['user_id' => $userId , 'group_id' => $data , 'is_admin' => 0 ,'created_at' => $now , 'updated_at' => $now ];
+                    }
+//                    dd($grp);
+                    GroupUser::insert($grp);
+                }
                 return redirect()->route('user.index')->with('success', 'User ' . Config::get('constant.ADDED_MESSAGE'));
             } else {
                 return redirect()->route('user.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
@@ -396,5 +416,17 @@ class UserController extends Controller {
             //$e->getMessage();
             return Redirect::back()->with('err_msg', $e->getMessage());
         }
+    }
+    /*return json response to show groups listing while adding new users*/
+    public function getCompanyGroups(Request $request)
+    {
+        $data = ['status' => 0, 'msg'=> 'Please try again later.' , 'data' => []];
+        if($request->ajax())
+        {
+            $companyId = $request->get('companyId');
+            $groups = Group::where('company_id' , $companyId)->orderByDesc('id')->get();
+            $data = ['status' => 1, 'msg'=> 'Group listing successfull.' , 'data' => $groups];
+        }
+        return response()->json($data,'200');
     }
 }

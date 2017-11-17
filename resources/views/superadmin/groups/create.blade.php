@@ -2,17 +2,17 @@
 @section('content')
 
     @if(session()->has('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-dismissable alert-success">
             {{ session()->get('success') }}
         </div>
     @endif
     @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
+        <div class="alert alert-dismissable alert-danger">
             {{ session()->get('err_msg') }}
         </div>
     @endif
     @if ($errors->any())
-        <div class="alert alert-danger">
+        <div class="alert alert-dismissable alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>

@@ -21,24 +21,30 @@
         </div>
     @endif
     <?php $state = 'disabled'; ?>
+    {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_users_edit_form']) !!}
     <div id="page-content">
         <div id='wrap'>
             <div id="page-heading">
+                <ol class="breadcrumb">
+                    <li><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ route('group.index') }}">Group</a></li>
+                    <li class="active">Update Group</li>
+                </ol>
                 <h1>Update Group</h1>
+                <div class="options">
+                    <div class="btn-toolbar">
+                        <a href="{{ route('group.index') }}" class="btn btn-default">Back</a>
+                        <input type="submit" name="save" id="save" class="btn btn-primary" value="Update">
+                    </div>
+                </div>
             </div>
             <div class="container">
-                <div class="panel panel-default">
-                    {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_users_edit_form']) !!}
+                <div class="panel panel-midnightblue">
+
                     <input type="hidden" id="group_id" value="{{ $groupId }}">
                     <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
-                    <div class="new_button">
-                        <div class="pull-right extra_button">
-                            <input type="submit" name="save" id="save" class="btn btn-primary">
-                        </div>
-                        <div class="pull-right extra_button">
-                            <a href="{{ route('group.index') }}" class="btn btn-default">Back</a>
-                        </div>
-                        <div style="clear: both;"></div>
+                    <div class="panel-heading">
+                        <h4>Update group details</h4>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
@@ -82,7 +88,7 @@
                         {!! Form::close() !!}
                         <br>
                         <div class="form-group">
-                            <div class="col-md-12">
+                            <div class="col-md-12 table-responsive">
                                 <table class="table table-bordered table-striped" id="group_users_edit_table">
                                 <thead>
                                 <tr>
