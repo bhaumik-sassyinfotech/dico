@@ -67,7 +67,7 @@ class DashboardController extends Controller {
             $validator = Validator::make($request->all(), [
                         'name' => 'required',
                         'email' => 'required|email|unique:users,email,' . $user_id,
-                        'profile_image' => 'image|mimes:jpg,png',
+                        'profile_image' => 'image|mimes:jpg,png,jpeg',
             ]);
             if ($validator->fails()) {
                 $request->session()->flash('failure', $validator->errors());

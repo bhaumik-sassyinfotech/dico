@@ -86,7 +86,7 @@
                 $group->group_name     = $request->group_name;
                 $group->description    = $request->group_description;
                 $group->company_id     = $request->company_listing;
-                $group->group_owner_id = $request->group_owner;
+                $group->group_owner      = $request->group_owner;
                 $group->created_by     = $user->id;
                 $group->updated_by     = $user->id;
                 if ( $group->save() )

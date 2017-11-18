@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Attachment extends Model
 {
     //
+    protected $table = 'attachments';
     use SoftDeletes;
 }

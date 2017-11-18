@@ -18,11 +18,11 @@ class CreatePostsTable extends Migration
             $table->integer('group_id')->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->index();
             $table->string('post_title','255');
             $table->text('post_description')->nullable();
-            $table->enum('post_type',['idea,question,challenge']);
+            $table->enum('post_type',['idea','question','challenge']);
             $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->boolean('is_anonymous')->default(0);	
             $table->boolean('status')->default(1);
-            $table->enum('idea_status',['approve,deny,amend'])->nullable();
+            $table->enum('idea_status',['approve','deny','amend'])->nullable();
             $table->string('idea_reason','255')->nullable();
             $table->timestamps();
             $table->softDeletes();

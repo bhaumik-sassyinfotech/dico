@@ -42,6 +42,7 @@
                         <li><a href="{{ route('group.index') }}"><span>View Groups</span></a></li>
                     </ul>
                 </li>
+                <li><a href="{{ route('points.index') }}"><i class="fa fa-usd" aria-hidden="true"></i><span>Points</span></a></li>
                 <?php }
                     else if(Auth::user()->role_id == 2) {
                 ?>
@@ -58,11 +59,15 @@
                         <li><a href="{{ route('group.index') }}"><span>View Groups</span></a></li>
                     </ul>
                 </li>
-                 <?php } 
+                <li><a href="{{ route('points.index') }}"><i class="fa fa-diamond" aria-hidden="true"></i><span>Points</span></a></li>
+                <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
+                <?php } 
                     else if(Auth::user()->role_id == 3) {
-                        
+                ?>
+                <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
+                <?php
                     }
-                 ?>
+                ?>
                 
             </ul>
             <!-- END SIDEBAR MENU -->

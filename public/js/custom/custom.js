@@ -283,3 +283,48 @@ $('#points-search-form').on('submit', function(e) {
         e.preventDefault();
 }); 
 //============================================================//
+//====================== Post Module ========================//
+$('#post_form').validate({
+    rules: {
+        post_type: {
+            required: true,
+        },
+        post_title: {
+            required: true,
+        }
+    },
+    messages: {
+        post_type: {
+            required: 'This field is required',
+        },
+        post_title: {
+            required: 'This field is required',
+        }
+    },
+    errorPlacement: function(error, element) {
+        if(element.attr("name") == "post_type") {
+          error.appendTo("#err_post_type");
+        } else {
+          error.insertAfter(element);
+        }
+    }
+});
+/*var postTable = $('#post_table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL+'/get_post',
+        
+    },
+    columns : [
+            {data : 'id'},
+            {data : 'post_title'},
+            {data : 'post_description'},
+            {data : 'post_user.name'},
+            {data : 'created_at'},
+            {data : 'post_status'},
+            {data : 'actions'},
+    ],
+    searching : false              
+});*/
+//============================================================//

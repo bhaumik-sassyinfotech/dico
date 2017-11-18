@@ -30,10 +30,13 @@
         Route::match(['get','post'],'group/editUsers','GroupController@groupUsersEdit');
         Route::post('group/companyUsers','GroupController@companyUsers');
         Route::resource('group' , 'GroupController');
-        
-        
+        /*Points*/
         Route::resource('points' , 'PointsController');
         Route::get('get_points' , 'PointsController@get_points');
+        /*Post*/
+        Route::resource('post' , 'PostController');
+        Route::get('like_post/{id}' , 'PostController@like_post');
+        Route::get('get_post' , 'PostController@get_post');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');
