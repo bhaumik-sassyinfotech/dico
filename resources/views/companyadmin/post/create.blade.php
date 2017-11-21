@@ -36,7 +36,7 @@
         </div>
         <div class="container">
             <div class="panel panel-default">
-                <form name="post_form" id="post_form" method="post" action="{{route('post.store')}}">
+                <form name="post_form" id="post_form" method="post" action="{{route('post.store')}}" enctype="multipart/form-data">
                      {{ csrf_field() }}
                     <div class="new_button">
                         <div class="pull-right extra_button">
@@ -73,6 +73,15 @@
                             <div class="col-xs-12 form-group">
                                 <label>Is Anonymous</label><br/>
                                 <input type="checkbox" name="is_anonymous" id="is_anonymous">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 form-group">
+                                <span class="btn btn-primary fileinput-button">
+                                    <i class="fa fa-upload"></i>
+                                    <span>upload</span>
+                                    <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                </span>
                             </div>
                         </div>
                     </div>

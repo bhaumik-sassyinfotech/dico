@@ -37,6 +37,8 @@
         Route::resource('post' , 'PostController');
         Route::get('like_post/{id}' , 'PostController@like_post');
         Route::get('get_post' , 'PostController@get_post');
+        Route::get('viewpost/{id}' , 'PostController@viewpost');
+        Route::post('savecomment/{id}','PostController@savecomment');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

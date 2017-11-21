@@ -35,6 +35,7 @@
             <div class="panel panel-default">
                 {!! Form::model($post, ['method' => 'PUT', 'route' => ['post.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form']) !!}
                     <div class="new_button">
+                        {{ csrf_field() }}
                         <div class="pull-right extra_button">
                             <input type="submit" name="save" id="save" class="btn btn-primary">
                         </div>
@@ -69,6 +70,20 @@
                             <div class="col-xs-12 form-group">
                                 <label>Is Anonymous</label><br/>
                                 <input type="checkbox" name="is_anonymous" id="is_anonymous" <?php if($post->is_anonymous == 1) { echo "checked"; } ?>>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 form-group">
+                                <span class="btn btn-primary fileinput-button">
+                                    <i class="fa fa-upload"></i>
+                                    <span>upload</span>
+                                    <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                    <?php
+                                        if(!empty($post['postAttachment'])) {
+                                           echo $post['postAttachment']['file_name']; 
+                                        }
+                                    ?>
+                                </span>
                             </div>
                         </div>
                     </div>

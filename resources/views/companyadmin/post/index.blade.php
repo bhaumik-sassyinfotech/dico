@@ -41,7 +41,7 @@
                         <div class="col-md-4">
                             <div class="info-tiles tiles-info">
                                 <div class="tiles-heading">
-                                    <div class="pull-left">{{$post['post_title']}}</div>
+                                    <div class="pull-left"><a href="{{url('viewpost',$post['id'])}}">{{$post['post_title']}}</a></div>
                                 </div>
                                 <div class="tiles-body">
                                     <div class="row-md-4">

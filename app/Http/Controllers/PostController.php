@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\PostLike;
 use App\Attachment;
+use App\Comment;
 use DB;
 use Validator;
 use Redirect;
@@ -114,8 +115,6 @@ class PostController extends Controller {
     }
     
     public function edit($id) {
-        //$obj = new Post;
-        //$post = $obj->where('id',$id)->first();
         $post = Post::with('postUser')->with('postLike')->with(['postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
                 }])->with(['postAttachment' => function($q) {
@@ -219,6 +218,47 @@ class PostController extends Controller {
             return Redirect::back()->with('err_msg', $e->getMessage());
         }
         
+    }
+    
+    public function viewpost($id) {
+        $post = Post::with('postUser','postUser.following')->with('postLike')->with(['postUserLike' => function($q) {
+                    $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
+                }])->with(['postAttachment' => function($q) {
+                    $q->where('type', 1)->first(); // '=' is optional
+                }])->with(['postComment' => function($q) {
+                    //$q->where('user_id',  Auth::user()->id); // '=' is optional
+                    $q->orderBy('id','desc');
+                },'postComment.commentUser'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                ->whereNULL('deleted_at')->where('id',$id)->first();
+               // dd($post);
+        return view($this->folder.'.post.view', compact('post'));
+    }
+    
+    public function savecomment($id,Request $request) {
+        //dd($request);
+        try{
+            if(Auth::user()) {
+                $user_id = Auth::user()->id;
+                $comment_text = $request->input('comment_text');
+                if($request->input('is_anonymous')) {
+                    $is_anonymous = 1;
+                } else {
+                    $is_anonymous = 0;
+                }
+                
+                $postData = array("user_id"=>$user_id,"post_id"=>$id,"comment_text"=>$comment_text,"is_anonymous"=>$is_anonymous,"created_at"=>Carbon\Carbon::now());
+                if(Comment::insert($postData)) {
+                    return Redirect::back()->with('success', 'Comment '.Config::get('constant.ADDED_MESSAGE'));
+                }else {
+                    return Redirect::back()->with('err_msg', $e->getMessage());
+                }
+            }
+            else {
+               return redirect('/index');  
+            }
+        }catch (\exception $e) {
+            return Redirect::back()->with('err_msg', $e->getMessage());
+        }
     }
 }
 ?>

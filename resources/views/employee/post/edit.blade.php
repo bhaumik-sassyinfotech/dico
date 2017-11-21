@@ -35,6 +35,7 @@
             <div class="panel panel-default">
                 {!! Form::model($post, ['method' => 'PUT', 'route' => ['post.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form']) !!}
                     <div class="new_button">
+                        {{ csrf_field() }}
                         <div class="pull-right extra_button">
                             <input type="submit" name="save" id="save" class="btn btn-primary">
                         </div>

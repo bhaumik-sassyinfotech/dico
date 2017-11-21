@@ -9,4 +9,9 @@ class Comment extends Model
 {
     //
     use SoftDeletes;
+    
+    public function commentUser()
+    {
+        return $this->hasOne('App\User','id','user_id');
+    }
 }

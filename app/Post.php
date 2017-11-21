@@ -25,4 +25,8 @@ class Post extends Model
     {
         return $this->hasOne('App\Attachment','type_id','id');
     }
+    public function postComment()
+    {
+        return $this->hasMany('App\Comment','post_id','id');
+    }
 }
