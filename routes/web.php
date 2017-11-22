@@ -23,8 +23,11 @@
         Route::post('security_update_profile' , 'UserController@security_update_profile');
         Route::post('changepassword_update_profile','UserController@changepassword_update_profile');
         Route::post('notification_update_profile','UserController@notification_update_profile');
-        Route::get('follow/{id}' , 'UserController@follow');
-        Route::get('unfollow/{id}' , 'UserController@unfollow');
+        //Route::get('follow/{id}' , 'UserController@follow');
+        //Route::get('unfollow/{id}' , 'UserController@unfollow');
+        Route::get('follow/{id}' , 'DashboardController@follow');
+        Route::get('unfollow/{id}' , 'DashboardController@unfollow');
+        Route::get('view_profile/{id}' , 'DashboardController@view_profile');
         /*Group*/
         Route::match(['get','post'],'group/list','GroupController@groupListing');
         Route::match(['get','post'],'group/editUsers','GroupController@groupUsersEdit');
@@ -36,6 +39,7 @@
         /*Post*/
         Route::resource('post' , 'PostController');
         Route::get('like_post/{id}' , 'PostController@like_post');
+        Route::get('unlike_post/{id}' , 'PostController@unlike_post');
         Route::get('get_post' , 'PostController@get_post');
         Route::get('viewpost/{id}' , 'PostController@viewpost');
         Route::post('savecomment/{id}','PostController@savecomment');

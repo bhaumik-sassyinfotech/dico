@@ -41,11 +41,11 @@
                         <div class="col-md-4">
                             <div class="info-tiles tiles-info">
                                 <div class="tiles-heading">
-                                    <div class="pull-left"><a href="{{url('viewpost',$post['id'])}}">{{$post['post_title']}}</a></div>
+                                    <div class="pull-left"><a href="{{url('viewpost',$post['id'])}}">{{ str_limit($post['post_title'], $limit = 50, $end = '...') }}</a></div>
                                 </div>
                                 <div class="tiles-body">
-                                    <div class="row-md-4">
-                                        {{$post['post_description']}}
+                                    <div class="row-md-4" style="font-size: 20px !important;">
+                                        {{ str_limit($post['post_description'], $limit = 130, $end = '...') }}
                                     </div>
                                     <div class="row-md-4">
                                         <div class="col-md-2"><a href="{{url('like_post',$post['id'])}}">

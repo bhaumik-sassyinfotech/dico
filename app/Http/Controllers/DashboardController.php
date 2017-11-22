@@ -6,6 +6,7 @@ use App\Company;
 use App\User;
 use App\SecurityQuestion;
 use App\UserSecurityQuestion;
+use App\FollowUser;
 use DB;
 use Validator;
 use Redirect;
@@ -99,6 +100,73 @@ class DashboardController extends Controller {
                 }
             }
         }catch (\exception $e) {
+            return Redirect::back()->with('err_msg', $e->getMessage());
+        }
+    }
+    public function view_profile($id = null) {
+        if(Auth::user() && !empty($id)) { 
+            $user_id = $id;
+            $user = User::where('id', $user_id)->first();
+            //$questions = SecurityQuestion::all();
+            //$userquestions = UserSecurityQuestion::where('user_id', $user_id)->get();
+            return view($this->folder.'.users.view_profile', compact('user'));
+        } else {
+            return redirect('/index');
+        }
+    }
+    public function follow($id = null) {
+        try {
+            if(Auth::user()) { 
+                $user_id = Auth::user()->id;
+                if(FollowUser::where(array('sender_user_id'=>$user_id,'receiver_user_id'=>$id))->exists())
+                {
+                    $data = array("status"=>1,"updated_at"=>Carbon\Carbon::now());
+                    $where = array("sender_user_id"=>$user_id,"receiver_user_id"=>$id); 
+                    $follow = FollowUser::where($where)->update($data);
+                    if ($follow) {
+                        return Redirect::back()->with('success', 'Follow successfully.');
+                    } else {
+                        return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                    }
+                } else {
+                    $follow = new FollowUser;
+                    $follow->sender_user_id = $user_id;
+                    $follow->receiver_user_id = $id;
+                    $follow->status = 1;
+                    $follow->created_at = Carbon\Carbon::now();
+                    if ($follow->save()) {
+                        return Redirect::back()->with('success', 'Follow successfully.');
+                    } else {
+                        return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                    }
+                }
+            }else {
+                return redirect('/index');
+            }
+        }
+          catch (\exception $e) {
+            //$e->getMessage();
+            return Redirect::back()->with('err_msg', $e->getMessage());
+        }
+    }
+    public function unfollow($id = null) {
+        try {
+            if(Auth::user()) { 
+                $user_id = Auth::user()->id;
+                $data = array("status"=>2,"updated_at"=>Carbon\Carbon::now());
+                $where = array("sender_user_id"=>$user_id,"receiver_user_id"=>$id); 
+                $follow = FollowUser::where($where)->update($data);
+                if ($follow) {
+                    return Redirect::back()->with('success', 'Unfollow successfully.');
+                } else {
+                    return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                }
+            }else {
+                return redirect('/index');
+            }
+        }
+          catch (\exception $e) {
+            //$e->getMessage();
             return Redirect::back()->with('err_msg', $e->getMessage());
         }
     }

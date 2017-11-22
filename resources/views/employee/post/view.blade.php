@@ -58,6 +58,18 @@
                                     <span><?php echo count($post['postLike']);?></span>
                                 </div>
                                 <div class="col-md-2">
+                                    <a href="{{url('unlike_post',$post['id'])}}">
+                                        <?php
+                                            if(!empty($post['postUserUnLike'])) {
+                                        ?>
+                                        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                        <?php } else { ?>
+                                        <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                                        <?php } ?>
+                                    </a>
+                                    <span><?php echo count($post['postUnLike']);?></span>
+                                </div>
+                                <div class="col-md-2">
                                     <a href="javascript:void(0)">
                                         <?php
                                             if(!empty($post['postComment'])) {
@@ -97,7 +109,9 @@
                                     foreach($post['postComment'] as $postComment) {
                             ?>
                             <div class="form-group">
-                                <div class="row">
+                                <div class="row" style="margin:0 !important;">
+                                <div class="col-md-2">
+                                    <div class="row">
                                     <?php
                                     if(!empty($postComment['commentUser'])) { ?> 
                                 <div class="col-md-2">
@@ -111,33 +125,50 @@
                                     ?>
                                     <img src="{{asset($profile_image)}}" id="profile" alt="" class="pull-left" height="100px" width="100px" style="margin: 0 20px 20px 0"/>
                                 </div>
-                                <div class="col-md-10"><b><?php echo $commentUser['name'];?></b><br>
-                                    <small><?php echo " - on ".date('m/d/Y',strtotime($commentUser['created_at'])); ?></small><br>
-                                    <?php echo $postComment['comment_text']; ?>
+                                    
                                 </div>
-                                    <div class="col-md-2"></div>    
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                <?php
+                                    <div class="row">
+                                        <?php
                                 if(!empty($commentUser['following']) && count($commentUser['following']) > 0) {
                                     if($commentUser['following'][0]->status == 1) {
                                     ?>
-                                        <a href="{{ url('/unfollow/'.$commentUser->id) }}" class="btn btn-primary" >Unfollow</a>
+                                        <a href="{{ url('/view_profile/'.$commentUser->id) }}" class="btn btn-primary" >Unfollow</a>
                                         <?php    
                                     }else {
                                     ?>
-                                      <a href="{{ url('/follow/'.$commentUser->id) }}" class="btn btn-primary" >Follow</a>  
+                                      <a href="{{ url('/view_profile/'.$commentUser->id) }}" class="btn btn-primary" >Follow</a>  
                                     <?php    
                                     }
                                     
                                 } else if($commentUser->id != Auth::user()->id) {
                                 ?>
-                                    <a href="{{ url('/follow/'.$commentUser->id) }}" class="btn btn-primary" >Follow</a>
+                                    <a href="{{ url('/view_profile/'.$commentUser->id) }}" class="btn btn-primary" >Follow</a>
                                 <?php   
                                 }
                                         }
-                                        ?></div></div>
+                                        ?>
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <span style="float:left;"><b><?php echo $commentUser['name'];?></b><br>
+                                        <small><?php echo " - on ".date('m/d/Y',strtotime($commentUser['created_at'])); ?></small></span>
+                                        <span style="float: right;"><i class="fa fa-star-o" aria-hidden="true"></i>  Solution</span><br>
+                                    </div>
+                                    <div class="row">
+                                        <?php echo $postComment['comment_text']; ?>
+                                    </div>    
+                                </div>
+                                </div>
+                                <div class="row">
+                                        <div class="col-md-9"></div>
+                                        <div class="col-md-3">
+                                            <div class="col-md-1"><a href=""><i class="fa fa-thumbs-o-up"></i></a></div>
+                                            <div class="col-md-1"><a href=""><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></a></div>
+                                            <div class="col-md-1"><a href=""><i class="fa fa-reply" aria-hidden="true"></i></a></div>
+                                        </div>
+                                    </div>
                                 </div>    
                                 <?php    
                                     }

@@ -46,12 +46,14 @@ class PostController extends Controller {
     public function index()
     {
         //dd("here");
-        $posts = Post::with('postUser')->with('postLike')->with(['postUserLike' => function($q) {
-                    $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-                }])->with(['postAttachment' => function($q) {
-                    $q->where('type', 1)->first(); // '=' is optional
-                }])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at')->get()->toArray();
+        if(Auth::user()) { 
+            $posts = Post::with('postUser')->with('postLike')->with(['postUserLike' => function($q) {
+                        $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
+                    }])->with('postAttachment')->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                    ->whereNULL('deleted_at')->where('company_id',Auth::user()->company_id)->get()->toArray();
+        } else {
+            return redirect('/index');
+        }
         //dd($posts);
         return view($this->folder.'.post.index',compact('posts'));
     }
@@ -74,6 +76,7 @@ class PostController extends Controller {
                 }
                 DB::beginTransaction();
                 $post = new Post;
+                $post->company_id = Auth::user()->company_id;
                 $post->post_title = $request->input('post_title');
                 $post->post_description = $request->input('post_description');
                 $post->post_type = $request->input('post_type');
@@ -115,11 +118,11 @@ class PostController extends Controller {
     }
     
     public function edit($id) {
-        $post = Post::with('postUser')->with('postLike')->with(['postUserLike' => function($q) {
+        $post = Post::with('postUser')->with('postLike')->with('postUnLike')->with(['postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-                }])->with(['postAttachment' => function($q) {
-                    $q->where('type', 1)->first(); // '=' is optional
-                }])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                }])->with(['postUserUnLike' => function($q) {
+                    $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
+                }])->with('postAttachment')->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->whereNULL('deleted_at')->where('id',$id)->first();
         return view($this->folder.'.post.edit', compact('post'));
     }
@@ -138,7 +141,7 @@ class PostController extends Controller {
                     $is_anonymous = 0;
                 }
                 DB::beginTransaction();
-                $postData = array('post_title'=>$request->input('post_title'),'post_description'=>$request->input('post_description'),'is_anonymous'=>$is_anonymous,'post_type'=>$request->input('post_type'),'updated_at'=>Carbon\Carbon::now());
+                $postData = array('company_id'=>Auth::user()->company_id,'post_title'=>$request->input('post_title'),'post_description'=>$request->input('post_description'),'is_anonymous'=>$is_anonymous,'post_type'=>$request->input('post_type'),'updated_at'=>Carbon\Carbon::now());
                 $res = $post->where('id', $id)->update($postData);
                 $file = $request->file('file_upload');
                 if ($file != "") {
@@ -197,18 +200,66 @@ class PostController extends Controller {
                 $postlike = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->first();
                 if($postlike)
                 {
-                    if($postlike->forceDelete()) {
-                        return redirect()->route('post.index')->with('success', 'Remove post Liked successfully');
-                    }else {
-                        return redirect()->route('post.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+                    if($postlike->flag == 1) {
+                        if($postlike->forceDelete()) {
+                            return Redirect::back()->with('success', 'Remove post Liked successfully');
+                        }else {
+                            return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+                        }
+                    } else {
+                        $likepost = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->update(array('flag'=>1,'updated_at'=>Carbon\Carbon::now()));
+                        if($likepost) {
+                            return Redirect::back()->with('success', 'post unliked successfully');
+                        }else {
+                            return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+                        }
                     }
                     
                 }else {
-                    $likepost = PostLike::insert(array('user_id'=>$user_id,'post_id'=>$id,'created_at'=>Carbon\Carbon::now()));
+                    $likepost = PostLike::insert(array('user_id'=>$user_id,'post_id'=>$id,'flag'=>1,'created_at'=>Carbon\Carbon::now()));
                     if($likepost) {
-                        return redirect()->route('post.index')->with('success', 'Post Liked successfully');
+                        return Redirect::back()->with('success', 'Post Liked successfully');
                     }else {
-                        return redirect()->route('post.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+                        return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+                    }
+                }
+            }else {
+               return redirect('/index'); 
+            }
+        }catch (\exception $e) {
+            return Redirect::back()->with('err_msg', $e->getMessage());
+        }
+        
+    }
+    
+    public function unlike_post($id) {
+        try{
+            if(Auth::user()) {
+                $user_id = Auth::user()->id;
+                $postunlike = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->first();
+                if($postunlike)
+                {
+                    if($postunlike->flag == 2) {
+                        if($postunlike->forceDelete()) {
+                            return Redirect::back()->with('success', 'Remove post unliked successfully');
+                        }else {
+                            return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+                        }
+                    }else {
+                        $unlikepost = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->update(array('flag'=>2,'updated_at'=>Carbon\Carbon::now()));
+                        if($unlikepost) {
+                            return Redirect::back()->with('success', 'post unliked successfully');
+                        }else {
+                            return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+                        }
+                    }
+                    
+                }else {
+                    $unlikepost = PostLike::insert(array('user_id'=>$user_id,'post_id'=>$id,'flag'=>2,'created_at'=>Carbon\Carbon::now()));
+                    if($unlikepost) {
+                        return Redirect::back()->with('success', 'Post unliked successfully');
+                    }else {
+                        return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
                     }
                 }
             }else {
@@ -223,14 +274,12 @@ class PostController extends Controller {
     public function viewpost($id) {
         $post = Post::with('postUser','postUser.following')->with('postLike')->with(['postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-                }])->with(['postAttachment' => function($q) {
-                    $q->where('type', 1)->first(); // '=' is optional
-                }])->with(['postComment' => function($q) {
+                }])->with('postAttachment')->with(['postComment' => function($q) {
                     //$q->where('user_id',  Auth::user()->id); // '=' is optional
                     $q->orderBy('id','desc');
                 },'postComment.commentUser'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->whereNULL('deleted_at')->where('id',$id)->first();
-               // dd($post);
+                //dd($post);
         return view($this->folder.'.post.view', compact('post'));
     }
     

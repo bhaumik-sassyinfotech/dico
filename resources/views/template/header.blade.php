@@ -8,7 +8,8 @@
             if(!empty(Auth::user()->profile_image)) {
                 $profile_pic = 'public/uploads/profile_pic/'.Auth::user()->profile_image;
             }else {
-                $profile_pic = 'public/assets/demo/avatar/dangerfield.png';
+                //$profile_pic = 'public/assets/demo/avatar/dangerfield.png';
+                $profile_pic = 'public/assets/demo/avatar/jackson.png';
             }
         ?>
 
