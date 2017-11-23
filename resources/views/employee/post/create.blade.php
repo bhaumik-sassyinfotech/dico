@@ -40,7 +40,7 @@
                      {{ csrf_field() }}
                     <div class="new_button">
                         <div class="pull-right extra_button">
-                            <input type="submit" name="save" id="save" class="btn btn-primary">
+                            <input type="submit" name="save" id="save" value="Submit" class="btn btn-primary">
                         </div>
                         <div class="pull-right extra_button">
                                 <a href="{{ route('post.index') }}" class="btn btn-default" >Back</a>
@@ -69,12 +69,16 @@
                                 <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control"></textarea>
                             </div>
                         </div>
+                        <?php
+                            if(isset($company) && $company->allow_anonymous == 1) {
+                        ?>
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label>Is Anonymous</label><br/>
                                 <input type="checkbox" name="is_anonymous" id="is_anonymous">
                             </div>
                         </div>
+                        <?php } ?>
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <span class="btn btn-primary fileinput-button">

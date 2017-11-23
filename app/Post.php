@@ -18,7 +18,7 @@ class Post extends Model
     {
         return $this->hasMany('App\PostLike','post_id','id')->where('flag',1);
     }
-    public function postUnLike()
+    public function postDisLike()
     {
         return $this->hasMany('App\PostLike','post_id','id')->where('flag',2);
     }
@@ -26,7 +26,7 @@ class Post extends Model
     {
         return $this->hasOne('App\PostLike','post_id','id')->where('flag',1);
     }
-    public function postUserUnLike()
+    public function postUserDisLike()
     {
         return $this->hasOne('App\PostLike','post_id','id')->where('flag',2);
     }
@@ -36,6 +36,6 @@ class Post extends Model
     }
     public function postComment()
     {
-        return $this->hasMany('App\Comment','post_id','id');
+        return $this->hasMany('App\Comment','post_id','id')->orderBy('id','desc');
     }
 }

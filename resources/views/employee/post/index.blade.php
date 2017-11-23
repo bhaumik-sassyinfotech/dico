@@ -30,66 +30,90 @@
                     <form method="POST" id="post-search-form" class="form-inline" role="form">
                     </form>
                     <?php
-                        if(!empty($posts)) {
-                            foreach(array_chunk($posts,3) as $p) {
-                                //dd($post['post_title']);
-                    ?>
-                    <div class="row">
-                    <?php
-                        foreach($p as $post) {
-                    ?>
-                        <div class="col-md-4">
-                            <div class="info-tiles tiles-info">
-                                <div class="tiles-heading">
-                                    <div class="pull-left"><a href="{{url('viewpost',$post['id'])}}">{{ str_limit($post['post_title'], $limit = 50, $end = '...') }}</a></div>
-                                </div>
-                                <div class="tiles-body">
-                                    <div class="row-md-4" style="font-size: 20px !important;">
-                                        {{ str_limit($post['post_description'], $limit = 130, $end = '...') }}
-                                    </div>
-                                    <div class="row-md-4">
-                                        <div class="col-md-2"><a href="{{url('like_post',$post['id'])}}">
-                                                <?php
-                                                    if(!empty($post['post_user_like'])) {
-                                                ?>
-                                                <i class="fa fa-thumbs-up"></i>
-                                                <?php } else { ?>
-                                                <i class="fa fa-thumbs-o-up"></i>
-                                                <?php } ?>
-                                            </a>
-                                                <span><?php echo count($post['post_like']);?></span>
+                    if (!empty($posts)) {
+                        foreach (array_chunk($posts, 3) as $p) {
+                            //dd($post['post_title']);
+                            ?>
+                            <div class="row">
+                                <?php
+                                foreach ($p as $post) {
+                                    // dd($post);
+                                    ?>
+                                    <div class="col-md-4">
+                                        <div class="info-tiles tiles-info">
+                                            <div class="tiles-heading">
+                                                <div class="pull-left"><a href="{{url('viewpost',$post['id'])}}">{{ str_limit($post['post_title'], $limit = 50, $end = '...') }}</a></div>
+                                            </div>
+                                            <div class="tiles-body">
+                                                <div class="row-md-4" style="font-size: 20px !important;">
+                                                    {{ str_limit($post['post_description'], $limit = 130, $end = '...') }}
+                                                </div>
+                                                <div class="row-md-4">
+                                                    <div class="col-md-2">
+                                                        <a id="like_post" onclick="likePost({{$post['id']}})">
+                                                            <?php
+                                                            if (!empty($post['post_user_like'])) {
+                                                                ?>
+                                                                <i class="fa fa-thumbs-up"></i>
+                                                            <?php } else { ?>
+                                                                <i class="fa fa-thumbs-o-up"></i>
+                                                            <?php } ?>
+                                                        </a>
+                                                        <span id="post_like_count"><?php echo count($post['post_like']); ?></span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <a id="dislike_post" onclick="dislikePost({{$post['id']}})">
+                                                            <?php
+                                                            if (!empty($post['post_user_dis_like'])) {
+                                                                ?>
+                                                                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                                            <?php } else { ?>
+                                                                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                                                            <?php } ?>
+                                                        </a>
+                                                        <span id="post_dislike_count"><?php echo count($post['post_dis_like']); ?></span>
+                                                    </div>
+                                                    <div class="col-md-2"><a href="javascript:void(0)">
+                                                            <?php
+                                                            if (!empty($post['post_comment'])) {
+                                                                ?>
+                                                                <i class="fa fa-comments"></i>
+                                                            <?php } else { ?>
+                                                                <i class="fa fa-comments-o"></i>
+                                                            <?php } ?>
+                                                        </a>
+                                                        <span><?php echo count($post['post_comment']); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tiles-footer">
+                                                Author : {{$post['post_user']['name']}} <br/>
+                                                Date : {{date('d/m/Y',strtotime($post['created_at']))}}
+                                            </div>
                                         </div>
-                                        <div class="col-md-2"><a href=""><i class="fa fa-comments-o"></i></a></div>
                                     </div>
-                                </div>
-                                <div class="tiles-footer">
-                                    Author : {{$post['post_user']['name']}} <br/>
-                                    Date : {{date('d/m/Y',strtotime($post['created_at']))}}
-                                </div>
-                            </div>
-                        </div>
-                        
-                    <?php
+
+                                    <?php
+                                }
+                                ?>
+                            </div>    
+                            <?php
                         }
+                    }
                     ?>
-                    </div>    
-                    <?php
-                            }
-                        }
-                    ?>
-                    <?php /*<table class="table table-striped" id="post_table">
-                        <thead>
-                            <tr>
-                                <th>ID#</th>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Author</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>*/?>
+                    <?php /* <table class="table table-striped" id="post_table">
+                      <thead>
+                      <tr>
+                      <th>ID#</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Author</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                      </tr>
+                      </thead>
+                      </table> */ ?>
                 </div>
             </div>
         </div>
@@ -99,32 +123,32 @@
 @push('scripts')
 <script type="text/javascript">
     function deletepost(id) {
-        swal({
-            title: "Are you sure?",
+    swal({
+    title: "Are you sure?",
             text: "you will not able to recover this post.",
             type: "info",
             showCancelButton: true,
             closeOnConfirm: false,
             showLoaderOnConfirm: true
-          }, function () {
-              var token = '<?php echo csrf_token() ?>';
-              var formData = {post_id : id, _token : token};
-              $.ajax({
-                url: "{{ route('post.destroy',"+id+") }}",
-                type: "POST",
-                data: formData,
-                success: function (response) {
-                    var res = JSON.parse(response);
-                    if(res.status == 1) {
-                        swal("Success", res.msg, "success");
-                        location.reload();
-                    }
-                    else {
-                        swal("Error", res.msg, "error");
-                    }
-                }
-            });
-        });
+    }, function () {
+    var token = '<?php echo csrf_token() ?>';
+    var formData = {post_id : id, _token : token};
+    $.ajax({
+    url: "{{ route('post.destroy'," + id + ") }}",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+            var res = JSON.parse(response);
+            if (res.status == 1) {
+            swal("Success", res.msg, "success");
+            location.reload();
+            }
+            else {
+            swal("Error", res.msg, "error");
+            }
+            }
+    });
+    });
     }
 </script>
 @endpush

@@ -39,10 +39,14 @@
         /*Post*/
         Route::resource('post' , 'PostController');
         Route::get('like_post/{id}' , 'PostController@like_post');
-        Route::get('unlike_post/{id}' , 'PostController@unlike_post');
+        Route::get('dislike_post/{id}' , 'PostController@dislike_post');
         Route::get('get_post' , 'PostController@get_post');
         Route::get('viewpost/{id}' , 'PostController@viewpost');
         Route::post('savecomment/{id}','PostController@savecomment');
+        Route::get('deletecomment/{id}','PostController@deletecomment');
+        Route::get('like_comment/{id}' , 'PostController@like_comment');
+        Route::get('dislike_comment/{id}' , 'PostController@dislike_comment');
+        Route::post('comment_solution' , 'PostController@comment_solution');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

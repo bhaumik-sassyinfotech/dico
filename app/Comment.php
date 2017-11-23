@@ -14,4 +14,24 @@ class Comment extends Model
     {
         return $this->hasOne('App\User','id','user_id');
     }
+    public function commentAttachment()
+    {
+        return $this->hasOne('App\Attachment','type_id','id')->where('type', 2);
+    }
+    public function commentLike()
+    {
+        return $this->hasMany('App\CommentLike','comment_id','id')->where('flag',1);
+    }
+    public function commentDisLike()
+    {
+        return $this->hasMany('App\CommentLike','comment_id','id')->where('flag',2);
+    }
+    public function commentUserLike()
+    {
+        return $this->hasOne('App\CommentLike','comment_id','id')->where('flag',1);
+    }
+    public function commentUserDisLike()
+    {
+        return $this->hasOne('App\CommentLike','comment_id','id')->where('flag',2);
+    }
 }

@@ -60,3 +60,89 @@ jQuery.validator.addMethod("email_valid", function (value, element) {
 jQuery.validator.addMethod("validName", function (value, element) {
     return this.optional(element) || /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/.test(value);
 }, "Only Characters, Numbers and Spaces are Allowed.");
+
+function likePost(id) {
+    $.ajax({
+    url: SITE_URL+'/like_post/'+id,
+    type: 'GET',
+    success: function(response) {
+       var res = JSON.parse(response);
+       var html = "";
+       if(res.status == 1) {
+           html += '<i class="fa fa-thumbs-up"></i>';
+       } else {
+           html += '<i class="fa fa-thumbs-o-up"></i>';
+       }
+       $('#post_like_count').html(res.likecount);
+       $('#post_dislike_count').html(res.dislikecount);
+       $('#like_post').html(html);
+       $('#dislike_post').html('<i class="fa fa-thumbs-o-down"></i>');
+    },
+    error: function() {
+    }
+ });
+}
+function dislikePost(id) {
+    $.ajax({
+    url: SITE_URL+'/dislike_post/'+id,
+    type: 'GET',
+    success: function(response) {
+       var res = JSON.parse(response);
+       var html = "";
+       if(res.status == 1) {
+           html += '<i class="fa fa-thumbs-down"></i>';
+       } else {
+           html += '<i class="fa fa-thumbs-o-down"></i>';
+       }
+       $('#post_like_count').html(res.likecount);
+       $('#post_dislike_count').html(res.dislikecount);
+       $('#dislike_post').html(html);
+       $('#like_post').html('<i class="fa fa-thumbs-o-up"></i>');
+    },
+    error: function() {
+    }
+ });
+}
+
+function likeComment(id) {
+    $.ajax({
+    url: SITE_URL+'/like_comment/'+id,
+    type: 'GET',
+    success: function(response) {
+       var res = JSON.parse(response);
+       var html = "";
+       if(res.status == 1) {
+           html += '<i class="fa fa-thumbs-up"></i>';
+       } else {
+           html += '<i class="fa fa-thumbs-o-up"></i>';
+       }
+       $('#comment_like_count_'+id).html(res.likecount);
+       $('#comment_dislike_count_'+id).html(res.dislikecount);
+       $('#like_comment_'+id).html(html);
+       $('#dislike_comment_'+id).html('<i class="fa fa-thumbs-o-down"></i>');
+    },
+    error: function() {
+    }
+ });
+}
+function dislikeComment(id) {
+    $.ajax({
+    url: SITE_URL+'/dislike_comment/'+id,
+    type: 'GET',
+    success: function(response) {
+       var res = JSON.parse(response);
+       var html = "";
+       if(res.status == 1) {
+           html += '<i class="fa fa-thumbs-down"></i>';
+       } else {
+           html += '<i class="fa fa-thumbs-o-down"></i>';
+       }
+       $('#comment_like_count_'+id).html(res.likecount);
+       $('#comment_dislike_count_'+id).html(res.dislikecount);
+       $('#dislike_comment_'+id).html(html);
+       $('#like_comment_'+id).html('<i class="fa fa-thumbs-o-up"></i>');
+    },
+    error: function() {
+    }
+ });
+}
