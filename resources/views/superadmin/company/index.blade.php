@@ -15,6 +15,10 @@
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
+            <ol class="breadcrumb">
+                <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                <li class="active">Company</li>
+            </ol>
             <h1>Company</h1>
             <div class="options">
                 <div class="btn-toolbar">

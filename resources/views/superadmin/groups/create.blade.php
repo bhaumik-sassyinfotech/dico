@@ -23,23 +23,24 @@
     <div id="page-content">
         <div id='wrap'>
             <div id="page-heading">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h1>Create Group</h1>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="pull-right nopadding"><p style="float:right;"><a
-                                        href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('group.index') }}">Group</a>
-                                > Create Group</p></div>
-                    </div>
-                </div>
+                <ol class="breadcrumb">
+                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                    <li><a href="{{ route('group.index') }}">Group</a></li>
+                    <li class="active">Create Group</li>
+                </ol>
+                <h1>Create Group</h1>
+
             </div>
+            {{ Form::open([ 'name' => 'createUserGroup','route' => 'group.store' , 'id' => 'createUserGroup'] ) }}
             <div class="container">
                 <div class="panel panel-default">
-                    <div class="panel panel-body">
-                        <div class="row">
-                            {{ Form::open([ 'name' => 'createUserGroup','route' => 'group.store' , 'id' => 'createUserGroup'] ) }}
-                            <div class="form-group container">
+                    {{--<div class="panel-heading">--}}
+                        {{--<h4>Create Group</h4>--}}
+                    {{--</div>--}}
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <div class="row">
                                 <div class="col-md-6">
                                     <label for="group_name">Group name:*</label>
                                     <input type="text" name="group_name" id="group_name" class="form-control required"/>
@@ -50,7 +51,10 @@
                                               class="form-control required"></textarea>
                                 </div>
                             </div>
-                            <div class="form-group container ">
+                        </div>
+
+                        <div class="form-group ">
+                            <div class="row">
                                 <div class="col-md-3">
                                     <label for="company_listing">Company:* </label>
                                     <select name="company_listing" class="form-control required" id="company_listing">
@@ -74,18 +78,21 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="form-group container">
-                                <div class="col-md-12">
-                                    {{ Form::submit('Save',['class' => 'btn btn-success']) }}
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-toolbar">
+                                    <a class="btn btn-default" href="{{ route('group.index') }}">Back</a>
+                                    {{ Form::submit('Submit',['class' => 'btn btn-primary']) }}
                                 </div>
                             </div>
-                            {{ Form::close() }}
                         </div>
                     </div>
                 </div>
-
             </div>
+            {{ Form::close() }}
         </div>
     </div>
 @stop

@@ -1,6 +1,10 @@
 /*enable `save` button once the page is loaded to ensure that jquery validations are applied.*/
 $("#save").prop('disabled',true);
-// return false;
+/*Yajratables default parameters*/
+$.extend(true, jQuery.fn.dataTable.defaults, {
+    "stateSave": true,
+    // "searchDelay": 2000,
+});
 /*validations*/
 jQuery.validator.addMethod("validateName", function (value, element) {
     return this.optional(element) || /^[a-zA-Z\\.'-\s]+$/i.test(value);
@@ -63,6 +67,7 @@ jQuery.validator.addMethod("email_valid", function (value, element) {
 jQuery.validator.addMethod("validName", function (value, element) {
     return this.optional(element) || /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/.test(value);
 }, "Only Characters, Numbers and Spaces are Allowed.");
+
 
 $(document).ready(function ()
 {

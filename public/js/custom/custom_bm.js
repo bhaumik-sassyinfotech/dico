@@ -53,8 +53,13 @@ $("#company_listing").change(function () {
             {
                 $("#users_listing,#group_owner").empty().append($("<option></option>").val("").html("Select user"));
                 var userData = response.data;
+                var role = '';
                 $.each(userData, function (key, val) {
-                    $("#users_listing,#group_owner").append("<option value='" + val.id + "'>" + val.name + "</option>");
+                    if(val.role_id === 2)
+                        role = 'Manager';
+                    else if(val.role_id === 3)
+                        role = 'Employee';
+                    $("#users_listing,#group_owner").append("<option value='" + val.id + "'>" + val.name +"("+role+")"+"</option>");
                 });
             }
         });
@@ -65,9 +70,9 @@ var groupTable = $('#group_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: SITE_URL + '/group/list',
-    searching: false,
+    searching: true,
     columns: [
-        {data: 'row'},
+        {data: 'rownum',name: 'rownum'},
         {data: 'group_name'},
         {data: 'description'},
         {data: 'group_users_count'},
@@ -87,7 +92,7 @@ var groupEditTable = $("#group_users_edit_table").DataTable({
     },
     searching: false,
     columns: [
-        {data: 'row'},
+        {data: 'rownum'},
         {data: 'user_detail.name' , name:'userDetail.name' },
         {data: 'admin'},
         {data: 'action'}
@@ -218,32 +223,42 @@ $(document).on('click', '.removeUser', function (event) {
 
         });
 });
-
+$("#group_users_edit_form").validate({submitHandler: function (form) {
+    $("#save").prop('disabled',true);
+    form.submit();
+}});
 $("#add_user").click(function(event){
     //
-    $("#group_users_edit_form").validate({submitHandler: function (form) {
-        $("#save").prop('disabled',true);
-        form.submit();
-    }});
     event.preventDefault();
     var users = $("#company_users").val();
-    var companyId = $("#company_id").val();
-    var groupId = $("#group_id").val();
-    var dataString = { _token: CSRF_TOKEN, addGroupUsers:1, users_list: users , company_id: companyId, group_id: groupId };
-    $.ajax({
-        method: "POST",
-        url: SITE_URL + '/group/editUsers',
-        data: dataString,
-        success: function (response) {
-            var status = response.status;
-            if(status == 1) {
-                swal("Success", response.msg, "success");
+    if($.trim(users) !== "") {
+        var companyId = $("#company_id").val();
+        var groupId = $("#group_id").val();
+        var dataString = {
+            _token: CSRF_TOKEN,
+            addGroupUsers: 1,
+            users_list: users,
+            company_id: companyId,
+            group_id: groupId
+        };
+        $.ajax({
+            method: "POST",
+            url: SITE_URL + '/group/editUsers',
+            data: dataString,
+            success: function (response) {
+                var status = response.status;
+                if (status == 1) {
+                    swal("Success", response.msg, "success");
+                }
+                companyUsers();
+                groupEditTable.draw();
             }
-            companyUsers();
-            groupEditTable.draw();
-        }
 
-    })
+        })
+    } else
+    {
+        swal("Error!","Please select users.","error");
+    }
 });
 function companyUsers() {
     var companyId = $("#company_id").val();
@@ -285,6 +300,7 @@ $("#company_id").change(function () {
             if(status == 1)
             {
                 var groups = response.data;
+
                 $.each(groups,function(key,val){
                     groupDropDown.append($("<option></option>").val(val.id).html(val.group_name));
                 });

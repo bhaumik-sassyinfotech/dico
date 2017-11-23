@@ -2,6 +2,7 @@
     
     namespace App\Http\Controllers;
     
+    use Exception;
     use Illuminate\Http\Request;
     use App\Company;
     use App\Post;
@@ -619,7 +620,7 @@
                 } else
                 {
                     DB::rollBack();
-                    dd("There was some error saving your post.");
+                    return back()->withInput();
                 }
             }
             catch ( Exception $ex )

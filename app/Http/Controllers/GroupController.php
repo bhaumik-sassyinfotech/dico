@@ -212,16 +212,11 @@
         
         public function groupListing()
         {
-            $rowCount = 0;
-            
-            $group = Group::select([ 'groups.*' ])->withCount([ 'groupUsers' ])->orderBy('id' , 'DESC');
-
+            DB::statement(DB::raw('set @rownum=0'));
+            $group = Group::select([DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'groups.*' ])->withCount([ 'groupUsers' ])->orderBy('id','DESC')->get();
+//            return $group;
 //        return $group;
-            return Datatables::of($group)->addColumn('row' , function ($row) use (&$rowCount) {
-                $rowCount += 1;
-                
-                return $rowCount;
-            })->addColumn('actions' , function ($row) {
+            return Datatables::of($group)->addColumn('actions' , function ($row) {
                 $editBtn = '<a href="' . route('group.edit' , [ $row->id ]) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
                 
                 return $editBtn;
@@ -240,7 +235,8 @@
             $groupUserId  = $request->get('groupUserId');
             $groupUser    = GroupUser::find($groupUserId);
             $groupDetails = Group::where('id' , $group_id)->first();
-            $groupUsers   = GroupUser::select([ 'group_users.*' ])->with([ 'userDetail' ])->where('group_id' , $group_id);
+            DB::statement(DB::raw('set @rownum=0'));
+            $groupUsers   = GroupUser::select([DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'group_users.*' ])->with([ 'userDetail' ])->where('group_id' , $group_id);
             
             if ( $request->get('makeAdmin') == 1 )
             {
@@ -285,13 +281,9 @@
                     return Response::json([ 'msg' => 'There was some error adding users to group.' , 'status' => 0 ]);
             }
             
-            $rowCount = 0;
+//            $rowCount = 0;
             
-            return DataTables::of($groupUsers)->addColumn('row' , function ($row) use (&$rowCount) {
-                $rowCount += 1;
-                
-                return $rowCount;
-            })->addColumn('admin' , function ($row) use ($groupDetails) {
+            return DataTables::of($groupUsers)->addColumn('admin' , function ($row) use ($groupDetails) {
                 $btn = '';
                 if ( $row->user_id == $groupDetails->group_owner )
                 {

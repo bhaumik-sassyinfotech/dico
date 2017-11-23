@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="company_users">Add Users</label>
-                                <select name="company_users[]" id="company_users" class="form-control required" multiple="multiple">
+                                <select name="company_users[]" id="company_users" class="form-control" multiple="multiple">
                                     @foreach($companyEmployee as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach

@@ -27,13 +27,15 @@
 <script type='text/javascript' src="{{asset('assets/js/placeholdr.js')}}"></script> 
 <script type='text/javascript' src="{{asset('assets/js/application.js')}}"></script> 
 <script type='text/javascript' src="{{asset('assets/demo/demo.js')}}"></script> -->
-<script type='text/javascript' src="{{asset('public/assets/js/jquery.validate.min.js')}}"></script> 
+<script type='text/javascript' src="{{asset('public/assets/js/jquery.validate.min.js')}}"></script>
+
+<link href="{{ asset('public/assets/fonts/glyphicons/css/glyphicons.css') }}" rel="stylesheet">
 <link href="https://datatables.yajrabox.com/css/datatables.bootstrap.css" rel="stylesheet">
 <script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
 <script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
 <script type='text/javascript' src="{{asset('public/js/sweetalert.min.js')}}"></script>
 <script src="{{ asset('public/js/select2.js') }}"></script>
 <script type='text/javascript' src="{{ asset('public/js/application.js') }}"></script>
+<script type='text/javascript' src="{{asset('public/js/custom/common.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom_bm.js')}}"></script>
-<script type='text/javascript' src="{{asset('public/js/custom/common.js')}}"></script>

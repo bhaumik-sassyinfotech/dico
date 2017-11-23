@@ -15249,3 +15249,7 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
 .input-group-addon:not(:first-child) {
   border-left: 0;
 }
+
+.pagination > li span {
+  padding: 0px;
+}
