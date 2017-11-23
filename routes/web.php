@@ -37,6 +37,12 @@
         Route::resource('points' , 'PointsController');
         Route::get('get_points' , 'PointsController@get_points');
         /*Post*/
+        Route::get('/post/idea_show/{id}','PostController@idea_show')->name('idea.index');
+        Route::match(['get','POST'],'/post/idea_store','PostController@idea_store')->name('idea.store');
+        Route::match(['get','POST'],'/post/idea_edit/{id}','PostController@idea_edit')->name('idea.edit');
+        Route::match(['get','POST'],'/post/change-status','PostController@change_status');
+        Route::match(['PUT','POST'],'/post/idea_update/{id}','PostController@idea_update')->name('idea.update');
+        Route::match(['get','POST'],'/post/idea_list','PostController@idea_list')->name('idea.list');
         Route::resource('post' , 'PostController');
         Route::get('like_post/{id}' , 'PostController@like_post');
         Route::get('unlike_post/{id}' , 'PostController@unlike_post');

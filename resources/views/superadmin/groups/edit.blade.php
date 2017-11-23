@@ -54,7 +54,7 @@
                                        value="{{ $groupData->group_name }}"/>
                             </div>
                             <div class="col-md-6">
-                                <label for="group_description"> Group Description:</label>
+                                <label for="group_description"> Group Description:*</label>
                                 <textarea name="group_description" id="group_description"
                                           class="form-control required">{{ nl2br($groupData->description) }}</textarea>
                             </div>

@@ -25,6 +25,7 @@ class CreatePostsTable extends Migration
             $table->boolean('status')->default(1);
             $table->enum('idea_status',['approve','deny','amend'])->nullable();
             $table->string('idea_reason','255')->nullable();
+            $table->integer('idea_status_updated_by')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

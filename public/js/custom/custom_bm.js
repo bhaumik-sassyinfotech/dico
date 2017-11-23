@@ -33,7 +33,12 @@ $(document).ready(function () {
     $("#company_listing,#company_users,#group_owner").select2();
     $("#user_groups").select2();
 });
-$("#createUserGroup").validate();
+$("#createUserGroup").validate({
+    submitHandler: function (form) {
+        $("#save").prop('disabled',true);
+        form.submit();
+    }
+});
 /*Ajax Call to fetch user of the company selected*/
 $("#company_listing").change(function () {
     var that = $(this);
@@ -213,9 +218,13 @@ $(document).on('click', '.removeUser', function (event) {
 
         });
 });
+
 $("#add_user").click(function(event){
     //
-    $("#group_users_edit_form").validate();
+    $("#group_users_edit_form").validate({submitHandler: function (form) {
+        $("#save").prop('disabled',true);
+        form.submit();
+    }});
     event.preventDefault();
     var users = $("#company_users").val();
     var companyId = $("#company_id").val();
@@ -290,3 +299,54 @@ $("#company_id").change(function () {
 
 });
 
+/*change status of an idea */
+$('.ideaStatus').click(function (ev) {
+    var that = $(this);
+    ev.preventDefault();
+    var postId = $("#post_id").val();
+    var dataString = { _token: CSRF_TOKEN , post_id: postId , idea_status: null};
+    var btnClicked = that.data('postStatus');
+
+    if(btnClicked === 'approve')
+    {
+        dataString.idea_status = 'approve';
+    } else if(btnClicked === 'deny')
+    {
+        dataString.idea_status = 'deny';
+    } else if(btnClicked === 'amend')
+    {
+        dataString.idea_status = 'amend';
+    }
+
+    if(dataString.idea_status !== null)
+    {
+        swal({
+            title: "Are you sure?",
+            // text: "You want to "+dataString.idea_status.charAt(0).toUpperCase() + dataString.idea_status.slice(1)+" the idea?",
+            text: "This will "+dataString.idea_status + " the idea.",
+            type: "input",
+            inputPlaceholder: "Reason",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (inputValue) {
+            if (inputValue === false) return false;
+            if (inputValue === "" || $.trim(inputValue) === "") {
+                swal.showInputError("Please enter a valid reason for your decision!");
+                return false
+            }
+            dataString.idea_reason = inputValue;
+            $.ajax({
+                url: SITE_URL+'/post/change-status',
+                method: "POST",
+                data: dataString,
+                success: function (response) {
+                    swal("Success", response.msg, "success");
+                }
+            });
+
+        });
+    } else
+        alert("null");
+
+});
