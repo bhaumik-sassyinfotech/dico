@@ -299,9 +299,11 @@ class PostController extends Controller {
     }
     
     public function viewpost($id) {
-        $post = Post::with('postUser','postUser.following')->with('postLike')->with(['postUserLike' => function($q) {
+        $post = Post::with('postUser','postUser.following')->with('postLike')->with('postDisLike')->with(['postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
-                }])->with('postAttachment')->with(['postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentUserLike' => function($q) {
+                }])->with(['postUserDisLike' => function($q) {
+                        $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
+                    }])->with('postAttachment')->with(['postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 

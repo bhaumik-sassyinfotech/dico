@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-xs-12 form-group">
                                 <div class="col-md-2">
-                                    <a id="like_post" onclick="likePost({{$post['id']}})">
+                                    <a href="javascript:void(0)" id="like_post" onclick="likePost({{$post['id']}})">
                                         <?php
                                         if (!empty($post['postUserLike'])) {
                                             ?>
@@ -58,7 +58,7 @@
                                     <span id="post_like_count"><?php echo count($post['postLike']); ?></span>
                                 </div>
                                 <div class="col-md-2">
-                                    <a id="dislike_post" onclick="dislikePost({{$post['id']}})">
+                                    <a href="javascript:void(0)" id="dislike_post" onclick="dislikePost({{$post['id']}})">
                                         <?php
                                         if (!empty($post['postUserDisLike'])) {
                                             ?>
