@@ -150,7 +150,7 @@
             $groupData       = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
 //            dd($groupData->groupUsers->pluck('user_id')->toArray());
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
-            $companyEmployee = User::where('company_id' , $groupData->company_id)->whereNotIn('id' , $groupUsers)->get();
+            $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id','!=',1)->whereNotIn('id' , $groupUsers)->get();
             
             return view($this->folder . '.groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
         }

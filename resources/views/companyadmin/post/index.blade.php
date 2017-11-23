@@ -50,7 +50,7 @@
                                                 </div>
                                                 <div class="row-md-4">
                                                     <div class="col-md-2">
-                                                        <a id="like_post" onclick="likePost({{$post['id']}})">
+                                                        <a href="javascript:void(0)" id="like_post" onclick="likePost({{$post['id']}})">
                                                             <?php
                                                             if (!empty($post['post_user_like'])) {
                                                                 ?>
@@ -62,7 +62,7 @@
                                                         <span id="post_like_count"><?php echo count($post['post_like']); ?></span>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <a id="dislike_post" onclick="dislikePost({{$post['id']}})">
+                                                        <a href="javascript:void(0)" id="dislike_post" onclick="dislikePost({{$post['id']}})">
                                                             <?php
                                                             if (!empty($post['post_user_dis_like'])) {
                                                                 ?>
@@ -87,7 +87,10 @@
                                                 </div>
                                             </div>
                                             <div class="tiles-footer">
+                                                <?php
+                                                    if($post['is_anonymous'] == 0) { ?>
                                                 Author : {{$post['post_user']['name']}} <br/>
+                                                    <?php } ?>
                                                 Date : {{date('d/m/Y',strtotime($post['created_at']))}}
                                             </div>
                                         </div>

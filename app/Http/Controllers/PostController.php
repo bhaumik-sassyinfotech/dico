@@ -575,6 +575,59 @@
              echo json_encode(array('status' => 0,'msg' => $e->getMessage()));
         }
     }
+    
+    
+    public function idea_update($id , Request $request)
+        {
+            $this->validate($request , [
+                'post_type'  => 'required' ,
+                'post_title' => 'required' ,
+            ]);
+            DB::beginTransaction();
+            try
+            {
+                $currUser               = Auth::user();
+                $post                   = Post::find($id);
+                $post->post_title       = $request->post_title;
+                $post->post_type        = $request->post_type;
+                $post->post_description = $request->post_description;
+                $post->user_id          = $currUser->id;
+                $post->is_anonymous     = $request->get('is_anonymous') ? 1 : 0;
+                if ( $post->save() )
+                {
+                    $file = $request->file('file_upload');
+                    if ( $file != "" )
+                    {
+                        $postData = array();
+                        //echo "here";die();
+                        $fileName        = $file->getClientOriginalName();
+                        $extension       = $file->getClientOriginalExtension();
+                        $folderName      = '/uploads/';
+                        $destinationPath = public_path() . $folderName;
+                        $safeName        = str_random(10) . '.' . $extension;
+                        $file->move($destinationPath , $safeName);
+                        //$attachment = new Attachment;
+                        $postData[ 'file_name' ] = $safeName;
+//                        $postData[ 'type' ]      = 1;
+//                        $postData[ 'type_id' ]   = $id;
+//                        $postData[ 'user_id' ]   = $currUser->id;
+//                        $attachment              = Attachment::insert($postData);
+                        $attachment              = Attachment::where('type_id',$id)->where('type',1)->where('user_id',$currUser->id)->update($postData);
+                    }
+                    DB::commit();
+                    return back();
+                } else
+                {
+                    DB::rollBack();
+                    dd("There was some error saving your post.");
+                }
+            }
+            catch ( Exception $ex )
+            {
+                DB::rollBack();
+                return Redirect::back()->with('err_msg' , $ex->getMessage());
+            }
+        }
         
         public function idea_edit($id , Request $request)
         {

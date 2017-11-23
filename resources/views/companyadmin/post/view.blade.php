@@ -39,18 +39,18 @@
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label><b>{{$post->post_title}}</b></label><br>
-                                <small>{{$post->postUser->name}} on {{date('d/m/Y',strtotime($post->created_at))}}</small>
+                                <small><?php
+                                    if($post['is_anonymous'] == 0) {
+                                   
+                                    echo $post->postUser->name; }
+                                   ?>  on {{date('d/m/Y',strtotime($post->created_at))}}</small>
                             </div>
                             <div class="col-xs-12 form-group">
                                 <label>{{$post->post_description}}</label>
                             </div>
                             <div class="col-xs-12 form-group">
                                 <div class="col-md-2">
-<<<<<<< HEAD
                                     <a href="javascript:void(0)" id="like_post" onclick="likePost({{$post['id']}})">
-=======
-                                    <a href="javascript:void(0);" id="like_post" onclick="likePost({{$post['id']}})">
->>>>>>> 886b2b56c2c99379bd9c44891d495a8b6adbb598
                                         <?php
                                         if (!empty($post['postUserLike'])) {
                                             ?>
@@ -62,11 +62,7 @@
                                     <span id="post_like_count"><?php echo count($post['postLike']); ?></span>
                                 </div>
                                 <div class="col-md-2">
-<<<<<<< HEAD
                                     <a href="javascript:void(0)" id="dislike_post" onclick="dislikePost({{$post['id']}})">
-=======
-                                    <a href="javascript:void(0);" id="dislike_post" onclick="dislikePost({{$post['id']}})">
->>>>>>> 886b2b56c2c99379bd9c44891d495a8b6adbb598
                                         <?php
                                         if (!empty($post['postUserDisLike'])) {
                                             ?>
@@ -113,7 +109,13 @@
 
                         <div class="row">
                             <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">
+                            <?php
+                                if($post['user_id'] == Auth::user()->id) {
+                            ?>
                             <a href="{{route('post.edit',$post->id)}}" class="btn btn-primary">Edit</a>
+                            <?php
+                                }
+                                ?>
                         </div>    
                     </div>
                 </form>
