@@ -203,7 +203,7 @@ class Helpers {
     public static function postViews($post_id , $user_id)
     {
         PostView::firstOrCreate(['user_id' => $user_id , 'post_id' => $post_id , 'visitor_ip' => request()->ip() ]);
-        return PostView::select(DB::RAW("count('id') as views"))->where('user_id' ,$user_id )->where('post_id' , $post_id)->groupBy('post_id')->first();
+        return PostView::select(DB::RAW("count('id') as views"))->where('post_id' , $post_id)->groupBy('post_id')->first();
     }
 }
 ?>

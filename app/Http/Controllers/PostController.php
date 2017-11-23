@@ -258,123 +258,97 @@
             })->rawColumns([ 'actions' ])->make(TRUE);
         }
         
-        public function like_post($id)
-        {
-            try
-            {
-                if ( Auth::user() )
+        public function like_post($id) {
+        try{
+            if(Auth::user()) {
+                $user_id = Auth::user()->id;
+                $postlike = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->first();
+                if($postlike)
                 {
-                    
-                    if ( $postlike->flag == 1 )
-                    {
-                        $deleteLike  = $postlike->forceDelete();
-                        $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
-                        $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
-                        if ( $deleteLike )
-                        {
-                            echo json_encode(array( 'status' => 0 , 'msg' => "Remove post liked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                        } else
-                        {
-                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
+                    if($postlike->flag == 1) {
+                        $deleteLike = $postlike->forceDelete();
+                        $likepost = PostLike::where(array('post_id'=>$id,'flag'=>1))->get();
+                        $dislikepost = PostLike::where(array('post_id'=>$id,'flag'=>2))->get();
+                        if($deleteLike) {
+                            echo json_encode(array('status' => 0, 'msg' => "Remove post liked successfully",'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'),'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
                         }
-                    } else
-                    {
-                        $likepost    = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->update(array( 'flag' => 1 ));
-                        $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
-                        $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
-                        if ( $likepost )
-                        {
-                            echo json_encode(array( 'status' => 1 , 'msg' => "post liked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                        } else
-                        {
-                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
+                    } else {
+                        $likepost = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->update(array('flag'=>1));
+                        $likepost = PostLike::where(array('post_id'=>$id,'flag'=>1))->get();
+                        $dislikepost = PostLike::where(array('post_id'=>$id,'flag'=>2))->get();
+                        if($likepost) {
+                            echo json_encode(array('status' => 1, 'msg' => "post liked successfully",'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'),'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
                         }
                     }
                     
-                } else
-                {
-                    $likepost    = PostLike::insert(array( 'user_id' => $user_id , 'post_id' => $id , 'flag' => 1 ));
-                    $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
-                    $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
-                    if ( $likepost )
-                    {
-                        echo json_encode(array( 'status' => 1 , 'msg' => "post liked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                    } else
-                    {
-                        echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
+                }else {
+                    $likepost = PostLike::insert(array('user_id'=>$user_id,'post_id'=>$id,'flag'=>1));
+                    $likepost = PostLike::where(array('post_id'=>$id,'flag'=>1))->get();
+                    $dislikepost = PostLike::where(array('post_id'=>$id,'flag'=>2))->get();
+                    if($likepost) {
+                        echo json_encode(array('status' => 1, 'msg' => "post liked successfully",'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'),'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
                     }
                 }
+            }else {
+               return redirect('/index'); 
             }
-            
-            catch ( \exception $e )
-            {
-                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
-            }
-            
+        }catch (\exception $e) {
+            echo json_encode(array('status' => 0,'msg' => $e->getMessage()));
         }
         
-        public
-        function dislike_post($id)
-        {
-            try
-            {
-                if ( Auth::user() )
+    }
+    
+    public function dislike_post($id) {
+        try{
+            if(Auth::user()) {
+                $user_id = Auth::user()->id;
+                $postdislike = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->first();
+                if($postdislike)
                 {
-                    $user_id     = Auth::user()->id;
-                    $postdislike = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->first();
-                    if ( $postdislike )
-                    {
-                        if ( $postdislike->flag == 2 )
-                        {
-                            $deletedislike = $postdislike->forceDelete();
-                            $likepost      = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
-                            $dislikepost   = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
-                            if ( $deletedislike )
-                            {
-                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove post disliked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                            } else
-                            {
-                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                            }
-                        } else
-                        {
-                            $dislikepost = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->update(array( 'flag' => 2 ));
-                            $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
-                            $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
-                            if ( $dislikepost )
-                            {
-                                echo json_encode(array( 'status' => 1 , 'msg' => "post disliked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                            } else
-                            {
-                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                            }
+                    if($postdislike->flag == 2) {
+                        $deletedislike = $postdislike->forceDelete();
+                        $likepost = PostLike::where(array('post_id'=>$id,'flag'=>1))->get();
+                        $dislikepost = PostLike::where(array('post_id'=>$id,'flag'=>2))->get();
+                        if($deletedislike) {
+                            echo json_encode(array('status' => 0, 'msg' => "Remove post disliked successfully",'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'),'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
                         }
-                        
-                    } else
-                    {
-                        $dislikepost = PostLike::insert(array( 'user_id' => $user_id , 'post_id' => $id , 'flag' => 2 ));
-                        $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
-                        $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
-                        if ( $dislikepost )
-                        {
-                            echo json_encode(array( 'status' => 1 , 'msg' => "post disliked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                        } else
-                        {
-                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
-                            
+                    }else {
+                        $dislikepost = PostLike::where(array('user_id'=>$user_id,'post_id'=>$id))->update(array('flag'=>2));
+                        $likepost = PostLike::where(array('post_id'=>$id,'flag'=>1))->get();
+                        $dislikepost = PostLike::where(array('post_id'=>$id,'flag'=>2))->get();
+                        if($dislikepost) {
+                            echo json_encode(array('status' => 1, 'msg' => "post disliked successfully",'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'),'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
                         }
                     }
-                } else
-                {
-                    return redirect('/index');
+                    
+                }else {
+                    $dislikepost = PostLike::insert(array('user_id'=>$user_id,'post_id'=>$id,'flag'=>2));
+                    $likepost = PostLike::where(array('post_id'=>$id,'flag'=>1))->get();
+                    $dislikepost = PostLike::where(array('post_id'=>$id,'flag'=>2))->get();
+                    if($dislikepost) {
+                        echo json_encode(array('status' => 1, 'msg' => "post disliked successfully",'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'),'likecount'=>count($likepost),'dislikecount'=>count($dislikepost)));
+                    }
                 }
+            }else {
+               return redirect('/index'); 
             }
-            catch ( \exception $e )
-            {
-                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
-            }
-            
+        }catch (\exception $e) {
+            echo json_encode(array('status' => 0,'msg' => $e->getMessage()));
         }
+        
+    }
         
    
     
@@ -406,7 +380,7 @@
                 }
                 DB::beginTransaction();
                 $postData = array("user_id"=>$user_id,"post_id"=>$id,"comment_text"=>$comment_text,"is_anonymous"=>$is_anonymous);
-                $res = Comment::insert($postData);
+                $res = Comment::insertGetId($postData);
                 $file = $request->file('file_upload');
                 if ($file != "") {
                     $fileName = $file->getClientOriginalName();
@@ -418,7 +392,7 @@
                     $attachment = new Attachment;
                     $attachment->file_name = $safeName;
                     $attachment->type = 2;
-                    $attachment->type_id = $res->id;
+                    $attachment->type_id = $res;
                     $attachment->user_id = Auth::user()->id;
                     $attachment->save();
                    // $attachment = Attachment::insert($postData);
@@ -427,81 +401,30 @@
                 if($res) {
                     return Redirect::back()->with('success', 'Comment '.Config::get('constant.ADDED_MESSAGE'));
                 }else {
-                    return Redirect::back()->with('err_msg', Config::get('constant.TRY_MESSAGE'));
+                    return Redirect::back()->with('err_msg', $e->getMessage());
                 }
             }
-        }
-            catch ( Exception $e )
-            {
-                DB::rollBack();
-                
-                return Redirect::back()->with('err_msg' , $e->getMessage());
+            else {
+               return redirect('/index');  
             }
+        }catch (\exception $e) {
+            DB::rollback();
+            return Redirect::back()->with('err_msg', $e->getMessage());
         }
-        
-        public function idea_edit($id , Request $request)
-        {
-            
-            $currUser  = Auth::user();
-            $userId    = $currUser->id;
-            $companyId = $currUser->company_id;
-            
-            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment' ])->first();
-            
-            return view($this->folder . '.post.edit_idea_post' , compact('post'));
+    }
+    public function deletecomment($id = null) {
+        if(Attachment::where(array('type_id'=>$id,'type'=>2))->exists()) {
+            Attachment::where(array('type_id'=>$id,'type'=>2))->delete();
         }
-        
-        public function idea_show($id)
-        {
-            
-            $currUser = Auth::user();
-            
-            $postViews = Helpers::postViews($id , $currUser->id);
-            $post      = Post::with('ideaUser' , 'postUser' , 'postUser.following')->with('postLike')->with([ 'postUserLike' => function ($q) {
-                $q->where('user_id' , Auth::user()->id)->first();
-            } ])->with('postAttachment')->with([ 'postComment' , 'postComment.commentUser' , 'postComment.commentAttachment' ])->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at')->where('id' , $id)->first();
-            
-            return view($this->folder . '.post.view_idea_post' , compact('post'));
+        $deleteComment = Comment::where('id', $id)->delete();
+        if($deleteComment) {
+            return Redirect::back()->with('success', 'Comment deleted successfully');
+        }else {
+            return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
         }
-        
-        public function change_status(Request $request)
-        {
-            
-            $currUser = Auth::user();
-            if ( $currUser->role_id < 3 )
-            {
-                $status = $request->get('idea_status');
-                $reason = $request->get('idea_reason');
-                $postId = $request->get('post_id');
-                
-                $res = Post::where('id' , $postId)->update([ 'idea_status' => $status , 'idea_reason' => $reason , 'idea_status_updated_by' => $currUser->id ]);
-                if ( $res )
-                    return response()->json([ 'status' => 1 , 'msg' => "Status of this idea has been set successfully." ]);
-                else
-                    return response()->json([ 'status' => 0 , 'msg' => "Failed to set the status of this idea." ]);
-            }
-            
-            return response()->json([ 'status' => 0 , 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. " ]);
-        }
-        
-        public function deletecomment($id = null)
-        {
-            if ( Attachment::where(array( 'type_id' => $id , 'type' => 2 ))->exists() )
-            {
-                Attachment::where(array( 'type_id' => $id , 'type' => 2 ))->delete();
-            }
-            $deleteComment = Comment::where('id' , $id)->delete();
-            if ( $deleteComment )
-            {
-                return Redirect::back()->with('success' , 'Comment successfully');
-            } else
-            {
-                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
-            }
-        }
-        
-        public function like_comment($id)
+    }
+    
+    public function like_comment($id)
         {
             try
             {
@@ -624,47 +547,83 @@
             }
             
         }
-        
-        public function comment_solution(Request $request)
-        {
-            try
-            {
-                if ( Auth::user() )
-                {
-                    $comment_id = $request->input('comment_id');
-                    $user_id    = $request->input('user_id');
-                    if ( Comment::where(array( 'id' => $comment_id , 'is_correct' => 0 ))->exists() )
-                    {
-                        $answer = Comment::where('id' , $comment_id)->update(array( 'is_correct' => 1 , 'is_correct_by_user' => $user_id ));
-                        if ( $answer )
-                        {
-                            echo json_encode(array( 'status' => 1 , 'msg' => "answer marked successfully" ));
-                        } else
-                        {
-                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') ));
-                        }
-                    } else
-                    {
-                        $answer = Comment::where('id' , $comment_id)->update(array( 'is_correct' => 0 , 'is_correct_by_user' => 0 ));
-                        if ( $answer )
-                        {
-                            echo json_encode(array( 'status' => 0 , 'msg' => "answer marked successfully" ));
-                        } else
-                        {
-                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') ));
-                        }
+        public function comment_solution(Request $request) {
+        try{
+            if(Auth::user()) {
+                $comment_id = $request->input('comment_id');
+                $user_id = $request->input('user_id');
+                if(Comment::where(array('id'=>$comment_id,'is_correct'=>0))->exists()) {
+                    $answer = Comment::where('id',$comment_id)->update(array('is_correct'=>1,'is_correct_by_user'=>$user_id));
+                    if($answer) {
+                        echo json_encode(array('status' => 1, 'msg' => "answer marked successfully"));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
                     }
-                    
-                } else
-                {
-                    return redirect('/index');
+                } else {
+                    $answer = Comment::where('id',$comment_id)->update(array('is_correct'=>0,'is_correct_by_user'=>0));
+                    if($answer) {
+                        echo json_encode(array('status' => 0, 'msg' => "answer marked successfully"));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                    }
                 }
+                
+            }else {
+               return redirect('/index'); 
             }
-            catch ( \exception $e )
-            {
-                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
-            }
+        }catch (\exception $e) {
+             echo json_encode(array('status' => 0,'msg' => $e->getMessage()));
         }
+    }
+        
+        public function idea_edit($id , Request $request)
+        {
+            
+            $currUser  = Auth::user();
+            $userId    = $currUser->id;
+            $companyId = $currUser->company_id;
+            
+            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment' ])->first();
+            
+            return view($this->folder . '.post.edit_idea_post' , compact('post'));
+        }
+        
+        public function idea_show($id)
+        {
+            
+            $currUser = Auth::user();
+            
+            $postViews = Helpers::postViews($id , $currUser->id);
+            $post      = Post::with('ideaUser' , 'postUser' , 'postUser.following')->with('postLike')->with([ 'postUserLike' => function ($q) {
+                $q->where('user_id' , Auth::user()->id)->first();
+            } ])->with('postAttachment')->with([ 'postComment' , 'postComment.commentUser' , 'postComment.commentAttachment' ])->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                ->whereNULL('deleted_at')->where('id' , $id)->first();
+            
+            return view($this->folder . '.post.view_idea_post' , compact('post'));
+        }
+        
+        public function change_status(Request $request)
+        {
+            
+            $currUser = Auth::user();
+            if ( $currUser->role_id < 3 )
+            {
+                $status = $request->get('idea_status');
+                $reason = $request->get('idea_reason');
+                $postId = $request->get('post_id');
+                
+                $res = Post::where('id' , $postId)->update([ 'idea_status' => $status , 'idea_reason' => $reason , 'idea_status_updated_by' => $currUser->id ]);
+                if ( $res )
+                    return response()->json([ 'status' => 1 , 'msg' => "Status of this idea has been set successfully." ]);
+                else
+                    return response()->json([ 'status' => 0 , 'msg' => "Failed to set the status of this idea." ]);
+            }
+            
+            return response()->json([ 'status' => 0 , 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. " ]);
+        }
+        
+        
+        
     }
 
 ?>
