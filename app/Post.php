@@ -50,4 +50,5 @@
         {
             return $this->hasOne('App\User' , 'id' , 'idea_status_updated_by');
         }
+        
     }

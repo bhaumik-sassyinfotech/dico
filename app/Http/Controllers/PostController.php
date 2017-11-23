@@ -1,24 +1,21 @@
 <?php
+    
     namespace App\Http\Controllers;
     
-    use App\PostView;
-    use Exception;
-    use Helpers;
     use Illuminate\Http\Request;
+    use App\Company;
     use App\Post;
     use App\PostLike;
     use App\Attachment;
     use App\Comment;
     use App\CommentLike;
     use DB;
-    use Illuminate\Http\Response;
     use Validator;
     use Redirect;
     use Config;
     use Carbon;
     use Yajra\Datatables\Datatables;
     use Auth;
-    
     
     
     class PostController extends Controller
@@ -55,27 +52,19 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function index()
+        
+        
+        public function create()
         {
-            //dd("here");
             if ( Auth::user() )
             {
-                $posts = Post::with('postUser')->with('postLike')->with([ 'postUserLike' => function ($q) {
-                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
-                } ])->with('postAttachment')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                    ->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)->get()->toArray();
+                $company = Company::where('id' , Auth::user()->company_id)->first();
+                
+                return view($this->folder . '.post.create' , compact('company'));
             } else
             {
                 return redirect('/index');
             }
-            
-            //dd($posts);
-            return view($this->folder . '.post.index' , compact('posts'));
-        }
-        
-        public function create()
-        {
-            return view($this->folder . '.post.create');
         }
         
         public function store(Request $request)
@@ -131,9 +120,8 @@
                     {
                         return redirect()->route('post.index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
                     }
-                } else
-                {
-                    return redirect('/index');
+
+//                    return $next($request);
                 }
             }
             catch ( \exception $e )
@@ -144,17 +132,31 @@
             }
         }
         
-        public function edit($id)
+        /**
+         * Show the application dashboard.
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function index()
         {
-            $post = Post::with('postUser')->with('postLike')->with('postDisLike')->with([ 'postUserLike' => function ($q) {
-                $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
-            } ])->with([ 'postUserDisLike' => function ($q) {
-                $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
-            } ])->with('postAttachment')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at')->where('id' , $id)->first();
+            //dd("here");
+            if ( Auth::user() )
+            {
+                $posts = Post::with('postUser')->with('postLike')->with('postDisLike')->with('postComment')->with([ 'postUserLike' => function ($q) {
+                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
+                } ])->with([ 'postUserDisLike' => function ($q) {
+                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
+                } ])->with('postAttachment')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                    ->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)->get()->toArray();
+            } else
+            {
+                return redirect('/index');
+            }
             
-            return view($this->folder . '.post.edit' , compact('post'));
+            //dd($posts);
+            return view($this->folder . '.post.index' , compact('posts'));
         }
+        
         
         public function update(Request $request , $id)
         {
@@ -216,6 +218,26 @@
             }
         }
         
+        public function edit($id)
+        {
+            if ( Auth::user() )
+            {
+                $company = Company::where('id' , Auth::user()->company_id)->first();
+                $post    = Post::with('postUser')->with('postLike')->with('postDisLike')->with([ 'postUserLike' => function ($q) {
+                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
+                } ])->with([ 'postUserDisLike' => function ($q) {
+                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
+                } ])->with('postAttachment')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                    ->whereNULL('deleted_at')->where('id' , $id)->first();
+                
+                return view($this->folder . '.post.edit' , compact('post' , 'company'));
+            } else
+            {
+                return redirect('/index');
+            }
+        }
+        
+        
         public function destroy($id)
         {
             //
@@ -242,55 +264,57 @@
             {
                 if ( Auth::user() )
                 {
-                    $user_id  = Auth::user()->id;
-                    $postlike = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->first();
-                    if ( $postlike )
+                    
+                    if ( $postlike->flag == 1 )
                     {
-                        if ( $postlike->flag == 1 )
+                        $deleteLike  = $postlike->forceDelete();
+                        $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
+                        $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
+                        if ( $deleteLike )
                         {
-                            if ( $postlike->forceDelete() )
-                            {
-                                return Redirect::back()->with('success' , 'Remove post Liked successfully');
-                            } else
-                            {
-                                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
-                            }
+                            echo json_encode(array( 'status' => 0 , 'msg' => "Remove post liked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                         } else
                         {
-                            $likepost = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->update(array( 'flag' => 1 , 'updated_at' => Carbon\Carbon::now() ));
-                            if ( $likepost )
-                            {
-                                return Redirect::back()->with('success' , 'post disliked successfully');
-                            } else
-                            {
-                                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
-                            }
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                         }
-                        
                     } else
                     {
-                        $likepost = PostLike::insert(array( 'user_id' => $user_id , 'post_id' => $id , 'flag' => 1 , 'created_at' => Carbon\Carbon::now() ));
+                        $likepost    = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->update(array( 'flag' => 1 ));
+                        $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
+                        $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
                         if ( $likepost )
                         {
-                            return Redirect::back()->with('success' , 'Post Liked successfully');
+                            echo json_encode(array( 'status' => 1 , 'msg' => "post liked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                         } else
                         {
-                            return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                         }
                     }
+                    
                 } else
                 {
-                    return redirect('/index');
+                    $likepost    = PostLike::insert(array( 'user_id' => $user_id , 'post_id' => $id , 'flag' => 1 ));
+                    $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
+                    $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
+                    if ( $likepost )
+                    {
+                        echo json_encode(array( 'status' => 1 , 'msg' => "post liked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
+                    } else
+                    {
+                        echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
+                    }
                 }
             }
+            
             catch ( \exception $e )
             {
-                return Redirect::back()->with('err_msg' , $e->getMessage());
+                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
             }
             
         }
         
-        public function dislike_post($id)
+        public
+        function dislike_post($id)
         {
             try
             {
@@ -302,34 +326,42 @@
                     {
                         if ( $postdislike->flag == 2 )
                         {
-                            if ( $postdislike->forceDelete() )
+                            $deletedislike = $postdislike->forceDelete();
+                            $likepost      = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
+                            $dislikepost   = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
+                            if ( $deletedislike )
                             {
-                                return Redirect::back()->with('success' , 'Remove post disliked successfully');
+                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove post disliked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                             } else
                             {
-                                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                             }
                         } else
                         {
-                            $dislikepost = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->update(array( 'flag' => 2 , 'updated_at' => Carbon\Carbon::now() ));
+                            $dislikepost = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->update(array( 'flag' => 2 ));
+                            $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
+                            $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
                             if ( $dislikepost )
                             {
-                                return Redirect::back()->with('success' , 'post disliked successfully');
+                                echo json_encode(array( 'status' => 1 , 'msg' => "post disliked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                             } else
                             {
-                                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                             }
                         }
                         
                     } else
                     {
-                        $dislikepost = PostLike::insert(array( 'user_id' => $user_id , 'post_id' => $id , 'flag' => 2 , 'created_at' => Carbon\Carbon::now() ));
+                        $dislikepost = PostLike::insert(array( 'user_id' => $user_id , 'post_id' => $id , 'flag' => 2 ));
+                        $likepost    = PostLike::where(array( 'post_id' => $id , 'flag' => 1 ))->get();
+                        $dislikepost = PostLike::where(array( 'post_id' => $id , 'flag' => 2 ))->get();
                         if ( $dislikepost )
                         {
-                            return Redirect::back()->with('success' , 'Post disliked successfully');
+                            echo json_encode(array( 'status' => 1 , 'msg' => "post disliked successfully" , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
                         } else
                         {
-                            return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likepost) , 'dislikecount' => count($dislikepost) ));
+                            
                         }
                     }
                 } else
@@ -339,7 +371,7 @@
             }
             catch ( \exception $e )
             {
-                return Redirect::back()->with('err_msg' , $e->getMessage());
+                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
             }
             
         }
@@ -348,7 +380,11 @@
         {
             $post = Post::with('postUser' , 'postUser.following')->with('postLike')->with([ 'postUserLike' => function ($q) {
                 $q->where('user_id' , Auth::user()->id)->first();
-            } ])->with('postAttachment')->with([ 'postComment' , 'postComment.commentUser' , 'postComment.commentAttachment' ])->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+            } ])->with('postAttachment')->with([ 'postComment' , 'postComment.commentUser' , 'postComment.commentAttachment' , 'postComment.commentLike' , 'postComment.commentDisLike' , 'postComment.commentUserLike' => function ($q) {
+                $q->where('user_id' , Auth::user()->id)->first();
+            } , 'postComment.commentUserDisLike'                                                                                                                                                                        => function ($q) {
+                $q->where('user_id' , Auth::user()->id)->first();
+            } ])->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->whereNULL('deleted_at')->where('id' , $id)->first();
             
             //dd($post);
@@ -372,7 +408,7 @@
                         $is_anonymous = 0;
                     }
                     DB::beginTransaction();
-                    $postData = array( "user_id" => $user_id , "post_id" => $id , "comment_text" => $comment_text , "is_anonymous" => $is_anonymous , "created_at" => Carbon\Carbon::now() );
+                    $postData = array( "user_id" => $user_id , "post_id" => $id , "comment_text" => $comment_text , "is_anonymous" => $is_anonymous );
                     $res      = Comment::insert($postData);
                     $file     = $request->file('file_upload');
                     if ( $file != "" )
@@ -399,17 +435,60 @@
                     {
                         return Redirect::back()->with('err_msg' , $e->getMessage());
                     }
-                } else
-                {
-                    return redirect('/index');
                 }
             }
-            catch ( \exception $e )
+            catch ( Exception $ex )
             {
-                DB::rollback();
+                DB::rollBack();
                 
-                return Redirect::back()->with('err_msg' , $e->getMessage());
+                return Redirect::back()->with('err_msg' , $ex->getMessage());
             }
+        }
+        
+        public function idea_edit($id , Request $request)
+        {
+            
+            $currUser  = Auth::user();
+            $userId    = $currUser->id;
+            $companyId = $currUser->company_id;
+            
+            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment' ])->first();
+            
+            return view($this->folder . '.post.edit_idea_post' , compact('post'));
+        }
+        
+        public function idea_show($id)
+        {
+            
+            $currUser = Auth::user();
+            
+            $postViews = Helpers::postViews($id , $currUser->id);
+            $post      = Post::with('ideaUser' , 'postUser' , 'postUser.following')->with('postLike')->with([ 'postUserLike' => function ($q) {
+                $q->where('user_id' , Auth::user()->id)->first();
+            } ])->with('postAttachment')->with([ 'postComment' , 'postComment.commentUser' , 'postComment.commentAttachment' ])->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                ->whereNULL('deleted_at')->where('id' , $id)->first();
+            
+            return view($this->folder . '.post.view_idea_post' , compact('post'));
+        }
+        
+        public function change_status(Request $request)
+        {
+            
+            $currUser = Auth::user();
+            if ( $currUser->role_id < 3 )
+            {
+                $status = $request->get('idea_status');
+                $reason = $request->get('idea_reason');
+                $postId = $request->get('post_id');
+                
+                $res = Post::where('id' , $postId)->update([ 'idea_status' => $status , 'idea_reason' => $reason , 'idea_status_updated_by' => $currUser->id ]);
+                if ( $res )
+                    return response()->json([ 'status' => 1 , 'msg' => "Status of this idea has been set successfully." ]);
+                else
+                    return response()->json([ 'status' => 0 , 'msg' => "Failed to set the status of this idea." ]);
+            }
+            
+            return response()->json([ 'status' => 0 , 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. " ]);
         }
         
         public function deletecomment($id = null)
@@ -434,40 +513,110 @@
             {
                 if ( Auth::user() )
                 {
+                    $f           = 0;
                     $user_id     = Auth::user()->id;
                     $commentlike = CommentLike::where(array( 'user_id' => $user_id , 'comment_id' => $id ))->first();
                     if ( $commentlike )
                     {
-                        if ( $postlike->flag == 1 )
+                        if ( $commentlike->flag == 1 )
                         {
-                            if ( $postlike->forceDelete() )
+                            $deletelike     = $commentlike->forceDelete();
+                            $likecomment    = CommentLike::where(array( 'comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = CommentLike::where(array( 'comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $deletelike )
                             {
-                                return Redirect::back()->with('success' , 'Remove post Liked successfully');
+                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove comment Liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             } else
                             {
-                                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             }
                         } else
                         {
-                            $likepost = PostLike::where(array( 'user_id' => $user_id , 'post_id' => $id ))->update(array( 'flag' => 1 , 'updated_at' => Carbon\Carbon::now() ));
-                            if ( $likepost )
+                            $likecomment    = CommentLike::where(array( 'user_id' => $user_id , 'comment_id' => $id ))->update(array( 'flag' => 1 ));
+                            $likecomment    = CommentLike::where(array( 'comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = CommentLike::where(array( 'comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $likecomment )
                             {
-                                return Redirect::back()->with('success' , 'post liked successfully');
+                                echo json_encode(array( 'status' => 1 , 'msg' => "comment liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             } else
                             {
-                                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             }
                         }
                         
                     } else
                     {
-                        $likepost = PostLike::insert(array( 'user_id' => $user_id , 'post_id' => $id , 'flag' => 1 , 'created_at' => Carbon\Carbon::now() ));
-                        if ( $likepost )
+                        $likecomment    = CommentLike::insert(array( 'user_id' => $user_id , 'comment_id' => $id , 'flag' => 1 ));
+                        $likecomment    = CommentLike::where(array( 'comment_id' => $id , 'flag' => 1 ))->get();
+                        $dislikecomment = CommentLike::where(array( 'comment_id' => $id , 'flag' => 2 ))->get();
+                        if ( $likecomment )
                         {
-                            return Redirect::back()->with('success' , 'Post Liked successfully');
+                            echo json_encode(array( 'status' => 1 , 'msg' => "comment liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                         } else
                         {
-                            return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                        }
+                    }
+                    
+                } else
+                {
+                    return redirect('/index');
+                }
+            }
+            catch ( \exception $e )
+            {
+                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
+                //return Redirect::back()->with('err_msg', $e->getMessage());
+            }
+        }
+        
+        public function dislike_comment($id)
+        {
+            try
+            {
+                if ( Auth::user() )
+                {
+                    $user_id        = Auth::user()->id;
+                    $commentdislike = CommentLike::where(array( 'user_id' => $user_id , 'comment_id' => $id ))->first();
+                    if ( $commentdislike )
+                    {
+                        if ( $commentdislike->flag == 2 )
+                        {
+                            $deletedislike  = $commentdislike->forceDelete();
+                            $likecomment    = CommentLike::where(array( 'comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = CommentLike::where(array( 'comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $deletedislike )
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove comment disiked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            } else
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            }
+                        } else
+                        {
+                            $dislikecomment = CommentLike::where(array( 'user_id' => $user_id , 'comment_id' => $id ))->update(array( 'flag' => 2 ));
+                            $likecomment    = CommentLike::where(array( 'comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = CommentLike::where(array( 'comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $dislikecomment )
+                            {
+                                echo json_encode(array( 'status' => 1 , 'msg' => "comment disliked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            } else
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            }
+                        }
+                        
+                    } else
+                    {
+                        $dislikecomment = CommentLike::insert(array( 'user_id' => $user_id , 'comment_id' => $id , 'flag' => 2 ));
+                        $likecomment    = CommentLike::where(array( 'comment_id' => $id , 'flag' => 1 ))->get();
+                        $dislikecomment = CommentLike::where(array( 'comment_id' => $id , 'flag' => 2 ))->get();
+                        if ( $dislikecomment )
+                        {
+                            echo json_encode(array( 'status' => 1 , 'msg' => "comment disliked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                        } else
+                        {
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                         }
                     }
                 } else
@@ -477,157 +626,50 @@
             }
             catch ( \exception $e )
             {
-                return Redirect::back()->with('err_msg' , $e->getMessage());
+                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
             }
             
         }
         
-        public function idea_store(Request $request)
+        public function comment_solution(Request $request)
         {
-            DB::beginTransaction();
-            $validator = $this->validate($request , [
-                'post_type'  => 'required' ,
-                'post_title' => 'required' ,
-            ]);
             try
             {
-                $currUser               = Auth::user();
-                $post                   = new Post;
-                $post->post_title       = $request->post_title;
-                $post->post_type        = strtolower($request->post_type);
-                $post->post_description = $request->post_description;
-                $post->user_id          = $currUser->id;
-                $post->is_anonymous     = $request->get('is_anonymous') ? $request->get('is_anonymous') : 0;
-                $file                   = $request->file('file_upload');
-                if ( $file != "" )
+                if ( Auth::user() )
                 {
-                    $fileName        = $file->getClientOriginalName();
-                    $extension       = $file->getClientOriginalExtension();
-                    $folderName      = '/uploads/';
-                    $destinationPath = public_path() . $folderName;
-                    $safeName        = str_random(10) . '.' . $extension;
-                    $file->move($destinationPath , $safeName);
-                    $attachment            = new Attachment;
-                    $attachment->file_name = $safeName;
-                    $attachment->type      = 1;
-                    $attachment->type_id   = $post->id;
-                    $attachment->user_id   = $currUser->id;
-                    $attachment->save();
-                }
-                if ( $post->save() )
-                {
-                    DB::commit();
-                    dd("Your post has been saved.");
-                } else
-                {
-                    DB::rollBack();
-                    dd("There was some error saving your post.");
-                }
-            }
-            catch ( Exception $ex )
-            {
-                DB::rollBack();
-                
-                return back();
-            }
-        }
-        
-        public function idea_update($id , Request $request)
-        {
-            $this->validate($request , [
-                'post_type'  => 'required' ,
-                'post_title' => 'required' ,
-            ]);
-            DB::beginTransaction();
-            try
-            {
-                $currUser               = Auth::user();
-                $post                   = Post::find($id);
-                $post->post_title       = $request->post_title;
-                $post->post_type        = $request->post_type;
-                $post->post_description = $request->post_description;
-                $post->user_id          = $currUser->id;
-                $post->is_anonymous     = $request->get('is_anonymous') ? 1 : 0;
-                if ( $post->save() )
-                {
-                    $file = $request->file('file_upload');
-                    if ( $file != "" )
+                    $comment_id = $request->input('comment_id');
+                    $user_id    = $request->input('user_id');
+                    if ( Comment::where(array( 'id' => $comment_id , 'is_correct' => 0 ))->exists() )
                     {
-                        $postData = array();
-                        //echo "here";die();
-                        $fileName        = $file->getClientOriginalName();
-                        $extension       = $file->getClientOriginalExtension();
-                        $folderName      = '/uploads/';
-                        $destinationPath = public_path() . $folderName;
-                        $safeName        = str_random(10) . '.' . $extension;
-                        $file->move($destinationPath , $safeName);
-                        //$attachment = new Attachment;
-                        $postData[ 'file_name' ] = $safeName;
-//                        $postData[ 'type' ]      = 1;
-//                        $postData[ 'type_id' ]   = $id;
-//                        $postData[ 'user_id' ]   = $currUser->id;
-//                        $attachment              = Attachment::insert($postData);
-                        $attachment              = Attachment::where('type_id',$id)->where('type',1)->where('user_id',$currUser->id)->update($postData);
+                        $answer = Comment::where('id' , $comment_id)->update(array( 'is_correct' => 1 , 'is_correct_by_user' => $user_id ));
+                        if ( $answer )
+                        {
+                            echo json_encode(array( 'status' => 1 , 'msg' => "answer marked successfully" ));
+                        } else
+                        {
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') ));
+                        }
+                    } else
+                    {
+                        $answer = Comment::where('id' , $comment_id)->update(array( 'is_correct' => 0 , 'is_correct_by_user' => 0 ));
+                        if ( $answer )
+                        {
+                            echo json_encode(array( 'status' => 0 , 'msg' => "answer marked successfully" ));
+                        } else
+                        {
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') ));
+                        }
                     }
-                    DB::commit();
-
-                    return back();
+                    
                 } else
                 {
-                    DB::rollBack();
-                    dd("There was some error saving your post.");
+                    return redirect('/index');
                 }
             }
-            catch ( Exception $ex )
+            catch ( \exception $e )
             {
-                DB::rollBack();
-                return Redirect::back()->with('err_msg' , $ex->getMessage());
+                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
             }
-        }
-        
-        public function idea_edit($id , Request $request)
-        {
-            
-            $currUser  = Auth::user();
-            $userId    = $currUser->id;
-            $companyId = $currUser->company_id;
-            
-            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment' ])->first();
-            
-            return view($this->folder . '.post.edit_idea_post' , compact('post'));
-        }
-    
-        public function idea_show($id)
-        {
-            
-            $currUser = Auth::user();
-            
-            $postViews = Helpers::postViews($id , $currUser->id );
-                $post = Post::with('ideaUser','postUser' , 'postUser.following')->with('postLike')->with([ 'postUserLike' => function ($q) {
-                $q->where('user_id' , Auth::user()->id)->first();
-            } ])->with('postAttachment')->with([ 'postComment' , 'postComment.commentUser' , 'postComment.commentAttachment' ])->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at')->where('id' , $id)->first();
-    
-            return view($this->folder . '.post.view_idea_post' , compact('post'));
-        }
-        
-        public function change_status(Request $request)
-        {
-            
-            $currUser = Auth::user();
-            if($currUser->role_id < 3)
-            {
-                $status = $request->get('idea_status');
-                $reason = $request->get('idea_reason');
-                $postId = $request->get('post_id');
-    
-                $res = Post::where('id' , $postId)->update([ 'idea_status' => $status , 'idea_reason' => $reason , 'idea_status_updated_by' => $currUser->id ]);
-                if ( $res )
-                    return response()->json([ 'status' => 1 , 'msg' => "Status of this idea has been set successfully." ]);
-                else
-                    return response()->json([ 'status' => 0 , 'msg' => "Failed to set the status of this idea." ]);
-            }
-            return response()->json([ 'status' => 0 , 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. " ]);
         }
     }
 

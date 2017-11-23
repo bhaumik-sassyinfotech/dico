@@ -17,7 +17,7 @@ class CreatePostLikesTable extends Migration
             $table->increments('id')->unsigned();
             $table->integer('post_id')->foreign('post_id')->references('id')->on('posts')->onDelete('cascade')->index();
             $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
-            $table->integer('flag')->nullable()->comment('1-Like,2-Unlike');
+            $table->integer('flag')->nullable()->comment('1-Like,2-Dislike');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -66,12 +66,16 @@
                                 <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control">{{$post->post_description}}</textarea>
                             </div>
                         </div>
+                        <?php
+                            if(isset($company) && $company->allow_anonymous == 1) {
+                        ?>
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label>Is Anonymous</label><br/>
                                 <input type="checkbox" name="is_anonymous" id="is_anonymous" <?php if($post->is_anonymous == 1) { echo "checked"; } ?>>
                             </div>
                         </div>
+                            <?php } ?>
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <span class="btn btn-primary fileinput-button">
