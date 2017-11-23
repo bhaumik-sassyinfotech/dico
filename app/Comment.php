@@ -14,6 +14,7 @@ class Comment extends Model
     {
         return $this->hasOne('App\User','id','user_id');
     }
+
     public function commentAttachment()
     {
         return $this->hasOne('App\Attachment','type_id','id')->where('type', 2);

@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PostView extends Model
 {
     //
-    use softDeletes;
+//    use softDeletes;
+    protected $fillable = ['created_at','updated_at','visitor_ip','user_id','post_id'];
 }

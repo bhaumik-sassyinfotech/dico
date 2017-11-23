@@ -1,7 +1,6 @@
 <?php
-
-use App\User;
-use App\Meta;
+    use App\PostView;
+    use App\User;
 
 //use DB;
 
@@ -199,6 +198,12 @@ class Helpers {
 
             $message->setBody($content, 'text/html');
         });
+    }
+    
+    public static function postViews($post_id , $user_id)
+    {
+        PostView::firstOrCreate(['user_id' => $user_id , 'post_id' => $post_id , 'visitor_ip' => request()->ip() ]);
+        return PostView::select(DB::RAW("count('id') as views"))->where('user_id' ,$user_id )->where('post_id' , $post_id)->groupBy('post_id')->first();
     }
 }
 ?>

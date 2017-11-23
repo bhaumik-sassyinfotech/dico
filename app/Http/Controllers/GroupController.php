@@ -148,6 +148,7 @@
             $groupId         = $id;
             $companies       = Company::all();
             $groupData       = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
+//            dd($groupData->groupUsers->pluck('user_id')->toArray());
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->whereNotIn('id' , $groupUsers)->get();
             
@@ -197,7 +198,7 @@
             if ( $request->ajax() )
             {
                 $companyId = $request->company_id;
-                $users     = User::where('company_id' , $companyId)->where('is_active' , '1')->get();
+                $users     = User::where('company_id' , $companyId)->where('role_id','!=' , 1)->where('is_active' , '1')->get();
                 
                 return Response::json(array(
                     'success' => '1' ,
@@ -258,13 +259,13 @@
             } else if ( $request->get('removeFromGroup') == 1 )
             {
                 if ( $groupUser->delete() )
-                    return Response::json([ 'msg' => 'User has been deleted.' , 'status' => 1 ]);
+                    return Response::json([ 'msg' => 'User has been removed from the group.' , 'status' => 1 ]);
                 else
-                    return Response::json([ 'msg' => 'There has been some error deleting user.' , 'status' => 1 ]);
+                    return Response::json([ 'msg' => 'There has been some error removing user.' , 'status' => 1 ]);
             } else if ( $request->get('getGroupUsers') == 1 )
             {
                 $groupUserIds = GroupUser::where('group_id' , $group_id)->get()->pluck('user_id')->prepend(1)->toArray(); // select user_id which are already in the group
-                $users        = User::whereNotIn('id' , $groupUserIds)->get()->toArray();
+                $users        = User::whereNotIn('id' , $groupUserIds)->where('role_id','!=','1')->where('company_id' , $company_id )->get()->toArray();
                 
                 return Response::json([ 'msg' => 'Users listing.' , 'data' => $users , 'status' => 1 ]);
             } else if ( $request->get('addGroupUsers') == 1 )
@@ -279,7 +280,7 @@
                 
                 $result = GroupUser::insert($insertData);
                 if ( $result )
-                    return Response::json([ 'msg' => 'Users added to the group.' , 'status' => 1 ]);
+                    return Response::json([ 'msg' => 'Users has been added to the group.' , 'status' => 1 ]);
                 else
                     return Response::json([ 'msg' => 'There was some error adding users to group.' , 'status' => 0 ]);
             }
