@@ -246,12 +246,23 @@
                                         
                                         <!-- comment reply box start -->
                                         <?php
+                                            //dd($postComment['commentReply']);
                                             if(!empty($postComment['commentReply'])) {
                                                 foreach($postComment['commentReply'] as $commentReply) {
                                         ?>
                                         <div class="form-group row"><div class="col-md-12">
-                                            <?php echo $commentReply['comment_reply']; ?>
+                                            <span style="float:left;">
+                                                    <b><?php echo $commentReply['commentReplyUser']['name']; ?></b>
+                                                <br>
+                                            <small><?php echo " - on " . date('d/m/Y', strtotime($commentReply['created_at'])); ?></small>
+                                            </span>  <br>
+                                            <div class="col-md-12">    
+                                            <?php echo $commentReply['comment_reply']; ?></div>
                                             </div></div>  
+                                                <?php if ($commentReply['id'] == Auth::user()->id) { ?>
+                                                        <span style="float:right;">
+                                                            <a href="{{url('/deletecomment',$postComment['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                        </span><?php } ?>
                                         <?php
                                                 }
                                             }
