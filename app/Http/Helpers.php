@@ -1,5 +1,6 @@
 <?php
     
+    use App\EmailTemplate;
     use App\PostView;
     use App\User;
 
@@ -102,23 +103,38 @@
         }
         
         
-        public static function parse_template($template , $data)
+        public static function parse_template($template , $data , $allowed_fields)
         {
+            $allowed_fields = rtrim(trim($allowed_fields),",");
+            $allowed_fields = explode("," , $allowed_fields);
             if ( $template == '' )
             {
                 return FALSE;
             }
             $l_delim = '{';
             $r_delim = '}';
+            $errors  = [];
+//            dd($data);
             foreach ( $data as $key => $val )
             {
-                if ( !is_array($val) )
+//                echo var_dump($key)."<br>";
+                if ( !is_array($val) && in_array($key , $allowed_fields) )
                 {
                     $template = str_replace($l_delim . $key . $r_delim , (string) $val , $template);
+                } else
+                {
+                    $errors[] = $key . " is not in the set of allowed fields";
+//                    $template = str_replace($l_delim . $key . $r_delim , (string) $key , $template);
                 }
             }
+            $data = [ 'data' => $template , 'errors' => $errors ];
             
-            return $template;
+            return $data;
+        }
+        
+        public static function getEmailTemplateBySlug($slug)
+        {
+            return EmailTemplate::where('slug' , $slug)->first();
         }
         
         /*public static function isAdmin() {
@@ -130,18 +146,6 @@
             }
         }*/
         
-        public static function Sendmail($email , $content)
-        {
-            
-            \Mail::send([] , [] , function ($message) use ($content , $email) {
-                
-                $message->from('testacc2016@gmail.com' , 'Clique Chat');
-                
-                $message->to($email)->subject("Clique Chat");
-                
-                $message->setBody($content , 'text/html');
-            });
-        }
         
         public static function postViews($post_id , $user_id)
         {
@@ -150,15 +154,15 @@
             return PostView::select(DB::RAW("count('id') as views"))->where('post_id' , $post_id)->groupBy('post_id')->first();
         }
         
-        function testMail()
+        public static function testMail()
         {
-            $to        = 'divyesh.sassyinfotech@gmail.com';
+            $to        = 'bhaumik.sassyinfotech@gmail.com';
             $from      = 'testacc2016@gmail.com';
-            $reply_to  = 'divyesh.sassyinfotech@gmail.com';
+            $reply_to  = 'bhaumik.sassyinfotech@gmail.com';
             $from_name = 'Test';
             $subject   = 'Test';
             $content   = 'Test';
-            $path      = 'mail/template';
+            $path      = 'template/mail';
             
             $data = array( 'to'        => $to ,
                            'from'      => $from ,
@@ -166,14 +170,43 @@
                            'from_name' => $from_name ,
                            'subject'   => $subject ,
                            'message'   => $content ,
-                           'path'      => $path,
+                           'path'      => $path ,
             );
             
             return Mail::send($path , [ 'data' => $data ] , function ($message) use ($data) {
                 $message->subject($data[ 'subject' ]);
                 $message->from($data[ 'from' ] , $data[ 'from_name' ]);
                 //$message->bcc(array('rajesh.sassyinfotech@gmail.com','dilip.sassyinfotech@gmail.com','kishan.sassyinfotech@gmail.com'));
-                $message->to(array( 'rajesh.sassyinfotech@gmail.com' , 'dilip.sassyinfotech@gmail.com' , 'kishan.sassyinfotech@gmail.com' , 'divyesh.sassyinfotech@gmail.com' ));
+//                $message->to(array( 'rajesh.sassyinfotech@gmail.com' , 'dilip.sassyinfotech@gmail.com' , 'kishan.sassyinfotech@gmail.com' , 'divyesh.sassyinfotech@gmail.com' ));
+                $message->to($data[ 'to' ]);
+                //$message->attach($pathToFile, array $options = []);
+            });
+        }
+        
+        public static function sendMail($data)
+        {
+            // dd($data);
+            $to        = isset($data[ 'to' ]) ? $data[ 'to' ] : env('MAIL_FROM_ADDRESS');
+            $from      = isset($data[ 'from' ]) ? $data[ 'from' ] : env('MAIL_FROM_ADDRESS');
+            $reply_to  = isset($data[ 'reply_to' ]) ? $data[ 'reply_to' ] : $from;
+            $from_name = isset($data[ 'from_name' ]) ? $data[ 'from_name' ] : env('MAIL_FROM_NAME');
+            $subject   = isset($data[ 'subject' ]) ? $data[ 'subject' ] : env('DEFAULT_MAIL_SUBJECT');
+            $content   = isset($data[ 'message' ]) ? ($data[ 'message' ]) : env('DEFAULT_MAIL_CONTENT');
+            $path      = 'template/mail';
+            
+            $data = array( 'to'        => $to ,
+                           'from'      => $from ,
+                           'reply_to'  => $reply_to ,
+                           'from_name' => $from_name ,
+                           'subject'   => $subject ,
+                           'message'   => $content ,
+                           'path'      => $path ,
+            );
+            
+            return Mail::send($path , [ 'data' => $data ] , function ($message) use ($data) {
+                $message->subject($data[ 'subject' ]);
+                $message->from($data[ 'from' ] , $data[ 'from_name' ]);
+                $message->to($data[ 'to' ]);
                 //$message->attach($pathToFile, array $options = []);
             });
         }
