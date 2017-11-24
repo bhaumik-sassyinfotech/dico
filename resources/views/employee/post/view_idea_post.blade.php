@@ -46,7 +46,7 @@
                                 <div class="col-xs-12 form-group">
                                     <label>{{$post->post_description}}</label>
                                 </div>
-                                <div class="col-xs-12 form-group">
+                                <div class="row col-xs-12 form-group">
                                     <input type="hidden" name="post_id" id="post_id" value="{{ $post->id }}">
                                     <div class="col-md-2">
                                         <a href="javascript:void(0)" id="like_post" onclick="likePost({{$post['id']}})">
@@ -85,7 +85,7 @@
                                         </div>
                                     @else
                                         @if($post->idea_status == null)
-                                            <div class="col-md-6">Action pending</div>
+                                            <div class="col-md-6"><strong>Action is yet to be taken on this post.</strong></div>
                                         @else
                                             @php
                                                 $ideaStatus = '';

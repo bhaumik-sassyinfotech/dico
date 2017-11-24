@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
     
     use Exception;
+    use Helpers;
     use Illuminate\Http\Request;
     use App\Company;
     use App\Post;
@@ -592,56 +593,65 @@
     
     
     public function idea_update($id , Request $request)
+    {
+        $this->validate($request , [
+            'post_type'  => 'required' ,
+            'post_title' => 'required' ,
+        ]);
+        DB::beginTransaction();
+        try
         {
-            $this->validate($request , [
-                'post_type'  => 'required' ,
-                'post_title' => 'required' ,
-            ]);
-            DB::beginTransaction();
-            try
+            $currUser               = Auth::user();
+            $post                   = Post::find($id);
+            $post->post_title       = $request->post_title;
+            $post->post_type        = $request->post_type;
+            $post->post_description = $request->post_description;
+            $post->user_id          = $currUser->id;
+            $post->is_anonymous     = $request->get('is_anonymous') ? 1 : 0;
+            if ( $post->save() )
             {
-                $currUser               = Auth::user();
-                $post                   = Post::find($id);
-                $post->post_title       = $request->post_title;
-                $post->post_type        = $request->post_type;
-                $post->post_description = $request->post_description;
-                $post->user_id          = $currUser->id;
-                $post->is_anonymous     = $request->get('is_anonymous') ? 1 : 0;
-                if ( $post->save() )
+                $file = $request->file('file_upload');
+                if ( $file != "" )
                 {
-                    $file = $request->file('file_upload');
-                    if ( $file != "" )
-                    {
-                        $postData = array();
-                        //echo "here";die();
-                        $fileName        = $file->getClientOriginalName();
-                        $extension       = $file->getClientOriginalExtension();
-                        $folderName      = '/uploads/';
-                        $destinationPath = public_path() . $folderName;
-                        $safeName        = str_random(10) . '.' . $extension;
-                        $file->move($destinationPath , $safeName);
-                        //$attachment = new Attachment;
-                        $postData[ 'file_name' ] = $safeName;
-//                        $postData[ 'type' ]      = 1;
-//                        $postData[ 'type_id' ]   = $id;
-//                        $postData[ 'user_id' ]   = $currUser->id;
+                    $postData = array();
+                    //echo "here";die();
+                    $fileName        = $file->getClientOriginalName();
+                    $extension       = $file->getClientOriginalExtension();
+                    $folderName      = '/uploads/';
+                    $destinationPath = public_path() . $folderName;
+                    $safeName        = str_random(10) . '.' . $extension;
+                    $file->move($destinationPath , $safeName);
+                    //$attachment = new Attachment;
+                    $postData[ 'file_name' ] = $safeName;
+                    $postData[ 'type' ]      = 1;
+                    $postData[ 'type_id' ]   = $id;
+                    $postData[ 'user_id' ]   = $currUser->id;
 //                        $attachment              = Attachment::insert($postData);
-                        $attachment              = Attachment::where('type_id',$id)->where('type',1)->where('user_id',$currUser->id)->update($postData);
+                    $attachment              = Attachment::where('type_id',$id)->where('type',1)->where('user_id',$currUser->id);
+                    $now = Carbon\Carbon::now();
+                    if($attachment->first())
+                    {
+                        $attachment->update(['file_name' => $postData[ 'file_name' ] , 'updated_at' => $now]);
+                    } else {
+                        
+                        $postData['created_at'] = $postData['updated_at'] = $now;
+                        Attachment::insert($postData);
                     }
-                    DB::commit();
-                    return back();
-                } else
-                {
-                    DB::rollBack();
-                    return back()->withInput();
                 }
-            }
-            catch ( Exception $ex )
+                DB::commit();
+                return back();
+            } else
             {
                 DB::rollBack();
-                return Redirect::back()->with('err_msg' , $ex->getMessage());
+                return back()->withInput();
             }
         }
+        catch ( Exception $ex )
+        {
+            DB::rollBack();
+            return Redirect::back()->with('err_msg' , $ex->getMessage());
+        }
+    }
         
         public function idea_edit($id , Request $request)
         {
@@ -652,6 +662,10 @@
             
             $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment' ])->first();
             
+            if($post == null )
+                return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
+            
+//            dd($post);
             return view($this->folder . '.post.edit_idea_post' , compact('post'));
         }
         
@@ -659,14 +673,18 @@
         {
             
             $currUser = Auth::user();
-            
+//            dd($currUser);
             $postViews = Helpers::postViews($id , $currUser->id);
-            $post      = Post::with('ideaUser' , 'postUser' , 'postUser.following')->with('postLike')->with([ 'postUserLike' => function ($q) {
-                $q->where('user_id' , Auth::user()->id)->first();
-            } ])->with('postAttachment')->with([ 'postComment' , 'postComment.commentUser' , 'postComment.commentAttachment' ])->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at')->where('id' , $id)->first();
-            
-            return view($this->folder . '.post.view_idea_post' , compact('post'));
+            $post = Post::with('postUser','postUser.following')->with('postLike')->with('postDisLike')->with(['postUserLike' => function($q) {
+                $q->where('user_id',  Auth::user()->id)->first();
+            }])->with(['postUserDisLike' => function($q) {
+                $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
+            }])->with('postAttachment')->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                ->where('post_type','=','idea')->where('id',$id)->first();
+//            dd($post);
+            if($post == null)
+                return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
+            return view($this->folder . '.post.view_idea_post' , compact('post','postViews','currUser'));
         }
         
         public function change_status(Request $request)
