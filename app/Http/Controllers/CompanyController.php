@@ -87,7 +87,7 @@ class CompanyController extends Controller {
     
     public function edit($id) {
         $obj = new Company;
-        $company = $obj->where('id',$id)->first();
+        $company = $obj->where('id',$id)->orderBy('id','desc')->first();
         return view('superadmin.company.edit', compact('company'));
     }
     
@@ -124,7 +124,7 @@ class CompanyController extends Controller {
     public function get_company(Request $request) {
         $company = new Company;
         $res = $company->select('*',DB::raw('CASE WHEN allow_anonymous = "1" THEN "Yes" ELSE "No" END AS anonymous,CASE WHEN allow_add_admin = "1" THEN "Yes" ELSE "No" END AS add_admin'))
-                ->whereNULL('deleted_at');
+                ->whereNULL('deleted_at')->orderBy('id','desc');
                 return Datatables::of($res)->filter(function ($query) use ($request) {
                 if ($request->has('company_name')) {
                     $query->where('company_name', 'like', "%{$request->get('company_name')}%");

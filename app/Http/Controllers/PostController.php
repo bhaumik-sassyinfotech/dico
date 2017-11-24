@@ -10,6 +10,7 @@
     use App\Attachment;
     use App\Comment;
     use App\CommentLike;
+    use App\CommentReply;
     use DB;
     use Validator;
     use Redirect;
@@ -148,7 +149,7 @@
                 } ])->with([ 'postUserDisLike' => function ($q) {
                     $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
                 } ])->with('postAttachment')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                    ->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)->get()->toArray();
+                    ->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)->orderBy('id','desc')->get()->toArray();
             } else
             {
                 return redirect('/index');
@@ -249,7 +250,7 @@
         {
             $post = new Post;
             $res  = Post::with('postUser')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at');
+                ->whereNULL('deleted_at')->orderBy('id','desc');
             
             //dd($res);
             return Datatables::of($res)->addColumn('actions' , function ($row) {
@@ -358,14 +359,18 @@
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 }])->with(['postUserDisLike' => function($q) {
                         $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-                    }])->with('postAttachment')->with(['postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentUserLike' => function($q) {
+                    }])->with('postAttachment')->with(['postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 }])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->whereNULL('deleted_at')->where('id',$id)->first();
                 //dd($post);
-        return view($this->folder.'.post.view', compact('post'));
+        if($post['postUser']['company_id'] == Auth::user()->company_id) {        
+            return view($this->folder.'.post.view', compact('post'));
+        }else {
+            return redirect('/index'); 
+        }
     }
     
     public function savecomment($id,Request $request) {
@@ -553,21 +558,29 @@
             if(Auth::user()) {
                 $comment_id = $request->input('comment_id');
                 $user_id = $request->input('user_id');
-                if(Comment::where(array('id'=>$comment_id,'is_correct'=>0))->exists()) {
+                $post_id = $request->input('post_id');
+                $check = Comment::where(array('post_id'=>$post_id,'is_correct'=>1))->first();
+                if($check) {
+                    if($check->user_id == $user_id) {
+                        echo json_encode(array('status' => 2,'msg' => "Solution already marked"));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => "Solution already marked"));
+                    }
+                }else{
                     $answer = Comment::where('id',$comment_id)->update(array('is_correct'=>1,'is_correct_by_user'=>$user_id));
                     if($answer) {
                         echo json_encode(array('status' => 1, 'msg' => "answer marked successfully"));
                     }else {
                         echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
                     }
-                } else {
+                } /*else {
                     $answer = Comment::where('id',$comment_id)->update(array('is_correct'=>0,'is_correct_by_user'=>0));
                     if($answer) {
                         echo json_encode(array('status' => 0, 'msg' => "answer marked successfully"));
                     }else {
                         echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
                     }
-                }
+                }*/
                 
             }else {
                return redirect('/index'); 
@@ -676,7 +689,29 @@
             return response()->json([ 'status' => 0 , 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. " ]);
         }
         
-        
+        public function comment_reply(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $user_id = Auth::user()->id;
+                    $comment_reply = $request->input('comment_reply');
+                    $comment_id = $request->input('comment_id');
+                    
+                    $postData = array("user_id"=>$user_id,"comment_id"=>$comment_id,"comment_reply"=>$comment_reply,"created_at"=>Carbon\Carbon::now());
+                    $res = CommentReply::insert($postData);
+                    if($res) {
+                        echo json_encode(array('status' => 1, 'msg' => 'Comment '.Config::get('constant.ADDED_MESSAGE')));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                    }
+                } else {
+                    return redirect('/index'); 
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 0,'msg' => $ex->getMessage()));
+            }
+        }
         
     }
 

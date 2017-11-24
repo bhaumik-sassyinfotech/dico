@@ -27,7 +27,7 @@
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form method="POST" id="user-search-form" class="form-inline" role="form">
+                    <form method="POST" id="company-user-search-form" class="form-inline" role="form">
                         <div class="form-group">
                             <label for="name">User Name</label>
                             <input type="text" class="form-control" name="user_name" id="user_name" placeholder="user name">
@@ -53,7 +53,7 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form>
-                    <table class="table table-striped" id="users-table">
+                    <table class="table table-striped" id="company-users-table">
                         <thead>
                             <tr>
                                 <th>ID#</th>

@@ -41,21 +41,6 @@
                                        placeholder="user email">
                             </div>
                             <div class="form-group">
-                                <label for="role">Role</label>
-                                <select id="role_id" name="role_id" class="form-control">
-                                    <option value="">------ Select ------</option>
-                                    <?php
-                                    if(!empty($roles)) {
-                                    foreach($roles as $role) {
-                                    ?>
-                                    <option value="{{$role->id}}">{{$role->role_name}}</option>
-                                    <?php
-                                    }
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="company">Company</label>
                                 <select id="company_id" name="company_id" class="form-control">
                                     <option value="">------ Select ------</option>
@@ -70,6 +55,21 @@
                                     ?>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <select id="role_id" name="role_id" class="form-control">
+                                    <option value="">------ Select ------</option>
+                                    <?php
+                                    if(!empty($roles)) {
+                                    foreach($roles as $role) {
+                                    ?>
+                                    <option value="{{$role->id}}">{{$role->role_name}}</option>
+                                    <?php
+                                    }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                             <button type="submit" class="btn btn-primary">Search</button>
                         </form>
                         <table class="table table-striped" id="users-table">
@@ -78,6 +78,7 @@
                                 <th>ID#</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Company</th>
                                 <th>Role</th>
                                 <th>Active</th>
                                 <th>Suspended</th>

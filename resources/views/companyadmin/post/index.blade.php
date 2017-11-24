@@ -30,6 +30,7 @@
                     <form method="POST" id="post-search-form" class="form-inline" role="form">
                     </form>
                     <?php
+                    //dd($posts);
                     if (!empty($posts)) {
                         foreach (array_chunk($posts, 3) as $p) {
                             //dd($post['post_title']);
@@ -89,8 +90,8 @@
                                             <div class="tiles-footer">
                                                 <?php
                                                     if($post['is_anonymous'] == 0) { ?>
-                                                Author : {{$post['post_user']['name']}} <br/>
-                                                    <?php } ?>
+                                                Author : {{$post['post_user']['name']}} 
+                                                    <?php } else { echo "Anonymous"; }?><br/>
                                                 Date : {{date('d/m/Y',strtotime($post['created_at']))}}
                                             </div>
                                         </div>

@@ -8,7 +8,7 @@ var companyTable = $('#company_table').DataTable({
         }
     },
     columns : [
-            {data : 'id'},
+            {data : 'rownum'},
             {data : 'company_name'},
             {data : 'description'},
             {data : 'anonymous'},
@@ -117,11 +117,36 @@ var userTable = $('#users-table').DataTable({
         ajax: {
             url: SITE_URL+"/user/list",
             data: function (d) {
-            d.user_name = $('input[name=user_name]').val();
-            d.user_email = $('input[name=user_email]').val();
-            d.role_id = $('#role_id :selected').val();
-            d.company_id = $('#company_id :selected').val();
-        }
+                d.user_name = $('input[name=user_name]').val();
+                d.user_email = $('input[name=user_email]').val();
+                d.role_id = $('#role_id :selected').val();
+                d.company_id = $('#company_id :selected').val();
+            }
+        },
+        columns : [
+                {data : 'id'},
+                {data : 'name'},
+                {data : 'email'},
+                {data : 'company.0.company_name'},
+                {data : 'role'},
+                {data : 'active'},
+                {data : 'suspended'},
+                {data : 'actions'}
+        ],
+        searching : false              
+    });
+    
+var companyuserTable = $('#company-users-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: SITE_URL+"/user/list",
+            data: function (d) {
+                d.user_name = $('input[name=user_name]').val();
+                d.user_email = $('input[name=user_email]').val();
+                d.role_id = $('#role_id :selected').val();
+                d.company_id = $('#company_id :selected').val();
+            }
         },
         columns : [
                 {data : 'id'},
@@ -133,7 +158,8 @@ var userTable = $('#users-table').DataTable({
                 {data : 'actions'}
         ],
         searching : false              
-    });
+    }); 
+
 $("#user_form").validate({
         rules: {
             user_name: {
@@ -169,7 +195,11 @@ $("#user_form").validate({
     $('#user-search-form').on('submit', function(e) {
         userTable.draw();
         e.preventDefault();
-});    
+}); 
+$('#company-user-search-form').on('submit', function(e) {
+        companyuserTable.draw();
+        e.preventDefault();
+}); 
 //============================================================//
 //=================== Update Profile ========================//
 $('#general_profile_form').validate({

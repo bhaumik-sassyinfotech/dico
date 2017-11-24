@@ -9,4 +9,8 @@ class CommentReply extends Model
 {
     //
     use SoftDeletes;
+    public function commentReplyUser()
+    {
+        return $this->hasOne('App\User','id','user_id');
+    }
 }

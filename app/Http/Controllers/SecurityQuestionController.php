@@ -86,7 +86,7 @@ class SecurityQuestionController extends Controller {
     public function get_security_question(Request $request) {
         $security_question = new SecurityQuestion;
         $res = $security_question->select('*')
-                ->whereNULL('deleted_at');
+                ->whereNULL('deleted_at')->orderBy('id','desc');
                 return Datatables::of($res)->addColumn('actions' , function ( $row )
                 {
                     return '<a href="'.route('security_question.edit' , [ $row->id ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';

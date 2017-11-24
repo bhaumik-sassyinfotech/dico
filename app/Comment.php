@@ -35,4 +35,8 @@ class Comment extends Model
     {
         return $this->hasOne('App\CommentLike','comment_id','id')->where('flag',2);
     }
+    public function commentReply()
+    {
+        return $this->hasMany('App\CommentReply','comment_id','id');
+    }
 }

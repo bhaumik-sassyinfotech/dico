@@ -90,8 +90,8 @@
                                             <div class="tiles-footer">
                                                 <?php
                                                     if($post['is_anonymous'] == 0) { ?>
-                                                Author : {{$post['post_user']['name']}} <br/>
-                                                    <?php }?>
+                                                Author : {{$post['post_user']['name']}} 
+                                                    <?php } else { echo "Anonymous"; }?><br/>
                                                 Date : {{date('d/m/Y',strtotime($post['created_at']))}}
                                             </div>
                                         </div>
