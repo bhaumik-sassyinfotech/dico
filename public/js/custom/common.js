@@ -78,6 +78,9 @@ $(document).ready(function ()
     $('.post_type').on('change', function() {
         $('.post_type').not(this).prop('checked', false);
     });
+    $('.privacy_type').on('change', function() {
+        $('.privacy_type').not(this).prop('checked', false);
+    });
 });
 function likePost(id) {
     $.ajax({

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMeetingsTable extends Migration
+class CreateMeetingUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateMeetingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('meetings', function (Blueprint $table) {
+        Schema::create('meeting_users', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('meeting_title','255');
-            $table->text('meeting_description')->nullable();
-            $table->tinyInteger('privacy')->comment('0 = public , 1 = private')->default(0);
-//            $table->integer('is_admin')->default(0);
+            $table->integer('meeting_id')->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade')->index();;
+            $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
+            $table->integer('is_admin')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +30,6 @@ class CreateMeetingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('meetings');
+        Schema::dropIfExists('meeting_users');
     }
 }

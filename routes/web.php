@@ -55,6 +55,9 @@
         Route::get('dislike_comment/{id}' , 'PostController@dislike_comment');
         Route::post('comment_solution' , 'PostController@comment_solution');
         Route::post('comment_reply' , 'PostController@comment_reply');
+        
+        Route::match(['get','post'],'/meeting/list','MeetingController@meetingList');
+        Route::resource('meeting','MeetingController');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

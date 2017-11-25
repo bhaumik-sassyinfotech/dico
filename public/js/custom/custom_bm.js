@@ -28,14 +28,16 @@ $(".sec_question").on('focus', function () {
     previous = this.value;
 });
 
+
 $(document).ready(function () {
     $('#users_listing').select2();
     $("#company_listing,#company_users,#group_owner").select2();
     $("#user_groups").select2();
+    $("#employees_listing,#group_listing").select2();
 });
 $("#createUserGroup").validate({
     submitHandler: function (form) {
-        $("#save").prop('disabled',true);
+        $("#save").prop('disabled', true);
         form.submit();
     }
 });
@@ -43,23 +45,21 @@ $("#createUserGroup").validate({
 $("#company_listing").change(function () {
     var that = $(this);
     var dataString = {_token: CSRF_TOKEN, company_id: that.val()};
-    if(that.val() != "")
-    {
+    if (that.val() != "") {
         $.ajax({
             url: 'companyUsers',
             data: dataString,
             method: "POST",
-            success: function (response)
-            {
+            success: function (response) {
                 $("#users_listing,#group_owner").empty().append($("<option></option>").val("").html("Select user"));
                 var userData = response.data;
                 var role = '';
                 $.each(userData, function (key, val) {
-                    if(val.role_id === 2)
+                    if (val.role_id === 2)
                         role = 'Manager';
-                    else if(val.role_id === 3)
+                    else if (val.role_id === 3)
                         role = 'Employee';
-                    $("#users_listing,#group_owner").append("<option value='" + val.id + "'>" + val.name +"("+role+")"+"</option>");
+                    $("#users_listing,#group_owner").append("<option value='" + val.id + "'>" + val.name + "(" + role + ")" + "</option>");
                 });
             }
         });
@@ -72,7 +72,7 @@ var groupTable = $('#group_table').DataTable({
     ajax: SITE_URL + '/group/list',
     searching: true,
     columns: [
-        {data: 'rownum',name: 'rownum'},
+        {data: 'rownum', name: 'rownum'},
         {data: 'group_name'},
         {data: 'description'},
         {data: 'group_users_count'},
@@ -93,7 +93,7 @@ var groupEditTable = $("#group_users_edit_table").DataTable({
     searching: false,
     columns: [
         {data: 'rownum'},
-        {data: 'user_detail.name' , name:'userDetail.name' },
+        {data: 'user_detail.name', name: 'userDetail.name'},
         {data: 'admin'},
         {data: 'action'}
     ]
@@ -223,15 +223,17 @@ $(document).on('click', '.removeUser', function (event) {
 
         });
 });
-$("#group_users_edit_form").validate({submitHandler: function (form) {
-    $("#save").prop('disabled',true);
-    form.submit();
-}});
-$("#add_user").click(function(event){
+$("#group_users_edit_form").validate({
+    submitHandler: function (form) {
+        $("#save").prop('disabled', true);
+        form.submit();
+    }
+});
+$("#add_user").click(function (event) {
     //
     event.preventDefault();
     var users = $("#company_users").val();
-    if($.trim(users) !== "") {
+    if ($.trim(users) !== "") {
         var companyId = $("#company_id").val();
         var groupId = $("#group_id").val();
         var dataString = {
@@ -255,11 +257,11 @@ $("#add_user").click(function(event){
             }
 
         })
-    } else
-    {
-        swal("Error!","Please select users.","error");
+    } else {
+        swal("Error!", "Please select users.", "error");
     }
 });
+
 function companyUsers() {
     var companyId = $("#company_id").val();
     var groupId = $("#group_id").val();
@@ -273,9 +275,8 @@ function companyUsers() {
             userSelect.empty();
             var users = response.data;
             var status = response.status;
-            if(status === 1)
-            {
-                $.each(users,function (key,value) {
+            if (status === 1) {
+                $.each(users, function (key, value) {
                     userSelect.append($("<option></option>").html(value.name).val(value.id));
                 });
             }
@@ -288,26 +289,23 @@ $("#company_id").change(function () {
     var that = $(this);
     var groupDropDown = $("#user_groups");
     var company_id = that.val();
-    var dataString = { _token: CSRF_TOKEN, companyId: company_id };
+    var dataString = {_token: CSRF_TOKEN, companyId: company_id};
     $.ajax({
         method: "POST",
-        url: SITE_URL+'/user/getCompanyGroups',
+        url: SITE_URL + '/user/getCompanyGroups',
         data: dataString,
-        success: function(response)
-        {
+        success: function (response) {
             groupDropDown.empty();
             var status = response.status;
-            if(status == 1)
-            {
+            if (status == 1) {
                 var groups = response.data;
 
-                $.each(groups,function(key,val){
+                $.each(groups, function (key, val) {
                     groupDropDown.append($("<option></option>").val(val.id).html(val.group_name));
                 });
-            } else if(status == 0)
-            {
+            } else if (status == 0) {
                 console.error(response.msg);
-            } else{
+            } else {
                 console.log("some other error occured");
             }
         }
@@ -320,26 +318,22 @@ $('.ideaStatus').click(function (ev) {
     var that = $(this);
     ev.preventDefault();
     var postId = $("#post_id").val();
-    var dataString = { _token: CSRF_TOKEN , post_id: postId , idea_status: null};
+    var dataString = {_token: CSRF_TOKEN, post_id: postId, idea_status: null};
     var btnClicked = that.data('postStatus');
 
-    if(btnClicked === 'approve')
-    {
+    if (btnClicked === 'approve') {
         dataString.idea_status = 'approve';
-    } else if(btnClicked === 'deny')
-    {
+    } else if (btnClicked === 'deny') {
         dataString.idea_status = 'deny';
-    } else if(btnClicked === 'amend')
-    {
+    } else if (btnClicked === 'amend') {
         dataString.idea_status = 'amend';
     }
 
-    if(dataString.idea_status !== null)
-    {
+    if (dataString.idea_status !== null) {
         swal({
             title: "Are you sure?",
             // text: "You want to "+dataString.idea_status.charAt(0).toUpperCase() + dataString.idea_status.slice(1)+" the idea?",
-            text: "This will "+dataString.idea_status + " the idea.",
+            text: "This will " + dataString.idea_status + " the idea.",
             type: "input",
             inputPlaceholder: "Reason",
             showCancelButton: true,
@@ -353,7 +347,7 @@ $('.ideaStatus').click(function (ev) {
             }
             dataString.idea_reason = inputValue;
             $.ajax({
-                url: SITE_URL+'/post/change-status',
+                url: SITE_URL + '/post/change-status',
                 method: "POST",
                 data: dataString,
                 success: function (response) {
@@ -365,4 +359,36 @@ $('.ideaStatus').click(function (ev) {
     } else
         alert("null");
 
+});
+
+$("#createMeeting").validate({
+    rules:{
+        'privacy[]':{
+            required: true,
+            minlength: 1
+        }
+    },
+        submitHandler: function (form) {
+            $("#save").prop('disabled', true);
+            form.submit();
+        }
+});
+$("#meeting_table").DataTable({
+    processing: true,
+    serverSide: true,
+    searching: false,
+    ajax: {
+        url: SITE_URL + '/meeting/list',
+        data: function (d) {
+            d.group_id = $("#group_id").val();
+            d.company_id = $("#company_id").val();
+        }
+    },
+    columns: [
+        {data: 'rownum'},
+        {data: 'meeting_title'},
+        {data: 'meeting_description'},
+        {data: 'privacy'},
+        {data: 'meeting_users_count'},
+    ]
 });
