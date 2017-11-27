@@ -37,6 +37,6 @@ class Comment extends Model
     }
     public function commentReply()
     {
-        return $this->hasMany('App\CommentReply','comment_id','id');
+        return $this->hasMany('App\CommentReply','comment_id','id')->orderBy('id','desc');
     }
 }

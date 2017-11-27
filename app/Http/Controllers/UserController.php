@@ -221,7 +221,9 @@
                 $query->where('company_id', 'like', "%{$request->get('company_id')}%");
         
             }
-        });
+        })->addColumn('actions', function ( $row ) {
+                return '<a href="' . route('user.edit', [$row->id]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+            })->rawColumns(['actions'])->make(true);
         }
     }
         

@@ -145,18 +145,19 @@
             //dd("here");
             if ( Auth::user() )
             {
-                $posts = Post::with('postUser')->with('postLike')->with('postDisLike')->with('postComment')->with([ 'postUserLike' => function ($q) {
-                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
-                } ])->with([ 'postUserDisLike' => function ($q) {
-                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
-                } ])->with('postAttachment')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                    ->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)->orderBy('id','desc')->get()->toArray();
+//                $posts = Post::withCount('postLike')->with('postLike')->get();
+//                dd($posts);
+                $posts = Post::with(['postUser','postLike','postDisLike','postComment', 'postUserLike' => function ($q) {
+                    return $q->where('user_id' , Auth::user()->id);
+                } ,'postUserDisLike' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)->orderBy('post_like_count','desc')->get()->toArray();
             } else
             {
                 return redirect('/index');
             }
             
-            //dd($posts);
+           // dd($posts);
             return view($this->folder . '.post.index' , compact('posts'));
         }
         
@@ -711,23 +712,28 @@
             try
             {
                 if(Auth::user()) {
+                    $post_id = $request->input('post_id');
                     $user_id = Auth::user()->id;
                     $comment_reply = $request->input('comment_reply');
+                    $is_anonymous = $request->input('is_anonymous');
                     $comment_id = $request->input('comment_id');
+                    $srno = $request->input('srno');
                     
-                    $postData = array("user_id"=>$user_id,"comment_id"=>$comment_id,"comment_reply"=>$comment_reply,"created_at"=>Carbon\Carbon::now());
-                    $res = CommentReply::insert($postData);
-                    if($res) {
-                        echo json_encode(array('status' => 1, 'msg' => 'Comment '.Config::get('constant.ADDED_MESSAGE')));
+                    $postData = array("user_id"=>$user_id,"comment_id"=>$comment_id,"comment_reply"=>$comment_reply,"is_anonymous"=>$is_anonymous,"created_at"=>Carbon\Carbon::now());
+                    $reply_id = CommentReply::insertGetId($postData);
+                    if($reply_id) {
+                        $commentReply = CommentReply::with('commentReplyUser')->where('id',$reply_id)->first()->toArray();
+                            //print_r($post);
+                        return view($this->folder . '.post.comment', compact('commentReply','srno'));    
                     }else {
-                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        echo json_encode(array('status' => 1,'msg' => Config::get('constant.TRY_MESSAGE')));
                     }
                 } else {
                     return redirect('/index'); 
                 }
             }
             catch (Exception $ex) {
-                echo json_encode(array('status' => 0,'msg' => $ex->getMessage()));
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         }
         

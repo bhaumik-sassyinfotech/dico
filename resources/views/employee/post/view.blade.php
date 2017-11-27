@@ -35,6 +35,7 @@
             <div class="panel panel-default">
                 <form name="post_comment_form" id="post_comment_form" method="post" action="{{url('savecomment',$post->id)}}" enctype="multipart/form-data">
                     {{ csrf_field() }}
+                    <input type="hidden" name="post_id" id="post_id" value="{{$post['id']}}">
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 form-group">
@@ -62,7 +63,7 @@
                                             <i class="fa fa-thumbs-up"></i>
                                         <?php } else { ?>
                                             <i class="fa fa-thumbs-o-up"></i>
-<?php } ?>
+                                        <?php } ?>
                                     </a>
                                     <span id="post_like_count"><?php echo count($post['postLike']); ?></span>
                                 </div>
@@ -74,7 +75,7 @@
                                             <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                                         <?php } else { ?>
                                             <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-<?php } ?>
+                                        <?php } ?>
                                     </a>
                                     <span id="post_dislike_count"><?php echo count($post['postDisLike']); ?></span>
                                 </div>
@@ -86,7 +87,7 @@
                                             <i class="fa fa-comments"></i>
                                         <?php } else { ?>
                                             <i class="fa fa-comments-o"></i>
-<?php } ?>
+                                        <?php } ?>
                                     </a>
                                     <span><?php echo count($post['postComment']); ?></span>
                                 </div>
@@ -133,11 +134,11 @@
                             if (!empty($post['postComment'])) {
                                 foreach ($post['postComment'] as $postComment) {
                                     ?>
-                                    <div class="form-group">
+                                    <div class="form-group" id="commentreply_{{$postComment['id']}}">
                                         <div class="row" style="margin:0 !important;">
                                             <div class="col-md-2">
                                                 <div class="row">
-                                                        <?php if (!empty($postComment['commentUser'])) { ?> 
+                                                    <?php if (!empty($postComment['commentUser'])) { ?> 
                                                         <div class="col-md-2">
                                                             <?php
                                                             $commentUser = $postComment['commentUser'];
@@ -178,39 +179,42 @@
                                                     <span style="float:left;">
                                                         <?php if ($postComment['is_anonymous'] == 0) { ?>
                                                             <b><?php echo $commentUser['name']; ?></b>
-                                                    <?php } else {
-                                                        echo "<b>Anonymous</b>";
-                                                    } ?><br>
+                                                        <?php
+                                                        } else {
+                                                            echo "<b>Anonymous</b>";
+                                                        }
+                                                        ?><br>
                                                         <small><?php echo " - on " . date('m/d/Y', strtotime($commentUser['created_at'])); ?></small></span>
                                                             <?php if ($post['user_id'] == Auth::user()->id) { ?>
                                                         <span style="float: right;">
                                                             <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">
                                                                 <?php if ($postComment['is_correct'] == 1) { ?>
                                                                     <i class="fa fa-star" aria-hidden="true"></i>
-                                                        <?php } else { ?>
+                                                                <?php } else { ?>
                                                                     <i class="fa fa-star-o" aria-hidden="true"></i>
                                                         <?php } ?>  </a>Solution
                                                         </span>
-                                                            <?php } else {
-                                                                if ($postComment['is_correct'] == 1) {
-                                                                    ?><span style="float: right;"><a href="javascript:void(0)"><i class="fa fa-star" aria-hidden="true"></i></a> Solution</span><?php
-                                                }
-                                            }
-                                            ?><br>
-                                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                    <?php
+                                                    } else {
+                                                        if ($postComment['is_correct'] == 1) {
+                                                            ?><span style="float: right;"><a href="javascript:void(0)"><i class="fa fa-star" aria-hidden="true"></i></a> Solution</span><?php
+                                                                }
+                                                            }
+                                                            ?><br>
+        <?php if ($commentUser['id'] == Auth::user()->id) { ?>
                                                         <span style="float:right;">
                                                             <a href="{{url('/deletecomment',$postComment['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                         </span><?php } ?>
                                                 </div>
                                                 <div class="row">
-                                                    <?php echo $postComment['comment_text']; ?>
+                                                <?php echo $postComment['comment_text']; ?>
                                                 </div> 
-                                                <?php
-                                                    if (!empty($postComment['commentAttachment'])) {
-                                                ?>
-                                                <div class="row"><b>Attachment : </b>
-                                                    <a href="#">{{$postComment['commentAttachment']['file_name']}}</a>
-                                                </div><?php } ?>
+        <?php
+        if (!empty($postComment['commentAttachment'])) {
+            ?>
+                                                    <div class="row"><b>Attachment : </b>
+                                                        <a href="#">{{$postComment['commentAttachment']['file_name']}}</a>
+                                                    </div><?php } ?>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -222,9 +226,9 @@
                                                         if (!empty($postComment['commentUserLike'])) {
                                                             ?>
                                                             <i class="fa fa-thumbs-up"></i>
-                                                        <?php } else { ?>
+        <?php } else { ?>
                                                             <i class="fa fa-thumbs-o-up"></i>
-                                                        <?php } ?>
+        <?php } ?>
                                                     </a>
                                                     <span id="comment_like_count_{{$postComment['id']}}"><?php echo count($postComment['commentLike']) ?></span>
                                                 </div>
@@ -233,39 +237,73 @@
                                                         if (!empty($postComment['commentUserDisLike'])) {
                                                             ?>
                                                             <i class="fa fa-thumbs-down"></i>
-                                                        <?php } else { ?>
+        <?php } else { ?>
                                                             <i class="fa fa-thumbs-o-down"></i>
-                                                        <?php } ?>
+        <?php } ?>
                                                     </a>
                                                     <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
                                                 </div>
-                                                <div class="col-md-1"><a href="javascript:void(0);" onclick="comment_reply({{$postComment['id']}})"><i class="fa fa-reply" aria-hidden="true"></i></a></div>
-                                                
+                                                <div class="col-md-1"><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal{{$postComment['id']}}"><i class="fa fa-reply" aria-hidden="true"></i></a></div>
+                                                <div id="myModal{{$postComment['id']}}" class="modal fade" role="dialog">
+                                                    <div class="modal-dialog">
+
+                                                        <!-- Modal content-->
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                <h4 class="modal-title">Comment Here</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="row">
+                                                                   <textarea name="comment_text" id="comment_text_{{$postComment['id']}}" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <label>Anonymous</label><br>
+                                                                    <input type="checkbox" name="is_anonymous" id="is_anonymous_{{$postComment['id']}}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="comment_reply({{$postComment['id']}})">Submit</button>
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- comment reply box start -->
                                         <?php
-                                            //dd($postComment['commentReply']);
-                                            if(!empty($postComment['commentReply'])) {
-                                                foreach($postComment['commentReply'] as $commentReply) {
-                                        ?>
-                                        <div class="form-group row"><div class="col-md-12">
-                                            <span style="float:left;">
-                                                    <b><?php echo $commentReply['commentReplyUser']['name']; ?></b>
-                                                <br>
-                                            <small><?php echo " - on " . date('d/m/Y', strtotime($commentReply['created_at'])); ?></small>
-                                            </span>  <br>
-                                            <div class="col-md-12">    
-                                            <?php echo $commentReply['comment_reply']; ?></div>
-                                            </div></div>  
+                                        //dd($postComment['commentReply']);
+                                        if (!empty($postComment['commentReply'])) {
+                                            $srno = 0;
+                                            foreach ($postComment['commentReply'] as $commentReply) {
+                                                $srno++;
+                                                ?>
+                                        <div class="form-group row cmry" id="{{$srno}}"><div class="col-md-12">
+                                                        <span style="float:left;">
+                                                            <?php if ($commentReply['is_anonymous'] == 0) { ?>
+                                                            <b><?php echo $commentReply['commentReplyUser']['name']; ?></b>
+                                                        <?php
+                                                        } else {
+                                                            echo "<b>Anonymous</b>";
+                                                        }
+                                                        ?>
+                                                            
+                                                            <br>
+                                                            <small><?php echo " - on " . date('d/m/Y', strtotime($commentReply['created_at'])); ?></small>
+                                                        </span>  <br>
+                                                        <div class="col-md-12">    
+                <?php echo $commentReply['comment_reply']; ?></div>
+                                                    </div></div>  
                                                 <?php if ($commentReply['id'] == Auth::user()->id) { ?>
-                                                        <span style="float:right;">
-                                                            <a href="{{url('/deletecomment',$postComment['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </span><?php } ?>
-                                        <?php
-                                                }
+                                                    <span style="float:right;">
+                                                        <a href="{{url('/deletecomment',$postComment['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    </span><?php } ?>
+                                                <?php
                                             }
+                                        }
                                         ?>
                                         <!-- comment reply box end --> 
                                     </div>    
@@ -294,69 +332,65 @@
             closeOnConfirm: true,
             showLoaderOnConfirm: true
     }, function () {
-        var _token = CSRF_TOKEN;
-        var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
-        $.ajax({
-            url: SITE_URL + '/comment_solution',
+    var _token = CSRF_TOKEN;
+    var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
+    $.ajax({
+    url: SITE_URL + '/comment_solution',
             type: 'POST',
             data: formData,
             success: function(response) {
-                var res = JSON.parse(response);
-                var html = "";
+            var res = JSON.parse(response);
+            var html = "";
             if (res.status == 1) {
-                html += '<i class="fa fa-star" aria-hidden="true">';
+            html += '<i class="fa fa-star" aria-hidden="true">';
             } else if (res.status == 2) {
-                html += '<i class="fa fa-star" aria-hidden="true">';
-                swal("Error", res.msg, "error");
+            html += '<i class="fa fa-star" aria-hidden="true">';
+            swal("Error", res.msg, "error");
             } else {
-                html += '<i class="fa fa-star-o" aria-hidden="true">';
-                swal("Error", res.msg, "error");
+            html += '<i class="fa fa-star-o" aria-hidden="true">';
+            swal("Error", res.msg, "error");
             }
             $('#solution_' + commentid).html(html);
             },
             error: function(e) {
-                swal("Error", e, "error");
+            swal("Error", e, "error");
             }
     });
     });
     }
     function comment_reply(commentid) {
-        swal({
-            title: "Enter your comment",
-            //text: "Write your comment",
-            type: "input",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            inputPlaceholder: "Write your comment"
-         }, function (inputValue) {
-            if (inputValue === false) return false;
-            if (inputValue === "") {
-              swal.showInputError("You need to write something.");
-              return false;
+    
+        var _token = CSRF_TOKEN;
+        var post_id = $('#post_id').val();
+        var comment_reply = $('#comment_text_'+commentid).val();
+        var anonymous = 0;
+        var srno = $('#commentreply_'+commentid+' .cmry:first').attr('id');
+        if($("#is_anonymous_"+commentid).is(':checked')) {
+            anonymous = 1;
+        } else {
+            anonymous = 0;
+        }
+        var formData = {comment_id:commentid, comment_reply:comment_reply,post_id:post_id,is_anonymous:anonymous,srno:srno, _token};
+        $.ajax({
+        url: SITE_URL + '/comment_reply',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                /*res = JSON.parse(response);
+                if (res.status == 1) {
+                    location.reload();
+                } else {
+                swal("Error", res.msg, "error");
+                }*/
+                console.log(commentid,"::::",srno);
+                $('#commentreply_'+commentid+' #'+srno).before(response);
+                
+            },
+            error: function(e) {
+                swal("Error", e, "error");
             }
-            else {
-                var _token = CSRF_TOKEN;
-                var formData = {comment_id:commentid,comment_reply:inputValue, _token};
-                $.ajax({
-                    url: SITE_URL + '/comment_reply',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        res = JSON.parse(response);
-                        if(res.status == 1) {
-                            location.reload();
-                        } else {
-                            swal("Error", res.msg, "error");
-                        }
-                    },
-                    error: function(e) {
-                        swal("Error", e, "error");
-                    }
-                });
-            }
-        });
-            //swal("Nice!", "You wrote: " + inputValue, "success");
-        //});
+    });
+    
     }
 </script>
 @endpush

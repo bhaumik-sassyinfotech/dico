@@ -145,7 +145,7 @@ var companyuserTable = $('#company-users-table').DataTable({
                 d.user_name = $('input[name=user_name]').val();
                 d.user_email = $('input[name=user_email]').val();
                 d.role_id = $('#role_id :selected').val();
-                d.company_id = $('#company_id :selected').val();
+               // d.company_id = $('#company_id :selected').val();
             }
         },
         columns : [

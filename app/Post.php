@@ -21,6 +21,11 @@
             return $this->hasMany('App\PostLike' , 'post_id' , 'id')->where('flag' , 1);
         }
         
+        public function postLikeCount()
+        {
+         return $this->postLike;
+        }
+        
         public function postDisLike()
         {
             return $this->hasMany('App\PostLike' , 'post_id' , 'id')->where('flag' , 2);

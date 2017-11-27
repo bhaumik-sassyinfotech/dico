@@ -17,6 +17,7 @@ class CreateCommentRepliesTable extends Migration
            $table->increments('id')->unsigned();
             $table->integer('comment_id')->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade')->index();
             $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
+            $table->boolean('is_anonymous')->default(0);
             $table->text('comment_reply');
             $table->timestamps();
             $table->softDeletes();
