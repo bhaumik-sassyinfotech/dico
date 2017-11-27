@@ -53,22 +53,20 @@
                         <input type="hidden" name="company_id" value="{{ $company_id }}">
                         <div class="form-group ">
                             <div class="row">
-                                <div class="col-md-3">
-                                    <label for="group_listing" class="control-label">Groups: </label>
-                                    <select name="group_listing" class="form-control" id="group_listing">
-                                        <option value="">Select groups</option>
-                                        @foreach($groups as $group)
-                                            <option value="{{ $group->id }}">{{ $group->group_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="employees_listing">Employees: </label>
+                                <div class="col-md-6">
+                                    <label for="employees_listing">Groups and Employees: </label>
                                     <select name="employees[]" id="employees_listing" class="form-control" multiple="multiple">
-                                        <option value="">Select employees</option>
+                                        {{--<option value="">Select employees</option>--}}
+                                        <optgroup label="Employees">
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                         @endforeach
+                                        </optgroup>
+                                        <optgroup label="Groups">
+                                            @foreach($groups as $group)
+                                                <option value="group_{{ $group->id }}">{{ $group->group_name }}</option>
+                                            @endforeach
+                                        </optgroup>
                                     </select>
                                 </div>
                                 <div class="col-md-2">
@@ -86,7 +84,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="btn-toolbar">
-                                    <a class="btn btn-default" href="{{ route('group.index') }}">Back</a>
+                                    <a class="btn btn-default" href="{{ route('meeting.index') }}">Back</a>
                                     {{ Form::submit('Submit',['class' => 'btn btn-primary']) }}
                                 </div>
                             </div>

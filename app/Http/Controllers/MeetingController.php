@@ -16,7 +16,7 @@
     use Illuminate\Support\Facades\Auth;
     use Symfony\Component\VarDumper\Cloner\Data;
     use Yajra\DataTables\DataTables;
-
+    
     class MeetingController extends Controller
     {
         protected $folder;
@@ -57,9 +57,10 @@
          */
         public function create()
         {
+            
             $currUser   = Auth::user();
             $company_id = $currUser->company_id;
-            $employees  = User::where('company_id' , $company_id)->where('role_id' , '!=' , 1)->orderByDesc('id')->get();
+            $employees  = User::where('company_id' , $company_id)->where('role_id' , '!=' , 1)->where('id' , '!=' , $currUser->id)->orderByDesc('id')->get();
             $groups     = Group::where('company_id' , $company_id)->orderByDesc('id')->get();
             
             return view($this->folder . '.meeting.create' , compact('employees' , 'groups' , 'company_id'));
@@ -74,7 +75,7 @@
          */
         public function store(Request $request)
         {
-//            dd($request);
+            
             DB::beginTransaction();
             try
             {
@@ -90,39 +91,55 @@
                 if ( $meeting->save() )
                 {
                     
-                    $meetingUsers = [];
+                    $group        = $users = [];
                     $meeting_id   = $meeting->id;
-                    if ( !empty($request->group_listing) )
+                    $meetingUsers = [[ 'user_id' => $currUser->id , 'is_admin' => 1 , 'group_id' => 0 , 'meeting_id' => $meeting_id , 'created_at' => Carbon::now() , 'updated_at' => Carbon::now() ]];
+                    foreach ( $request->employees as $key => $val )
                     {
-                        $group_id    = $request->group_listing;
-                        $group_users = GroupUser::where('group_id' , $group_id)->where('company_id' , $company_id)->pluck('user_id')->toArray();
-                        $now         = Carbon::now();
-                        foreach ( $group_users as $key => $val )
+                        if ( strpos($val , 'group_') !== FALSE )
+                            $group[] = substr($val , 6);
+                        else
+                            $users[] = $val;
+                    }
+                    if ( !empty($group) )
+                    {
+                        foreach ( $group as $key => $val )
                         {
-                            $is_admin = 0;
-                            if ( $val == $currUser->id )
-                                $is_admin = 1;
-                            $meetingUsers[] = [ 'user_id' => $val , 'is_admin' => $is_admin , 'meeting_id' => $meeting_id , 'created_at' => $now , 'updated_at' => $now ];
+                            $now         = Carbon::now();
+                            $group_id    = $val;
+                            $group_users = GroupUser::where('group_id' , $group_id)->where('company_id' , $company_id)->pluck('user_id')->toArray();
+                            
+                            foreach ( $group_users as $k => $v )
+                            {
+                                $is_admin = 0;
+                                if ( $v != $currUser->id )
+                                {
+                                    $meetingUsers[] = [ 'user_id' => $v , 'is_admin' => $is_admin , 'group_id' => $group_id , 'meeting_id' => $meeting_id , 'created_at' => $now , 'updated_at' => $now ];
+                                }
+                            }
                         }
-                    } else if ( !empty($request->employees) )
+                    }
+                    
+                    if ( !empty($users) )
                     {
-                        
-                        $users = $request->employees;
                         
                         $now = Carbon::now();
                         foreach ( $users as $key => $val )
                         {
                             $is_admin = 0;
-                            if ( $val == $currUser->id )
-                                $is_admin = 1;
-                            $meetingUsers[] = [ 'user_id' => $val , 'is_admin' => $is_admin , 'meeting_id' => $meeting_id , 'created_at' => $now , 'updated_at' => $now ];
+                            if ( $val != $currUser->id )
+                            {
+                                $meetingUsers[] = [ 'user_id' => $val , 'is_admin' => $is_admin , 'group_id' => $group_id , 'meeting_id' => $meeting_id , 'created_at' => $now , 'updated_at' => $now ];
+                            }
                         }
                     }
+//                    dd($meetingUsers);
                     
                     if ( MeetingUser::insert($meetingUsers) )
                     {
                         DB::commit();
-                        return redirect()->route('meeting.index')->with('success','Meeting has been created successfully.');
+                        
+                        return redirect()->route('meeting.index')->with('success' , 'Meeting has been created successfully.');
                     } else
                     {
                         DB::rollBack();
@@ -200,7 +217,7 @@
             $user_id  = $currUser->id;
             
             /*fetch list of meeting's id which current user is part of*/
-            $user_meetings = MeetingUser::where('user_id',$user_id)->pluck('meeting_id')->toArray();
+            $user_meetings = MeetingUser::where('user_id' , $user_id)->pluck('meeting_id')->toArray();
             
             /*
              * Private meetings will only be included in listing if user is part of it.
@@ -208,19 +225,20 @@
              *
              * */
             DB::statement(DB::raw('set @rownum=0'));
-            $meetings = Meeting::select([DB::raw('@rownum  := @rownum  + 1 AS rownum'),'meetings.*'])->withCount('meetingUsers')->where('privacy',0)->orWhereIn('id',$user_meetings)->orderByDesc('id')->get();
-            return DataTables::of($meetings)->addColumn('privacy',function ($row)
-            {
+            $meetings = Meeting::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'meetings.*' ])->withCount('meetingUsers')->where('privacy' , 0)->orWhereIn('id' , $user_meetings)->orderByDesc('id')->get();
+            
+            return DataTables::of($meetings)->addColumn('privacy' , function ($row) {
                 /*
                  * 0 => Public , 1 => Private
                  * */
-                if($row->privacy == 0)
+                if ( $row->privacy == 0 )
                     return "Public";
                 else
                     return "Private";
-            })->addColumn('meeting_description',function($row){
-                if(empty($row->meeting_description))
+            })->addColumn('meeting_description' , function ($row) {
+                if ( empty($row->meeting_description) )
                     return "-";
+                
                 return $row->meeting_description;
             })->make(TRUE);
 //            dd($meetings);

@@ -36,6 +36,8 @@
 <script type='text/javascript' src="{{asset('public/js/sweetalert.min.js')}}"></script>
 <script src="{{ asset('public/js/select2.js') }}"></script>
 <script type='text/javascript' src="{{ asset('public/js/application.js') }}"></script>
+<!-- js to exclude profanity ( https://github.com/ChaseFlorell/jQuery.ProfanityFilter ) -->
+<script src="{{ asset('public/js/jquery.profanityfilter.js') }}" type="text/javascript"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/common.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom_bm.js')}}"></script>

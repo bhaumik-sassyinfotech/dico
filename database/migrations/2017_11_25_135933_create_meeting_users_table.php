@@ -16,6 +16,7 @@ class CreateMeetingUsersTable extends Migration
         Schema::create('meeting_users', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('meeting_id')->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade')->index();;
+            $table->integer('group_id')->default(0)->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->index();
             $table->integer('user_id')->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->integer('is_admin')->default(0);
             $table->timestamps();

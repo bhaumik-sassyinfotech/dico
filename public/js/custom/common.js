@@ -1,5 +1,8 @@
 /*enable `save` button once the page is loaded to ensure that jquery validations are applied.*/
 $("#save").prop('disabled',true);
+$('.profanity').profanityFilter({
+    externalSwears: EXTERNAL_SWEARS,
+});
 /*Yajratables default parameters*/
 $.extend(true, jQuery.fn.dataTable.defaults, {
     "stateSave": true,
