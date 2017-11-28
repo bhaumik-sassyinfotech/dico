@@ -12,6 +12,9 @@
     use App\Comment;
     use App\CommentLike;
     use App\CommentReply;
+    use App\Tag;
+    use App\PostTag;
+    use App\Group;
     use DB;
     use Validator;
     use Redirect;
@@ -62,8 +65,9 @@
             if ( Auth::user() )
             {
                 $company = Company::where('id' , Auth::user()->company_id)->first();
+                $groups = Group::where('company_id' , Auth::user()->company_id)->get();
                 
-                return view($this->folder . '.post.create' , compact('company'));
+                return view($this->folder . '.post.create' , compact('company','groups'));
             } else
             {
                 return redirect('/index');
@@ -95,6 +99,13 @@
                     $post->post_type        = $request->input('post_type');
                     $post->user_id          = Auth::user()->id;
                     $post->is_anonymous     = $is_anonymous;
+                    //=== groups saving start ===//
+                    $post_groups = $request->input('user_groups');
+                    if(!empty($post_groups)) {
+                        $groups = implode(",", $post_groups);
+                        $post->group_id     = $groups;
+                    }
+                    //=== groups saving end ===//
                     $post->save();
                     $file = $request->file('file_upload');
                     if ( $file != "" )
@@ -115,6 +126,21 @@
                         $attachment->save();
                         // $attachment = Attachment::insert($postData);
                     }
+                    //=== tags saving start ===//
+                    $post_tags = $request->input('post_tags');
+                    if(!empty($post_tags)) {
+                        $tags = explode(",", $post_tags);
+                        foreach($tags as $tag) {
+                            $existTag = Tag::where("tag_name",$tag)->first();
+                            if($existTag) {
+                                $tag_id = $existTag->id;
+                            } else {
+                                $tag_id = Tag::insertGetId(array("tag_name"=>$tag,"created_at"=>Carbon\Carbon::now()));
+                            }
+                            $post_tags = PostTag::insert(array("post_id"=>$post->id,"tag_id"=>$tag_id,"created_at"=>Carbon\Carbon::now()));
+                        }
+                    }
+                    //=== tagss saving end ===//
                     DB::commit();
                     if ( $post )
                     {
@@ -182,6 +208,13 @@
                     }
                     DB::beginTransaction();
                     $postData = array( 'company_id' => Auth::user()->company_id , 'post_title' => $request->input('post_title') , 'post_description' => $request->input('post_description') , 'is_anonymous' => $is_anonymous , 'post_type' => $request->input('post_type') , 'updated_at' => Carbon\Carbon::now() );
+                   //=== groups saving start ===//
+                    $post_groups = $request->input('user_groups');
+                    if(!empty($post_groups)) {
+                        $groups = implode(",", $post_groups);
+                        $postData['group_id'] = $groups;
+                    }
+                    //=== groups saving end ===//
                     $res      = $post->where('id' , $id)->update($postData);
                     $file     = $request->file('file_upload');
                     if ( $file != "" )
@@ -201,6 +234,22 @@
                         $postData[ 'user_id' ]   = Auth::user()->id;
                         $attachment              = Attachment::insert($postData);
                     }
+                    $post_tags = $request->input('post_tags');
+                    if(!empty($post_tags)) {
+                        $tags = explode(",", $post_tags);
+                        $get_tag = PostTag::where('post_id',$id)->forceDelete();
+                        
+                        foreach($tags as $tag) {
+                            $existTag = Tag::where("tag_name",$tag)->first();
+                            if($existTag) {
+                                $tag_id = $existTag->id;
+                            } else {
+                                $tag_id = Tag::insertGetId(array("tag_name"=>$tag,"created_at"=>Carbon\Carbon::now()));
+                            }
+                            $post_tags = PostTag::insert(array("post_id"=>$id,"tag_id"=>$tag_id,"created_at"=>Carbon\Carbon::now()));
+                        }
+                    }
+                    
                     DB::commit();
                     if ( $res )
                     {
@@ -227,14 +276,10 @@
             if ( Auth::user() )
             {
                 $company = Company::where('id' , Auth::user()->company_id)->first();
-                $post    = Post::with('postUser')->with('postLike')->with('postDisLike')->with([ 'postUserLike' => function ($q) {
-                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
-                } ])->with([ 'postUserDisLike' => function ($q) {
-                    $q->where('user_id' , Auth::user()->id)->first(); // '=' is optional
-                } ])->with('postAttachment')->select('*' , DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                    ->whereNULL('deleted_at')->where('id' , $id)->first();
-                
-                return view($this->folder . '.post.edit' , compact('post' , 'company'));
+                $groups = Group::where('company_id' , Auth::user()->company_id)->get();
+                $post = Post::with('postUser')->with(['postAttachment','postTag.tag'])->whereNULL('deleted_at')->where('id' , $id)->first();
+                //dd($post);
+                return view($this->folder . '.post.edit' , compact('post', 'groups' , 'company'));
             } else
             {
                 return redirect('/index');
@@ -734,6 +779,28 @@
             }
             catch (Exception $ex) {
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function deletecommentReply($id = null) {
+            $deleteCommentReply = CommentReply::where('id', $id)->delete();
+            if($deleteCommentReply) {
+                return Redirect::back()->with('success', 'Comment deleted successfully');
+            }else {
+                return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+            }
+        }
+        public function tags() {
+            $tags = Tag::all();
+            if($tags) {
+               /* $tag_arr = array();
+                foreach($tags as $tag) {
+                    $tag_arr[] = $tag['tag_name'];
+                }*/
+                //$tagArr = implode(",", $tag_arr);
+                //dd($tags);
+                echo json_encode(array('status' => 1,'data' => $tags));
+            } else {
+                echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
             }
         }
         

@@ -136,8 +136,7 @@
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-md-12">
+                            <div class="row col-xs-12">
                                 <div class="btn-toolbar">
                                     <a href="{{ route('user.index') }}" class="btn btn-default">Back</a>
                                     <input type="submit" name="save" id="save" class="btn btn-primary">
