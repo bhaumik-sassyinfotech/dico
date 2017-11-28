@@ -41,3 +41,4 @@
 <script type='text/javascript' src="{{asset('public/js/custom/common.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/custom/custom_bm.js')}}"></script>
+<script src="{{asset('public/assets/js/tag-it.js')}}" type="text/javascript" charset="utf-8"></script>

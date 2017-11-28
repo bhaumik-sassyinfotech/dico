@@ -29,6 +29,8 @@
 <link rel='stylesheet' type='text/css' href="{{asset('public/assets/plugins/form-toggle/toggles.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset('public/css/sweetalert.css')}}" />
 <link href="{{asset('public/css/select2.css')}}" rel="stylesheet" />
+<link href="{{asset('public/assets/css/jquery.tagit.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('public/assets/css/tagit.ui-zendesk.css')}}" rel="stylesheet" type="text/css">
 <script type="text/javascript">
     var SITE_URL = '<?php echo url('/'); ?>';
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";

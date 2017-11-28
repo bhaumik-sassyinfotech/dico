@@ -296,11 +296,11 @@
                                                         </span>  <br>
                                                         <div class="col-md-12">    
                 <?php echo $commentReply['comment_reply']; ?></div>
-                                                    </div></div>  
-                                                <?php if ($commentReply['id'] == Auth::user()->id) { ?>
+                                                    </div>  
+                                                <?php if ($commentReply['user_id'] == Auth::user()->id) { ?>
                                                     <span style="float:right;">
-                                                        <a href="{{url('/deletecomment',$postComment['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                    </span><?php } ?>
+                                                        <a href="{{url('/deletecommentReply',$commentReply['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    </span><?php } ?></div>
                                                 <?php
                                             }
                                         }
@@ -335,20 +335,20 @@
     var _token = CSRF_TOKEN;
     var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
     $.ajax({
-    url: SITE_URL + '/comment_solution',
+            url: SITE_URL + '/comment_solution',
             type: 'POST',
             data: formData,
             success: function(response) {
-            var res = JSON.parse(response);
-            var html = "";
+                var res = JSON.parse(response);
+                var html = "";
             if (res.status == 1) {
-            html += '<i class="fa fa-star" aria-hidden="true">';
+                html += '<i class="fa fa-star" aria-hidden="true">';
             } else if (res.status == 2) {
-            html += '<i class="fa fa-star" aria-hidden="true">';
-            swal("Error", res.msg, "error");
+                html += '<i class="fa fa-star" aria-hidden="true">';
+                swal("Error", res.msg, "error");
             } else {
-            html += '<i class="fa fa-star-o" aria-hidden="true">';
-            swal("Error", res.msg, "error");
+                html += '<i class="fa fa-star-o" aria-hidden="true">';
+                swal("Error", res.msg, "error");
             }
             $('#solution_' + commentid).html(html);
             },

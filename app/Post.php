@@ -55,5 +55,9 @@
         {
             return $this->hasOne('App\User' , 'id' , 'idea_status_updated_by');
         }
+        public function postTag()
+        {
+            return $this->hasMany('App\PostTag' , 'post_id' , 'id');
+        }
         
     }

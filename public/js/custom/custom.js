@@ -5,10 +5,11 @@ var companyTable = $('#company_table').DataTable({
         url: SITE_URL+'/get_company',
         data: function (d) {
             d.company_name = $('input[name=company_name]').val();
+            
         }
     },
     columns : [
-            {data : 'rownum'},
+            {data : 'id'},
             {data : 'company_name'},
             {data : 'description'},
             {data : 'anonymous'},

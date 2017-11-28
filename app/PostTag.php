@@ -9,4 +9,8 @@ class PostTag extends Model
 {
     //
     use SoftDeletes;
+    public function tag()
+    {
+        return $this->hasOne('App\Tag' , 'id' , 'tag_id');
+    }
 }

@@ -16,7 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id')->foreign('company_id')->references('id')->on('company')->onDelete('cascade')->index();
-            $table->integer('group_id')->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->index();
+            $table->string('group_id','255')->nullable()->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->index();
             $table->string('post_title','255');
             $table->text('post_description')->nullable();
             $table->enum('post_type',['idea','question','challenge']);

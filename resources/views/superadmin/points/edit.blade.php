@@ -34,15 +34,7 @@
         <div class="container">
             <div class="panel panel-default">
                 {!! Form::model($point, ['method' => 'PUT', 'route' => ['points.update', $point->id],'enctype'=>'multipart/form-data', 'id' => 'points_form']) !!}
-                    <div class="new_button">
-                        <div class="pull-right extra_button">
-                            <input type="submit" name="save" id="save" class="btn btn-primary">
-                        </div>
-                        <div class="pull-right extra_button">
-                                <a href="{{ route('points.index') }}" class="btn btn-default" >Back</a>
-                        </div>
-                        <div style="clear: both;"></div>
-                    </div>
+                    
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 form-group">
@@ -63,6 +55,17 @@
                             </div>
                         </div>
                     </div>
+                
+                    <div class="panel-footer">
+                        <div class="row col-xs-12">
+                            <div class="btn-toolbar">
+                                <a href="{{ route('points.index') }}" class="btn btn-default" >Back</a>
+                                <input type="submit" name="save" id="save" class="btn btn-primary">
+                            </div>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                
                <!-- </form>     -->
                {!! Form::close() !!}
             </div>
