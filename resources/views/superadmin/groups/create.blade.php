@@ -43,12 +43,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="group_name">Group name:*</label>
-                                    <input type="text" name="group_name" id="group_name" class="form-control required"/>
+                                    <input type="text" name="group_name" id="group_name" class="form-control required" value=" {{ old('group_name') }}"/>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="group_description"> Group Description:* </label>
                                     <textarea name="group_description" id="group_description"
-                                              class="form-control required"></textarea>
+                                              class="form-control required">{{ old('group_description') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -59,9 +59,16 @@
                                     <label for="company_listing">Company:* </label>
                                     <select name="company_listing" class="form-control required" id="company_listing">
                                         <option value="">Select Company:*</option>
-                                        @foreach($companies as $company)
-                                            <option value="{{ $company->id }}">{{ $company->company_name }}</option>
-                                        @endforeach
+                                        @if(!is_null(old('company_listing')))
+                                            <?php $company_id = old('company_listing'); ?>
+                                            @foreach($companies as $company)
+                                                <option {{ $company_id == $company->id ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->company_name }}</option>
+                                            @endforeach
+                                        @else
+                                            @foreach($companies as $company)
+                                                <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-md-3">

@@ -37,6 +37,7 @@
                                 <th>Meeting description</th>
                                 <th>Type</th>
                                 <th>Total members</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                         </table>

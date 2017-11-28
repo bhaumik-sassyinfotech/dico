@@ -87,13 +87,14 @@
                 $meeting->meeting_title       = $request->meeting_title;
                 $meeting->meeting_description = $request->meeting_description;
                 $meeting->privacy             = $privacy;
+                $meeting->created_by          = $currUser->id;
                 
                 if ( $meeting->save() )
                 {
                     
                     $group        = $users = [];
                     $meeting_id   = $meeting->id;
-                    $meetingUsers = [[ 'user_id' => $currUser->id , 'is_admin' => 1 , 'group_id' => 0 , 'meeting_id' => $meeting_id , 'created_at' => Carbon::now() , 'updated_at' => Carbon::now() ]];
+                    $meetingUsers = [ [ 'user_id' => $currUser->id , 'is_admin' => 1 , 'group_id' => 0 , 'meeting_id' => $meeting_id , 'created_at' => Carbon::now() , 'updated_at' => Carbon::now() ] ];
                     foreach ( $request->employees as $key => $val )
                     {
                         if ( strpos($val , 'group_') !== FALSE )
@@ -165,13 +166,21 @@
         /**
          * Display the specified resource.
          *
-         * @param  int $id
+         * @param  int    $id
+         *
+         * @param Request $request
          *
          * @return \Illuminate\Http\Response
          */
-        public function show($id)
+        public function show($id , Request $request)
         {
             //
+            return $meeting = Meeting::with('meetingCreator')->where('id' , $id)->first();
+            
+            $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id' , $meeting->id)->pluck('user_id')->toArray()));
+            $meeting_users    = User::whereIn('id' , $meeting_user_ids)->get();
+            
+            return view($this->folder . '.meeting.detail' , compact('meeting' , 'meeting_users'));
         }
         
         /**
@@ -240,7 +249,12 @@
                     return "-";
                 
                 return $row->meeting_description;
-            })->make(TRUE);
+            })->addColumn('actions' , function ($row) {
+//                $editBtn = '<a href="' . route('meeting.edit' , [ $row->id ]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                $showBtn = '<a href="' . route('meeting.show' , [ $row->id ]) . '" title="Show"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                
+                return $showBtn;
+            })->rawColumns([ 'actions' ])->make(TRUE);
 //            dd($meetings);
         }
     }

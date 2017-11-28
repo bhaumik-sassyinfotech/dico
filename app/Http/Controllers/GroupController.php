@@ -12,7 +12,9 @@
     use Exception;
     use Illuminate\Http\Request;
     use Config;
+    use Illuminate\Support\Facades\Redirect;
     use Response;
+    use Validator;
     use Yajra\DataTables\Facades\DataTables;
     
     
@@ -54,16 +56,18 @@
             return view($this->folder . '.groups.index');
 //        return redirect()->route('group.create');
         }
-        
+    
         /**
          * Show the form for creating a new resource.
          *
+         * @param Request $request
+         *
          * @return \Illuminate\Http\Response
          */
-        public function create()
+        public function create(Request $request)
         {
             //
-//        dd("create");
+            
             $companies = Company::all();
             
             return view($this->folder . '.groups.create' , compact('companies'));
@@ -78,17 +82,22 @@
          */
         public function store(Request $request)
         {
+            $validator = $this->validation($request);
+            if ( $validator->fails() )
+            {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             DB::beginTransaction();
             try
             {
-                $user                  = Auth::user();
-                $group                 = new Group;
-                $group->group_name     = $request->group_name;
-                $group->description    = $request->group_description;
-                $group->company_id     = $request->company_listing;
-                $group->group_owner      = $request->group_owner;
-                $group->created_by     = $user->id;
-                $group->updated_by     = $user->id;
+                $user               = Auth::user();
+                $group              = new Group;
+                $group->group_name  = $request->group_name;
+                $group->description = $request->group_description;
+                $group->company_id  = $request->company_listing;
+                $group->group_owner = $request->group_owner;
+                $group->created_by  = $user->id;
+                $group->updated_by  = $user->id;
                 if ( $group->save() )
                 {
                     if ( !empty($request->users_listing) )
@@ -145,12 +154,12 @@
          */
         public function edit($id , Request $request)
         {
-            $groupId         = $id;
-            $companies       = Company::all();
-            $groupData       = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
+            $groupId   = $id;
+            $companies = Company::all();
+            $groupData = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
 //            dd($groupData->groupUsers->pluck('user_id')->toArray());
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
-            $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id','!=',1)->whereNotIn('id' , $groupUsers)->get();
+            $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id' , '!=' , 1)->whereNotIn('id' , $groupUsers)->get();
             
             return view($this->folder . '.groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
         }
@@ -166,6 +175,11 @@
         public function update($groupId , Request $request)
         {
             //
+            $validator = $this->validation($request);
+            if ( $validator->fails() )
+            {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             $data               = [ 'msg' => 'Please try again.' , 'status' => 0 ];
             $group              = Group::find($groupId);
             $group->group_name  = $request->group_name;
@@ -198,7 +212,7 @@
             if ( $request->ajax() )
             {
                 $companyId = $request->company_id;
-                $users     = User::where('company_id' , $companyId)->where('role_id','!=' , 1)->where('is_active' , '1')->get();
+                $users     = User::where('company_id' , $companyId)->where('role_id' , '!=' , 1)->where('is_active' , '1')->get();
                 
                 return Response::json(array(
                     'success' => '1' ,
@@ -213,7 +227,7 @@
         public function groupListing()
         {
             DB::statement(DB::raw('set @rownum=0'));
-            $group = Group::select([DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'groups.*' ])->withCount([ 'groupUsers' ])->orderBy('id','DESC')->get();
+            $group = Group::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'groups.*' ])->withCount([ 'groupUsers' ])->orderBy('id' , 'DESC')->get();
 //            return $group;
 //        return $group;
             return Datatables::of($group)->addColumn('actions' , function ($row) {
@@ -236,7 +250,7 @@
             $groupUser    = GroupUser::find($groupUserId);
             $groupDetails = Group::where('id' , $group_id)->first();
             DB::statement(DB::raw('set @rownum=0'));
-            $groupUsers   = GroupUser::select([DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'group_users.*' ])->with([ 'userDetail' ])->where('group_id' , $group_id);
+            $groupUsers = GroupUser::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'group_users.*' ])->with([ 'userDetail' ])->where('group_id' , $group_id);
             
             if ( $request->get('makeAdmin') == 1 )
             {
@@ -261,7 +275,7 @@
             } else if ( $request->get('getGroupUsers') == 1 )
             {
                 $groupUserIds = GroupUser::where('group_id' , $group_id)->get()->pluck('user_id')->prepend(1)->toArray(); // select user_id which are already in the group
-                $users        = User::whereNotIn('id' , $groupUserIds)->where('role_id','!=','1')->where('company_id' , $company_id )->get()->toArray();
+                $users        = User::whereNotIn('id' , $groupUserIds)->where('role_id' , '!=' , '1')->where('company_id' , $company_id)->get()->toArray();
                 
                 return Response::json([ 'msg' => 'Users listing.' , 'data' => $users , 'status' => 1 ]);
             } else if ( $request->get('addGroupUsers') == 1 )
@@ -280,7 +294,7 @@
                 else
                     return Response::json([ 'msg' => 'There was some error adding users to group.' , 'status' => 0 ]);
             }
-            
+
 //            $rowCount = 0;
             
             return DataTables::of($groupUsers)->addColumn('admin' , function ($row) use ($groupDetails) {
@@ -303,5 +317,43 @@
                 return $removeBtn;
 //
             })->rawColumns([ 'admin' , 'action' ])->make(TRUE);
+        }
+        
+        public function validation($request)
+        {
+            
+            $rulesArray = [];
+//            switch($this->method()) {
+            switch ( $request->method() )
+            {
+                case 'GET':
+                case 'DELETE':
+                    $rulesArray = [];
+                    break;
+                case 'POST':
+                    $rulesArray = [
+                        'group_name'        => 'required' ,
+                        'group_description' => 'nullable' ,
+                        'company_listing'   => 'required' ,
+                        'group_owner'       => 'required' ,
+                        'users_listing'     => 'required'
+                    ];
+                    break;
+                case 'PUT':
+                case 'PATCH':
+                    $rulesArray = [
+                        'group_name'        => 'required' ,
+                        'group_description' => 'nullable' ,
+                        'company_listing'   => 'required' ,
+                        'group_owner'       => 'required' ,
+                        'users_listing'     => 'required'
+                    ];
+                    break;
+                default:
+                    break;
+            }
+//            return $validator = Validator::make($request->all() , $rulesArray);
+            
+            return Validator::make($request->all() , $rulesArray);
         }
     }

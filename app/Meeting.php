@@ -15,4 +15,9 @@ class Meeting extends Model
     {
         return $this->hasMany('App\MeetingUser','meeting_id','id');
     }
+    
+    public function meetingCreator()
+    {
+        return $this->hasOne('App\User','id','user_id');
+    }
 }
