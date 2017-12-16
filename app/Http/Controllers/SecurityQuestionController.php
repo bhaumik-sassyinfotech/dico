@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Helpers;
+    use Illuminate\Http\Request;
 use App\SecurityQuestion;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -62,6 +63,7 @@ class SecurityQuestionController extends Controller {
     }
     
     public function edit($id) {
+        $id = Helpers::decode_url($id);
         $obj = new SecurityQuestion;
         $security_question = $obj->where('id',$id)->first();
         return view('superadmin.security_question.edit', compact('security_question'));
@@ -89,7 +91,7 @@ class SecurityQuestionController extends Controller {
                 ->whereNULL('deleted_at')->orderBy('id','desc');
                 return Datatables::of($res)->addColumn('actions' , function ( $row )
                 {
-                    return '<a href="'.route('security_question.edit' , [ $row->id ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    return '<a href="'.route('security_question.edit' , [ Helpers::encode_url($row->id) ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                 })->rawColumns(['actions'])->make(true);
     }
     

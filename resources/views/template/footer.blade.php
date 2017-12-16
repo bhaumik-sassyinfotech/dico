@@ -30,9 +30,15 @@
 <script type='text/javascript' src="{{asset('public/assets/js/jquery.validate.min.js')}}"></script>
 
 <link href="{{ asset('public/assets/fonts/glyphicons/css/glyphicons.css') }}" rel="stylesheet">
+<?php /*
 <link href="https://datatables.yajrabox.com/css/datatables.bootstrap.css" rel="stylesheet">
 <script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
 <script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
+*/?>
+<link href="{{ asset('public/yajratable/css/datatables.bootstrap.css') }}" rel="stylesheet">
+<script src="{{ asset('public/yajratable/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('public/yajratable/js/datatables.bootstrap.js') }}"></script>
+
 <script type='text/javascript' src="{{asset('public/js/sweetalert.min.js')}}"></script>
 <script src="{{ asset('public/js/select2.js') }}"></script>
 <script type='text/javascript' src="{{ asset('public/js/application.js') }}"></script>

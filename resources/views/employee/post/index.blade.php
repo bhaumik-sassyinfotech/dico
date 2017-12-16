@@ -2,19 +2,13 @@
 <title>DICO - Post</title>
 @section('content')
 
-@if(session()->has('success'))
-<div class="alert alert-success">
-    {{ session()->get('success') }}
-</div>
-@endif
-@if(session()->has('err_msg'))
-<div class="alert alert-danger">
-    {{ session()->get('err_msg') }}
-</div>
-@endif
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
+            <ol class="breadcrumb">
+                <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                <li class="active">Post</li>
+            </ol>
             <h1>Post</h1>
             <div class="options">
                 <div class="btn-toolbar">
@@ -27,6 +21,17 @@
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-body">
+    
+                    @if(session()->has('success'))
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
+                    </div>
+                    @endif
+                    @if(session()->has('err_msg'))
+                    <div class="alert alert-danger">
+                        {{ session()->get('err_msg') }}
+                    </div>
+                    @endif
                     <form method="POST" id="post-search-form" class="form-inline" role="form">
                     </form>
                     <?php
@@ -43,7 +48,7 @@
                                     <div class="col-md-4">
                                         <div class="info-tiles tiles-info">
                                             <div class="tiles-heading">
-                                                <div class="pull-left"><a href="{{url('viewpost',$post['id'])}}">{{ str_limit($post['post_title'], $limit = 50, $end = '...') }}</a></div>
+                                                <div class="pull-left"><a href="{{url('viewpost', Helpers::encode_url($post['id'])) }}">{{ str_limit($post['post_title'], $limit = 50, $end = '...') }}</a></div>
                                             </div>
                                             <div class="tiles-body">
                                                 <div class="row-md-4" style="font-size: 20px !important;">

@@ -2,10 +2,9 @@
     Route::get('/' , function () {
         return redirect('/index');
     });
+      
+    Route::get('index' , 'HomeController@index');
     
-    $this->get('index' , 'HomeController@index');
-
-//$this->get('logout', 'Auth\LoginController@logout')->name('auth.logout');
     Auth::routes();
     Route::match([ 'get' , 'post' ] , '/first_login' , 'UserSecurityQuestionController@firstLogin')->name('security.firstLogin');
     Route::group([ 'middleware' => 'admin' ] , function () {
@@ -57,7 +56,9 @@
         Route::post('comment_reply' , 'PostController@comment_reply');
         Route::get('deletecommentReply/{id}','PostController@deletecommentReply');
         Route::get('tags' , 'PostController@tags');
-        
+    
+        Route::post('meeting/saveComment/{id}','MeetingController@savecomment');
+        Route::get( 'meeting/deleteComment/{id}','MeetingController@deletecomment');
         Route::match(['get','post'],'/meeting/list','MeetingController@meetingList');
         Route::resource('meeting','MeetingController');
     });

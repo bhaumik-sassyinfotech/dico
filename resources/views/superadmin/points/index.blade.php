@@ -2,19 +2,13 @@
 <title>DICO - Points</title>
 @section('content')
 
-@if(session()->has('success'))
-<div class="alert alert-success">
-    {{ session()->get('success') }}
-</div>
-@endif
-@if(session()->has('err_msg'))
-<div class="alert alert-danger">
-    {{ session()->get('err_msg') }}
-</div>
-@endif
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
+            <ol class="breadcrumb">
+                <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                <li class="active">Points</li>
+            </ol>
             <h1>Points</h1>
             <div class="options">
                 <div class="btn-toolbar">
@@ -28,6 +22,18 @@
         <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-body">
+
+                        @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                        @endif
+                        @if(session()->has('err_msg'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('err_msg') }}
+                        </div>
+                        @endif
+                        
                         <form method="POST" id="points-search-form" class="form-inline" role="form">
                             <div class="form-group">
                                 <label for="name">Activity</label>

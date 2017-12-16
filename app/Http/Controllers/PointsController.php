@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Helpers;
+    use Illuminate\Http\Request;
 use App\Point;
 use App\CompanyPoint;
 use DB;
@@ -89,6 +90,7 @@ class PointsController extends Controller {
     
     public function edit($id) {
        // $obj = new Company;
+        $id = Helpers::decode_url($id);
         if(Auth::user()) {
             if(Auth::user()->role_id == 1) {
                 $points = new Point;
@@ -151,7 +153,7 @@ class PointsController extends Controller {
             }
             })->addColumn('actions' , function ( $row )
             {
-                return '<a href="'.route('points.edit' , [ $row->id ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                return '<a href="'.route('points.edit' , [ Helpers::encode_url($row->id) ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
             })->rawColumns(['actions'])->make(true);
         } else {
             return redirect('/index');

@@ -2,25 +2,6 @@
 <title>DICO - Post</title>
 @section('content')
 
-@if(session()->has('success'))
-<div class="alert alert-success">
-    {{ session()->get('success') }}
-</div>
-@endif
-@if(session()->has('err_msg'))
-<div class="alert alert-danger">
-    {{ session()->get('err_msg') }}
-</div>
-@endif
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
@@ -37,6 +18,26 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="post_id" id="post_id" value="{{$post['id']}}">
                     <div class="panel-body">
+    
+                        @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                        @endif
+                        @if(session()->has('err_msg'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('err_msg') }}
+                        </div>
+                        @endif
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label><b>{{$post->post_title}}</b></label><br>
@@ -108,20 +109,21 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Is Anonymous</label><br/>
-                                <input type="checkbox" name="is_anonymous" id="is_anonymous">
+                                <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br/>
                             </div>
                         </div>
 
                         <div class="row">
-                            <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">
-                            <?php
-                            if ($post['user_id'] == Auth::user()->id) {
-                                ?>
-                                <a href="{{route('post.edit',$post->id)}}" class="btn btn-primary">Edit</a>
+                            <div class="form-group col-xs-12">
+                                <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">
                                 <?php
-                            }
-                            ?>
+                                    if ($post['user_id'] == Auth::user()->id) {
+                                        ?>
+                                        <a href="{{route('post.edit',$post->id)}}" class="btn btn-primary">Edit</a>
+                                        <?php
+                                    }
+                                ?>
+                            </div>
                         </div>    
                     </div>
                 </form>
@@ -142,7 +144,7 @@
                                                         <div class="col-md-2">
                                                             <?php
                                                             $commentUser = $postComment['commentUser'];
-                                                            if (!empty($commentUser->profile_image)) {
+                                                            if (!empty($commentUser->profile_image) && $postComment['is_anonymous'] == 0) {
                                                                 $profile_image = 'public/uploads/profile_pic/' . $commentUser->profile_image;
                                                             } else {
                                                                 $profile_image = 'public/assets/demo/avatar/jackson.png';
@@ -154,19 +156,20 @@
                                                     <div class="row">
                                                         <?php
                                                         //dd($commentUser);
+                                                            $comment_id = Helpers::encode_url($commentUser->id);
                                                         if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
                                                             if ($commentUser['following'][0]->status == 1) {
                                                                 ?>
-                                                                <a href="{{ url('/view_profile/'.$commentUser->id) }}" class="btn btn-primary" >Unfollow</a>
+                                                                <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Unfollow</a>
                                                                 <?php
                                                             } else {
                                                                 ?>
-                                                                <a href="{{ url('/view_profile/'.$commentUser->id) }}" class="btn btn-primary" >Follow</a>  
+                                                                <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
                                                                 <?php
                                                             }
                                                         } else if ($commentUser->id != Auth::user()->id) {
                                                             ?>
-                                                            <a href="{{ url('/view_profile/'.$commentUser->id) }}" class="btn btn-primary" >Follow</a>
+                                                            <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
                                                             <?php
                                                         }
                                                     }
@@ -258,8 +261,7 @@
                                                                    <textarea name="comment_text" id="comment_text_{{$postComment['id']}}" class="form-control autosize" placeholder="Leave a comment here"></textarea>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <label>Anonymous</label><br>
-                                                                    <input type="checkbox" name="is_anonymous" id="is_anonymous_{{$postComment['id']}}">
+                                                                    <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous_{{$postComment['id']}}">Anonymous</label><br>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">

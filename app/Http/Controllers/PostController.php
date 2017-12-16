@@ -188,7 +188,7 @@
         }
         
         
-        public function update(Request $request , $id)
+        public function update($id , Request $request)
         {
             try
             {
@@ -273,6 +273,8 @@
         
         public function edit($id)
         {
+            
+            $id = Helpers::decode_url($id);
             if ( Auth::user() )
             {
                 $company = Company::where('id' , Auth::user()->company_id)->first();
@@ -402,6 +404,7 @@
    
     
     public function viewpost($id) {
+        $id = Helpers::decode_url($id);
         $post = Post::with('postUser','postUser.following')->with('postLike')->with('postDisLike')->with(['postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 }])->with(['postUserDisLike' => function($q) {
@@ -433,7 +436,7 @@
                 }
                 DB::beginTransaction();
                 $postData = array("user_id"=>$user_id,"post_id"=>$id,"comment_text"=>$comment_text,"is_anonymous"=>$is_anonymous);
-                $res = Comment::insertGetId($postData);
+                return $res = Comment::insertGetId($postData);
                 $file = $request->file('file_upload');
                 if ($file != "") {
                     $fileName = $file->getClientOriginalName();
@@ -454,7 +457,7 @@
                 if($res) {
                     return Redirect::back()->with('success', 'Comment '.Config::get('constant.ADDED_MESSAGE'));
                 }else {
-                    return Redirect::back()->with('err_msg', $e->getMessage());
+                    return Redirect::back()->with('err_msg', 'Please try again.');
                 }
             }
             else {

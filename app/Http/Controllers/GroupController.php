@@ -10,6 +10,7 @@
     use Carbon\Carbon;
     use DB;
     use Exception;
+    use Helpers;
     use Illuminate\Http\Request;
     use Config;
     use Illuminate\Support\Facades\Redirect;
@@ -30,6 +31,8 @@
         public function __construct(Request $request)
         {
             $this->middleware(function ($request , $next) {
+                $url_segments = $request->segments();
+//                dd($url_segments);
                 if ( Auth::user()->role_id == 3 )
                 {
                     return redirect('/index');
@@ -40,6 +43,17 @@
                 } else if ( Auth::user()->role_id == 2 )
                 {
                     $this->folder = 'companyadmin';
+                    if( isset($url_segments[1]))
+                    {
+//                        dd("yes");
+                        $msg = '';
+                        if( $url_segments[1] == 'create' )
+                        {
+                            $msg = "You don't have permissions to create a group.";
+                        }
+                        if(!empty($msg))
+                            return back()->with('err_msg' , $msg);
+                    }
                 } else if ( Auth::user()->role_id == 3 )
                 {
                     $this->folder = 'employee';
@@ -103,10 +117,10 @@
                     if ( !empty($request->users_listing) )
                     {
                         $users      = $request->users_listing;
-                        $insertData = [];
                         $company    = $request->company_listing;
                         $now        = Carbon::now();
-                        
+                        $insertData = [[ 'group_id' => $group->id , 'user_id' => $request->group_owner , 'company_id' => $company , 'is_admin' => 0 , 'created_at' => $now , 'updated_at' => $now ]];
+    
                         foreach ( $users as $k => $v )
                         {
                             $insertData[] = [ 'group_id' => $group->id , 'user_id' => $v , 'company_id' => $company , 'is_admin' => 0 , 'created_at' => $now , 'updated_at' => $now ];
@@ -154,6 +168,7 @@
          */
         public function edit($id , Request $request)
         {
+            $id = Helpers::decode_url($id);
             $groupId   = $id;
             $companies = Company::all();
             $groupData = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
@@ -212,8 +227,14 @@
             if ( $request->ajax() )
             {
                 $companyId = $request->company_id;
-                $users     = User::where('company_id' , $companyId)->where('role_id' , '!=' , 1)->where('is_active' , '1')->get();
                 
+                
+                $query = User::where('company_id' , $companyId)->where('role_id' , '!=' , 1)->where('is_active' , '1');
+                if($request->input('group_owner'))
+                {
+                    $query = $query->where('id','!=',$request->input('group_owner'));
+                }
+                $users = $query->get();
                 return Response::json(array(
                     'success' => '1' ,
                     'data'    => $users ,
@@ -231,8 +252,7 @@
 //            return $group;
 //        return $group;
             return Datatables::of($group)->addColumn('actions' , function ($row) {
-                $editBtn = '<a href="' . route('group.edit' , [ $row->id ]) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
-                
+                $editBtn = '<a href="' . route('group.edit' , [ Helpers::encode_url($row->id) ]) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
                 return $editBtn;
             })->rawColumns([ 'actions' ])->make('true');
         }
@@ -344,9 +364,6 @@
                     $rulesArray = [
                         'group_name'        => 'required' ,
                         'group_description' => 'nullable' ,
-                        'company_listing'   => 'required' ,
-                        'group_owner'       => 'required' ,
-                        'users_listing'     => 'required'
                     ];
                     break;
                 default:

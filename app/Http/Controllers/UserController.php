@@ -188,7 +188,7 @@ class UserController extends Controller {
                             $query->where('company_id', 'like', "%{$request->get('company_id')}%");
                         }
                     })->addColumn('actions', function ( $row ) {
-                        return '<a href="' . route('user.edit', [$row->id]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                        return '<a href="' . route('user.edit', [Helpers::encode_url($row->id)]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                     })->rawColumns(['actions'])->make(true);
         }
     }
@@ -202,6 +202,7 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
+        $id = Helpers::decode_url($id);
         if (Auth::user()) {
             $company_id = Auth::user()->company_id;
             $usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();

@@ -154,6 +154,16 @@
             return PostView::select(DB::RAW("count('id') as views"))->where('post_id' , $post_id)->groupBy('post_id')->first();
         }
         
+        public static function encode_url($slug)
+        {
+            return base64_encode($slug);
+        }
+        
+        public static function decode_url($slug)
+        {
+            return base64_decode($slug);
+        }
+        
         public static function testMail()
         {
             $to        = 'bhaumik.sassyinfotech@gmail.com';

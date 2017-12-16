@@ -7,13 +7,18 @@
     use App\GroupUser;
     use App\Meeting;
     use App\MeetingUser;
+    use App\MeetingComment;
+    use App\MeetingAttachment;
     use App\User;
     use Carbon\Carbon;
+    use Config;
     use DB;
     use Exception;
     use function foo\func;
+    use Helpers;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
+    use Redirect;
     use Symfony\Component\VarDumper\Cloner\Data;
     use Yajra\DataTables\DataTables;
     
@@ -49,6 +54,7 @@
             //
             return view($this->folder . '.meeting.index');
         }
+        
         
         /**
          * Show the form for creating a new resource.
@@ -175,12 +181,16 @@
         public function show($id , Request $request)
         {
             //
-            return $meeting = Meeting::with('meetingCreator')->where('id' , $id)->first();
+            $id      = Helpers::decode_url($id);
+            $meeting = Meeting::with('meetingCreator')->where('id' , $id)->first();
             
             $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id' , $meeting->id)->pluck('user_id')->toArray()));
             $meeting_users    = User::whereIn('id' , $meeting_user_ids)->get();
             
-            return view($this->folder . '.meeting.detail' , compact('meeting' , 'meeting_users'));
+            $comments = Meeting::with([ 'meetingUser' , 'meetingUser.following' , 'meetingAttachment' , 'meetingComment' , 'meetingComment.commentUser' , 'meetingComment.commentAttachment' , 'meetingComment.commentReply' , 'meetingComment.commentReply.commentReplyUser' ])->where('id' , $id)->get();
+//                ->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+            
+            return view($this->folder . '.meeting.detail' , compact('meeting' , 'meeting_users','comments'));
         }
         
         /**
@@ -251,10 +261,87 @@
                 return $row->meeting_description;
             })->addColumn('actions' , function ($row) {
 //                $editBtn = '<a href="' . route('meeting.edit' , [ $row->id ]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
-                $showBtn = '<a href="' . route('meeting.show' , [ $row->id ]) . '" title="Show"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                $showBtn = '<a href="' . route('meeting.show' , [ Helpers::encode_url($row->id) ]) . '" title="Show"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                 
                 return $showBtn;
             })->rawColumns([ 'actions' ])->make(TRUE);
 //            dd($meetings);
+        }
+        
+        public function saveComment($id , Request $request)
+        {
+            //dd($request);
+            try
+            {
+                if ( Auth::check() )
+                {
+                    $user_id      = Auth::user()->id;
+                    $comment_text = $request->input('comment_text');
+                    
+                    DB::beginTransaction();
+                    
+                    $meetingComment = new MeetingComment;
+                    $meetingComment->user_id = $user_id;
+                    $meetingComment->meeting_id = $id;
+                    $meetingComment->comment_text = $comment_text;
+                    $res = 0;
+                    if($meetingComment->save())
+                    {
+                        $res = $meetingComment->id;
+                    }
+                    $file = $request->file('file_upload');
+                    if ( $file != "" )
+                    {
+                        $fileName        = $file->getClientOriginalName();
+                        $extension       = $file->getClientOriginalExtension();
+                        $folderName      = '/uploads/';
+                        $destinationPath = public_path() . $folderName;
+                        $safeName        = str_random(10) . '.' . $extension;
+                        
+                        $file->move($destinationPath , $safeName);
+                        
+                        $attachment                    = new Attachment;
+                        $attachment->file_name         = $safeName;
+                        $attachment->type              = 2;
+                        $attachment->type_id           = $res;
+                        $attachment->orignal_file_name = $file->getClientOrignalName;
+                        $attachment->user_id           = Auth::user()->id;
+                        $attachment->save();
+                        // $attachment = Attachment::insert($postData);
+                    }
+                    DB::commit();
+                    if ( $res )
+                    {
+                        return Redirect::back()->with('success' , 'Comment ' . Config::get('constant.ADDED_MESSAGE'));
+                    } else
+                    {
+                        return Redirect::back()->with('err_msg' , 'Please try again.');
+                    }
+                } else {
+                    return redirect('/index');
+                }
+            }
+            catch ( \exception $e )
+            {
+                DB::rollback();
+                
+                return Redirect::back()->with('err_msg' , $e->getMessage());
+            }
+        }
+        
+        public function deleteComment($id = null)
+        {
+            if ( MeetingAttachment::where(array( 'type_id' => $id , 'type' => 2 ))->exists() )
+            {
+                MeetingAttachment::where(array( 'type_id' => $id , 'type' => 2 ))->delete();
+            }
+            $deleteComment = MeetingComment::where('id' , $id)->delete();
+            if ( $deleteComment )
+            {
+                return Redirect::back()->with('success' , 'Comment deleted successfully');
+            } else
+            {
+                return Redirect::back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+            }
         }
     }

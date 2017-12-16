@@ -2,25 +2,7 @@
 <title>DICO - User</title>
 @section('content')
 
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
-            {{ session()->get('err_msg') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+
     <form name="user_form" id="user_form" method="post" action="{{route('user.store')}}">
         <div id="page-content">
             <div id='wrap'>
@@ -39,6 +21,25 @@
                     <div class="panel panel-default">
                         {{ csrf_field() }}
                         <div class="panel-body">
+                            @if(session()->has('success'))
+                                <div class="alert alert-success">
+                                    {{ session()->get('success') }}
+                                </div>
+                            @endif
+                            @if(session()->has('err_msg'))
+                                <div class="alert alert-danger">
+                                    {{ session()->get('err_msg') }}
+                                </div>
+                            @endif
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="row">
                                 <div class="col-xs-6 form-group">
                                     <label>Company Name<span>*</span></label>

@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Helpers;
+    use Illuminate\Http\Request;
 use App\Company;
 use App\Point;
 use App\CompanyPoint;
@@ -86,6 +87,7 @@ class CompanyController extends Controller {
     }
     
     public function edit($id) {
+        $id = Helpers::decode_url($id);
         $obj = new Company;
         $company = $obj->where('id',$id)->orderBy('id','desc')->first();
         return view('superadmin.company.edit', compact('company'));
@@ -131,7 +133,7 @@ class CompanyController extends Controller {
                 }
                 })->addColumn('actions' , function ( $row )
                 {
-                    return '<a href="'.route('company.edit' , [ $row->id ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    return '<a href="'.route('company.edit' , [ Helpers::encode_url($row->id) ]).'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                 })->rawColumns(['actions'])->make(true);
     }
 }

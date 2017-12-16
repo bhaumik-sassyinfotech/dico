@@ -1,46 +1,50 @@
 @extends('template.default')
 @section('content')
 
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
-            {{ session()->get('err_msg') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+
     <?php $state = 'disabled'; ?>
+{!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_update_form']) !!}
     <div id="page-content">
         <div id='wrap'>
             <div id="page-heading">
+                <ol class="breadcrumb">
+                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                    <li><a href="{{ route('group.index') }}">Group</a></li>
+                    <li class="active">Update Group</li>
+                </ol>
                 <h1>Update Group</h1>
+                <div class="options">
+                    <div class="btn-toolbar">
+                        <a href="{{ route('group.index') }}" class="btn btn-default">Back</a>
+                        <input type="submit" name="save" id="save" class="btn btn-primary">
+                    </div>
+                </div>
             </div>
             <div class="container">
                 <div class="panel panel-default">
 
                     <input type="hidden" id="group_id" value="{{ $groupId }}">
                     <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
-                    <div class="new_button">
-                        <div class="pull-right extra_button">
-                            <input type="submit" name="save" id="save" class="btn btn-primary">
-                        </div>
-                        <div class="pull-right extra_button">
-                            <a href="{{ route('group.index') }}" class="btn btn-default">Back</a>
-                        </div>
-                        <div style="clear: both;"></div>
-                    </div>
                     <div class="panel-body">
+                        @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                        @endif
+                        @if(session()->has('err_msg'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('err_msg') }}
+                        </div>
+                        @endif
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                         <div class="form-group">
                             <div class="col-md-6">
                                 <label for="group_name">Group name:*</label>
@@ -54,7 +58,6 @@
                             </div>
                         </div>
                         <br>
-                        {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_update_form']) !!}
                         <div class="form-group">
                             <div class="col-md-6">
                                 <label for="company_listing">Company:* </label>
@@ -79,7 +82,6 @@
                                 <button id="add_user" class="btn btn-success">Add to group</button>
                             </div>
                         </div>
-                        {!! Form::close() !!}
                         <br>
                         <div class="form-group">
                             <div class="col-md-12">
@@ -100,4 +102,5 @@
             </div>
         </div>
     </div>
+{!! Form::close() !!}
 @stop

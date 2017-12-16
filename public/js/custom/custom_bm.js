@@ -35,12 +35,12 @@ $(document).ready(function () {
     $("#user_groups").select2();
     $("#employees_listing,#group_listing").select2();
 });
-// $("#createUserGroup").validate({
-//     submitHandler: function (form) {
-//         $("#save").prop('disabled', true);
-//         form.submit();
-//     }
-// });
+$("#createUserGroup").validate({
+    submitHandler: function (form) {
+        $("#save").prop('disabled', true);
+        form.submit();
+    }
+});
 /*Ajax Call to fetch user of the company selected*/
 $("#company_listing").change(function () {
     var that = $(this);
@@ -76,7 +76,7 @@ var groupTable = $('#group_table').DataTable({
         {data: 'group_name'},
         {data: 'description'},
         {data: 'group_users_count'},
-        {data: 'actions'}
+        {data: 'actions', sorting: false, orderable: false}
     ]
 });
 
@@ -362,16 +362,16 @@ $('.ideaStatus').click(function (ev) {
 });
 
 $("#createMeeting").validate({
-    rules:{
-        'privacy[]':{
+    rules: {
+        'privacy[]': {
             required: true,
             minlength: 1
         }
     },
-        submitHandler: function (form) {
-            $("#save").prop('disabled', true);
-            form.submit();
-        }
+    submitHandler: function (form) {
+        $("#save").prop('disabled', true);
+        form.submit();
+    }
 });
 $("#meeting_table").DataTable({
     processing: true,
@@ -390,6 +390,6 @@ $("#meeting_table").DataTable({
         {data: 'meeting_description'},
         {data: 'privacy'},
         {data: 'meeting_users_count'},
-        {data: 'actions'},
+        {data: 'actions', sorting: false, orderable: false},
     ]
 });

@@ -1,25 +1,6 @@
 @extends('template.default')
 @section('content')
 
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
-            {{ session()->get('err_msg') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <?php $state = 'disabled'; ?>
     {!! Form::open(['method' => 'PUT', 'route' => ['group.update', $groupData->id], 'id' => 'group_users_edit_form']) !!}
     <div id="page-content">
@@ -34,7 +15,7 @@
                 <div class="options">
                     <div class="btn-toolbar">
                         <a href="{{ route('group.index') }}" class="btn btn-default">Back</a>
-                        <input type="submit" name="save" id="save" class="btn btn-primary" value="Update">
+                        <input type="submit" name="save" id="save" class="btn btn-primary" value="Submit">
                     </div>
                 </div>
             </div>
@@ -43,10 +24,29 @@
 
                     <input type="hidden" id="group_id" value="{{ $groupId }}">
                     <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
-                    <div class="panel-heading">
-                        <h4>Update group details</h4>
-                    </div>
+                    {{--<div class="panel-heading">--}}
+                        {{--<h4>Update group details</h4>--}}
+                    {{--</div>--}}
                     <div class="panel-body">
+                        @if(session()->has('success'))
+                            <div class="alert alert-success">
+                                {{ session()->get('success') }}
+                            </div>
+                        @endif
+                        @if(session()->has('err_msg'))
+                            <div class="alert alert-danger">
+                                {{ session()->get('err_msg') }}
+                            </div>
+                        @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <div class="col-md-6">
                                 <label for="group_name">Group name:*</label>
@@ -56,7 +56,7 @@
                             <div class="col-md-6">
                                 <label for="group_description"> Group Description:*</label>
                                 <textarea name="group_description" id="group_description"
-                                          class="form-control required">{{ nl2br($groupData->description) }}</textarea>
+                                          class="form-control">{{ nl2br($groupData->description) }}</textarea>
                             </div>
                         </div>
                         <br>
@@ -75,9 +75,13 @@
                             <div class="col-md-4">
                                 <label for="company_users">Add Users</label>
                                 <select name="company_users[]" id="company_users" class="form-control" multiple="multiple">
-                                    @foreach($companyEmployee as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                    @endforeach
+                                    @if($companyEmployee->count() > 0)
+                                        @foreach($companyEmployee as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="">All eligible users have been already added to this group.</option>
+                                    @endif
                                 </select>
                             </div>
                             <div class="col-md-2">

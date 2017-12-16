@@ -2,25 +2,7 @@
 <title>DICO - User</title>
 @section('content')
 
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
-            {{ session()->get('err_msg') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    
     <div id="page-content">
         <div id='wrap'>
             <div id="page-heading">
@@ -58,6 +40,25 @@
                 <div class="panel panel-default">
                     {!! Form::model($user, ['method' => 'PUT', 'route' => ['user.update', $user->id],'enctype'=>'multipart/form-data', 'id' => 'user_form']) !!}
                     <div class="panel-body">
+                        @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                        @endif
+                        @if(session()->has('err_msg'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('err_msg') }}
+                        </div>
+                        @endif
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                         <div class="row">
                             <div class="col-xs-6 form-group">
                                 <label>Company Name<span>*</span></label>

@@ -2,25 +2,7 @@
 <title>DICO - Post</title>
 @section('content')
 
-@if(session()->has('success'))
-<div class="alert alert-success">
-    {{ session()->get('success') }}
-</div>
-@endif
-@if(session()->has('err_msg'))
-<div class="alert alert-danger">
-    {{ session()->get('err_msg') }}
-</div>
-@endif
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
+
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
@@ -35,6 +17,25 @@
             <div class="panel panel-default">
                 {!! Form::model($post, ['method' => 'PUT', 'route' => ['post.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form']) !!}
                     <div class="panel-body">
+                        @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                        @endif
+                        @if(session()->has('err_msg'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('err_msg') }}
+                        </div>
+                        @endif
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                         <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label>Post<span>*</span></label><br>
