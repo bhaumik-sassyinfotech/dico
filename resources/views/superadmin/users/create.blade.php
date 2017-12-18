@@ -3,8 +3,8 @@
 @section('content')
 
 
-    <form name="user_form" id="user_form" method="post" action="{{route('user.store')}}">
-        <div id="page-content">
+    
+        <div id="page-content" class="post-details create-user">
             <div id='wrap'>
                 <div id="page-heading">
                     <ol class="breadcrumb">
@@ -12,12 +12,11 @@
                         <li><a href="{{ route('user.index') }}">User</a></li>
                         <li class="active">Create User</li>
                     </ol>
-                    <h1>User</h1>
-                    <?php /*<div>
-                <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('user.index') }}">User</a> > Create User</p></div>
-            </div>*/?>
+                    <h1>Create User</h1>
+                    <hr>
                 </div>
                 <div class="container">
+                    <form name="user_form" id="user_form" method="post" action="{{route('user.store')}}">
                     <div class="panel panel-default">
                         {{ csrf_field() }}
                         <div class="panel-body">
@@ -124,10 +123,11 @@
                             <div style="clear: both;"></div>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </form>
+    
 @stop
 @section('javascript')
     <script type="text/javascript">
