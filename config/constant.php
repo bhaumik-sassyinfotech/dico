@@ -11,3 +11,4 @@ return [
 'NOT_FOUND'=>'not found.', 
 'OLD_PASSWORD_NOT_MATCH' => 'old password does not match.',    
 ];
+?>

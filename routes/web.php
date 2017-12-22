@@ -61,6 +61,8 @@
         Route::get( 'meeting/deleteComment/{id}','MeetingController@deletecomment');
         Route::match(['get','post'],'/meeting/list','MeetingController@meetingList');
         Route::resource('meeting','MeetingController');
+        Route::post('loadmorepost','PostController@loadmorepost');
+        Route::post('loadmoremypost','PostController@loadmoremypost');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

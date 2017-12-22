@@ -3,13 +3,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
 @media screen and (max-width:1258px){
  
-.member-details > h3 {
-  font-size: 14px;
-}
-.member-details > a,
-.member-details > p{
-  font-size: 12px;
-}
    
 .common-form .form-group {
   margin-bottom: 20px;
@@ -18,12 +11,10 @@
   margin-top: 15px;
 }
 .common-form .form-group > label {
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 5px;
 }
-.common-form .select {
-  width: 100%;
-}    
+  
 .st-btn {
   padding: 5px 28px;
 }
@@ -110,9 +101,9 @@
   padding: 4px;
 }
 .post-category .member-img {
-  float: none;
-  margin-bottom: 5px;    
-} 
+  margin-bottom: 5px;
+}
+    
 .category-detials .check {
   font-size: 10px;
   line-height: 130%;
@@ -148,6 +139,10 @@
     
 }
 @media screen and (max-width:1024px){
+    
+.group-listing.posts .profile-page  .group-tabs > .panel-heading {
+  padding-right: 10px !important;
+}
 .category-detials .check {
   font-size: 12px;
 }
@@ -232,10 +227,6 @@
 .post-details-like > div i {
   font-size: 24px;
 }    
-.post-details-like > div p {
-  font-size: 18px;
-  margin: 0 5px;
-}
 .post-details .user-rply {
   width: 80%;
 }    
@@ -281,12 +272,20 @@
     
 #create-user-from {
   width: 100%;
+}
+.add-group {
+  margin-top: 5px;
+  padding: 10px 20px 10px 35px;
+  position: relative;
+}  
+.add-grp-wrap {
+  position: relative;
+  right: 0;
 }    
-
-.common-form .select {
-  width: 100%;
+.add-group::before {
+    margin: -4px 0;
 }    
-.common-form .btn-wrap-div {
+.common-form .btn-wrap-div{
   margin-left: 0;
 }
 .common-form .form-group {
@@ -368,11 +367,65 @@ body .employe-profile .employ-box {
 }
 
 
+
+
+@media screen and (max-width:925px){
+
+    
+.active-admin, .deactive-admin {
+  font-size: 10px;
+  padding: 7px;
+}
+.group-listing tbody tr td:last-child p {
+  padding: 16px 0;
+}    
+.group-listing tbody tr td p {
+  font-size: 11px;
+  padding: 23px 0;
+}
+.group-listing tbody tr td:first-child p {
+  margin-left: 0;
+}
+.group-listing tbody tr td:last-child p {
+  margin-right: 0;
+}  
+.group-listing .table thead tr:first-child th:first-child {
+  padding-left: 10px;
+}
+.group-listing .table thead tr th {
+  padding: 15px 2px;
+}    
+
+}
+
+
+
 @media screen and (max-width:767px){
- 
+.profile-page {
+  padding-bottom: 20px;
+}
+.post-details-like {
+  margin-bottom: 10px;
+}
+.post-rectangle > a {
+  padding: 5px 12px;
+}    
 /*------------------------------------------------------*/
 /*group list Page */
 /*------------------------------------------------------*/
+.post-slider .panel-body-wrap .wrap-inner-icon i {
+  font-size: 10px;
+}    
+.create-user .form-group .btn-wrap-div .modal-dialog {
+  margin: 0 auto;
+  max-width: 310px;
+}
+.common-form .btn-wrap-div .modal-header {
+  padding: 0;
+}    
+body #wrap .border-in-hr {
+  margin: 18px 0;
+}    
 .group-listing .form_box {
       display: block;
       width: 100%;
@@ -480,7 +533,7 @@ body .employe-profile .employ-box {
     
 #post-detail-left .user-rply {
   margin-top: 20px;
-  padding: 0 15px;
+  padding: 0;
   width: 100%;
 }
 #post-detail-left .user-image {
@@ -497,9 +550,12 @@ body .employe-profile .employ-box {
 .post-wrap-details p {
   margin-left: 0;
 }    
-.post-details #page-heading hr {
-  margin: 0;
-}   
+body #wrap .border-out-hr {
+  margin: 10px 20px 0;
+}
+#wrap > .container {
+  padding: 10px 20px;
+}    
 #page-heading h1 {
   font-size: 24px;
   padding: 15px 20px 5px;
@@ -521,7 +577,7 @@ body .employe-profile .employ-box {
   height: 140px;
 }
 .user-image > a {
-  font-size: 20px;
+  font-size: 14px;
   padding: 10px;
 }
 .post-btn-wrap .post-btn > a {
@@ -564,26 +620,24 @@ body .employe-profile .employ-box {
   margin-bottom: 5px;
 }    
 .common-form .form-group > textarea {
-  display: block;
   float: none;
-  font-size: 14px;
-  height: 90px;
+  height: 120px;
   padding: 10px;
-  text-align: justify;
   width: 100%;
 }
 .common-form .form-group > label {
   margin-bottom: 0;
   width: 100%;
+  padding:5px 0;     
 }
+.new-meeting-details form .form-group:first-child {
+  margin-bottom: 0;
+}    
 .common-form .form-group .st-btn {
   margin-top: 10px;
 }
 .common-form .form-group > input:not([type="submit"]) {
   float: none;
-  font-size: 14px;
-  height: 40px;
-  padding: 5px 10px;
   width: 100%;
 }
 .newmeeting-form .form-group:first-child {
@@ -598,8 +652,9 @@ body .employe-profile .employ-box {
   margin-left: 0px;
 }  
 .group-wrap h3 {
-  font-size: 18px;
-}    
+  font-size: 16px;
+  line-height: 140%;
+}  
 .circle-exclm .fa-exclamation {
   font-size: 14px;
   height: 30px;
@@ -637,10 +692,6 @@ body .employe-profile .employ-box {
 .common-form .btn-wrap-div .check {
   margin: 0 0 15px;
 }
-    
-form .form-group:last-child {
-  margin-bottom: 10px;
-}   
 
 .login-page .verticalcenter {
   top: 45%;
@@ -730,8 +781,9 @@ form .form-group:last-child {
     line-height: 200%;
 }
 .profile-page .group-tabs .panel-body > p.user-icon {
-    font-size: 10px;
-    line-height: 200%;
+  font-size: 10px;
+  line-height: 200%;
+  margin: 0;
 }
 .profile-page .group-tabs .panel-primary {
     margin-bottom: 0;
@@ -739,6 +791,7 @@ form .form-group:last-child {
 .ul-checkbox > li {
   float: none;
   line-height: 100%;
+  padding: 5px 0;
   width: 100%;
 }
 .employe-profile table {
@@ -861,9 +914,7 @@ p.user-icon {
 .profile-slider.owl-carousel, .post-slider.owl-carousel {
   width: 100%;
 }    
-.group-listing tbody tr td p {
-  padding: 5px 20px;
-}    
+ 
 .common-form .check {
   margin-right: 5px;
  }    
@@ -875,10 +926,51 @@ p.user-icon {
   font-size: 11px;
   padding: 12px 10px 10px 35px;
 }  
-
-    
-    
+.idea-details hr {
+  margin: 0;
+}
+.idea-details hr {
+  border-color: transparent;
+}    
+.emp.login-page .form-group > textarea, .emp.login-page .form-group > input:not([type="submit"]):not([type="reset"]), .emp.login-page .form-group .select {
+  margin-left: 0;
+  width: 100%;
+}    
+.common-form .btn-wrap-div,
+.emp.login-page .common-form .btn-wrap-div{
+  margin-left: 0;
+}    
     
     
     
 } 
+
+
+    
+}
+@media screen and (max-width:480px){
+    
+    
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  font-size: 9px;
+  padding: 2px;
+}  
+.group-listing tbody tr td:last-child p {
+  padding: 9px 0;
+}    
+.group-listing tbody tr td:last-child p {
+  padding: 21.5px 0;
+}    
+    
+}
+
+@media screen and (max-width:480px){
+.group-listing tbody tr td:last-child p {
+    padding: 6px 0;
+}
+.active-admin, .deactive-admin {
+    font-size: 9px;
+    padding: 5px;
+    border-radius: 0;
+}

@@ -8,9 +8,7 @@
     
     class Helpers
     {
-        
-        
-        public static function getProfilePic($user_id)
+         public static function getProfilePic($user_id)
         {
             $user = DB::table('users')
                 ->join('user_profile' , 'users.id' , '=' , 'user_profile.user_id')
@@ -154,7 +152,7 @@
             return PostView::select(DB::RAW("count('id') as views"))->where('post_id' , $post_id)->groupBy('post_id')->first();
         }
         
-        public static function encode_url($slug)
+        /*public static function encode_url($slug)
         {
             return base64_encode($slug);
         }
@@ -162,7 +160,7 @@
         public static function decode_url($slug)
         {
             return base64_decode($slug);
-        }
+        }*/
         
         public static function testMail()
         {
@@ -220,6 +218,60 @@
                 //$message->attach($pathToFile, array $options = []);
             });
         }
+        
+        public static function my_simple_crypt( $string, $action = 'e' ) {
+            // you may change these values to your own
+            $secret_key = 'my_simple_secret_key';
+            $secret_iv = 'my_simple_secret_iv';
+            $output = false;
+            $encrypt_method = "AES-256-CBC";
+            $key = hash( 'sha256', $secret_key );
+            $iv = substr( hash( 'sha256', $secret_iv ), 0, 16 );
+
+            if( $action == 'e' ) {
+                $output = base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
+            }
+            else if( $action == 'd' ){
+                $output = openssl_decrypt( base64_decode( $string ), $encrypt_method, $key, 0, $iv );
+            }
+            return $output;
+        }
+        public static function encode_url($value) {
+            if (!$value) {
+                return false;
+            }
+            $obj = new Helpers();
+            $text = $value;
+            $iv_size = mcrypt_get_iv_size('des', 'ecb');
+            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            $crypttext = mcrypt_encrypt('des', ENC_KEY, $text, 'ecb', $iv);
+            return trim($obj->safe_b64encode($crypttext));
+        }
+        public function safe_b64encode($string) {
+            $data = base64_encode($string);
+            $data = str_replace(array('+', '/', '='), array('-', '_', ''), $data);
+            return $data;
+        }
+        public function safe_b64decode($string) {
+            $data = str_replace(array('-', '_'), array('+', '/'), $string);
+            $mod4 = strlen($data) % 4;
+            if ($mod4) {
+                $data .= substr('====', $mod4);
+            }
+            return base64_decode($data);
+        }
+        public static function decode_url($value) {
+               if (!$value) {
+                   return false;
+               }
+               $obj = new Helpers();
+               $crypttext = $obj->safe_b64decode($value);
+               // $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+               $iv_size = mcrypt_get_iv_size('des', 'ecb');
+               $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+               $decrypttext = mcrypt_decrypt('des', ENC_KEY, $crypttext, 'ecb', $iv);
+               return trim($decrypttext);
+          }
     }
 
 ?>

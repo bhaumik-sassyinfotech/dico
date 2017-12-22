@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+define('ENC_KEY','ZF#48sp(');
+define('DATE_FORMAT','d/m/Y');
+define('POST_TITLE_LIMIT',50);
+define('POST_DESCRIPTION_LIMIT',130);
+define('POST_DISPLAY_LIMIT',6);

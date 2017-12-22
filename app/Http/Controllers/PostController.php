@@ -23,7 +23,6 @@
     use Yajra\Datatables\Datatables;
     use Auth;
     
-    
     class PostController extends Controller
     {
         
@@ -173,20 +172,87 @@
             {
 //                $posts = Post::withCount('postLike')->with('postLike')->get();
 //                dd($posts);
-                $posts = Post::with(['postUser','postLike','postDisLike','postComment', 'postUserLike' => function ($q) {
+                $query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
                     return $q->where('user_id' , Auth::user()->id);
                 } ,'postUserDisLike' => function ($q) {
                    return $q->where('user_id' , Auth::user()->id);
-                } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)->orderBy('post_like_count','desc')->get()->toArray();
+                } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
+                        ->orderBy('post_like_count','desc');
+                $count_post = count($query->get());
+                $posts = $query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                
+                $user_query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
+                    return $q->where('user_id' , Auth::user()->id);
+                } ,'postUserDisLike' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->orderBy('post_like_count','desc');
+                $count_user_post = count($user_query->get());
+                $user_posts = $user_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
             } else
             {
                 return redirect('/index');
             }
-            
-           // dd($posts);
-            return view($this->folder . '.post.index' , compact('posts'));
+            return view($this->folder . '.post.index' , compact('posts','user_posts','count_post','count_user_post'));
         }
         
+        public function loadmorepost(Request $request) {
+            try
+            {
+                if ($request)
+                {
+                    $offset = $request->get('offset');
+                    $query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
+                        return $q->where('user_id' , Auth::user()->id);
+                    } ,'postUserDisLike' => function ($q) {
+                       return $q->where('user_id' , Auth::user()->id);
+                    } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
+                            ->orderBy('post_like_count','desc');
+                    $count_post = count($query->get());
+                    $posts = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                
+                    return view($this->folder . '.post.ajaxpost' , compact('posts','count_post'));
+                }
+                else
+                {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                }
+            }
+            catch ( \exception $e )
+            {
+                DB::rollback();
+                
+                return Redirect::back()->with('err_msg' , $e->getMessage());
+            }
+        }
+        
+        public function loadmoremypost(Request $request) {
+            try
+            {
+                if ($request)
+                {
+                    $offset = $request->get('offset');
+                    $user_query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
+                        return $q->where('user_id' , Auth::user()->id);
+                    } ,'postUserDisLike' => function ($q) {
+                       return $q->where('user_id' , Auth::user()->id);
+                    } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->orderBy('post_like_count','desc');
+                    $count_user_post = count($user_query->get());
+                    $user_posts = $user_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                    
+                    return view($this->folder . '.post.ajaxmypost' , compact('user_posts','count_user_post'));
+                }
+                else
+                {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                }
+            }
+            catch ( \exception $e )
+            {
+                DB::rollback();
+                
+                return Redirect::back()->with('err_msg' , $e->getMessage());
+            }
+        }
         
         public function update($id , Request $request)
         {
@@ -217,7 +283,7 @@
                     //=== groups saving end ===//
                     $res      = $post->where('id' , $id)->update($postData);
                     $file     = $request->file('file_upload');
-                    if ( $file != "" )
+                    if ($file != "")
                     {
                         $postData = array();
                         //echo "here";die();
@@ -273,7 +339,6 @@
         
         public function edit($id)
         {
-            
             $id = Helpers::decode_url($id);
             if ( Auth::user() )
             {
@@ -405,19 +470,26 @@
     
     public function viewpost($id) {
         $id = Helpers::decode_url($id);
-        $post = Post::with('postUser','postUser.following')->with('postLike')->with('postDisLike')->with(['postUserLike' => function($q) {
+        $post = Post::with('postUser','postUser.following')->with(['postLike','postDisLike','postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
-                }])->with(['postUserDisLike' => function($q) {
-                        $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-                    }])->with('postAttachment')->with(['postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
+                },'postUserDisLike' => function($q) {
+                    $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
+                },'postAttachment','postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
-                }])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                },'postTag.tag'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->whereNULL('deleted_at')->where('id',$id)->first();
                 //dd($post);
+        $post_group = '';        
+        if($post) {
+            if(!empty($post->group_id)) {
+                $groupId = explode(',', $post->group_id);
+                $post_group = Group::with('groupUsersCount')->whereIn('id',$groupId)->get(); 
+            }
+        }
         if($post['postUser']['company_id'] == Auth::user()->company_id) {        
-            return view($this->folder.'.post.view', compact('post'));
+            return view($this->folder.'.post.view', compact('post','post_group'));
         }else {
             return redirect('/index'); 
         }

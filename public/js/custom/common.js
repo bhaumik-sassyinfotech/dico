@@ -127,6 +127,48 @@ function dislikePost(id) {
         }
     });
 }
+function like_post(id) {
+    $.ajax({
+        url: SITE_URL+'/like_post/'+id,
+        type: 'GET',
+        success: function(response) {
+            var res = JSON.parse(response);
+            var html = "";
+            if(res.status == 1) {
+                html += '<i class="fa fa-thumbs-up"></i>';
+            } else {
+                html += '<i class="fa fa-thumbs-o-up"></i>';
+            }
+            $('#post_like_count_'+id).html(res.likecount);
+            $('#post_dislike_count_'+id).html(res.dislikecount);
+            $('#like_post_'+id).html(html);
+            $('#dislike_post_'+id).html('<i class="fa fa-thumbs-o-down"></i>');
+        },
+        error: function() {
+        }
+    });
+}
+function dislike_post(id) {
+    $.ajax({
+        url: SITE_URL+'/dislike_post/'+id,
+        type: 'GET',
+        success: function(response) {
+            var res = JSON.parse(response);
+            var html = "";
+            if(res.status == 1) {
+                html += '<i class="fa fa-thumbs-down"></i>';
+            } else {
+                html += '<i class="fa fa-thumbs-o-down"></i>';
+            }
+            $('#post_like_count_'+id).html(res.likecount);
+            $('#post_dislike_count_'+id).html(res.dislikecount);
+            $('#dislike_post_'+id).html(html);
+            $('#like_post_'+id).html('<i class="fa fa-thumbs-o-up"></i>');
+        },
+        error: function() {
+        }
+    });
+}
 
 function likeComment(id) {
     $.ajax({

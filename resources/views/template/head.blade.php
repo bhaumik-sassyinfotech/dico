@@ -22,18 +22,19 @@
 
 	<!-- The following CSS are included as plugins and can be removed if unused-->
 
+<link rel='stylesheet' type='text/css' href="{{asset('assets/css/styles.css')}}" />
+<link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-responsive.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-style.css')}}" /> 
+
+<link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/codeprettifier/prettify.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/form-toggle/toggles.css')}}" />
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/form-daterangepicker/daterangepicker-bs3.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/fullcalendar/fullcalendar.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/form-markdown/css/bootstrap-markdown.min.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/codeprettifier/prettify.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/form-toggle/toggles.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset('public/css/sweetalert.css')}}" />
 <link href="{{asset('public/css/select2.css')}}" rel="stylesheet" />
 <link href="{{asset(ASSETS_URL.'css/jquery.tagit.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset(ASSETS_URL.'css/tagit.ui-zendesk.css')}}" rel="stylesheet" type="text/css">
-<link rel='stylesheet' type='text/css' href="{{asset('assets/css/styles.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-style.css')}}" /> 
-<link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-responsive.css')}}" /> 
 <script type="text/javascript">
     var SITE_URL = '<?php echo url('/'); ?>';
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";
