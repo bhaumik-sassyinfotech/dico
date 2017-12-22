@@ -242,9 +242,9 @@
             }
             $obj = new Helpers();
             $text = $value;
-            $iv_size = mcrypt_get_iv_size('des', 'ecb');
-            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-            $crypttext = mcrypt_encrypt('des', ENC_KEY, $text, 'ecb', $iv);
+            $iv_size = @mcrypt_get_iv_size('des', 'ecb');
+            $iv = @mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            $crypttext = @mcrypt_encrypt('des', ENC_KEY, $text, 'ecb', $iv);
             return trim($obj->safe_b64encode($crypttext));
         }
         public function safe_b64encode($string) {
@@ -267,9 +267,9 @@
                $obj = new Helpers();
                $crypttext = $obj->safe_b64decode($value);
                // $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
-               $iv_size = mcrypt_get_iv_size('des', 'ecb');
-               $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-               $decrypttext = mcrypt_decrypt('des', ENC_KEY, $crypttext, 'ecb', $iv);
+               $iv_size = @mcrypt_get_iv_size('des', 'ecb');
+               $iv = @mcrypt_create_iv($iv_size, MCRYPT_RAND);
+               $decrypttext = @mcrypt_decrypt('des', ENC_KEY, $crypttext, 'ecb', $iv);
                return trim($decrypttext);
           }
     }
