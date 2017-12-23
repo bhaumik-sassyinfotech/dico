@@ -15,8 +15,8 @@
                         <div class="panel-heading">
                             <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                             <div class="pull-right i-con-set">
-                              <a><img src="assets/img/notification-icon.png"></a>  
-                              <a><img src="assets/img/warning-icon.png"></a>
+                              <a><img src="{{asset('assets/img/notification-icon.png')}}"></a>  
+                              <a><img src="{{asset('assets/img/warning-icon.png')}}"></a>
                             </div>
                         </div>
                         <div class="panel-body">

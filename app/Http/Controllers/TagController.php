@@ -93,7 +93,17 @@
             {
                 $id = Helpers::decode_url($id);
                 if(is_numeric($id)) {
-                    $tag = Tag::where('id',$id)->first()->toArray();
+                    $tag = Tag::where('id',$id)->first()->toArray(); 
+                    $query = Post::whereHas('postTag', function ($qr) use ($id) {
+                        return $qr->where('tag_id',$id);
+                    })->with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
+                        return $q->where('user_id' , Auth::user()->id);
+                    } ,'postUserDisLike' => function ($q) {
+                        return $q->where('user_id' , Auth::user()->id);
+                    } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
+                        ->orderBy('post_like_count','desc');//->get()->toArray();
+                    $count_post = count($query->get());
+                    $posts = $query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
                 }else {
                     return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
                 }
@@ -101,20 +111,25 @@
             {
                 return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
             }
-            return view($this->folder . '.tags.tagpost' , compact('tag'));
+            return view($this->folder . '.tags.tagpost' , compact('posts','count_post','tag'));
         }
         
-        public function loadmorepost(Request $request) {
+        public function loadmoretagpost(Request $request) {
             try
             {
                 if ($request)
                 {
+                    $id = $request->tag_id;
                     $offset = $request->get('offset');
-                    $query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
-                        return $q->where('user_id' , Auth::user()->id);
-                    } ,'postUserDisLike' => function ($q) {
-                       return $q->where('user_id' , Auth::user()->id);
-                    } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id);
+                    $query = Post::whereHas('postTag', function ($qr) use ($id) {
+                                return $qr->where('tag_id',$id);
+                            })->with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
+                                return $q->where('user_id' , Auth::user()->id);
+                            } ,'postUserDisLike' => function ($q) {
+                                return $q->where('user_id' , Auth::user()->id);
+                            } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
+                                ->orderBy('post_like_count','desc');//->get()->toArray();
+                    
                     if(!empty($request->get('search_text'))) {
                         $search_text = $request->get('search_text');
                          $query->where('post_title', 'like','%'.$search_text.'%');
@@ -123,44 +138,8 @@
                     $count_post = count($query->get());
                     $posts = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
                     //echo "<pre>";print_r($posts);die();
-                    $html = view::make($this->folder . '.post.ajaxpost' , compact('posts','count_post'));
+                    $html = view::make($this->folder . '.tags.ajaxtagpost' , compact('posts','count_post'));
                     $output = array('html'=>$html->render(),'count'=>$count_post);
-                    return $output;
-                }
-                else
-                {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
-                }
-            }
-            catch ( \exception $e )
-            {
-                DB::rollback();
-                
-                return Redirect::back()->with('err_msg' , $e->getMessage());
-            }
-        }
-        
-        public function loadmoremypost(Request $request) {
-            try
-            {
-                if ($request)
-                {
-                    $offset = $request->get('offset');
-                    $user_query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
-                        return $q->where('user_id' , Auth::user()->id);
-                    } ,'postUserDisLike' => function ($q) {
-                       return $q->where('user_id' , Auth::user()->id);
-                    } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id]);
-                    if(!empty($request->get('search_text'))) {
-                        $search_text = $request->get('search_text');
-                        $user_query->where('post_title', 'like', '%'.$search_text.'%');
-                    }
-                    $user_query->orderBy('post_like_count','desc');
-                    $count_user_post = count($user_query->get());
-                    $user_posts = $user_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
-                    
-                    $html = view::make($this->folder . '.post.ajaxmypost' , compact('user_posts','count_user_post'));
-                    $output = array('html'=>$html->render(),'count'=>$count_user_post);
                     return $output;
                 }
                 else

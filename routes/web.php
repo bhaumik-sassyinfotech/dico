@@ -65,6 +65,8 @@
         Route::post('loadmorepost','PostController@loadmorepost');
         Route::post('loadmoremypost','PostController@loadmoremypost');
         Route::get('tag/{id}','TagController@tagpost');
+        Route::post('loadmoretagpost','TagController@loadmoretagpost');
+        
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

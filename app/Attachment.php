@@ -10,4 +10,9 @@ class Attachment extends Model
     //
     protected $table = 'attachments';
     use SoftDeletes;
+    
+    public function attachmentUser()
+    {
+        return $this->hasOne('App\User' , 'id' , 'user_id');
+    }
 }

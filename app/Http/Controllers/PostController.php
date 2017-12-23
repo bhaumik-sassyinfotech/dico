@@ -488,7 +488,7 @@
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-                },'postAttachment','postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
+                },'postAttachment','postAttachment.attachmentUser','postComment','postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 

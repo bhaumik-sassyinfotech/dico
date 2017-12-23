@@ -511,48 +511,31 @@
                                 <a href="#">who has any right to find fault with....</a>
                             </div>  
                         </div> 
+                        <?php
+                            if(!empty($post->postAttachment)) {
+                        ?>
                         <div class="category">
                             <h2>Uploaded Files</h2>
                             <div class="idea-grp post-category">
-
+                                <?php
+                                //dd($post->postAttachment);
+                                    foreach($post->postAttachment as $attachment) {
+                                ?>
                                 <div class="member-wrap files-upload">
                                     <div class="member-img">
-                                        <img src="assets/img/uploadfiles1.PNG" alt="no">
+                                        <img src="{{asset('assets/img/uploadfiles1.PNG')}}" alt="no">
                                     </div>
                                     <div class="member-details">
-                                        <h3>Sales Report.Pdf</h3>
-                                        <p>Uploaded By:<a href="#">Jason Mcdowney</a></p>
+                                        <h3>{{$attachment->file_name}}</h3>
+                                        <p>Uploaded By:<a href="#">{{$attachment->attachmentUser->name}}</a></p>
                                     </div>
                                 </div>
-                                <div class="member-wrap files-upload">
-                                    <div class="member-img">
-                                        <img src="assets/img/uploadfiles2.PNG" alt="no">
-                                    </div>
-                                    <div class="member-details">
-                                        <h3>Managament List.jpeg</h3>
-                                        <p>Uploaded By:<a href="#">Jason Mcdowney</a></p>
-                                    </div>
-                                </div> 
-                                <div class="member-wrap files-upload">
-                                    <div class="member-img">
-                                        <img src="assets/img/uploadfiles3.PNG" alt="no">
-                                    </div>
-                                    <div class="member-details">
-                                        <h3>Attendance</h3>
-                                        <p>Uploaded By:<a href="#">Jason Mcdowney</a></p>
-                                    </div>
-                                </div>
-                                <div class="member-wrap files-upload">
-                                    <div class="member-img">
-                                        <img src="assets/img/uploadfiles4.PNG" alt="no">
-                                    </div>
-                                    <div class="member-details">
-                                        <h3>Expense Sheet.Xlxs</h3>
-                                        <p>Uploaded By:<a href="#">Jason Mcdowney</a></p>
-                                    </div>
-                                </div>
+                                    <?php } ?>
                             </div> 
                     </div>
+                        <?php
+                            }
+                        ?>
                     <!-- END RIGHT SIDEBAR -->
                 </div> 
                  </div>
