@@ -7,19 +7,11 @@
         <div id="page-heading">
             <ol class="breadcrumb">
                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-               <li class="active">Post</li>
+               <li class="active">Tags</li>
             </ol>
-            <h1 class="tp-bp-0">Post</h1>
+            <h1 class="tp-bp-0">Tags</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                    <div class="btn-group hidden-xs">
-                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
-                    </div>
-                    <div class="btn-group">
-                        <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
         </div>    
@@ -30,8 +22,7 @@
                         <div class="panel-heading">
                             <h4>
                               <ul class="nav nav-tabs">
-                                  <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Posts</span></a></li>
-                                <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>
+                                <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">{{$tag['tag_name']}} Posts</span></a></li>
                               </ul>
                             </h4>
                             <div class="pull-right search-form">
@@ -134,7 +125,7 @@
                                                              ?>
                                                              <hr>
                                                              <div class="post-circle">
-                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
+                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
                                                               </div>
                                                                  <?php } ?>
                                                          </div>
@@ -248,7 +239,7 @@
                                     <?php
                                     if(!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                                     ?>
-                                    <div class="user_viewmore col-md-12"><a href="javascript:void(0)" id="load_mypost" onclick="loadMoreMyPost();" data-id="0">View More</a></div>
+                                    <div class="user_viewmore"><a href="javascript:void(0)" id="load_mypost" onclick="loadMoreMyPost();" data-id="0">View More</a></div>
                                     <?php
                                             } ?>
                                 </div>
@@ -306,14 +297,10 @@
             data: formData,
             success: function (response) {
                 if(response != "") {
-                    if(response.html != "") {
-                        $('#threads .postlist:last').after(response.html);
-                        $('#load_post').attr('data-id',offset);
-                        if($('.postlist').length == response.count) {
-                            $('#load_post').hide();
-                        }
-                    }else {
-                        //$('#threads .postlist:last').after("No post found.");
+                    $('#threads .postlist:last').after(response.html);
+                    $('#load_post').attr('data-id',offset);
+                    if($('.postlist').length == response.count) {
+                        $('#load_post').hide();
                     }
                 }
             },
@@ -332,14 +319,10 @@
             data: formData,
             success: function (response) {
                 if(response != '') {
-                    if(response.html != "") {
-                        $('#users .userpostlist:last').after(response.html);
-                        $('#load_mypost').attr('data-id',offset);
-                        if($('.userpostlist').length == response.count) {
-                            $('#load_mypost').hide();
-                        }else {
-                        //$('#users .postlist:last').after("No post found.");
-                        }
+                    $('#users .userpostlist:last').after(response.html);
+                    $('#load_mypost').attr('data-id',offset);
+                    if($('.userpostlist').length == response.count) {
+                        $('#load_mypost').hide();
                     }
                 }
             },
@@ -360,21 +343,14 @@
                 success: function (response) {
                     console.log(response.html);
                     if(response != ""){
-                        if(response.html != "") {
-                            $('#threads .postlist').remove();
-                            //$('#count_post').remove();
-                            $('#threads .all_viewmore').before(response.html);
-                            $('#load_post').attr('data-id',offset);
-                            if(response.count < {{POST_DISPLAY_LIMIT}}) {
-                                $('#load_post').hide();
-                            } else {
-                                $('#load_post').show();
-                            }
-                        } else {
-                            $('#threads .postlist').remove();
-                            $('#threads').append("<p class='postlist'>No post found.</p>");
+                        $('#threads .postlist').remove();
+                        //$('#count_post').remove();
+                        $('#threads .all_viewmore').before(response.html);
+                        $('#load_post').attr('data-id',offset);
+                        if(response.count < {{POST_DISPLAY_LIMIT}}) {
                             $('#load_post').hide();
-                            
+                        } else {
+                            $('#load_post').show();
                         }
                     }
                 },
@@ -392,20 +368,13 @@
                 data: formData,
                 success: function (response) {
                     if(response != '') {
-                        if(response.html != "") {
-                            $('#users .userpostlist').remove();
-                            $('#users .user_viewmore').before(response.html);
-                            $('#load_mypost').attr('data-id',offset);
-                            if(response.count < {{POST_DISPLAY_LIMIT}}) {
-                                $('#load_mypost').hide();
-                            } else {
-                                $('#load_mypost').show();
-                            }
-                        } else {
-                            $('#users .userpostlist').remove();
-                            $('#users').append("<p class='userpostlist'>No post found.</p>");
+                        $('#users .userpostlist').remove();
+                        $('#users .user_viewmore').before(response.html);
+                        $('#load_mypost').attr('data-id',offset);
+                        if(response.count < {{POST_DISPLAY_LIMIT}}) {
                             $('#load_mypost').hide();
-                            
+                        } else {
+                            $('#load_mypost').show();
                         }
                     }
                 },

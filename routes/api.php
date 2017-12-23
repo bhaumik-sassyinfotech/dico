@@ -21,4 +21,4 @@ define('ENC_KEY','ZF#48sp(');
 define('DATE_FORMAT','d/m/Y');
 define('POST_TITLE_LIMIT',50);
 define('POST_DESCRIPTION_LIMIT',130);
-define('POST_DISPLAY_LIMIT',6);
+define('POST_DISPLAY_LIMIT',2);

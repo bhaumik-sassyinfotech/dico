@@ -63,6 +63,7 @@
         Route::resource('meeting','MeetingController');
         Route::post('loadmorepost','PostController@loadmorepost');
         Route::post('loadmoremypost','PostController@loadmoremypost');
+        Route::get('tag/{id}','TagController@tagpost');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

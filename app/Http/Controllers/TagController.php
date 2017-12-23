@@ -24,7 +24,7 @@
     use Auth;
     use View;
     
-    class PostController extends Controller
+    class TagController extends Controller
     {
         
         /**
@@ -62,96 +62,14 @@
         
         public function create()
         {
-            if ( Auth::user() )
-            {
-                $company = Company::where('id' , Auth::user()->company_id)->first();
-                $groups = Group::where('company_id' , Auth::user()->company_id)->get();
-                
-                return view($this->folder . '.post.create' , compact('company','groups'));
-            } else
-            {
-                return redirect('/index');
-            }
+            
         }
         
         public function store(Request $request)
         {
             try
             {
-                if ( Auth::user() )
-                {
-                    $this->validate($request , [
-                        'post_type'  => 'required' ,
-                        'post_title' => 'required' ,
-                    ]);
-                    if ( $request->input('is_anonymous') )
-                    {
-                        $is_anonymous = 1;
-                    } else
-                    {
-                        $is_anonymous = 0;
-                    }
-                    DB::beginTransaction();
-                    $post                   = new Post;
-                    $post->company_id       = Auth::user()->company_id;
-                    $post->post_title       = $request->input('post_title');
-                    $post->post_description = $request->input('post_description');
-                    $post->post_type        = $request->input('post_type');
-                    $post->user_id          = Auth::user()->id;
-                    $post->is_anonymous     = $is_anonymous;
-                    //=== groups saving start ===//
-                    $post_groups = $request->input('user_groups');
-                    if(!empty($post_groups)) {
-                        $groups = implode(",", $post_groups);
-                        $post->group_id     = $groups;
-                    }
-                    //=== groups saving end ===//
-                    $post->save();
-                    $file = $request->file('file_upload');
-                    if ( $file != "" )
-                    {
-                        $postData = array();
-                        //echo "here";die();
-                        $fileName        = $file->getClientOriginalName();
-                        $extension       = $file->getClientOriginalExtension();
-                        $folderName      = '/uploads/';
-                        $destinationPath = public_path() . $folderName;
-                        $safeName        = str_random(10) . '.' . $extension;
-                        $file->move($destinationPath , $safeName);
-                        $attachment            = new Attachment;
-                        $attachment->file_name = $safeName;
-                        $attachment->type      = 1;
-                        $attachment->type_id   = $post->id;
-                        $attachment->user_id   = Auth::user()->id;
-                        $attachment->save();
-                        // $attachment = Attachment::insert($postData);
-                    }
-                    //=== tags saving start ===//
-                    $post_tags = $request->input('post_tags');
-                    if(!empty($post_tags)) {
-                        $tags = explode(",", $post_tags);
-                        foreach($tags as $tag) {
-                            $existTag = Tag::where("tag_name",$tag)->first();
-                            if($existTag) {
-                                $tag_id = $existTag->id;
-                            } else {
-                                $tag_id = Tag::insertGetId(array("tag_name"=>$tag,"created_at"=>Carbon\Carbon::now()));
-                            }
-                            $post_tags = PostTag::insert(array("post_id"=>$post->id,"tag_id"=>$tag_id,"created_at"=>Carbon\Carbon::now()));
-                        }
-                    }
-                    //=== tagss saving end ===//
-                    DB::commit();
-                    if ( $post )
-                    {
-                        return redirect()->route('post.index')->with('success' , 'Post ' . Config::get('constant.ADDED_MESSAGE'));
-                    } else
-                    {
-                        return redirect()->route('post.index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
-                    }
-
-//                    return $next($request);
-                }
+                
             }
             catch ( \exception $e )
             {
@@ -166,34 +84,24 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function index()
+        public function index() {
+            
+        }
+        public function tagpost($id = null)
         {
-            //dd("here");
-            if ( Auth::user() )
+            if (Auth::user() && !empty($id))
             {
-//                $posts = Post::withCount('postLike')->with('postLike')->get();
-//                dd($posts);
-                $query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
-                    return $q->where('user_id' , Auth::user()->id);
-                } ,'postUserDisLike' => function ($q) {
-                   return $q->where('user_id' , Auth::user()->id);
-                } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
-                        ->orderBy('post_like_count','desc');
-                $count_post = count($query->get());
-                $posts = $query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
-                
-                $user_query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
-                    return $q->where('user_id' , Auth::user()->id);
-                } ,'postUserDisLike' => function ($q) {
-                   return $q->where('user_id' , Auth::user()->id);
-                } ,'postAttachment'])->withCount('postLike')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->orderBy('post_like_count','desc');
-                $count_user_post = count($user_query->get());
-                $user_posts = $user_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                $id = Helpers::decode_url($id);
+                if(is_numeric($id)) {
+                    $tag = Tag::where('id',$id)->first()->toArray();
+                }else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                }
             } else
             {
-                return redirect('/index');
+                return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
             }
-            return view($this->folder . '.post.index' , compact('posts','user_posts','count_post','count_user_post'));
+            return view($this->folder . '.tags.tagpost' , compact('tag'));
         }
         
         public function loadmorepost(Request $request) {

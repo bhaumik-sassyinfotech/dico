@@ -2428,7 +2428,7 @@ form .form-group:last-child {
   margin-top: 2px;    
 }
 
-.search-form > input:not([type="submit"]) {
+.search-form > input:not([type="button"]) {
   border: 1px solid #949494;
   border-radius: 4px;
   color: #999;
@@ -3490,5 +3490,10 @@ body .point-page .group-tabs > .panel-body {
 }
 .new-meeting-details .common-form .form-group:first-child > label {
   margin-bottom: 0;
+}
+.desc-content {
+    overflow: hidden; 
+    height: 3em;
+    line-height: 1em;
 }
 /*close point page*/
