@@ -15,7 +15,8 @@
                 <div class="option">
                     <div class="btn-toolbar">
                         @if($meeting->created_by == Auth::user()->id)
-                            <a href="{{route('meeting.edit',$meeting->id)}}" class="btn btn-primary">Edit</a>
+                            <a href="{{ route('meeting.edit' , Helpers::encode_url($meeting->id) ) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ route('deleteMeeting' , Helpers::encode_url($meeting->id) ) }}" class="btn btn-danger">Delete</a>
                         @endif
                     </div>
                 </div>
@@ -27,31 +28,13 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="post_id" id="post_id" value="{{$meeting->id }}">
                         <div class="panel-body">
-                            @if(session()->has('success'))
-                                <div class="alert alert-success">
-                                    {{ session()->get('success') }}
-                                </div>
-                            @endif
-                            @if(session()->has('err_msg'))
-                                <div class="alert alert-danger">
-                                    {{ session()->get('err_msg') }}
-                                </div>
-                            @endif
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                            @include('template.notification')
                             <div class="row">
                                 <div class="row col-xs-8">
                                     <div class="col-xs-12 form-group">
                                         <label><b>{{$meeting->meeting_title}}</b></label><br>
                                         <small>
-                                            {{date('d-M-Y',strtotime($meeting->created_at))}}
+                                            {{ date('d-M-Y',strtotime($meeting->created_at)) }}
                                         </small>
                                     </div>
                                     <div class="col-xs-12 form-group">

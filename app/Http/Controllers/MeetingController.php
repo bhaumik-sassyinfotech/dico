@@ -6,6 +6,7 @@
     use App\Group;
     use App\GroupUser;
     use App\Meeting;
+    use App\MeetingCommentReply;
     use App\MeetingUser;
     use App\MeetingComment;
     use App\MeetingAttachment;
@@ -103,27 +104,33 @@
                         else
                             $users[] = $val;
                     }
-                    if ( !empty($group) ) {
-                        foreach ( $group as $key => $val ) {
+                    if ( !empty($group) )
+                    {
+                        foreach ( $group as $key => $val )
+                        {
                             $now         = Carbon::now();
                             $group_id    = $val;
                             $group_users = GroupUser::where('group_id', $group_id)->where('company_id', $company_id)->pluck('user_id')->toArray();
                             
-                            foreach ( $group_users as $k => $v ) {
+                            foreach ( $group_users as $k => $v )
+                            {
                                 $is_admin = 0;
-                                if ( $v != $currUser->id ) {
+                                if ( $v != $currUser->id )
+                                {
                                     $meetingUsers[] = [ 'user_id' => $v, 'is_admin' => $is_admin, 'group_id' => $group_id, 'meeting_id' => $meeting_id, 'created_at' => $now, 'updated_at' => $now ];
                                 }
                             }
                         }
                     }
                     
-                    if ( !empty($users) ) {
-                        
+                    if ( !empty($users) )
+                    {
                         $now = Carbon::now();
-                        foreach ( $users as $key => $val ) {
+                        foreach ( $users as $key => $val )
+                        {
                             $is_admin = 0;
-                            if ( $val != $currUser->id ) {
+                            if ( $val != $currUser->id )
+                            {
                                 $meetingUsers[] = [ 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'meeting_id' => $meeting_id, 'created_at' => $now, 'updated_at' => $now ];
                             }
                         }
@@ -187,7 +194,20 @@
          */
         public function edit( $id )
         {
-            //
+            $id = Helpers::decode_url($id);
+            $currUser = Auth::user();
+            $meeting = Meeting::with(['meetingUser','meetingAttachment'])->where('id',$id)->first();
+            if($currUser->id != $meeting->created_by)
+            {
+                return back();
+            }
+//            dd($meeting);
+            if(!empty($meeting))
+            {
+                return view($this->folder.'.meeting.edit' , compact('meeting'));
+            }
+            
+            return back();
         }
         
         /**
@@ -200,7 +220,54 @@
          */
         public function update( Request $request, $id )
         {
-            //
+//            dd($request->all());
+            $id = Helpers::decode_url($id);
+            $meeting = Meeting::find($id);
+    
+            $privacy                      = ($request->privacy[ 0 ] == 'public') ? 0 : 1;
+            $meeting->meeting_title       = $request->input('meeting_title');
+            $meeting->meeting_description = $request->input('meeting_description');
+            $meeting->privacy             = $privacy;
+            
+            DB::beginTransaction();
+            if ( $meeting->save() )
+            {
+                $file = $request->file('file_upload');
+                if ( $file != "" )
+                {
+                    $currUser = Auth::user();
+                    $postData = array();
+                    //echo "here";die();
+                    $fileName        = $file->getClientOriginalName();
+                    $extension       = $file->getClientOriginalExtension();
+                    $folderName      = '/uploads/meeting/';
+                    $destinationPath = public_path() . $folderName;
+                    $safeName        = str_random(10) . '.' . $extension;
+                    $file->move($destinationPath , $safeName);
+                    //$attachment = new Attachment;
+                    $postData[ 'file_name' ] = $safeName;
+                    $postData[ 'type' ]      = 1;
+                    $postData[ 'type_id' ]   = $id;
+                    $postData[ 'user_id' ]   = $currUser->id;
+//                        $attachment              = Attachment::insert($postData);
+                    $attachment              = MeetingAttachment::where('type_id',$id)->where('type',1)->where('user_id',$currUser->id);
+                    $now = Carbon\Carbon::now();
+                    if($attachment->first())
+                    {
+                        $attachment->update(['file_name' => $postData[ 'file_name' ] , 'updated_at' => $now]);
+                    } else {
+                
+                        $postData['created_at'] = $postData['updated_at'] = $now;
+                        Attachment::insert($postData);
+                    }
+                }
+                DB::commit();
+                return back();
+            } else
+            {
+                DB::rollBack();
+                return back()->withInput();
+            }
         }
         
         /**
@@ -247,9 +314,12 @@
             })->addColumn('actions', function ( $row ) {
 //                $editBtn = '<a href="' . route('meeting.edit' , [ $row->id ]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                 $showBtn   = '<a href="' . route('meeting.show', [ Helpers::encode_url($row->id) ]) . '" title="Show"><i class="fa fa-eye" aria-hidden="true"></i></a>';
-                $deleteBtn = '<a href="javascript:void(0);" title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
-                
-                return $showBtn . " | " . $deleteBtn;
+//                $deleteBtn = '<a href="javascript:void(0);" title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
+//                $editBtn   = '<a href="' . route('meeting.edit', [ Helpers::encode_url($row->id) ]) . '" title="Show"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+
+//                return $showBtn . " | " . $editBtn ." | " . $deleteBtn;
+//                return $showBtn . " | " . $deleteBtn;
+                return $showBtn;
             })->rawColumns([ 'actions' ])->make(TRUE);
 //            dd($meetings);
         }
@@ -352,5 +422,33 @@
                     break;
             }
             return  Validator::make($request->all(), $rulesArray);
+        }
+    
+        public function deleteMeeting( $meeting_id )
+        {
+            $meeting_id = Helpers::decode_url($meeting_id);
+            $meeting = Meeting::find($meeting_id);
+            $currUser   = Auth::user();
+//            if($meeting->created_by != $currUser->id)
+//                return back();
+            if(!empty($meeting))
+            {
+                MeetingAttachment::where('meeting_id', $meeting_id)->delete();
+                $meeting_comment     = MeetingComment::where('meeting_id', $meeting_id)->get();
+                
+                if( count($meeting_comment) != 0 )
+                {
+                    $meeting_comment_ids = $meeting_comment->pluck('id');
+                    MeetingCommentReply::whereIn('comment_id', $meeting_comment_ids)->delete();
+                    $meeting_comment->delete();
+                }
+                MeetingUser::where('meeting_id', $meeting_id)->delete();
+                if($meeting->delete())
+                {
+                    return Redirect::route('meeting.index')->with('success','Meeting has been deleted successfully.');
+                }
+                return Redirect::route('meeting.index')->with('error_msg','Please try again later.');
+            }
+            return Redirect::route('meeting.index')->with('error_msg','Please try again later.');
         }
     }

@@ -57,6 +57,7 @@
         Route::get('deletecommentReply/{id}','PostController@deletecommentReply');
         Route::get('tags' , 'PostController@tags');
     
+        Route::get( 'meeting/deleteMeeting/{id}','MeetingController@deleteMeeting')->name('deleteMeeting');
         Route::post('meeting/saveComment/{id}','MeetingController@savecomment');
         Route::get( 'meeting/deleteComment/{id}','MeetingController@deletecomment');
         Route::match(['get','post'],'/meeting/list','MeetingController@meetingList');

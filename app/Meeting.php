@@ -24,7 +24,7 @@ class Meeting extends Model
     
     public function meetingUser()
     {
-        return $this->hasOne('App\User' , 'id' , 'user_id')->where('company_id' , Auth::user()->company_id);
+        return $this->hasOne('App\User' , 'id' , 'created_by')->where('company_id' , Auth::user()->company_id);
     }
     
     public function meetingAttachment()
