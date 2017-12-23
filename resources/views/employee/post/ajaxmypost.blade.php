@@ -81,7 +81,7 @@ if (!empty($user_posts)) {
                             ?>
                         <hr>
                         <div class="post-circle">
-            <?php foreach ($mypost['post_tag'] as $mypost_tag) { ?><a href="#"><?= $mypost_tag['tag']['tag_name']; ?></a><?php } ?>
+            <?php foreach ($mypost['post_tag'] as $mypost_tag) { ?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?= $mypost_tag['tag']['tag_name']; ?></a><?php } ?>
                         </div>
         <?php } ?>
                 </div>

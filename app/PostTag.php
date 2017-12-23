@@ -13,4 +13,8 @@ class PostTag extends Model
     {
         return $this->hasOne('App\Tag' , 'id' , 'tag_id');
     }
+    public function posts()
+    {
+        return $this->hasMany('App\Post' , 'id' , 'post_id');
+    }
 }

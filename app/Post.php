@@ -43,7 +43,7 @@
         
         public function postAttachment()
         {
-            return $this->hasOne('App\Attachment' , 'type_id' , 'id')->where('type' , 1);
+            return $this->hasMany('App\Attachment' , 'type_id' , 'id')->where('type' , 1);
         }
         
         public function postComment()
