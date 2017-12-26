@@ -145,7 +145,7 @@
         }*/
         
         
-        public static function postViews($post_id , $user_id)
+        public static function postViews($post_id , $user_id='')
         {
             PostView::firstOrCreate([ 'user_id' => $user_id , 'post_id' => $post_id , 'visitor_ip' => request()->ip() ]);
             

@@ -104,7 +104,7 @@
                                                                          <span id="post_dislike_count_{{$post['id']}}"><?php echo count($post['post_dis_like']); ?></span>
                                                                      </div>
 
-                                                                     <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
+                                                                     <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>{{$post['post_view_count']}}</span></div>
 
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                          <?php

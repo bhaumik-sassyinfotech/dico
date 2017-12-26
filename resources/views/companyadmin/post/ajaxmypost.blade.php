@@ -59,7 +59,7 @@ if (!empty($user_posts)) {
                                 <span id="post_dislike_count_{{$mypost['id']}}"><?php echo count($mypost['post_dis_like']); ?></span>
                             </div>
 
-                            <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
+                            <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>{{$mypost['post_view_count']}}</span></div>
 
                             <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                     <?php
