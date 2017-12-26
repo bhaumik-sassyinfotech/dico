@@ -18,10 +18,17 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   width: 10px;
 }
 
-.form_box > form {
+.form_box form {
   display: block;
   position: relative;
 }
+
+update-wrap {
+  position: relative;
+  display: block;
+  margin-bottom: 10px;
+}
+
 
 #upload_form .fileinput {
   bottom: 0;
@@ -36,7 +43,7 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   z-index: 99;
 }
 
-#upload_form > label {
+#upload_form  label {
   background-color: rgb(0, 136, 216);
   bottom: 0;
   color: #fff;
@@ -48,6 +55,13 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   right: 0;
   text-align: center;
   z-index: 9;
+}
+
+
+.update-wrap {
+  position: relative;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .preview_box {

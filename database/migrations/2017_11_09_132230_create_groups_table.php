@@ -17,6 +17,7 @@ class CreateGroupsTable extends Migration
             $table->increments('id');
             $table->string('group_name','255');
             $table->text('description')->nullable();
+            $table->text('group_image')->nullable();
             $table->unsignedBigInteger('company_id')->default(0);
             $table->unsignedBigInteger('group_owner')->default(0);
             $table->bigInteger('created_by');

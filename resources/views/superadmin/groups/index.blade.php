@@ -1,60 +1,143 @@
 @extends('template.default')
 @section('content')
-
-    <div id="page-content">
+    
+    <div id="page-content" class="point-page">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
                     <li><a href="{{ url('/home') }}">Dashboard</a></li>
                     <li class="active">Group</li>
                 </ol>
-                <h1>Group</h1>
+                <h1 class="tp-bp-0">Group</h1>
                 <div class="options">
                     <div class="btn-toolbar">
                         <div class="btn-group hidden-xs">
-                            <a href="{{ route('group.create') }}" class="btn btn-primary">Add New</a>
+                            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i
+                                class="fa fa-filter fa-6" aria-hidden="true"></i><span
+                                class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
+                        </div>
+                        <a href="{{ route('group.create') }}" class="btn btn-primary">Add New</a>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="panel panel-midnightblue group-tabs">
+                            <div class="panel-heading">
+                                <h4>
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#threads" data-toggle="tab"><i
+                                                        class="fa fa-list visible-xs icon-scale"></i><span
+                                                        class="hidden-xs">All Groups</span></a></li>
+                                        <li class=""><a href="#users" data-toggle="tab"><i
+                                                        class="fa fa-group visible-xs icon-scale"></i><span
+                                                        class="hidden-xs">My Group Users</span></a></li>
+                                    </ul>
+                                </h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane active"
+                                         id="threads">
+                                        <div class="container">
+                                            
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="panel panel-info ">
+                                                        <div class="panel-heading trophy">
+                                                            <h4 class="icon">Users List</h4>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Group Name</th>
+                                                                        <th>Group Description</th>
+                                                                        <th>Total Posts</th>
+                                                                        <th>Total Members</th>
+                                                                        <th>Actions</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td><a>Jason Durelo</a></td>
+                                                                        <td><p>48</p></td>
+                                                                        <td><p>48</p></td>
+                                                                        <td><p>25</p></td>
+                                                                        <td><p>685</p></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><a>Mary Jane</a></td>
+                                                                        <td><p>234</p></td>
+                                                                        <td><p>150</p></td>
+                                                                        <td><p>68</p></td>
+                                                                        <td><p>685</p></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><a>Mike Tyson</a></td>
+                                                                        <td><p>258</p></td>
+                                                                        <td><p>48</p></td>
+                                                                        <td><p>25</p></td>
+                                                                        <td><p>685</p></td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane" id="users">
+                                        <div class="container">
+                                            
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="panel panel-info ">
+                                                        <div class="panel-heading trophy">
+                                                            <h4 class="icon">Group List</h4>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <table class="table" id="group_table">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Group Name</th>
+                                                                        <th>Group Description</th>
+                                                                        <th>Total Posts</th>
+                                                                        <th>Total Members</th>
+                                                                        <th>Actions</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="container">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        @if(session()->has('success'))
-                            <div class="alert alert-success">
-                                {{ session()->get('success') }}
-                            </div>
-                        @endif
-                        @if(session()->has('err_msg'))
-                            <div class="alert alert-danger">
-                                {{ session()->get('err_msg') }}
-                            </div>
-                        @endif
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        <table class="table table-bordered table-striped" id="group_table">
-                            <thead>
-                                <tr>
-                                    <th>#ID</th>
-                                    <th>Group Name</th>
-                                    <th>Group Description</th>
-                                    <th>Total members</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
+            
+            
             </div>
         </div>
-
     </div>
+    </div>
+    
+    
+    
+    
+    </div> <!-- container -->
+    </div> <!--wrap -->
+    </div> <!-- page-content -->
 @stop

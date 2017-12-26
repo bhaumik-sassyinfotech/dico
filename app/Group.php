@@ -22,6 +22,4 @@ class Group extends Model
             ->selectRaw('group_id, count(*) as cnt')
             ->groupBy('group_id');
     }
-    
-    
 }

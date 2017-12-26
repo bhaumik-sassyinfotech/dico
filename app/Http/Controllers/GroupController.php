@@ -171,7 +171,8 @@
             $id = Helpers::decode_url($id);
             $groupId   = $id;
             $companies = Company::all();
-            $groupData = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
+            $groupData = Group::with([ 'groupUsers','groupUsers.userDetail' ,'groupUsers.followers','groupUsers.following' ])->where('id' , $id)->first();
+            
 //            dd($groupData->groupUsers->pluck('user_id')->toArray());
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id' , '!=' , 1)->whereNotIn('id' , $groupUsers)->get();
@@ -372,5 +373,28 @@
 //            return $validator = Validator::make($request->all() , $rulesArray);
             
             return Validator::make($request->all() , $rulesArray);
+        }
+    
+        public function uploadGroupPicture( Request $request )
+        {
+            $file = $request->file('group_picture');
+            $group_id = $request->input('group_id');
+            if ( $file != "" && !empty($group_id) )
+            {
+                $postData = array();
+                //echo "here";die();
+                $fileName        = $file->getClientOriginalName();
+                $extension       = $file->getClientOriginalExtension();
+                $folderName      = '/uploads/groups';
+                $destinationPath = public_path() . $folderName;
+                $safeName        = str_random(10) . '.' . $extension;
+                $file->move($destinationPath , $safeName);
+                $updateData = ['group_image' => $safeName];
+                Group::where('id',$group_id)->update($updateData);
+                return back()->with('success','Group picture has been updated successfully.');
+            } else {
+                return back();
+            }
+            
         }
     }
