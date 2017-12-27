@@ -16,6 +16,15 @@
             return $this->hasOne('App\User' , 'id' , 'user_id')->where('company_id' , Auth::user()->company_id);
         }
         
+        public function postView()
+        {
+            return $this->hasMany('App\PostView' , 'post_id' , 'id');
+        }
+        public function postViewCount()
+        {
+         return $this->postView;
+        }
+        
         public function postLike()
         {
             return $this->hasMany('App\PostLike' , 'post_id' , 'id')->where('flag' , 1);

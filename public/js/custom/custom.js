@@ -341,6 +341,18 @@ $('#post_form').validate({
         }
     }
 });
+$('#commentbox_form').validate({
+    rules: {
+        comment_text: {
+            required: true,
+        }
+    },
+    messages: {
+        comment_text: {
+            required: 'This field is required',
+        }
+    }
+});
 /*var postTable = $('#post_table').DataTable({
     processing: true,
     serverSide: true,

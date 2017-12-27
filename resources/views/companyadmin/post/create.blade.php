@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="col-xs-4 form-group"><input type="checkbox" name="post_type"
                                                                             id="post_type_challenges"
-                                                                            value="challenges" class="post_type"> Challenges
+                                                                            value="challenge" class="post_type"> Challenge
                                     </div>
                                     <div id="err_post_type"></div>
                                 </div>
