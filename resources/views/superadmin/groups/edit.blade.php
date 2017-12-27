@@ -60,11 +60,15 @@
                                     @if($user->user_id == $groupData->group_owner || $user->is_admin == '1')
                                         <div class="member-wrap">
                                             <div class="member-img">
-                                                <img src="{{ asset('assets/img/member1.PNG') }}" alt="no">
+                                                @if($user->userDetail->profile_image != "")
+                                                    <img src="{{ asset('uploads/img/'.$user->userDetail->profile_image) }}" alt="no">
+                                                @else
+                                                    <img src="{{ asset('assets/img/member1.PNG') }}" alt="no">
+                                                @endif
                                             </div>
                                             <div class="member-details">
-                                                <h3 class="text-12">Richardo Ranchet</h3>
-                                                <a href="mailto:ricardo_ranchet@gmail.com">ricardo_ranchet@gmail.com</a>
+                                                <h3 class="text-12">{{ $user->userDetail->name }}</h3>
+                                                <a href="mailto:ricardo_ranchet@gmail.com">{{ $user->userDetail->email }}</a>
                                             </div>
                                         </div>
                                     @endif
@@ -312,27 +316,31 @@
                                         </div>
                                     </div>
                                     <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane tab-border active" id="users">
-                                        <table class="table table-responsive">
+                                        <table class="table table-responsive" id="group_users_edit_table">
                                             <thead>
                                             <tr>
-                                                <th>Group Admin Details</th>
+                                                <th>Group Users Details</th>
                                                 <th>Followings</th>
                                                 <th>Followers</th>
                                                 <th>Points</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
+                                           @php
+                                           /*
                                             <tbody>
                                             @foreach($groupData->groupUsers as $user)
-                                            <tr>
-                                                <td><p class="blue">{{ $user->userDetail->name }}<span>{{ $user->userDetail->email }}</span></p></td>
-                                                <td><p>{{ count($user->following) }}<span></span></p></td>
-                                                <td><p>{{ count($user->followers) }}<span></span></p></td>
-                                                <td><p>02<span></span></p></td>
-                                                <td><p><a class="promoteToAdmin {{ ( $groupData->group_owner == $user->user_id OR $user->is_admin == '1') ? 'active-admin' : 'deactive-admin' }}">Make Group Admin<span></span></a></p></td>
-                                            </tr>
+                                                <tr>
+                                                    <td><p class="blue">{{ $user->userDetail->name }}<span>{{ $user->userDetail->email }}</span></p></td>
+                                                    <td><p>{{ count($user->following) }}<span></span></p></td>
+                                                    <td><p>{{ count($user->followers) }}<span></span></p></td>
+                                                    <td><p>02<span></span></p></td>
+                                                    <td><p><a class="promoteToAdmin {{ ( $groupData->group_owner == $user->user_id OR $user->is_admin == '1') ? 'active-admin' : 'deactive-admin' }}">Make Group Admin<span></span></a></p></td>
+                                                </tr>
                                             @endforeach
                                             </tbody>
+                                           */
+                                           @endphp
                                         </table>
                                     </div>
                                 </div>
