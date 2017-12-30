@@ -46,6 +46,7 @@
         Route::match(['PUT','POST'],'/post/idea_update/{id}','PostController@idea_update')->name('idea.update');
         Route::match(['get','POST'],'/post/idea_list','PostController@idea_list')->name('idea.list');
         Route::resource('post' , 'PostController');
+        Route::match(['get','POST'],'/post/deletePost','PostController@deletePost')->name('deletePost');
         Route::get('like_post/{id}' , 'PostController@like_post');
         Route::get('dislike_post/{id}' , 'PostController@dislike_post');
         Route::get('get_post' , 'PostController@get_post');

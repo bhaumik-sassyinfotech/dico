@@ -22,16 +22,7 @@
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    @if(session()->has('success'))
-                    <div class="alert alert-success">
-                        {{ session()->get('success') }}
-                    </div>
-                    @endif
-                    @if(session()->has('err_msg'))
-                    <div class="alert alert-danger">
-                        {{ session()->get('err_msg') }}
-                    </div>
-                    @endif
+                   @include('template.notification')
                     <table class="table table-bordered table-striped" id="security_question_table">
                         <thead>
                         <tr>

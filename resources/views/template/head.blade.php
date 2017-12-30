@@ -35,6 +35,7 @@
 <link href="{{asset('public/css/select2.css')}}" rel="stylesheet" />
 <link href="{{asset(ASSETS_URL.'css/jquery.tagit.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset(ASSETS_URL.'css/tagit.ui-zendesk.css')}}" rel="stylesheet" type="text/css">
+<link href="{{ asset('assets/css/owl.carousel.css') }}" rel="stylesheet" type="text/css">
 <script type="text/javascript">
     var SITE_URL = '<?php echo url('/'); ?>';
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";
@@ -43,6 +44,6 @@
 </script>
 <style type="text/css">
 	.error {
-		color:#ff4a4a;
+		color:#ff4a4a !important;
 	}
 </style>

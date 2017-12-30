@@ -51,4 +51,6 @@
 <script type='text/javascript' src='{{asset("assets/plugins/bootbox/bootbox.min.js")}}'></script> 
 <script type='text/javascript' src='{{asset("assets/demo/demo-modals.js")}}'></script> 
 <script type='text/javascript' src='{{asset("assets/js/placeholdr.js")}}'></script> 
-<script type='text/javascript' src="{{asset('assets/demo/demo.js')}}"></script> 
+<script type='text/javascript' src="{{asset('assets/demo/demo.js')}}"></script>
+<script type='text/javascript' src="{{asset('assets/js/previews.js')}}"></script>
+<script type='text/javascript' src="{{asset('assets/js/owl.carousel.min.js')}}"></script>

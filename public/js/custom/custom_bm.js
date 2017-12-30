@@ -107,9 +107,9 @@ var groupTable = $('#group_table').DataTable({
     ajax: SITE_URL + '/group/list',
     searching: true,
     columns: [
-        {data: 'rownum', name: 'rownum'},
         {data: 'group_name'},
         {data: 'description'},
+        {data: 'group_posts_count'},
         {data: 'group_users_count'},
         {data: 'actions', sorting: false, orderable: false}
     ]
@@ -432,7 +432,8 @@ $('.ideaStatus').click(function (ev) {
             showLoaderOnConfirm: true
         }, function (inputValue) {
             if (inputValue === false) return false;
-            if (inputValue === "" || $.trim(inputValue) === "") {
+            if ( inputValue === "" || $.trim(inputValue ) === "")
+            {
                 swal.showInputError("Please enter a valid reason for your decision!");
                 return false
             }
@@ -509,4 +510,34 @@ $("#login_form").validate({
         $(".loginBtn").prop('disabled',true);
         form.submit();
     }
+});
+
+// $('#delete_post_form').submit();
+
+$('.delete_post_btn').click(function () {
+    swal({
+            title: "Are you sure?",
+            text: "This post will be deleted.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes",
+            closeOnConfirm: false
+        },
+        function () {
+            $.ajax({
+                url: SITE_URL + '/group/editUsers',
+                method: 'POST',
+                data: dataString,
+                success: function (response) {
+
+                    var status = response.status;
+                    swal("Success", response.msg, "success");
+                    if (status == 1) {
+                        groupEditTable.draw();
+                    }
+                    companyUsers();
+                }
+            });
+        });
 });

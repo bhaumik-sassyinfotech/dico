@@ -6,6 +6,7 @@
     use App\Group;
     use App\GroupUser;
     use App\User;
+    use App\Post;
     use Auth;
     use Carbon\Carbon;
     use DB;
@@ -166,15 +167,19 @@
         public function edit($id , Request $request)
         {
             $id = Helpers::decode_url($id);
+            
             $groupId   = $id;
             $companies = Company::all();
             $groupData = Group::with([ 'groupUsers','groupUsers.userDetail' ,'groupUsers.followers','groupUsers.following' ])->where('id' , $id)->first();
-            
+            $userPosts = Post::with(['postLike','postComment','postTag','postUser'])->where('group_id',$groupId)->get();
+            $count['admins'] = count(GroupUser::where('is_admin' , '1')->where('group_id',$groupId)->get()->toArray());
+            $count['total_users'] = $groupData->groupUsers->count();
+            $count['total_posts'] = $userPosts->count();
 //            dd($groupData->groupUsers->pluck('user_id')->toArray());
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id' , '!=' , 1)->whereNotIn('id' , $groupUsers)->get();
             
-            return view($this->folder . '.groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
+            return view($this->folder . '.groups.edit' , compact('groupData' , 'count','companies' , 'companyEmployee' , 'groupId','userPosts'));
         }
         
         /**
@@ -247,7 +252,7 @@
         {
             $currUser = Auth::user();
             DB::statement(DB::raw('set @rownum=0'));
-            $group = Group::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'groups.*' ])->withCount([ 'groupUsers' ])->orderBy('id' , 'DESC')->get();
+            $group = Group::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'groups.*' ])->withCount([ 'groupUsers','groupPosts' ])->orderBy('id' , 'DESC')->get();
 //            return $group;
             
             return Datatables::of($group)->addColumn('actions' , function ($row) use ($currUser) {
@@ -424,7 +429,7 @@
                 $company_id = $request->input('company_id');
                 $group_id   = $request->input('group_id');
                 $response = [ 'status' => 0 , 'data'=>[] , 'msg' => "Please try again later." ];
-                if(empty($user_email) && empty($company_id) && empty($group_id))
+                if( empty($user_email) || empty($company_id) || empty($group_id) )
                 {
                     $response = [ 'status' => 0 , 'data'=>[] , 'msg' => "Field cannot be left empty." ];
                 } else {

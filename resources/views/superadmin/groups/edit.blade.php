@@ -14,7 +14,10 @@
             
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-12 col-md-2">
+                    @include('template.notification')
+                   <?php
+                    /*
+                      <div class="col-sm-12 col-md-2">
                         <form id="upload_form" method="post" action="{{ url('group/uploadGroupPicture') }}" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <input type="hidden" value="{{ $groupData->id }}" name="group_id">
@@ -30,27 +33,76 @@
                                     <img id="preview_img" src="{{ $img }}">
                                 </div>
                             </div>
-                            <input class="update-button st-btn" style="position:relative;display: block; width: 100%;" type="submit" value="Submit" name="">
+                           
     
                         </form>
                         
                     </div>
-                    <div class="group-left-list col-sm-12 col-md-7">
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h4>Group Description:</h4>
-                                <div class="pull-right">
-                                    <a href="#"><img  src="{{ asset('assets/img/notification.png') }}" alt="notification"></a>
-                                    <a href="#"><img  src="{{ asset('assets/img/add-agent.png') }}" alt="add user"></a>
+                     */
+                    ?>
+                    
+                   
+                  
+                    <div class="group-images-left col-md-9 col-sm-12">
+                        <div class="form_box grp-left">
+                            <form id="upload_form" method="post">
+                            
+                            </form>
+                            <form id="upload_form" method="post" action="{{ url('group/uploadGroupPicture') }}" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                <input type="hidden" value="{{ $groupData->id }}" name="group_id">
+                                <input type="hidden" id="group_id" value="{{ $groupId }}">
+                                <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
+    
+                                <div class="update-wrap">
+                                    <input type="file" id="image" name="group_picture" class="fileinput">
+                                    <label>Upload Photo</label>
+                                    <div class="preview_box">
+                                        @php
+                                            $img = asset('assets/img/upload-image.png');
+                                            if($groupData->group_image != "")
+                                                $img = asset('public/uploads/groups/'.$groupData->group_image);
+                                        @endphp
+                                        <img id="preview_img" src="{{ $img }}">
+                                    </div>
+                                </div>
+                                <input class="update-button st-btn" style="position:relative;display: block; width: 100%;" type="submit" value="Submit" name="">
+                            </form>
+                        </div>
+                        <div class="group-left-list grp-left">
+                            <div class="panel panel-midnightblue">
+                                <div class="panel-heading">
+                                    <h4>Group Description:</h4>
+                                    <div class="pull-right">
+                                        <a href="#"><img  src="{{ asset('assets/img/notification.png') }}" alt="notification"></a>
+                                        <a href="javascript:;" data-group-id="{{ $groupId }}" data-company-id="{{ $groupData->company_id }}" class="addUserToGroup"><img  src="{{ asset('assets/img/add-agent.png') }}" alt="add user"></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    @if(empty($groupData->description))
+                                        <p>-</p>
+                                    @else
+                                        <p>{{ nl2br($groupData->description) }}</p>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="panel-body">
-                                <p>{{ nl2br($groupData->description) }}</p>
+                        </div>
+                       
+                        <div class="group-box">
+                            <div class="group-item one">
+                                <h2>{{ $count['admins'] }}</h2>
+                                <p>Group Admins</p>
+                            </div>
+                            <div class="group-item two">
+                                <h2>{{ $count['total_users'] }}</h2>
+                                <p>Group Members</p>
+                            </div>
+                            <div class="group-item three">
+                                <h2>{{ $count['total_posts'] }}</h2>
+                                <p>Group Posts</p>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="group_id" value="{{ $groupId }}">
-                    <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
                     <div class="group-right-list col-sm-12 col-md-3">
                         
                         <div class="category">
@@ -96,223 +148,154 @@
                                 <div class="tab-content">
                                     <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane" id="threads">
                                         <div  class="post-slider owl-carousel">
-                                            <div class="item">
-                                                <div class="panel-1 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Ideas</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-pencil"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-trash-o"></i></a>
-                                                        </div>
-                                                    
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4>lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-thumbs-o-up"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-comment-o"></i><span>06</span></div>
-                                                            </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
+                                            @if(count($userPosts) == 0)
+                                                <div class="item">
+                                                    <div class="panel-primary panel-1">
+                                                        <div class="panel-heading"></div>
+                                                        <div class="panel-body">
+                                                            <p>Current no post belong to this group.</p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="panel-2 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Questions</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-pencil"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-trash-o"></i></a>
+                                            @else
+                                                @foreach($userPosts as $post)
+                                                    <div class="item">
+                                                        @php
+                                                            $panelClass = '';
+                                                            $question_type = $post->post_type;
+                                                            if($question_type == 'idea')
+                                                                $panelClass = 'panel-1';
+                                                            else if($question_type == 'question')
+                                                                $panelClass = 'panel-2';
+                                                            else
+                                                                $panelClass = 'panel-3';
+                                                        @endphp
+                
+                                                        <div class="{{ $panelClass }} panel-primary">
+                                                            <div class="panel-heading">
+                                                                <h4 class="icon">{{ ucfirst($question_type) }}</h4>
+                                                                <div class="pull-right">
+                                                                    <form action="{{ url('/post/index') }}" method="post" id="delete_post_form">
+                                                                        <input type="hidden" value="{{ $post->id }}">
+                                                                        <a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a>
+                                                                        @if($post->user_id == Auth::user()->id)
+                                                                            <a href="{{ route('post.edit',[$post->id])  }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                            <a href="javascript:;" class="delete_post_btn">
+                                                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                                            </a>
+                                                                        @endif
+                                                                    </form>
+                                                                </div>
+                    
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <h4>{{ $post->post_title }}</h4>
+                                                                <p class="user-icon">-{{ $post->postUser->name }}<span>on {{ date('Y-m-d H:i' , strtotime($post->created_at)) }}</span></p>
+                                                                <fieldset>
+                                                                    <p>{{ $post->post_description }}</p>
+                                                                </fieldset>
+                                                                <div class="btn-wrap">
+                                                                    <a href="{{ url('viewpost/'.Helpers::encode_url($post->id)) }}">Read More</a>
+                                                                </div>
+                                                                <div class="panel-body-wrap">
+                                                                    <div class="wrap-social pull-left">
+                                                                        <div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>{{ (isset($post->postLike) && count($post->postLike) != 0) ? count($post->postLike) : 0  }}</span></div>
+                                                                        <div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>{{ isset(Helpers::postViews($post->id)['views']) ? Helpers::postViews($post->id)['views'] : 0 }}</span></div>
+                                                                        <div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>{{ (isset($post->postComment) && count($post->postComment) != 0) ? count($post->postComment) : 0  }}</span></div>
+                                                                    </div>
+                                                                    <div class="status pull-right">
+                                                                        <p>Status:<span>{{ $post->status == '1' ? 'Active' : 'Inactive' }}</span></p>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="post-circle">
+                                                                    @if(isset($post->postTag))
+                                                                        {{--                                                                @foreach($post->postTag as $tag)--}}
+                                                                        <a href="#"> Dummy</a>
+                                                                        {{--@endforeach--}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="panel-body">
-                                                        <h4>lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-thumbs-o-up"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-comment-o"></i><span>06</span></div>
-                                                            </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
+                                                    <?php
+                                                    /*
+                                                      <div class="item">
+                                                    <div class="panel-2 panel-primary">
+                                                        <div class="panel-heading">
+                                                            <h4 class="icon">Questions</h4>
+                                                            <div class="pull-right">
+                                                                <a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
+                                                                    <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                <a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="panel-3 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Challenges</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-pencil"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-trash-o"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4>lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-thumbs-o-up"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-comment-o"></i><span>06</span></div>
+                                                        <div class="panel-body">
+                                                            <h4>Lorem lpsum is dummy text</h4>
+                                                            <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
+                                                            <fieldset>
+                                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+                                                            </fieldset>
+                                                            <div class="btn-wrap">
+                                                                <a href="question-details.php">Read More</a>
                                                             </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
+                                                            <div class="panel-body-wrap">
+                                                                <div class="wrap-social pull-left">
+                                                                    <div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
+                                                                    <div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
+                                                                    <div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
+                                                                </div>
+                                                                <div class="status pull-right">
+                                                                    <p>Status:<span>Active</span></p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> <div class="item">
-                                                <div class="panel-1 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Ideas</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-pencil"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-trash-o"></i></a>
-                                                        </div>
-                                                    
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4>lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-thumbs-o-up"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-comment-o"></i><span>06</span></div>
+                                                            <hr>
+                                                            <div class="post-circle">
+                                                                <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
                                                             </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="panel-2 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Questions</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-pencil"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-trash-o"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4>lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-thumbs-o-up"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-comment-o"></i><span>06</span></div>
-                                                            </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
+                                                <div class="item">
+                                                    <div class="panel-3 panel-primary">
+                                                        <div class="panel-heading">
+                                                            <h4 class="icon">Challenge</h4>
+                                                            <div class="pull-right">
+                                                                <a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
+                                                                    <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                <a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="panel-3 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Challenges</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-pencil"></i></a>
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-trash-o"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4>lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-thumbs-o-up"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-comment-o"></i><span>06</span></div>
+                                                        <div class="panel-body">
+                                                            <h4>Lorem lpsum is dummy text</h4>
+                                                            <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
+                                                            <fieldset>
+                                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+                                                            </fieldset>
+                                                            <div class="btn-wrap">
+                                                                <a href="challenges.php">Read More</a>
                                                             </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
+                                                            <div class="panel-body-wrap">
+                                                                <div class="wrap-social pull-left">
+                                                                    <div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
+                                                                    <div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
+                                                                    <div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
+                                                                </div>
+                                                                <div class="status pull-right">
+                                                                    <p>Status:<span>Active</span></p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
+                                                            <hr>
+                                                            <div class="post-circle">
+                                                                <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                     */
+                                                    ?>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
                                     <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane tab-border active" id="users">

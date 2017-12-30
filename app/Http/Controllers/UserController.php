@@ -75,6 +75,7 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+        
         if (Auth::user()) {
             $company_id = Auth::user()->company_id;
             $usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();

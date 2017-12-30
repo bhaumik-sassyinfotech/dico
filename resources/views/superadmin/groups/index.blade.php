@@ -35,6 +35,21 @@
                                                         class="hidden-xs">My Group Users</span></a></li>
                                     </ul>
                                 </h4>
+                                <div class="btn-group top-set">
+                                    <form method="post" class="search-form">
+                                        <input placeholder="Search User" type="text">
+                                        <input value="#" class="search-icon" type="button">
+                                    </form>
+                                    <button id="GoList" class="grid-view active">
+                                        <img src="assets/img/icon/group-list.png" alt="group" class="block">
+                                        <img src="assets/img/icon/group-lis-hover.png" alt="group" class="none" style="display:none">
+                                    </button>
+                                    <button id="GoGrid" class="grid-view">
+                                        <img src="assets/img/icon/grid-view.png" alt="group list" class="block">
+                                        <img src="assets/img/icon/grid-view-hover.png" alt="group list" class="none" style="display:none">
+        
+                                    </button>
+                                </div>
                             </div>
                             <div class="panel-body">
                                 <div class="tab-content">
@@ -44,9 +59,12 @@
                                             
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="panel panel-info ">
+                                                    <div class="panel panel-info " style="overflow-x:auto;">
                                                         <div class="panel-heading trophy">
                                                             <h4 class="icon">Users List</h4>
+                                                            <div class="pull-right">
+                                                                <a href="#"><img src="{{ asset('assets/img/settings-icon.png') }}" alt="settings"></a>
+                                                            </div>
                                                         </div>
                                                         <div class="panel-body">
                                                             <div class="row">
@@ -97,9 +115,12 @@
                                             
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="panel panel-info ">
+                                                    <div class="panel panel-info " style="overflow-x: auto;" >
                                                         <div class="panel-heading trophy">
                                                             <h4 class="icon">Group List</h4>
+                                                            <div class="pull-right">
+                                                                <a href="#"><img src="{{ asset('assets/img/settings-icon.png') }}" alt="settings"></a>
+                                                            </div>
                                                         </div>
                                                         <div class="panel-body">
                                                             <div class="row">

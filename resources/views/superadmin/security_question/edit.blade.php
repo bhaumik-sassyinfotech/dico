@@ -2,25 +2,8 @@
 <title>DICO - SecurityQuestion</title>
 @section('content')
 
-@if(session()->has('success'))
-<div class="alert alert-success">
-    {{ session()->get('success') }}
-</div>
-@endif
-@if(session()->has('err_msg'))
-<div class="alert alert-danger">
-    {{ session()->get('err_msg') }}
-</div>
-@endif
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
+@include('template.notification')
+
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
@@ -29,34 +12,35 @@
                 <li><a href="{{ route('security_question.index') }}">Security Question</a></li>
                 <li class="active">Update Security Question</li>
             </ol>
-            <h1>Security Question</h1>
+            <h1 class="tp-bp-0">Security Question</h1>
+            <hr class="border-out-hr">
             <?php /*<div>
                 <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('security_question.index') }}">Security Question</a> > Update Security Question</p></div>
             </div>*/?>
         </div>
         <div class="container">
-            <div class="panel panel-default">
-                {!! Form::model($security_question, ['method' => 'PUT', 'route' => ['security_question.update', $security_question->id],'enctype'=>'multipart/form-data', 'id' => 'security_question_form']) !!}
-                    
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Question<span>*</span></label>
-                                <input type="text" name="question" id="question" value="{{$security_question->question}}" placeholder="Security Question" class="form-control required">
+            <div class="row">
+                <div id="create-user-from">
+                    <form name="security_question_form" id="security_question_form" method="POST"
+                          action="{{ route('security_question.update',[$security_question->id]) }}" class="common-form" >
+                        {{ csrf_field() }}
+                        {{ method_field('PUT') }}
+                        <div class="form-group">
+                            <label class="text-15">Question<span>*</span></label>
+                            <input type="text" name="question" id="question"
+                                   placeholder="Security Question"
+                                   class="form-control required" value="{{$security_question->question}}">
+                        </div>
+                        <div class="form-group">
+                            <div class="btn-wrap-div">
+                                <input type="submit" class="st-btn" value="Submit">
+                                <a href="{{ url()->previous() }}" class="st-btn">Back</a>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-footer">
-                            <div class="options">
-                                <div class="btn-toolbar">
-                                    <a href="{{ route('security_question.index') }}" class="btn btn-default">Back</a>
-                                    <input type="submit" name="save" id="save" class="btn btn-primary">
-                                </div>
-                                <div style="clear: both;"></div>
-                            </div>
-                        </div>
-               <!-- </form>     -->
-               {!! Form::close() !!}
+                    </form>
+            
+            
+                </div>
             </div>
         </div>
     </div>
