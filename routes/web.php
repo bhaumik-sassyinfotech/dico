@@ -67,6 +67,7 @@
         Route::get('tag/{id}','TagController@tagpost');
         Route::post('loadmoretagpost','TagController@loadmoretagpost');
         Route::post('comment_update','PostController@comment_update');
+        Route::post('allComments','PostController@allComments');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

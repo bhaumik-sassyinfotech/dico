@@ -98,11 +98,20 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
     width: 78%;
 }
 
+.employe-profile .group-item.one a:hover {
+  text-decoration: none;
+  color: #646464;    
+}
+
+.employe-profile .group-item.one a {
+  color: #59C4EA;
+}
+
 .group-item p {
   color: #646464;
   font-family: open sans;
   font-size: 15px;
-  font-weight: normal;
+  font-weight: lighter;
   margin-top: 5px;
 }
 
@@ -565,7 +574,7 @@ body .group-listing .group-left-list .panel-midnightblue .panel-body {
   font-family: "Open Sans",sans-serif;
   font-size: 50px;
   font-weight: 100;
-  line-height: 130%;
+  line-height: 150%;
 }
 
 .post-details #page-heading h1,
@@ -784,11 +793,10 @@ body .text-12{
   margin-top: 0;
 }
 .st-btn:hover,
-.upload-btn:hover
-{
-  background-color: #cccccc;
-  border-color: #333333;
-  color: #333333;
+.upload-btn:hover{
+  background-color: #E4E6E8;
+  border: 1px solid #999;
+  color: #353535;
   text-decoration: none;
 }
 .post-form .field-group::after {
@@ -873,7 +881,7 @@ body .text-12{
 }
 .user-image > a {
   background-color: #00bcdd;
-  border: 1px solid #000;
+  border: 1px solid #009bb9;
   color: #fff;
   display: block;
   font-size: 12px;
@@ -950,6 +958,7 @@ body .text-12{
 }
 .user-image .img-wrap {
   background-color: #cccccc;
+  border: 1px solid #9e9e9e;
   display: block;
   height: 70px;
   position: relative;
@@ -1025,8 +1034,9 @@ body .text-12{
   width: 20%;
   text-align: right;
 }
-.category .post-links {
-  max-height: 170px;
+.category .post-links,
+.group-listing .category .post-category{
+  max-height: 220px;
   overflow-x: hidden;
 }
 .post-wrap-details .post-btn-wrap {
@@ -1056,19 +1066,45 @@ body .text-12{
   padding: 10px 35px;
 }
 .post-wrap-details .post-btn-wrap .post-btn > a:hover {
-  background-color: #CCCCCC;
+  background-color: #cccccc;
+  border-color: #999;
   text-decoration: none;
 }
+.point-page .table a {
+  color: #006dc7;
+  font-family: Open Sans;
+  font-size: 12px;
+  font-weight: 100;
+  line-height: 100%;
+}
+
+.point-page .table > thead > tr > th{
+  border-bottom: 1px solid #ddd;
+}
+.point-page .table > tbody + tbody{
+  border-top: 1px solid #ddd;
+}
+
+
+
 .post-btn-wrap .post-btn.deny > a {
-  background-color: #F93341;
+  background-color: #f93341;
+  border: 1px solid #d70b27;
+  text-decoration: none;
 }
 .post-btn-wrap .post-btn.ammend > a {
-  background-color: #FAC039;
+  background-color: #fac039;
+  border: 1px solid #c19e49;
 }
 .post-reply-pop .star-wrap {
   float: left;
   margin-right: 30px;
 }
+
+.tag-section {
+  margin-top: 15px;
+}
+
 .post-reply-pop .options .btn-toolbar {
   float: left;
 }
@@ -1298,8 +1334,8 @@ p.user-icon:before {
   margin-left: 0;
 }
 body #wrap .tp-bp-0 {
-  padding-bottom: 5px;
-  padding-top: 5px;
+  padding-bottom: 2px;
+  padding-top: 0;
 }
 /*------------------------------------------------------*/
 /*close Meetings details */
@@ -1394,7 +1430,7 @@ form .form-group {
   display: inline-block;
   float: left;
   font-family: Open Sans;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 100;
   height: 40px;
   line-height: 100%;
@@ -1403,14 +1439,16 @@ form .form-group {
   width: 71%;
 }
 .form-group > textarea {
-  height: 110px;
+  height: 133px;
   line-height: 160%;
   padding: 10px 15px;
 }
 .common-form .btn-wrap-div {
   margin-left: 29%;
 }
-
+.common-form #myModal .form-group > label {
+  line-height:90%;
+}
 .heading-title {
   color: #353535;
   font-size: 16px;
@@ -1496,13 +1534,14 @@ body .new-meeting-details .new-meeting-tab li.active > a {
   border-style: solid;
   border-width: 1px;
   color: #000;
-  font-size: 14px;
+  font-size: 10px;
   background-color: transparent;    
   -webkit-transition: all 0.5s ease 0s;
   -moz-transition: all 0.5s ease 0s;
   -o-ms-transition: all 0.5s ease 0s;
   transition: all 0.5s ease 0s;
- float: left;    
+ float: left;   
+ width: 75%;    
 }
 
 .category-tab input:focus:not([type="submit"]), 
@@ -1517,17 +1556,17 @@ body .new-meeting-details .new-meeting-tab li.active > a {
 }
 
 .category-tab .st-btn {
+  border: none;
   float: right;
-  font-size: 16px;
-  padding: 0 13px;
+  font-size: 10px;
+  padding: 3px 12px;
 }
 
 .new-meeting-details #profile1 .category-tab {
   background-color: #fff;
   border: 1px solid #999;
-  padding: 15px 20px;
+  padding: 15px 10px;
 }
-
 .category-tab > form {
   display: block;
   position: relative;
@@ -1566,6 +1605,21 @@ body .new-meeting-details .new-meeting-tab li.active > a {
   opacity: 1;    
 }
 
+.login-page .common-form .form-group > input::-webkit-input-placeholder,
+.login-page .common-form .form-group > textarea::-webkit-input-placeholder{ /* Chrome/Opera/Safari */
+  color: #323232;
+  opacity: 1;    
+}
+
+
+.login-page .common-form .form-group > input::-moz-placeholder,
+.login-page .common-form .form-group > textarea::-moz-placeholder
+{ /* Firefox 19+ */
+  color: #323232;
+  opacity: 1;    
+}
+
+
 
 .post-form .field-group textarea:-ms-input-placeholder{ /* IE 10+ */
   color: #333;
@@ -1596,7 +1650,11 @@ body .new-meeting-details .new-meeting-tab li.active > a {
   opacity: 1;    
 }
 
-
+.upload-btn-wrapper:hover button {
+  background-color: #328ed8;
+  border: 1px solid #0066af;
+  color: #fff;
+}
 
 .new-meeting-details .category .post-category:last-child {
   border-bottom: medium none;
@@ -1777,18 +1835,17 @@ body.modal-open .modal-backdrop.in {
 .create-post .common-form .check .checked{
   position: relative;
 }
-
 .create-post .common-form .check .checked::before {
-  background-image: url("../img/sprite.png");
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  content: "";
-  height: 25px;
-  left: -45px;
-  margin: 4px 16px;
-  position: absolute;
-  top: -8px;
-  width: 30px;
+    background-image: url(../img/sprite.png);
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    content: "";
+    height: 25px;
+    left: 0;
+    margin:-4px -32px;
+    position: absolute;
+    top: 0px;
+    width: 30px;
 }
 .i-con-set > a {
   margin-left: 5px;
@@ -1797,6 +1854,25 @@ body.modal-open .modal-backdrop.in {
   padding-right: 0;
 }
 
+.cancle {
+  background-color: #E4E6E8;
+  border: 1px solid #999;
+  color: #353535;
+  font-family: open sans;
+  font-size: 15px;
+  font-weight: 100;
+  padding: 8px 37px;
+}
+
+.cancle:hover {
+  background-color: #328ed8;
+  border: 1px solid #0066af;
+  color: #ffffff;
+}
+
+.form-group.m-b-20 {
+  margin-bottom: 20px;
+}
 .create-post .common-form .box-check .check:hover,
 .create-post .common-form .box-check .check:active,
 .create-post .common-form .box-check .check:focus,
@@ -1868,7 +1944,7 @@ body .challenges #page-heading h1.icon-mark {
 }
 
 .upload-btn {
-  background-color: #cccccc;
+  background-color: #e4e6e8;
   border: 1px solid #999999;
   color: #333333;
   font-family: Open Sans;
@@ -2168,6 +2244,7 @@ form .form-group:last-child {
   background-color: transparent;
   border-radius: 0 !important;
   box-shadow: none !important;
+  padding: 7px 30px;
 }
 
 .user-profile .tabs button span,
@@ -2416,16 +2493,16 @@ form .form-group:last-child {
 .search-icon {
   background-color: transparent;
   background-image: url("../img/icon/search-icon.png");
-  background-position: center center;
+  background-position: left center;
   background-repeat: no-repeat;
   border: medium none;
   font-size: 0;
   height: 30px;
-  left: 0;
+  left: 10px;
+  margin-top:2px;
   position: absolute;
-  width: 30px;
   top: 0;
-  margin-top: 2px;    
+  width: 30px;
 }
 
 .search-form > input:not([type="button"]) {
@@ -2622,7 +2699,7 @@ select::-ms-expand {
 .form-group select {
   border: 1px solid #aaaaaa;
   color: #333;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 100;
   height: 40px;
   line-height: 100%;
@@ -2807,8 +2884,9 @@ select::-ms-expand {
 .list-block .btn-wrap {
   border-bottom: 1px solid #c6c6c6;
   margin-bottom: 10px;
-  padding: 10px 0;
+  padding: 18px 0 20px;
 }
+
 .profile-page .group-tabs .panel-body > p.user-icon {
   color: #000;
   font-size: 8.5px;
@@ -2820,6 +2898,26 @@ select::-ms-expand {
   font-size: 12.75px;
   line-height: 100%;
   margin-bottom: 10px;
+}
+
+.profile-page .modal-header > button::after {
+  color: #000000;
+  content: "x";
+  font-size: 20px;
+  left: 0;
+  line-height: 14px;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  top: 35%;
+  -webkit-transform: translateY(-35%);
+  -moz-transform: translateY(-35%);
+  -ms-transform: translateY(-35%);
+  -o-transform: translateY(-35%);
+  transform: translateY(-35%);
+}
+.profile-page .modal-header > button:hover::after{
+ color:#fff;    
 }
 
 .status {
@@ -2861,17 +2959,27 @@ select::-ms-expand {
   padding-left: 25px;    
 }
 
-body #page-heading h1.icon-mark,
-body .question #page-heading h1.icon-mark{
+body #page-heading h1.icon-mark, 
+body .question #page-heading h1.icon-mark {
   background-image: url("../img/question-icon.png");
-  background-position: 0 54%;
+  background-position: 0 50%;
   background-repeat: no-repeat;
+  float: none;
   margin-left: 20px;
   padding-left: 45px;
   position: relative;
 }
 body .question #page-heading h1.icon-mark {
   background-position: 0 60%;
+  margin-bottom: 5px;    
+}
+
+body .meeting-details #wrap .tp-bp-0 {
+  padding-bottom: 10px;
+}
+.settings #page-heading h1 {
+  margin: 0;
+  padding: 0 20px 10px;
 }
 
 .fmr-10 {
@@ -2881,7 +2989,7 @@ body .question #page-heading h1.icon-mark {
 body #wrap .border-out-hr {
   border-color: #565f68;
   clear: both;
-  margin: 20px 20px 10px;
+  margin: 0 20px;
 }
 
 body #wrap .border-in-hr {
@@ -3070,6 +3178,10 @@ body .idea-page #page-heading h1.icon-mark {
   border: 1px solid #0088D8;
 }
 
+.employe-profile .table > thead > tr > th {
+  border-bottom: 1px solid #ccc;
+}
+
 .ul-checkbox > li {
   float: left;
   width: 25%;
@@ -3104,7 +3216,6 @@ body .idea-page #page-heading h1.icon-mark {
   padding-left: 30px;
 }
 
-
 .panel-info .panel-heading.trophy {
   background-color: #00bcdd;
   border-top-left-radius: 4px;
@@ -3118,12 +3229,12 @@ body .idea-page #page-heading h1.icon-mark {
 
 .employe-profile .table > thead > tr > th, 
 .employe-profile .table > tbody > tr > td {
-  border: medium none !important;
   color: #646464;
   font-family: Open Sans;
   font-size: 12px;
   font-weight: 100;
   outline: medium none;
+  text-align: center;
 }
 .ul-checkbox .checkmark {
   background-color: transparent;
@@ -3141,6 +3252,9 @@ body .idea-page #page-heading h1.icon-mark {
   background-color: transparent;
 }
 
+.employe-profile .panel-info .panel-body {
+  padding: 2px 10px;
+}
 
 .employe-profile table {
   margin: 0;
@@ -3148,7 +3262,7 @@ body .idea-page #page-heading h1.icon-mark {
 
 .employe-profile .table > thead > tr > th {
   color: #323232;
-  font-weight: normal;
+  font-weight: 600;
 }
 
 .profile-page .modal-dialog,
@@ -3232,7 +3346,7 @@ body .idea-page #page-heading h1.icon-mark {
 }
 
 .jobs-title.emp {
-  color: #a8dcf1;
+  color: #83d3ef;
 }   
 .jobs-title.adm {
   color: #A9B8C7;
@@ -3240,7 +3354,13 @@ body .idea-page #page-heading h1.icon-mark {
 .jobs-title.su{
   color: #333;
 }   
-
+.follow-name > a:hover{
+  color: #333;
+  text-decoration: none;    
+}   
+.common-form .calendar {
+  margin-top: 30px;
+}
 .jobs-title {
   bottom: 0;
   display: block;
@@ -3306,6 +3426,8 @@ body .idea-page #page-heading h1.icon-mark {
 }
 .tags-page #page-heading h1 {
   float: none;
+  line-height: 150%;
+  padding: 0 20px 10px;
 }
 .tag-button span {
   border: 1px solid #333;
@@ -3370,11 +3492,13 @@ body .idea-page #page-heading h1.icon-mark {
 }
 
 .point-page .panel .panel-heading .nav.nav-tabs > li.active {
-  border-color: #0c88db #d0d1d3 -moz-use-text-color;
-  border-style: solid solid none;
-  border-width: 3px 1px medium;
-  z-index: 1;
+  border-top: 2px solid #0c88db;
+  border-left: 1px solid #d0d1d3;     
+  border-right: 1px solid #d0d1d3;   
+  z-index: 1;    
+  border-bottom: none;    
 }
+
 
 .point-page .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li {
   margin-bottom: 0;
@@ -3485,15 +3609,32 @@ body .point-page .group-tabs > .panel-body {
   line-height: 150%;
   margin-bottom: 0;
 }
-.new-meeting-details form .form-group {
+.new-meeting-details form .form-group,
+.challenges #page-heading h1{
   margin-bottom: 10px;
+}
+.new-meeting-details #page-heading h1 {
+  margin-bottom: 8px;
 }
 .new-meeting-details .common-form .form-group:first-child > label {
   margin-bottom: 0;
 }
-.desc-content {
-    overflow: hidden; 
-    height: 3em;
-    line-height: 1em;
-}
+
 /*close point page*/
+.field-group.checkbox-btn .pull-left:last-child {
+    margin: 4px 15px;
+}
+.post-category .member-img > img, .user-image .img-wrap img {
+  border-radius: 0px;
+}
+body .breadcrumb > li + li:before {
+  color: #d2d3d6;
+  content: "\\";
+  padding: 0 7px 0 5px;
+}
+
+.calendr {
+  background-image: url("../img/calendar.png");
+  background-position: 98% center;
+  background-repeat: no-repeat;
+}

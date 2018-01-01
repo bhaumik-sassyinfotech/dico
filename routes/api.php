@@ -22,3 +22,4 @@ define('DATE_FORMAT','d/m/Y');
 define('POST_TITLE_LIMIT',50);
 define('POST_DESCRIPTION_LIMIT',130);
 define('POST_DISPLAY_LIMIT',2);
+define('COMMENT_DISPLAY_LIMIT',2);

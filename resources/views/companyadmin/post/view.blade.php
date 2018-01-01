@@ -251,17 +251,17 @@
                                          
                             } 
                         } ?>
-                            <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal">Load more</a></div>
+                            <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allComments();">View all comments</a></div>
                             <div class="modal fade" id="LoadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                      <h5 class="modal-title" id="exampleModalLabel">View all comments</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
-                                    <div class="modal-body">
+                                      <div class="modal-body" id="allcomments_box" style="height: 280px;overflow: auto;">
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -687,6 +687,30 @@
                 }
             });
         }
+    }
+    function allComments() {
+        var _token = CSRF_TOKEN;
+        var post_id = $('#post_id').val();
+        formData = {post_id:post_id,offset:3,_token};
+        $.ajax({
+            url: SITE_URL + '/allComments',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                $('#allcomments_box').html(response);
+                //res = JSON.parse(response);
+                /*if (res.status == 1) {
+                    if(res.data != "") {
+                        
+                    }
+                } else {
+                    swal("Error", res.msg, "error");
+                }*/
+            },
+            error: function(e) {
+                swal("Error", e, "error");
+            }
+        });
     }
 </script>
 @endpush

@@ -1,6 +1,22 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    /* Safari and Chrome, if Chrome rule needed */
+    .create-post .common-form .check .checked:before {
+    margin:  4px 16px;
+    }
+
+    /* Safari 5+ ONLY */
+    ::i-block-chrome, .create-post .common-form .check .checked:before {
+    margin:  4px 16px;
+    }
+}
+
+
+
+
 @media screen and (max-width:1258px){
  
    
@@ -260,7 +276,7 @@
   padding: 5px;
 }    
     
-.search-form > input:not([type="submit"]) {
+.search-form > input:not([type="button"]) {
   font-size: 10px;
   line-height: 160%;
   padding: 5px 10px 5px 30px;
@@ -401,6 +417,10 @@ body .employe-profile .employ-box {
 
 
 @media screen and (max-width:767px){
+    
+.point-page .btn-group {
+  display: block !important;
+}
 .profile-page {
   padding-bottom: 20px;
 }
@@ -536,10 +556,10 @@ body #wrap .border-in-hr {
   padding: 0;
   width: 100%;
 }
-#post-detail-left .user-image {
-  margin-right: 0%;
+#post-detail-left .group-wrap .pull-left {
+  padding-right: 15px;
   width: 100%;
-}    
+}
 #post-detail-left .group-wrap .pull-left {
   width: 100%;
 }    
@@ -621,9 +641,15 @@ body #wrap .border-out-hr {
 }    
 .common-form .form-group > textarea {
   float: none;
-  height: 120px;
+  height: 140px;
   padding: 10px;
   width: 100%;
+}
+.new-meeting-details #post-detail-right{
+  margin-bottom: 20px;
+}   
+.common-form .calendar {
+  margin-top: 10px;
 }
 .common-form .form-group > label {
   margin-bottom: 0;
@@ -939,8 +965,24 @@ p.user-icon {
 .common-form .btn-wrap-div,
 .emp.login-page .common-form .btn-wrap-div{
   margin-left: 0;
+}  
+.meetings #threads, 
+.meetings #comments,
+.meetings #users {
+  max-height: 100% !important;
+  overflow: scroll !important;
 }    
-    
+.post-details .options .btn-group {
+  margin: 10px 0 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}    
+.point-page .table th {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}    
     
     
 } 

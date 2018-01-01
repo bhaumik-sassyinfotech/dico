@@ -492,7 +492,7 @@
                 },'postUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
                 },'postAttachment','postAttachment.attachmentUser','postComment'=> function ($q) {
-                   return $q->take(4);
+                   return $q->take(COMMENT_DISPLAY_LIMIT);
                 },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
@@ -927,7 +927,28 @@
                 echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
             }
         }
-        
+       public function allComments(Request $request) {
+           try
+            {
+                if(Auth::user()) {
+                    $post_id = $request->input('post_id');
+                    $offset = $request->input('offset');
+                    //$comments = Comment::with('commentUser')->where('post_id',$post_id)->take($offset)->get();
+                    $post = Post::with('postUser','postUser.following')->with(['postComment'=> function ($q) {
+                                return $q->take(100)->skip(COMMENT_DISPLAY_LIMIT);
+                },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
+                            $q->where('user_id',  Auth::user()->id)->first(); 
+                        },'postComment.commentUserDisLike' => function($q) {
+                            $q->where('user_id',  Auth::user()->id)->first(); 
+                        },'postTag.tag'])->whereNULL('deleted_at')->where('id',$post_id)->first();
+                    return view($this->folder . '.post.allComments', compact('post'));    
+                } else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));  
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        } 
     }
-
 ?>
