@@ -6,6 +6,7 @@
     use App\Group;
     use App\GroupUser;
     use App\User;
+    use App\Post;
     use Auth;
     use Carbon\Carbon;
     use DB;
@@ -106,10 +107,10 @@
             {
                 $user               = Auth::user();
                 $group              = new Group;
-                $group->group_name  = $request->group_name;
-                $group->description = $request->group_description;
-                $group->company_id  = $request->company_listing;
-                $group->group_owner = $request->group_owner;
+                $group->group_name  = $request->input('group_name');
+                $group->description = $request->input('group_description');
+                $group->company_id  = $request->input('company_listing');
+                $group->group_owner = $request->input('group_owner');
                 $group->created_by  = $user->id;
                 $group->updated_by  = $user->id;
                 if ( $group->save() )
@@ -142,9 +143,6 @@
                 return redirect()->route('group.index')->with('err_msg' , $ex->getMessage());
             }
             
-            
-            //
-            
         }
         
         /**
@@ -169,14 +167,19 @@
         public function edit($id , Request $request)
         {
             $id = Helpers::decode_url($id);
+            
             $groupId   = $id;
             $companies = Company::all();
-            $groupData = Group::with([ 'groupUsers' ])->where('id' , $id)->first();
+            $groupData = Group::with([ 'groupUsers','groupUsers.userDetail' ,'groupUsers.followers','groupUsers.following' ])->where('id' , $id)->first();
+            $userPosts = Post::with(['postLike','postComment','postTag','postUser'])->where('group_id',$groupId)->get();
+            $count['admins'] = count(GroupUser::where('is_admin' , '1')->where('group_id',$groupId)->get()->toArray());
+            $count['total_users'] = $groupData->groupUsers->count();
+            $count['total_posts'] = $userPosts->count();
 //            dd($groupData->groupUsers->pluck('user_id')->toArray());
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id' , '!=' , 1)->whereNotIn('id' , $groupUsers)->get();
             
-            return view($this->folder . '.groups.edit' , compact('groupData' , 'companies' , 'companyEmployee' , 'groupId'));
+            return view($this->folder . '.groups.edit' , compact('groupData' , 'count','companies' , 'companyEmployee' , 'groupId','userPosts'));
         }
         
         /**
@@ -226,7 +229,7 @@
             $data = [ 'msg' => 'please try again later.' , 'success' => '0' , 'data' => [] ];
             if ( $request->ajax() )
             {
-                $companyId = $request->company_id;
+                $companyId = $request->input('company_id');
                 
                 
                 $query = User::where('company_id' , $companyId)->where('role_id' , '!=' , 1)->where('is_active' , '1');
@@ -247,13 +250,18 @@
         
         public function groupListing()
         {
+            $currUser = Auth::user();
             DB::statement(DB::raw('set @rownum=0'));
-            $group = Group::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'groups.*' ])->withCount([ 'groupUsers' ])->orderBy('id' , 'DESC')->get();
+            $group = Group::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'groups.*' ])->withCount([ 'groupUsers','groupPosts' ])->orderBy('id' , 'DESC')->get();
 //            return $group;
-//        return $group;
-            return Datatables::of($group)->addColumn('actions' , function ($row) {
-                $editBtn = '<a href="' . route('group.edit' , [ Helpers::encode_url($row->id) ]) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
-                return $editBtn;
+            
+            return Datatables::of($group)->addColumn('actions' , function ($row) use ($currUser) {
+                $addUserBtn = '';
+                $editBtn    = '<a href="' . route('group.edit', [ Helpers::encode_url($row->id) ]) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
+                if($row->group_owner == $currUser->id) {
+                    $addUserBtn = ' | <a href="javascript:void(0);" data-group-id="' . $row->id . '" data-company-id="' . $row->company_id . '" title="Edit" class="addUserToGroup" ><i class="fa fa-user"></i></a>';
+                }
+                return $editBtn.$addUserBtn;
             })->rawColumns([ 'actions' ])->make('true');
         }
         
@@ -270,7 +278,7 @@
             $groupUser    = GroupUser::find($groupUserId);
             $groupDetails = Group::where('id' , $group_id)->first();
             DB::statement(DB::raw('set @rownum=0'));
-            $groupUsers = GroupUser::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'group_users.*' ])->with([ 'userDetail' ])->where('group_id' , $group_id);
+            $groupUsers = GroupUser::select([ DB::raw('@rownum  := @rownum  + 1 AS rownum') , 'group_users.*' ])->with(['userDetail','followers','following'])->where('group_id' , $group_id);
             
             if ( $request->get('makeAdmin') == 1 )
             {
@@ -314,29 +322,45 @@
                 else
                     return Response::json([ 'msg' => 'There was some error adding users to group.' , 'status' => 0 ]);
             }
-
+    
+            $i = 25;
 //            $rowCount = 0;
-            
-            return DataTables::of($groupUsers)->addColumn('admin' , function ($row) use ($groupDetails) {
+            return DataTables::of($groupUsers)->addColumn('admin' , function ($row) use ($groupDetails)
+            {
                 $btn = '';
                 if ( $row->user_id == $groupDetails->group_owner )
                 {
-                    return "Group Owner";
+                    return "<p><a class='deactive-admin'>Group Owner</a></p>";
                 } else if ( $row->is_admin == 1 )
                 {
-                    return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger demoteToUser">Relegate to user</a>';
+                    $admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class="active-admin demoteToUser">Promote to admin</a>';
+                    $admin .= ' <a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser "><i class="fa fa-trash-o"></i></a></p>';
                 } else
                 {
-                    return '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-success promoteToAdmin">Promote to admin</a>';
+                    $admin  = '<p><a href="#" data-group-user-id="' . $row->id . '" class=" promoteToAdmin deactive-admin">Promote to admin</a>';
+                    $admin  .=  ' <a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a></p>';
                 }
+                return $admin;
+            })->addColumn('detail',function($row) {
+                return '<p class="blue">'. $row->userDetail->name .'<span>'.$row->userDetail->email.'</span></p>';
+            })->addColumn('following',function($row) {
+                return '<p >'. count($row->following).'<span></span></p>';
+            })->addColumn('followers',function($row) {
+                return '<p >'. count($row->followers).'<span></span></p>';
+            })->addColumn('points',function($row) use (&$i) {
+                $i += 12;
+                return '<p >'. $i.'<span></span></p>';
             })->addColumn('action' , function ($row) use ($groupDetails) {
                 $removeBtn = '';
-                if ( $row->user_id != $groupDetails->group_owner )
-                    $removeBtn = '<a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a>';
-                
+                if ( $row->user_id != $groupDetails->group_owner ) {
+                    $removeBtn = '<p><a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a></p>';
+                }
+                else if ( $row->user_id == $groupDetails->group_owner )
+                    $removeBtn = '<p>Group Owner</p>';
+                    
                 return $removeBtn;
 //
-            })->rawColumns([ 'admin' , 'action' ])->make(TRUE);
+            })->rawColumns([ 'admin' , 'action' ,'following','followers','detail','points' ])->make(TRUE);
         }
         
         public function validation($request)
@@ -372,5 +396,71 @@
 //            return $validator = Validator::make($request->all() , $rulesArray);
             
             return Validator::make($request->all() , $rulesArray);
+        }
+    
+        public function uploadGroupPicture( Request $request )
+        {
+            $file = $request->file('group_picture');
+            $group_id = $request->input('group_id');
+            if ( $file != "" && !empty($group_id) )
+            {
+                $postData = array();
+                //echo "here";die();
+                $fileName        = $file->getClientOriginalName();
+                $extension       = $file->getClientOriginalExtension();
+                $folderName      = '/uploads/groups';
+                $destinationPath = public_path() . $folderName;
+                $safeName        = str_random(10) . '.' . $extension;
+                $file->move($destinationPath , $safeName);
+                $updateData = ['group_image' => $safeName];
+                Group::where('id',$group_id)->update($updateData);
+                return back()->with('success','Group picture has been updated successfully.');
+            } else {
+                return back();
+            }
+            
+        }
+    
+        public function addUserByEmailAddress( Request $request )
+        {
+            if($request->ajax())
+            {
+                $user_email = $request->input('user');
+                $company_id = $request->input('company_id');
+                $group_id   = $request->input('group_id');
+                $response = [ 'status' => 0 , 'data'=>[] , 'msg' => "Please try again later." ];
+                if( empty($user_email) || empty($company_id) || empty($group_id) )
+                {
+                    $response = [ 'status' => 0 , 'data'=>[] , 'msg' => "Field cannot be left empty." ];
+                } else {
+                    if( User::where('email',$user_email)->exists() )
+                    {
+                        $user = User::where('email',$user_email)->where('company_id' , $company_id)->first();
+                        if(empty($user))
+                        {
+                            $response = [ 'status' => 0 , 'data'=>[] , 'msg' => "User with this email address doesn't exist." ];
+                        } else
+                        {
+                            
+                            if(GroupUser::where(['user_id' => $user->id , 'group_id' => $group_id , 'company_id' => $company_id])->exists())
+                            {
+                                $response = [ 'status' => 0, 'data' => [], 'msg' => "This user is already present in this group." ];
+                            } else
+                            {
+                                $now        = Carbon::now();
+                                $insertData = [ 'user_id' => $user->id, 'group_id' => $group_id, 'company_id' => $company_id, 'created_at' => $now, 'updated_at' => $now ];
+                                if ( GroupUser::insert($insertData) )
+                                    $response = [ 'status' => 1, 'data' => [], 'msg' => "User has been added to the group." ];
+                                else
+                                    $response = [ 'status' => 0, 'data' => [], 'msg' => "Please try again later." ];
+                            }
+                        }
+                        
+                    } else {
+                        $response = [ 'status' => 0 , 'data'=>[] , 'msg' => "User with this email address doesn't exist." ];
+                    }
+                }
+                return Response::json($response);
+            }
         }
     }

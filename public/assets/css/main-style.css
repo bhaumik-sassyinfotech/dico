@@ -36,7 +36,7 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   z-index: 99;
 }
 
-#upload_form > label {
+#upload_form  label {
   background-color: rgb(0, 136, 216);
   bottom: 0;
   color: #fff;
@@ -49,6 +49,7 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   text-align: center;
   z-index: 9;
 }
+
 
 .preview_box {
   background-color: #ccc;
@@ -69,6 +70,10 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   right: 0;
   top: 0;
   width: auto;    
+}
+.update-wrap {
+  position: relative;
+  display: block;
 }
 
 .form_box {

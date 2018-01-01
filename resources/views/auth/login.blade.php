@@ -1,69 +1,44 @@
-@extends('layouts.app')
+@extends('layouts.login')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
-
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a style="display: none;" class="btn btn-link" href="{{ route('password.request') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+    <style type="text/css">
+        .error1{
+            position: relative;
+            left: 145px;
+        }
+    </style>
+    <body class="login-page">
+    <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
+        <a data-original-title="Toggle Sidebar" id="leftmenu-trigger" class="tooltips" data-toggle="tooltip" data-placement="right" title=""></a>
+        <div class="navbar-header pull-left">
+            <a class="navbar-brand" href="{{ url('/') }}">Avant</a>
+        </div>
+    </header>
+    <div class="verticalcenter">
+        @include('template.notification')
+        {{--<p>Company: <span>Agency 96</span></p>--}}
+        <form class="common-form" method="POST" action="{{ route('login') }}" id="login_form">
+            {{ csrf_field() }}
+            <div class="form-group">
+                <label class="text-15">Email Id:</label>
+                <input id="email" name="email" type="email" placeholder="Enter email address" required autofocus>
+                <div id="email_error" class="error1"></div>
+            </div>
+            <div class="form-group">
+                <label class="text-15">Password:</label>
+                <input name="password" id="password" type="password" placeholder="Enter password" required>
+                <div id="password_error" class="error1"></div>
+            </div>
+            <div class="form-group">
+                <div class="btn-wrap-div">
+                    <label class="check">Remember Me<input type="checkbox" {{ old('remember') ? 'checked' : '' }}>
+                        <span class="checkmark"></span>
+                    </label>
+                    <input type="submit" value="Login" class="st-btn loginBtn">
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-</div>
+    </body>
 @endsection
+

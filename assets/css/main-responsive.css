@@ -18,7 +18,9 @@
 
 
 @media screen and (max-width:1258px){
- 
+ .group-left-list .panel-body > p {
+  font-size: 11px;
+}
    
 .common-form .form-group {
   margin-bottom: 20px;
@@ -37,6 +39,10 @@
 .profile-slider .grid-details > h4 {
     font-size: 11px;
 }   
+.super-user-employee tr label {
+  font-size: 10px;
+  line-height: 160%;
+}    
     
 }
 
@@ -155,7 +161,60 @@
     
 }
 @media screen and (max-width:1024px){
-    
+
+.point-page.super-user-employee .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li a {
+  font-size: 12px;
+  padding: 0 12px;
+}    
+.group-images-left {
+  margin-bottom: 20px;
+  width: 100%;
+}
+.point-page.all-group-list.super-user-employee .table > thead > tr > th {
+  padding: 10px;
+}
+.point-page.super-user-employee .group-tabs .tab-pane .panel-info table {
+  display: inline-block;
+  margin: 0;
+  max-height: 160px;
+  overflow: scroll;
+}
+.point-page.all-group-list .table p,
+.point-page.super-user-employee .table a,
+.super-user-employee table tbody tr label{
+  font-size: 10px;
+}    
+.point-page.all-group-list.super-user-employee .table > thead > tr > th {
+  font-size: 10px;
+}   
+.point-page.all-group-list.super-user-employee #users .table > thead > tr > th {
+  padding: 10px 12px;
+}    
+.point-page.all-group-list .table a.left-10 {
+  margin-left: 5px;
+}    
+.group-listing .profile-page .modal-dialog {
+  top: 50%;
+  -webkit-transform: translateY(-50%) translate(0px, 0px) !important;
+  -moz-transform: translateY(-50%) translate(0px, 0px) !important;
+  -ms-transform: translateY(-50%) translate(0px, 0px) !important;
+  -o-transform: translateY(-50%) translate(0px, 0px) !important;
+  transform: translateY(-50%) translate(0px, 0px) !important;
+}
+.form_box.grp-left {
+  margin-bottom: 20px;
+  padding-right: 0;
+  width: 100%;
+}
+.all-group-list.super-user-employee tr td {
+  width: auto !important;
+}
+.select.notice-left {
+  width: 25%;
+} 
+.group-listing .group-left-list {
+  margin-bottom: 20px;
+}    
 .group-listing.posts .profile-page  .group-tabs > .panel-heading {
   padding-right: 10px !important;
 }
@@ -231,8 +290,8 @@
   width: 79%;
 }
 #post-detail-left .user-image {
-  width: 20%;
-}    
+  width: 100%;
+}
     
 .post-details .group-wrap h3 {
   font-size: 16px;
@@ -311,8 +370,8 @@
     width: 100%;
 }
 .follow_box {
-    width: 100%;
-    margin-bottom: 10px;
+  margin-bottom: 10px;
+  width: 30%;
 }
 .follow_box .preview-box {
     height: 134px;
@@ -379,6 +438,13 @@ body .employe-profile .employ-box {
   transform: translateY(-30%) translate(0px, 0px) !important;
 }
     
+.upload-btn {
+  padding: 5px 28px;
+}    
+.create-post .common-form .check .checked:before {
+  margin: 3px -28px;
+}    
+    
 
 }
 
@@ -418,6 +484,11 @@ body .employe-profile .employ-box {
 
 @media screen and (max-width:767px){
     
+
+.create-post .common-form .btn-wrap-div {
+  margin-left: 0;
+}    
+
 .point-page .btn-group {
   display: block !important;
 }
@@ -616,6 +687,9 @@ body #wrap .border-out-hr {
   text-align: center;
 }
     
+.idea-page .post-wrap-details .post-btn-wrap {
+  text-align: left;
+}    
 /*------------------------------------------------------*/
 /*close post details */
 /*------------------------------------------------------*/    
@@ -944,10 +1018,10 @@ p.user-icon {
 .common-form .check {
   margin-right: 5px;
  }    
-.create-post .common-form .check .checked::before {
-  left: -40px;
-  top: -13px;    
-}    
+.create-post .common-form .check .checked:before {
+  left: 4px;
+  top: -11px;
+}   
 .create-post .common-form .box-check .check {
   font-size: 11px;
   padding: 12px 10px 10px 35px;
@@ -982,16 +1056,46 @@ p.user-icon {
   font-size: 12px;
   font-weight: bold;
   text-align: center;
+
 }    
     
     
-} 
-
-
-    
 }
-@media screen and (max-width:480px){
+
+.create-post .common-form .btn-wrap-div, .new-meeting-details .common-form .btn-wrap-div {
+  margin-left: 0;
+}
+.create-post .common-form .form-group > label, .new-meeting-details .common-form .form-group > label {
+  width: 100%;
+}    
+.padding-box.group-listing .modal-dialog .modal-content {
+  padding: 20px;
+  width: 300px;
+}     
+ .point-page.super-user-employee .btn-group {
+  display: inline-block !important;
+}  
+ .point-page.super-user-employee .btn-group.top-set,
+ .point-page.all-group-list .btn-group.top-set{
+  top: -20px;
+}
+ .point-page.super-user-employee  group-tabs > .panel-heading,
+ .point-page.all-group-list  group-tabs > .panel-heading {
+  padding-top: 10px !important;
+}    
+.point-page.super-user-employee .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li:last-child {
+  border-left: medium none;
+}
+.point-page .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li a {
+  padding: 0 15px;
+}    
+.posts #page-heading .options {
+  right: 30px;
+}
+
     
+@media screen and (max-width:480px){
+ 
     
 .active-admin, .deactive-admin {
   border-radius: 0;
@@ -1004,15 +1108,29 @@ p.user-icon {
 .group-listing tbody tr td:last-child p {
   padding: 21.5px 0;
 }    
-    
+.padding-box .modal-title {
+  font-size: 18px;
 }
-
-@media screen and (max-width:480px){
+.profile-page .modal-header > button:after {
+  line-height: 12px;
+}    
+    
+.group-listing .profile-page .modal-dialog {
+  top: 60%;
+  -webkit-transform: translateY(-60%) translate(0px, 0px) !important;
+  -moz-transform: translateY(-60%) translate(0px, 0px) !important;
+  -ms-transform: translateY(-60%) translate(0px, 0px) !important;
+  -o-transform: translateY(-60%) translate(0px, 0px) !important;
+  transform: translateY(-60%) translate(0px, 0px) !important;
+}
+    
 .group-listing tbody tr td:last-child p {
-    padding: 6px 0;
+  line-height: 140%;
+  padding: 17px 0;
 }
 .active-admin, .deactive-admin {
-    font-size: 9px;
-    padding: 5px;
-    border-radius: 0;
+  border-radius: 0;
+  font-size: 9px;
+  padding: 5px 9px;
+}
 }

@@ -30,6 +30,8 @@
         Route::get('view_profile/{id}' , 'DashboardController@view_profile');
         /*Group*/
         Route::match(['get','post'],'group/list','GroupController@groupListing');
+        Route::match(['get','post'],'group/addUserByEmailAddress','GroupController@addUserByEmailAddress');
+        Route::match(['get','post'],'group/uploadGroupPicture','GroupController@uploadGroupPicture');
         Route::match(['get','post'],'group/editUsers','GroupController@groupUsersEdit');
         Route::post('group/companyUsers','GroupController@companyUsers');
         Route::resource('group' , 'GroupController');
@@ -44,6 +46,7 @@
         Route::match(['PUT','POST'],'/post/idea_update/{id}','PostController@idea_update')->name('idea.update');
         Route::match(['get','POST'],'/post/idea_list','PostController@idea_list')->name('idea.list');
         Route::resource('post' , 'PostController');
+        Route::match(['get','POST'],'/post/deletePost','PostController@deletePost')->name('deletePost');
         Route::get('like_post/{id}' , 'PostController@like_post');
         Route::get('dislike_post/{id}' , 'PostController@dislike_post');
         Route::get('get_post' , 'PostController@get_post');

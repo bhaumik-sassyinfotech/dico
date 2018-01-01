@@ -74,14 +74,14 @@ $('.post-slider').owlCarousel({
     }
 })
 
-});
-
-
-
-
   /*
 	upload images with title
     */ document.getElementById("uploadBtn").onchange = function () {
                 document.getElementById("uploadFile").value = this.value;
             };
+});
+
+
+
+
 

@@ -77,6 +77,7 @@ class SecurityQuestionController extends Controller {
         
         $postData = array('question'=>$request->input('question'),'updated_at'=>Carbon\Carbon::now());
         $res = $security_question->where('id', $id)->update($postData);
+        
         if ($res) {
             return redirect()->route('security_question.index')->with('success', 'Security Question '.Config::get('constant.UPDATE_MESSAGE'));
         } else {

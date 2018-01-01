@@ -22,6 +22,8 @@ class Group extends Model
             ->selectRaw('group_id, count(*) as cnt')
             ->groupBy('group_id');
     }
-    
-    
+    public function groupPosts()
+    {
+        return $this->hasMany('App\Post','group_id','id');
+    }
 }

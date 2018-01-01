@@ -486,7 +486,7 @@
     public function viewpost($id) {
         $currUser = Auth::user();
         $id = Helpers::decode_url($id);
-        $view = Helpers::postViews($id);
+        $view = Helpers::postViews($id,Auth::user()->id);
         $post = Post::with('postUser','postUser.following')->with(['postLike','postDisLike','postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postUserDisLike' => function($q) {
@@ -927,6 +927,7 @@
                 echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
             }
         }
+
        public function allComments(Request $request) {
            try
             {
@@ -950,5 +951,15 @@
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         } 
+
+    
+        public function deletePost( Request $request )
+        {
+            if($request->ajax())
+            {
+                $post_id = $request->input('post_id');
+            }
+        }
+
     }
 ?>

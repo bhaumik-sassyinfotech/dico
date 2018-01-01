@@ -16,4 +16,12 @@ class GroupUser extends Model
     {
         return $this->hasOne('App\User','id','user_id');
     }
+    
+    public function followers() {
+        return $this->hasMany('App\FollowUser','receiver_user_id','user_id');
+    }
+    
+    public function following() {
+        return $this->hasMany('App\FollowUser','receiver_user_id','user_id');
+    }
 }

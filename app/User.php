@@ -42,4 +42,5 @@ class User extends Authenticatable
     public function following() {
         return $this->hasMany('App\FollowUser','receiver_user_id','id');
     }
+    
 }
