@@ -29,7 +29,8 @@ class Meeting extends Model
     
     public function meetingAttachment()
     {
-        return $this->hasOne('App\MeetingAttachment' , 'type_id' , 'id')->where('type' , 1);
+        return $this->hasMany('App\MeetingAttachment' , 'type_id' , 'id')->where('type' , 1);
+        
     }
     
     public function meetingComment()

@@ -101,7 +101,7 @@
                             <hr class="border-in-hr">
                             <div class="container">
                                 @foreach($meeting->meetingComment as $comment)
-                                <div class="row" id="comment_box_{{ $comment->id }}">
+                                <div class="row">
                                     
                                     <div class="col-sm-2 user-image">
                                         <div class="img-wrap">
@@ -111,7 +111,7 @@
                                                 if($profile_pic == "")
                                                     $profile_img = asset('assets/img/default_user.jpg');
                                                 else
-                                                    $profile_img = asset('public/uploads/profile_pic/'.$profile_pic);
+                                                    $profile_img = asset('assets/img/'.$profile_pic);
                                             ?>
                                             <img alt="post user" src="{{ $profile_img }}">
                                         </div>
@@ -138,6 +138,8 @@
                                             <?php
                                         }
                                         ?>
+
+                                    
                                     </div>
                                     <div class="col-sm-10 user-rply">
                                         <div class="post-inner-reply">
@@ -149,21 +151,20 @@
                                                 <div class="pull-right post-reply-pop">
                                                     <div class="options">
                                                         <div class="fmr-10">
-                                                            <a class="set-edit" onclick="editComment({{ $comment->id }});" href="javascript:void(0)">e</a>
-                                                            <a class="set-alarm deleteComment" data-comment-id="{{ $comment->id }}" href="javascript:void(0);">a</a>
+                                                            <a class="set-edit" href="">e</a>
+                                                            <a class="set-alarm" href="{{ url('meeting/deleteComment/'.$comment->id) }}">a</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             @endif
                                         </div>
                                         <p class="text-12">
-                                            <input type="text" id="comment_text_{{ $comment->id }}" value=" {{ $comment->comment_reply }}" readonly >
-                                            <button style="display:none;" class="saveComment st-btn" onclick="updateComment({{ $comment->id }})" id="update_comment_{{ $comment->id }}">Save</button>
+                                            {{ $comment->comment_reply }}
                                         </p>
                                         <div class="rply-box">
                                             <div class="rply-count">
                                                 <a href="#myModal" data-toggle="modal"><img
-                                                            src="{{ asset('assets/img/post-rply.png') }}"
+                                                            src="assets/img/post-rply.png"
                                                             alt="post-rply"> </a>
                                                 <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog"
                                                      tabindex="-1" id="myModal" class="modal fade"
@@ -174,17 +175,17 @@
                                                                 <button aria-hidden="true" data-dismiss="modal"
                                                                         class="desktop-close" type="button">×
                                                                 </button>
-                                                                <h4 class="modal-title">Reply to Comment</h4>
+                                                                <h4 class="modal-title">Report Comment</h4>
                                                             </div>
                                                             <form method="post" class="common-form">
                                                                 <div class="form-group">
                                                                     <label>Message To Author:</label>
-                                                                    <textarea type="text" id="comment_reply_text_{{ $comment->id }}"
+                                                                    <textarea type="text"
                                                                               placeholder="Type here"></textarea>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="btn-wrap-div">
-                                                                        <input data-comment-id="{{ $comment->id }}" class="st-btn reply_to_comment" type="button"
+                                                                        <input class="st-btn" type="submit"
                                                                                value="Submit">
                                                                         <input value="Cancel" class="st-btn"
                                                                                aria-hidden="true" data-dismiss="modal"
@@ -195,7 +196,7 @@
                                                         </div><!-- /.modal-content -->
                                                     </div><!-- /.modal-dialog -->
                                                 </div>
-                                                <p id="reply_count_{{ $comment->id }}">{{ count($comment->commentReply) }}</p>
+                                                <p>4</p>
                                             </div>
                                         </div>
                                     </div>
@@ -232,23 +233,17 @@
                         <div class="category">
                             <h2>Uploaded Files</h2>
                             <div class="idea-grp post-category">
-                                @if(count($uploadedFiles) > 0)
-                                    @foreach($uploadedFiles as $attachment)
-                                        <div class="member-wrap files-upload">
-                                            <div class="member-img">
-                                                <img src="{{ asset('assets/img/uploadfiles2.PNG') }}" alt="no">
-                                            </div>
-                                            <div class="member-details">
-                                                <h3 class="text-12">{{ $attachment->original_file_name }}</h3>
-                                                <p class="text-10">Uploaded By: <a href="#">{{ $attachment->attachmentUser->name }}</a></p>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @else
+                                @foreach($uploadedFiles as $attachment)
                                     <div class="member-wrap files-upload">
-                                        <p>No files has been attached yet.</p>
+                                        <div class="member-img">
+                                            <img src="{{ asset('assets/img/uploadfiles2.PNG') }}" alt="no">
+                                        </div>
+                                        <div class="member-details">
+                                            <h3 class="text-12">{{ $attachment->original_file_name }}</h3>
+                                            <p class="text-10">Uploaded By: <a href="#">{{ $attachment->attachmentUser->name }}</a></p>
+                                        </div>
                                     </div>
-                                @endif
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -256,6 +251,39 @@
             </div>
         </div>
     </div>
+    <!-- Comment Reply Modal START-->
+    <div id="commentReply" class="modal fade"
+         role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal">&times;
+                    </button>
+                    <h4 class="modal-title">Comment Here</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <textarea name="comment_text" id="comment_text" class="form-control autosize"
+                                  placeholder="Leave a comment here"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-danger"
+                            data-dismiss="modal">Close
+                    </button>
+                    <button type="button" id="reply_to_comment"
+                            class="btn btn-success reply_to_comment"
+                            data-dismiss="modal">
+                        Submit
+                    </button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Comment Reply Modal END-->
 @stop
 
 @push('javascripts')
@@ -268,30 +296,24 @@
             console.log("Comment ID: " + comment_id);
 
             var modal = $(this);
-            
-            // $('.reply_to_comment').unbind().click(function (e) {
-           
-        });
-        $('.reply_to_comment').click(function (e) {
-            e.preventDefault();
-            console.log("clicked"+Math.random());
-            var comment_id = $(this).data('commentId');
-            replyToComment(comment_id);
+            // modal.find('.modal-title').text('New message to ' + recipient);
+            // modal.find('.modal-body input').val(recipient);
+            $('.reply_to_comment').unbind().click(function (e) {
+                // console.log("Clicked 1"+Math.random()); 
+                e.preventDefault();
+                // console.log("Clicked 1");
+                // $(this).data('bs.modal', null);
+                replyToComment();
+            });
         });
 
-        function replyToComment(comment_id) {
-            var reply = $("#comment_reply_text_"+comment_id).val();
-            var dataString = {_token: CSRF_TOKEN , reply_text: reply,comment_id:comment_id};
-            // console.log(dataString);return false;
+        function replyToComment() {
             $.ajax({
                 type: "POST",
-                url: "{{ route('replyToMeetingComment') }}",
-                data: dataString,
+                url: SITE_URL + '/',
+                data: {},
                 success: function (response) {
-                    var reply_count = response.data.count;
-                    $("#reply_count_"+comment_id).html(reply_count);
-                    $("#myModal").modal('hide');
-                    $("#comment_reply_text_"+comment_id).val('').html('');
+                    console.log(response);
                 }
             });
         }
@@ -300,116 +322,12 @@
             rules: {
                 'comment_text': {
                     required: true,
+
                 }
             },
             submitHandler: function (form) {
                 form.submit();
             }
         });
-
-        function editComment(id) {
-            $('#comment_text_' + id).removeProp('readonly');
-            $('#update_comment_' + id).css('display', 'block');
-        }
-
-        function updateComment(id) {
-            
-                var comment = $.trim($('#comment_text_' + id).val());
-                var _token = CSRF_TOKEN;
-            if (comment != "" && comment.length > 0)
-            {
-                var formData = {id: id, comment: comment, _token: CSRF_TOKEN};
-                $.ajax(
-                {
-                    url: "{{ route('updateMeetingComment') }}",
-                    type: 'POST',
-                    data: formData,
-                    success: function (response)
-                    {
-                        var res = JSON.parse(response);
-                        if (res.status == 1)
-                        {
-                            //swal("Success", res.msg, "success");
-                            $('#comment_text_' + id).attr('readonly', true);
-                            $('#update_comment_' + id).css('display', 'none');
-                        } else {
-                            swal("Error", res.msg, "error");
-                        }
-                    },
-                    error: function (e) {
-                        swal("Error", e, "error");
-                    }
-                });
-            }
-        }
-        function comment_reply() {
-            var commentid = $('#modalComment').attr('data-id');
-            var _token = CSRF_TOKEN;
-            var post_id = $('#post_id').val();
-            var comment_reply = $('#comment_text_' + commentid).val();
-            var anonymous = 0;
-            var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
-            if ($("#is_anonymous_" + commentid).is(':checked')) {
-                anonymous = 1;
-            } else {
-                anonymous = 0;
-            }
-            var formData = {comment_id:commentid, comment_reply:comment_reply, post_id:post_id, is_anonymous:anonymous, srno:srno, _token};
-            $.ajax({
-                url: SITE_URL + '/comment_reply',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    /*res = JSON.parse(response);
-                     if (res.status == 1) {
-                     location.reload();
-                     } else {
-                     swal("Error", res.msg, "error");
-                     }*/
-                    console.log(commentid, "::::", srno);
-                    $('#commentreply_' + commentid + ' #' + srno).before(response);
-                },
-                error: function(e) {
-                    swal("Error", e, "error");
-                }
-            });
-        }
-        
-        $(document).on('click','.deleteComment',function () {
-            var comment_id = $(this).data('commentId');
-            var dataString = {_token: CSRF_TOKEN , comment_id:comment_id};
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this comment!",
-                icon: "warning",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                showLoaderOnConfirm: true
-            },function(willDelete) {
-                if (willDelete) {
-                    $.ajax({
-                        url: "{{ route('deleteMeetingComment') }}",
-                        data: dataString,
-                        type: "POST",
-                        success: function(response)
-                        {
-                            var status = response.status;
-                            var msg = response.msg;
-
-                            if(status == '1')
-                            {
-                                swal("Success",msg,"success");
-                                $("#comment_box_"+comment_id).remove();
-                            } else {
-                                swal("Error",msg,"error");
-                            }
-
-                        }
-                    });
-                }});
-        });
-        
     </script>
-    
-    
 @endpush

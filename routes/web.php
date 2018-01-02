@@ -18,6 +18,7 @@
         Route::match(['get','post'],'/user/getCompanyGroups','UserController@getCompanyGroups')->name('getCompanyGroups');
         Route::any('/test','UserController@test'); // working mail route
         Route::resource('user' , 'UserController');
+        Route::match(['get','post'],'/getUserProfile','UserController@getUserProfile');
         Route::get('edit_profile' , 'DashboardController@edit_profile');
         Route::post('update_profile' , 'DashboardController@update_profile');
         Route::post('security_update_profile' , 'UserController@security_update_profile');
@@ -61,8 +62,11 @@
         Route::get('tags' , 'PostController@tags');
     
         Route::get( 'meeting/deleteMeeting/{id}','MeetingController@deleteMeeting')->name('deleteMeeting');
+        Route::match(['get','post'],'meeting/finalizeMeeting','MeetingController@finalizeMeeting')->name('finalizeMeeting');
         Route::post('meeting/saveComment/{id}','MeetingController@savecomment');
-        Route::get( 'meeting/deleteComment/{id}','MeetingController@deletecomment');
+        Route::match( ['get','post'],'meeting/deleteComment','MeetingController@deletecomment')->name('deleteMeetingComment');
+        Route::match( ['get','post'],'meeting/UpdateComment','MeetingController@updateComment')->name('updateMeetingComment');
+        Route::match( ['get','post'],'meeting/commentReply','MeetingController@replyToComment')->name('replyToMeetingComment');
         Route::match(['get','post'],'/meeting/list','MeetingController@meetingList');
         Route::resource('meeting','MeetingController');
         Route::post('loadmorepost','PostController@loadmorepost');

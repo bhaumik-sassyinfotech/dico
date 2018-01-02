@@ -30,10 +30,42 @@ $(".sec_question").on('focus', function () {
 
 
 $(document).ready(function () {
+
     $('#users_listing').select2();
     $("#company_listing,#company_users,#group_owner").select2();
     $("#user_groups").select2();
     $("#employees_listing,#group_listing").select2();
+
+    /*show users in box while creating new meeting*/
+    $('#employees_listing').on('select2:select',function (e) {
+        var data = e.params.data;
+        var dataString = {_token:CSRF_TOKEN,user_id: data.id};
+        e.preventDefault();
+        // console.log(SITE_URL+'/getUserProfile');
+         console.log(dataString);
+        var ajaxURL = '/dico/getUserProfile';
+        $.ajax({
+            url: ajaxURL,
+            data:dataString,
+            type:"POST",
+            success: function (response) {
+                console.log(response);
+                if(response.status == '0')
+                {
+                    swal("Error","Some Error occured. Please try again later.","error");
+                } else if(response.status == '1')
+                {
+                    var profile_pic = '';
+                    var name = response.data.name;
+                    var email = response.data.email;
+                    $("#meeting_users_list")
+                        .append($('<div class="member-wrap"></div>')
+                        .append($('<div class="member-img"></div>').append(profile_pic)).append($('<div class="member-details"></div>').append('<h3 class="text-12">'+name+'</h3>').append('<a href="mailto:"'+email+'>'+email+'</a>')));
+                }
+
+            }
+        });
+    });
 });
 $("#createUserGroup").validate({
     submitHandler: function (form) {
@@ -541,3 +573,15 @@ $('.delete_post_btn').click(function () {
             });
         });
 });
+
+$("#finalize_meeting_form").validate({
+    rules:{
+        'meeting_comment': "required",
+        'meeting_summary': "required"
+    }, submitHandler: function (form) {
+        $(".saveBtn").prop('disabled',true);
+        // return false;
+        form.submit();
+    }
+});
+

@@ -13,8 +13,8 @@
                     <div class="btn-toolbar">
                         <div class="btn-group hidden-xs">
                             <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i
-                                class="fa fa-filter fa-6" aria-hidden="true"></i><span
-                                class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
+                                        class="fa fa-filter fa-6" aria-hidden="true"></i><span
+                                        class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
                         </div>
                         <a href="{{ route('group.create') }}" class="btn btn-primary">Add New</a>
                     </div>
@@ -47,7 +47,7 @@
                                     <button id="GoGrid" class="grid-view">
                                         <img src="assets/img/icon/grid-view.png" alt="group list" class="block">
                                         <img src="assets/img/icon/grid-view-hover.png" alt="group list" class="none" style="display:none">
-        
+                                    
                                     </button>
                                 </div>
                             </div>
@@ -109,7 +109,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
                                     <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane" id="users">
                                         <div class="container">
                                             
@@ -140,7 +139,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        
                                         </div>
                                     </div>
                                 </div>
@@ -148,19 +146,7 @@
                         </div>
                     </div>
                 </div>
-            
-            
             </div>
         </div>
     </div>
-    </div>
-    
-    
-    
-    
-    </div> <!-- container -->
-    </div> <!--wrap -->
-    </div> <!-- page-content -->
-
-    
 @stop

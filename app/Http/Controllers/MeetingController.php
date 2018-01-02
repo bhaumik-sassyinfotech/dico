@@ -19,6 +19,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Redirect;
+    use Response;
     use Symfony\Component\VarDumper\Cloner\Data;
     use Validator;
     use Yajra\DataTables\DataTables;
@@ -51,7 +52,21 @@
         public function index()
         {
             //
-            return view($this->folder . '.meeting.index');
+            $currUser = Auth::user();
+            $user_id  = $currUser->id;
+    
+            /*fetch list of meeting's id which current user is part of*/
+            $user_meetings = MeetingUser::where('user_id', $user_id)->pluck('meeting_id')->toArray();
+    
+            /*
+             * Private meetings will only be included in listing if user is part of it.
+             * So select meeting's id user is currently in and then check against the primary_key in `meetings` table
+             *
+             * */
+            $allMeetings = Meeting::withCount('meetingUsers')->where('privacy',0)->orderByDesc('id')->get();
+            $myMeetings = Meeting::with('meetingCreator')->withCount('meetingUsers')->where('privacy', 0)->orWhereIn('id', $user_meetings)->orderByDesc('id')->get();
+//    dd($meetings);
+            return view($this->folder . '.meeting.index' , compact('myMeetings','allMeetings'));
         }
         
         
@@ -80,7 +95,7 @@
          */
         public function store( Request $request )
         {
-            
+//            dd($request->all());
             DB::beginTransaction();
             try {
                 $currUser   = Auth::user();
@@ -92,18 +107,25 @@
                 $meeting->meeting_description = $request->meeting_description;
                 $meeting->privacy             = $privacy;
                 $meeting->created_by          = $currUser->id;
-                
+//                dd($meeting);
                 if ( $meeting->save() ) {
-                    
+//                    dd("abc");
                     $group        = $users = [];
                     $meeting_id   = $meeting->id;
-                    $meetingUsers = [ [ 'user_id' => $currUser->id, 'is_admin' => 1, 'group_id' => 0, 'meeting_id' => $meeting_id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now() ] ];
-                    foreach ( $request->employees as $key => $val ) {
-                        if ( strpos($val, 'group_') !== FALSE )
-                            $group[] = substr($val, 6);
-                        else
-                            $users[] = $val;
+                    $meetingUsers = [ [ 'user_id' => $currUser->id, 'is_admin' => 1, 'group_id' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now() ] ];
+                    if ( !empty($request->employees) )
+                    {
+                        foreach ( $request->employees as $emp )
+                        {
+                            $users[] = $emp;
+                        }
                     }
+                    if ( !empty($request->group) ) {
+                        foreach ( $request->group as $grp ) {
+                            $group[] = $grp;
+                        }
+                    }
+//                    dd([$users , $group]);
                     if ( !empty($group) )
                     {
                         foreach ( $group as $key => $val )
@@ -117,7 +139,7 @@
                                 $is_admin = 0;
                                 if ( $v != $currUser->id )
                                 {
-                                    $meetingUsers[] = [ 'user_id' => $v, 'is_admin' => $is_admin, 'group_id' => $group_id, 'meeting_id' => $meeting_id, 'created_at' => $now, 'updated_at' => $now ];
+                                    $meetingUsers[] = [ 'user_id' => $v, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
                                 }
                             }
                         }
@@ -131,7 +153,7 @@
                             $is_admin = 0;
                             if ( $val != $currUser->id )
                             {
-                                $meetingUsers[] = [ 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'meeting_id' => $meeting_id, 'created_at' => $now, 'updated_at' => $now ];
+                                $meetingUsers[] = [ 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
                             }
                         }
                     }
@@ -139,12 +161,10 @@
                     
                     if ( MeetingUser::insert($meetingUsers) ) {
                         DB::commit();
-                        
                         return redirect()->route('meeting.index')->with('success', 'Meeting has been created successfully.');
                     } else {
                         DB::rollBack();
                     }
-                    
                 } else {
                     DB::rollBack();
                     
@@ -173,16 +193,17 @@
         {
             //
             $id      = Helpers::decode_url($id);
-            $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingComment', 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser' ])->where('id', $id)->first();
-            
+            $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment', 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser' ])->where('id', $id)->first();
+            $type_ids = MeetingComment::where('meeting_id',$meeting->id)->pluck('id')->toArray();
+            $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
             $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
             $meeting_users    = User::whereIn('id', $meeting_user_ids)->get();
-            
+//            return $uploadedFiles = MeetingAttachment::with(['attachmentUser'])->whereIn('user_id',$meeting_user_ids)->get();
 //             $comments = Meeting::with()->where('id', $id)->get();
 
 //                ->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-            
-            return view($this->folder . '.meeting.detail', compact('meeting', 'meeting_users', 'comments'));
+//            dd($meeting);
+            return view($this->folder . '.meeting.detail', compact('meeting', 'meeting_users', 'comments','uploadedFiles'));
         }
         
         /**
@@ -246,19 +267,20 @@
                     $file->move($destinationPath , $safeName);
                     //$attachment = new Attachment;
                     $postData[ 'file_name' ] = $safeName;
+                    $postData[ 'original_file_name' ] = $fileName;
                     $postData[ 'type' ]      = 1;
                     $postData[ 'type_id' ]   = $id;
                     $postData[ 'user_id' ]   = $currUser->id;
 //                        $attachment              = Attachment::insert($postData);
                     $attachment              = MeetingAttachment::where('type_id',$id)->where('type',1)->where('user_id',$currUser->id);
-                    $now = Carbon\Carbon::now();
+                    $now = Carbon::now();
                     if($attachment->first())
                     {
-                        $attachment->update(['file_name' => $postData[ 'file_name' ] , 'updated_at' => $now]);
+                        $attachment->update(['file_name' => $postData[ 'file_name' ] , 'updated_at' => $now , 'original_file_name' => $postData[ 'original_file_name' ]]);
                     } else {
                 
                         $postData['created_at'] = $postData['updated_at'] = $now;
-                        Attachment::insert($postData);
+                        MeetingAttachment::insert($postData);
                     }
                 }
                 DB::commit();
@@ -321,7 +343,6 @@
 //                return $showBtn . " | " . $deleteBtn;
                 return $showBtn;
             })->rawColumns([ 'actions' ])->make(TRUE);
-//            dd($meetings);
         }
         
         public function saveComment( $id, Request $request )
@@ -340,14 +361,16 @@
                     }
                     DB::beginTransaction();
                     
-                    $meetingComment               = new MeetingComment;
-                    $meetingComment->user_id      = $user_id;
-                    $meetingComment->meeting_id   = $id;
-                    $meetingComment->comment_text = $comment_text;
+                    $meetingComment                = new MeetingComment;
+                    $meetingComment->user_id       = $user_id;
+                    $meetingComment->meeting_id    = $id;
+                    $meetingComment->comment_reply = $comment_text;
                     $res                          = 0;
                     if ( $meetingComment->save() ) {
+                        
                         $res = $meetingComment->id;
                     } else {
+                        
                         return back()->with('error', 'Some error occurred. Please try again later.');
                     }
                     $file = $request->file('file_upload');
@@ -363,7 +386,7 @@
                         $file->move($destinationPath, $safeName);
                         
                         $attachment                     = new MeetingAttachment;
-                        $attachment->meeting_id         = $id;
+//                        $attachment->meeting_id         = $id;
                         $attachment->type               = 2;
                         $attachment->type_id            = $res;
                         $attachment->user_id            = Auth::user()->id;
@@ -383,23 +406,40 @@
                 }
             }
             catch ( \exception $e ) {
+                dd($e);
                 DB::rollback();
                 
                 return Redirect::back()->with('err_msg', $e->getMessage());
             }
         }
         
-        public function deleteComment( $id = null )
+        public function deleteComment( Request $request )
         {
-            if ( MeetingAttachment::where(array( 'type_id' => $id, 'type' => 2 ))->exists() ) {
-                MeetingAttachment::where(array( 'type_id' => $id, 'type' => 2 ))->delete();
+            $id = $request->input('comment_id');
+            if(!empty($id))
+            {
+                $currUser= Auth::user();
+                $response_data = [ 'status' => 0, 'msg' => 'Please try again later.', 'data' => [] ];
+                $comment       = MeetingComment::find($id);
+                if ( (!empty($comment)) && ($comment->user_id == $currUser->id))
+                {
+                    DB::beginTransaction();
+                    if ( MeetingAttachment::where(array( 'type_id' => $id, 'type' => 2 ))->exists() )
+                    {
+                        MeetingAttachment::where(array( 'type_id' => $id, 'type' => 2 ))->delete();
+                    }
+                    $deleteComment = $comment->delete();
+                    if ( $deleteComment )
+                    {
+                        DB::commit();
+                        $response_data = ['status' => 1 , 'msg' => 'Comment has been deleted successfully.', 'data'=>[] ];
+                    } else
+                    {
+                        DB::rollBack();
+                    }
+                }
             }
-            $deleteComment = MeetingComment::where('id', $id)->delete();
-            if ( $deleteComment ) {
-                return Redirect::back()->with('success', 'Comment deleted successfully');
-            } else {
-                return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
-            }
+            return Response::json($response_data);
         }
     
         public function validation( Request $request )
@@ -417,7 +457,7 @@
                 case 'POST':
                     $rulesArray = [
                         'comment_text' => 'required',
-                        'file_upload'  => 'sometimes|required|email|max:2048'
+                        'file_upload'  => 'sometimes|required|max:2048'
                     ];
                     break;
             }
@@ -450,5 +490,65 @@
                 return Redirect::route('meeting.index')->with('error_msg','Please try again later.');
             }
             return Redirect::route('meeting.index')->with('error_msg','Please try again later.');
+        }
+    
+        public function finalizeMeeting( Request $request )
+        {
+            $meeting_id = $request->input('meeting_id');
+            $comment    = $request->input('meeting_comment');
+            $summary    = $request->input('meeting_summary');
+            $meeting = Meeting::where('id',$meeting_id)->first();
+            
+            if($meeting->created_by == Auth::user()->id)
+            {
+                Meeting::where('id', $meeting_id)->update([ 'meeting_comment' => $comment, 'meeting_summary' => $summary, 'is_finalized' => '1' ]);
+                return back()->with('success',"Meeting has been finalized successfully.");
+            }
+            
+            return back()->with('error',"Please try again later.");
+        }
+    
+        public function updateComment( Request $request )
+        {
+            try
+            {
+                $this->validate($request, [
+                    'comment' => 'required',
+                ]);
+                $comment_id   = $request->get('id');
+                $comment_text = $request->get('comment');
+                $res          = MeetingComment::where('id', $comment_id)->update([ 'comment_reply' => $comment_text ]);
+                if ( $res )
+                {
+                    echo json_encode(array( 'status' => 1, 'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE') ));
+                } else
+                {
+                    echo json_encode(array( 'status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE') ));
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+    
+        public function replyToComment( Request $request )
+        {
+            $comment_id = $request->input('comment_id');
+            $reply = $request->input('reply_text');
+            $response_data = ['status' => 0 , 'msg' => 'Please try again later.' ,'data' => []];
+            $currUser = Auth::user();
+            if(!empty($comment_id) && !empty($reply))
+            {
+                $meeting_reply                = new MeetingCommentReply;
+                $meeting_reply->comment_reply = $reply;
+                $meeting_reply->user_id       = $currUser->id;
+                $meeting_reply->comment_id    = $comment_id;
+                if($meeting_reply->save())
+                {
+                    $replyCount    = MeetingCommentReply::where('comment_id', $comment_id)->get()->count();
+                    $response_data = [ 'status' => 1, 'msg' => 'Reply has been saved successfully.', 'data' => [ 'count' => $replyCount ] ];
+                }
+            }
+            return Response::json($response_data);
         }
     }

@@ -68,7 +68,7 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   position: absolute;
   right: 0;
   top: 0;
-  width: auto;    
+  width: auto;
 }
 
 .form_box {
@@ -120,7 +120,7 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
 
 .employe-profile .group-item.one a:hover {
   text-decoration: none;
-  color: #646464;    
+  color: #646464;
 }
 
 .employe-profile .group-item.one a {
@@ -174,7 +174,7 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
 .group-listing .panel-heading {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  background-color: #3f546b;    
+  background-color: #3f546b;
 }
 
 .group-listing .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li a {
@@ -282,7 +282,7 @@ body .group-listing tbody tr td p.blue {
 
 
 
-.active-admin, 
+.active-admin,
 .deactive-admin {
   border: 1px solid #999;
   border-radius: 8px;
@@ -295,8 +295,8 @@ body .group-listing tbody tr td p.blue {
 
 .active-admin,
 .deactive-admin:hover{
- background-color: #FAC039;   
- color: #fff !important;    
+ background-color: #FAC039;
+ color: #fff !important;
 cursor: pointer;
 }
 
@@ -975,7 +975,7 @@ body .text-12{
   color: #000;
   text-decoration: none;
 }
-.user-rply .rply-box .rply-count i, 
+.user-rply .rply-box .rply-count i,
 .user-rply .rply-box .rply-count p,
 .user-rply .rply-count{
   display: inline-block;
@@ -1031,7 +1031,7 @@ body .text-12{
 .member-wrap .member-details {
   padding-top: 10px;
 }
-.category h2, 
+.category h2,
 .category-meeting h2 {
   background-color: #ecedef;
   border-bottom: 1px solid #a3a3a3;
@@ -1179,7 +1179,7 @@ body .text-12{
 .post-reply-pop .options .btn-toolbar {
   float: left;
 }
-.post-reply-pop .star-wrap p.active:before, 
+.post-reply-pop .star-wrap p.active:before,
 .post-reply-pop .star-wrap p:before {
   background-image: url("../img/common-sp.png");
   background-position: 0 0;
@@ -1242,7 +1242,7 @@ body .text-12{
 
 body .meeting-details #page-heading h1.icon-mark,
 body .meetings #page-heading h1.icon-mark{
-background-image: url("../img/group-icon.png");    
+background-image: url("../img/group-icon.png");
 }
 
 
@@ -1511,7 +1511,7 @@ form .form-group {
   position: relative;
 }
 
-.form-group > textarea, 
+.form-group > textarea,
 .form-group > input:not([type="submit"]):not([type="reset"]) {
   border: 1px solid #aaaaaa;
   color: #323232;
@@ -1635,16 +1635,16 @@ body .new-meeting-details .new-meeting-tab li.active > a {
   border-width: 1px;
   color: #000;
   font-size: 10px;
-  background-color: transparent;    
+  background-color: transparent;
   -webkit-transition: all 0.5s ease 0s;
   -moz-transition: all 0.5s ease 0s;
   -o-ms-transition: all 0.5s ease 0s;
   transition: all 0.5s ease 0s;
- float: left;   
- width: 75%;    
+ float: left;
+ width: 75%;
 }
 
-.category-tab input:focus:not([type="submit"]), 
+.category-tab input:focus:not([type="submit"]),
 .category-tab input:hover:not([type="submit"]) {
   border-bottom: 1px solid #000;
 }
@@ -1675,40 +1675,40 @@ body .new-meeting-details .new-meeting-tab li.active > a {
 
 .category-tab input::-webkit-input-placeholder{ /* Chrome/Opera/Safari */
   color: #000;
-  opacity: 1;    
+  opacity: 1;
 }
 .category-tab input::-moz-placeholder{ /* Firefox 19+ */
   color: #000;
-  opacity: 1;    
+  opacity: 1;
 }
 .category-tab input:-ms-input-placeholder { /* IE 10+ */
   color: #000;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .category-tab input:-moz-placeholder{ /* Firefox 18- */
   color: #000;
-  opacity: 1;    
+  opacity: 1;
 }
 
 
 .common-form .form-group > input::-webkit-input-placeholder,
 .common-form .form-group > textarea::-webkit-input-placeholder{ /* Chrome/Opera/Safari */
   color: #333;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .common-form .form-group > input::-moz-placeholder,
 .common-form .form-group > textarea::-moz-placeholder
 { /* Firefox 19+ */
   color: #333;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .login-page .common-form .form-group > input::-webkit-input-placeholder,
 .login-page .common-form .form-group > textarea::-webkit-input-placeholder{ /* Chrome/Opera/Safari */
   color: #323232;
-  opacity: 1;    
+  opacity: 1;
 }
 
 
@@ -1716,38 +1716,38 @@ body .new-meeting-details .new-meeting-tab li.active > a {
 .login-page .common-form .form-group > textarea::-moz-placeholder
 { /* Firefox 19+ */
   color: #323232;
-  opacity: 1;    
+  opacity: 1;
 }
 
 
 
 .post-form .field-group textarea:-ms-input-placeholder{ /* IE 10+ */
   color: #333;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .post-form .field-group textarea:-moz-placeholder{ /* Firefox 18- */
   color: #333;
-  opacity: 1;    
+  opacity: 1;
 }
 .post-form .field-group textarea::-webkit-input-placeholder{ /* Chrome/Opera/Safari */
   color: #646464;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .post-form .field-group textarea::-moz-placeholder{ /* Firefox 19+ */
   color: #646464;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .post-form .field-group textarea:-ms-input-placeholder{ /* IE 10+ */
   color: #646464;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .post-form .field-group textarea:-moz-placeholder{ /* Firefox 18- */
   color: #646464;
-  opacity: 1;    
+  opacity: 1;
 }
 
 .upload-btn-wrapper:hover button {
@@ -1974,7 +1974,7 @@ body.modal-open .modal-backdrop.in {
 .create-post .common-form .box-check .check:focus,
 .create-post .common-form .box-check .check:visited{
   background-color: #009F85;
-  color: #fff;    
+  color: #fff;
 }
 
 .create-post .check input:checked ~ .checked:before {
@@ -2023,7 +2023,7 @@ body .challenges #page-heading h1.icon-mark {
 .upload-btn-wrapper {
   position: relative;
   display: inline-block;
-  overflow: hidden;    
+  overflow: hidden;
 }
 
 .upload-btn-wrapper input[type="file"] {
@@ -2303,9 +2303,9 @@ form .form-group:last-child {
 }
 
 .slider-toggle:checked + .slider-viewport{
-    
+
     border: 2px solid #50535A;
-    
+
 }
 
 /* setting pages*/
@@ -2332,7 +2332,7 @@ form .form-group:last-child {
   border-bottom:none;
   border-top: 2px solid #0b89d9;
   border-width: 2px 1px medium;
-  padding-bottom: 6px;    
+  padding-bottom: 6px;
 }
 
 .user-profile .tabs .btn.btn-default {
@@ -2438,7 +2438,7 @@ form .form-group:last-child {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-top: medium none !important;
-  padding-top: 0 !important    
+  padding-top: 0 !important
 }
 
 .list-block .grid-details {
@@ -2510,7 +2510,7 @@ form .form-group:last-child {
   margin-right: 0;
 }
 
-.follower-text span, 
+.follower-text span,
 .group-tabs .profile-slider .panel-body .follower-text span {
   color: #323232;
   margin-left: 2px;
@@ -2642,7 +2642,7 @@ form .form-group:last-child {
   padding: 10px;
   text-align: center;
   width: 91px;
-  border: 1px solid #5e939f;    
+  border: 1px solid #5e939f;
 }
 
 .create-user-wrap::after {
@@ -2723,8 +2723,8 @@ form .form-group:last-child {
   height: 40px;
   width: 71%;
 }
-.emp.login-page .form-group > textarea, 
-.emp.login-page .form-group > input:not([type="submit"]):not([type="reset"]), 
+.emp.login-page .form-group > textarea,
+.emp.login-page .form-group > input:not([type="submit"]):not([type="reset"]),
 .emp.login-page .form-group .select {
   margin-left: 3%;
   width: 68%;
@@ -2782,7 +2782,7 @@ select::-ms-expand {
   padding: 0 1em;
   background: transparent;
   pointer-events: none;
-  color: #ababab;    
+  color: #ababab;
 }
 
 /* Transition */
@@ -3016,7 +3016,7 @@ select::-ms-expand {
   transform: translateY(-35%);
 }
 .profile-page .modal-header > button:hover::after{
- color:#fff;    
+ color:#fff;
 }
 
 .status {
@@ -3031,7 +3031,7 @@ select::-ms-expand {
   line-height: 250%;
 }
 
-.profile-page .group-tabs .panel-body-wrap span, 
+.profile-page .group-tabs .panel-body-wrap span,
 .profile-page .group-tabs .panel-body-wrap p {
   font-family: Open Sans;
   font-size: 8.5px;
@@ -3055,10 +3055,10 @@ select::-ms-expand {
 
 .panel-2 .icon {
   background-image: url("../img/question-mark.png");
-  padding-left: 25px;    
+  padding-left: 25px;
 }
 
-body #page-heading h1.icon-mark, 
+body #page-heading h1.icon-mark,
 body .question #page-heading h1.icon-mark {
   background-image: url("../img/question-icon.png");
   background-position: 0 50%;
@@ -3070,7 +3070,7 @@ body .question #page-heading h1.icon-mark {
 }
 body .question #page-heading h1.icon-mark {
   background-position: 0 60%;
-  margin-bottom: 5px;    
+  margin-bottom: 5px;
 }
 
 body .meeting-details #wrap .tp-bp-0 {
@@ -3127,6 +3127,7 @@ body #wrap .border-in-hr {
   display: inline-block;
   font-size: 0;
   height: 20px;
+  z-index: 1;
   margin-left: 10px;
   position: relative;
   text-align: center;
@@ -3146,7 +3147,7 @@ body .idea-page #page-heading h1.icon-mark {
 
 .panel-3 .icon {
   background-image: url("../img/challenge-icon.png");
-  padding-left: 25px;    
+  padding-left: 25px;
 }
 .profile-page .post-slider .list-block .panel-body {
   padding-top: 20px !important;
@@ -3235,7 +3236,7 @@ body .idea-page #page-heading h1.icon-mark {
   margin-left: 20px;
 }
 
-.employ-box li a, 
+.employ-box li a,
 .employ-box h2 {
   border-bottom: 1px solid #ccc;
   color: #323232;
@@ -3250,7 +3251,7 @@ body .idea-page #page-heading h1.icon-mark {
 .employ-box li a:hover {
   color: #0088D8;
   text-decoration: none;
-  cursor: pointer;    
+  cursor: pointer;
 }
 .employ-box .ul-emp-detail span {
   border: 1px solid #333;
@@ -3263,7 +3264,7 @@ body .idea-page #page-heading h1.icon-mark {
   right: 0;
   text-align: center;
   width: 20px;
-  margin-right: 10px;    
+  margin-right: 10px;
 }
 
 .employ-box .ul-emp-detail li span i {
@@ -3272,7 +3273,7 @@ body .idea-page #page-heading h1.icon-mark {
   margin-left: 2px;
 }
 .employ-box .ul-emp-detail li a:hover span i{
- color:#0088D8;    
+ color:#0088D8;
 }
 .employ-box .ul-emp-detail li a:hover span {
   border: 1px solid #0088D8;
@@ -3327,7 +3328,7 @@ body .idea-page #page-heading h1.icon-mark {
   border-top-right-radius: 4px;
 }
 
-.employe-profile .table > thead > tr > th, 
+.employe-profile .table > thead > tr > th,
 .employe-profile .table > tbody > tr > td {
   color: #646464;
   font-family: Open Sans;
@@ -3424,7 +3425,7 @@ body .idea-page #page-heading h1.icon-mark {
   margin-right: 2%;
   position: relative;
   width: 14%;
-  background-color: #ccc;    
+  background-color: #ccc;
 }
 .followers-list {
   max-height: 370px;
@@ -3450,17 +3451,17 @@ body .idea-page #page-heading h1.icon-mark {
 
 .jobs-title.emp {
   color: #83d3ef;
-}   
+}
 .jobs-title.adm {
   color: #A9B8C7;
-}   
+}
 .jobs-title.su{
   color: #333;
-}   
+}
 .follow-name > a:hover{
   color: #333;
-  text-decoration: none;    
-}   
+  text-decoration: none;
+}
 .common-form .calendar {
   margin-top: 30px;
 }
@@ -3601,10 +3602,10 @@ body .idea-page #page-heading h1.icon-mark {
 
 .point-page .panel .panel-heading .nav.nav-tabs > li.active {
   border-top: 2px solid #0c88db;
-  border-left: 1px solid #d0d1d3;     
-  border-right: 1px solid #d0d1d3;   
-  z-index: 1;    
-  border-bottom: none;    
+  border-left: 1px solid #d0d1d3;
+  border-right: 1px solid #d0d1d3;
+  z-index: 1;
+  border-bottom: none;
 }
 
 
@@ -3793,7 +3794,7 @@ body .breadcrumb > li + li:before {
     border-bottom: none;
     border-left: 1px solid #d2d3d6;
     border-right: 1px solid #d2d3d6;
-    
+
 }
 .all-group-list .nav.nav-tabs li a {
   border: medium none;
@@ -3810,7 +3811,7 @@ body .breadcrumb > li + li:before {
   margin-bottom: -1px;
 }
 
-.all-group-list .nav-tabs > li.active > a:hover, 
+.all-group-list .nav-tabs > li.active > a:hover,
 .all-group-list .nav-tabs > li.active > a:focus{
     border-bottom: medium none;
 }
@@ -3871,8 +3872,8 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 
 .all-group-list .trophy .pull-right a{
  position: relative;
- margin: 10px 15px;    
-     
+ margin: 10px 15px;
+
 }
 
 .point-page.all-group-list .table p {
@@ -4035,7 +4036,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 }
 
 .color-changes li > a{
-  color: #323232 !important;  
+  color: #323232 !important;
 }
 
 .update-wrap label {
@@ -4054,4 +4055,45 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
   display: block;
   position: relative;
   margin-bottom: 10px;
+}
+
+.color-changes li > a{
+  color: #323232 !important;
+}
+.gallery.list-unstyled.full-width,
+.gallery.list-unstyled + .hide-table,
+.hide-table .tab-pane{
+  display: none;
+}
+
+.user-profile .hide-table .panel-body {
+  border-bottom: 1px solid #dddddd !important;
+  border-left: 1px solid #dddddd !important;
+  border-right: 1px solid #dddddd !important;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.hide-table .tab-pane.active,
+.gallery.list-unstyled.full-width + .hide-table{
+  display: block;
+}
+
+
+.main-user-profile .table {
+  display: block;
+  margin-bottom: 20px;
+  max-width: 100%;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.all-group-list.user-profile .nav.nav-tabs li a {
+  background-color: #f7f8fa;
+  box-shadow: none;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 999;
 }

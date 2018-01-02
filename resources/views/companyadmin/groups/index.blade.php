@@ -38,10 +38,10 @@
                         <table class="table table-bordered table-striped" id="group_table">
                             <thead>
                                 <tr>
-                                    <th>#ID</th>
                                     <th>Group Name</th>
                                     <th>Group Description</th>
-                                    <th>Total members</th>
+                                    <th>Total Posts</th>
+                                    <th>Total Members</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
