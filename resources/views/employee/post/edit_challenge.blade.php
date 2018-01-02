@@ -102,7 +102,7 @@
                                 <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 <?php
                                     if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
-                                      // echo $post['postAttachment']['file_name']; 
+                                       echo $post['postAttachment']['file_name']; 
                                     }
                                 ?>
                             </div>        

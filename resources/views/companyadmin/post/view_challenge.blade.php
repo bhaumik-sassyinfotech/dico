@@ -2,7 +2,7 @@
 <title>DICO - Post</title>
 @section('content')
 
-<div id="page-content" class="idea-details challenges">
+<div id="page-content" class="idea-details challenges post-details">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
@@ -43,9 +43,32 @@
                         </div> 
                         <div class="pull-right">
                             <div class="options">
-                                <div class="fmr-10">
-                                        <a href="" class="set-alarm">a</a>
-                                        <a href="" class="set-warning">w</a>
+                                <!-- <div class="fmr-10">
+                                    <a class="set-alarm" href="">a</a>
+                                    <a class="set-edit" href="">w</a>
+                                    <a class="set-delete" href="">w</a>
+                                </div> -->
+                                <div class="btn-toolbar">
+                                    <div class="btn-group hidden-xs">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <div class="btn-toolbar">
+                                                <line></line>
+                                                <line></line>
+                                                <line></line>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Notification off</a></li>
+                                            <?php
+                                                if ($post['user_id'] == Auth::user()->id) {
+                                                    ?>
+                                                    <li><a href="{{url('edit_challenge',Helpers::encode_url($post->id))}}">Edit Post</a></li>
+                                                    <?php
+                                                }
+                                            ?>
+                                            <li><a href="#">Delete Post</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>  
@@ -255,24 +278,26 @@
                         <div class="category">
                             <h2>Group</span></h2>
                             <div class="idea-grp post-category">
-                                <div class="member-wrap">
-                                    <div class="member-details">
                                     <?php
                                         if(!empty($post_group)) {
                                             foreach($post_group as $group) {
                                     ?>
-                                            <h3>{{$group->group_name}}</h3>
-                                            <p>Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
+                                    <div class="member-wrap">
+                                        <div class="member-details">
+                                            <h3 class="text-12">{{$group->group_name}}</h3>
+                                            <p class="text-10">Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
+                                        </div>
+                                    </div>    
                                     <?php
                                             }
                                         } else {
                                     ?>
-                                            <p>No group selected.</p>
+                                        <div class="member-wrap">
+                                            <div class="member-details"><p class="text-10">No group selected.</p></div>
+                                        </div>
                                     <?php        
                                         }
                                     ?>
-                                    </div>
-                                </div>       
                             </div>  
                         </div>
                         <div class="category">

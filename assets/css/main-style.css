@@ -131,7 +131,7 @@ body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6,
   color: #646464;
   font-family: open sans;
   font-size: 15px;
-  font-weight: lighter;
+  font-weight: normal;
   margin-top: 5px;
 }
 
@@ -936,9 +936,6 @@ body .text-12{
 
 
 .user-image > a {
-
-  /*background-color: #00bcdd;*/
-
   background-color: #2bbce0;
   border: 1px solid #009bb9;
   color: #fff;
@@ -1093,9 +1090,7 @@ body .text-12{
   width: 20%;
   text-align: right;
 }
-.category .post-links,
-.group-listing .category .post-category{
-/*.category .post-links{*/
+.category .post-links{
   max-height: 220px;
   overflow-x: hidden;
 }
@@ -1527,9 +1522,6 @@ form .form-group {
   width: 71%;
 }
 .form-group > textarea {
-
-  /*height: 133px;*/
-
   height: 147px;
   line-height: 160%;
   padding: 10px 15px;
@@ -1751,9 +1743,6 @@ body .new-meeting-details .new-meeting-tab li.active > a {
 }
 
 .upload-btn-wrapper:hover button {
-
-  /*background-color: #328ed8;*/
-
   background-color: #4f8edc;
   border: 1px solid #0066af;
   color: #fff;
@@ -1938,7 +1927,7 @@ body.modal-open .modal-backdrop.in {
     content: "";
     height: 25px;
     left: 0;
-    margin:-4px -32px;
+    margin:-20px -32px;
     position: absolute;
     top: 0px;
     width: 30px;
@@ -4037,21 +4026,40 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 .color-changes li > a{
   color: #323232 !important;  
 }
-
-.update-wrap label {
-  position: absolute;
-  bottom: 0;
-  z-index: 99;
-  width: 100%;
-  background-color: rgb(0, 136, 216);
-  color: #fff;
-  padding: 6px 10px;
-  margin: 0;
-  text-align: center;
+.gallery.list-unstyled.full-width,
+.gallery.list-unstyled + .hide-table,
+.hide-table .tab-pane{
+  display: none;
 }
 
-.form_box > form .update-wrap {
+.user-profile .hide-table .panel-body {
+  border-bottom: 1px solid #dddddd !important;
+  border-left: 1px solid #dddddd !important;
+  border-right: 1px solid #dddddd !important;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.hide-table .tab-pane.active,
+.gallery.list-unstyled.full-width + .hide-table{
   display: block;
+}
+
+
+.main-user-profile .table {
+  display: block;
+  margin-bottom: 20px;
+  max-width: 100%;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.all-group-list.user-profile .nav.nav-tabs li a {
+  background-color: #f7f8fa;
+  box-shadow: none;
+  margin-bottom: -1px;
   position: relative;
-  margin-bottom: 10px;
+  z-index: 999;
 }

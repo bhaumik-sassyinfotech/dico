@@ -34,23 +34,22 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-8" id="post-detail-left">
-                        <form name="post_form" id="post_form" method="post" class="common-form" action="{{route('post.store')}}"
-                              enctype="multipart/form-data">
+                    <form name="post_form" id="post_form" method="post" class="common-form" action="{{route('post.store')}}" enctype="multipart/form-data">
+                        <div class="col-sm-8" id="post-detail-left">
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <label class="text-15">Post<span>*</span></label>
                                 <div class="check-wrap box-check">
                                     <label class="check idea-check">Idea    
-                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea">
+                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type"> 
                                         <span class="checked"></span>
                                     </label>
                                     <label class="check question-check">Question    
-                                        <input type="checkbox" name="post_type" id="post_type_question" value="question">
+                                        <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type">
                                         <span class="checked"></span>
                                     </label>
                                     <label class="check challenges-check">Challenge    
-                                        <input type="checkbox" name="post_type" id="post_type_challenges" value="challenge">
+                                        <input type="checkbox" name="post_type" id="post_type_challenges" value="challenge" class="post_type">
                                         <span class="checked"></span>
                                     </label>
                                 </div>
@@ -74,7 +73,7 @@
                                 </div>
                             </div>*/?>
                             <div class="form-group">
-                                    <label>Tags</label><br/>
+                                    <label>Tags</label>
                                     <input type="hidden" name="post_tags" id="mySingleField" value="">
                                     <ul id="singleFieldTags"></ul>
                             </div>  
@@ -85,12 +84,12 @@
                                 <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous">
                                     <span class="checkmark"></span>
                                 </label> 
+                                <a href="{{ route('post.index') }}" class="st-btn btn-default">Back</a>
+                                <input type="submit" name="save" id="save" value="Submit" class="st-btn">
                                 <div class="upload-btn-wrapper">
                                     <button class="upload-btn">Upload Files</button>
                                     <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 </div>
-                                <a href="{{ route('post.index') }}" class="st-btn btn-default">Back</a>
-                                <input type="submit" name="save" id="save" value="Submit" class="st-btn">
                             </div>
                             <?php } ?>
                             
@@ -117,30 +116,32 @@
                                 <div style="clear: both;"></div>
                             </div>
                             </div>*/?>
-                        </form>
-                    </div>
-                    <div class="col-sm-4" id="post-detail-right">
-                    <div class="category">
-                                 <div class="main-group-wrap">
-                                    <div class="category-tab tp-bp-0"> 
-                                      <label class="check">Groups<input type="checkbox">
-                                          <span class="checkmark"></span>
-                                      </label>
-                                    </div>
-                                    <?php
-                                        if(!empty($groups)) {
-                                           foreach($groups as $group) { 
-                                    ?>
+                        </div>
+                        <div class="col-sm-4" id="post-detail-right">
+                        <div class="category">
+                                     <div class="main-group-wrap">
+                                        <div class="category-tab tp-bp-0"> 
+                                            <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
+                                              <span class="checkmark"></span>
+                                          </label>
+                                        </div>
+                                        <?php
+                                            if(!empty($groups)) {
+                                               foreach($groups as $group) { 
+                                        ?>
                                         <div class="category-detials">
-                                        <label class="check text-12">{{$group->group_name}}
-                                            <input type="checkbox" name="user_groups[]" id="user_groups" value="{{$group->id}}">
-                                          <span class="checkmark"></span>
-                                         </label>
+                                            <label class="check text-12">{{$group->group_name}}
+                                                <input type="checkbox" name="user_groups[]" id="user_groups_{{$group->id}}" value="{{$group->id}}">
+                                                <span class="checkmark"></span>
+                                             </label>
                                         </div> 
-                                           <?php } } ?> 
+                                        <?php } } else { ?>
+                                         <div class="category-detials">No group found.</div>
+                                        <?php } ?>
+                                    </div>
                                 </div>
-                            </div>
-                    </div>
+                        </div>
+                    </form>    
                 </div>
             </div>
         </div>
@@ -268,5 +269,8 @@
                 removeConfirmation: true
             });
        // });
+        $("#checkAll").click(function () {
+            $("input[name*='user_groups[]']").not(this).prop('checked', this.checked);
+        });
     </script>
     @endpush

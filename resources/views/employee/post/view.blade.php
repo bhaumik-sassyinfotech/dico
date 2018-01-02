@@ -129,7 +129,7 @@
                     <hr>
                     <!-- Comment Box start -->
                     <div class="container">
-                        <form class="form-horizontal row-border">
+                        <form name="commentbox_form" id="commentbox_form" class="form-horizontal row-border">
                         <?php
                             if (!empty($post['postComment'])) {
                                 foreach ($post['postComment'] as $postComment) {
@@ -141,7 +141,7 @@
                                             $profile_image = 'public/assets/demo/avatar/jackson.png';
                                         }
                         ?>
-                        <div class="row">
+                        <div class="row" id="commentreply_{{$postComment['id']}}">
                             <div class="col-sm-2 user-image">
                                 <div class="img-wrap">
                                     <img alt="post user" src="{{asset($profile_image)}}" id="profile"/>
@@ -177,9 +177,9 @@
                                                 <?php if ($post['user_id'] == Auth::user()->id) { ?>
                                                     <?php 
                                                         if ($postComment['is_correct'] == 1) { ?>
-                                                                <i class="fa fa-star" aria-hidden="true"></i><?php
+                                                            <i class="fa fa-star" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
                                                         } else { ?>
-                                                                <i class="fa fa-star-o" aria-hidden="true"></i><?php
+                                                                <i class="fa fa-star-o" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
                                                             } ?>  
                                                         <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">
                                                         Solution</a> 
@@ -201,7 +201,9 @@
                                                             </div>
                                                         </a>
                                                         <ul class="dropdown-menu">
-                                                            <li><a href="#">Edit Comment</a></li>
+                                                            <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                                <li><a href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">Edit Comment</a></li>
+                                                            <?php } ?>
                                                             <li><a href="#">Report Comment</a></li>
                                                              <?php if ($commentUser['id'] == Auth::user()->id) { ?>
                                                             <li><a href="{{url('/deletecomment',$postComment['id'])}}">Delete Comment</a></li><?php } ?>
@@ -211,10 +213,9 @@
                                         </div>    
                                     </div> 
                                 </div>
-                                <p class="text-12">
-                                    <?php echo $postComment['comment_text']; ?>
-                                </p>
-                               <div class="rply-box">
+                                <input type="text" name="comment_text" id="comment_text_<?=$postComment['id']?>" value="<?php echo $postComment['comment_text']; ?>" readonly="" class="text-12"/>
+                                <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" onclick="updateComment(<?=$postComment['id']?>)" style="display: none;"/>
+                                <div class="rply-box">
                                     <div class="rply-count">
                                         <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
                                             <?php
@@ -249,7 +250,30 @@
                                     <?php } 
                                          
                             } 
+                                if(count($post['postComment']) >= COMMENT_DISPLAY_LIMIT) {
+                            ?>
+                            <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allComments();">View all comments</a></div>
+                                <?php }
                         } ?>
+                            
+                            <div class="modal fade" id="LoadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">View all comments</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                      <div class="modal-body" id="allcomments_box" style="height: 280px;overflow: auto;">
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                  </div>
+                                </div>
+                          </div>
                         </form>
                         <div id="myModalComment" class="modal fade" role="dialog">
                         <div class="modal-dialog">
@@ -471,32 +495,42 @@
                         <div class="category">
                             <h2>Group</span></h2>
                             <div class="idea-grp post-category">
-                                <?php
-                                    if(!empty($post_group)) {
-                                        foreach($post_group as $group) {
-                                ?>
-                                <div class="member-wrap">
-                                    <div class="member-details">
-                                        <h3>{{$group->group_name}}</h3>
-                                        <p>Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
-                                    </div>
-                                </div>
-                                <?php
+                                
+                                    <?php
+                                        if(!empty($post_group)) {
+                                            foreach($post_group as $group) {
+                                    ?>
+                                    <div class="member-wrap">
+                                        <div class="member-details">
+                                            <h3 class="text-12">{{$group->group_name}}</h3>
+                                            <p class="text-10">Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
+                                        </div>
+                                    </div>               
+                                    <?php
+                                            }
+                                        } else {
+                                    ?>
+                                <div class="member-wrap"><div class="member-details"><p class="text-10">No group selected.</p></div></div>
+                                    <?php        
                                         }
-                                    }
-                                ?>
+                                    ?>
+                                    
                             </div>  
                         </div>
                         <div class="category">
                             <h2>Tags</h2>
                             <div class="post-circle post-category">
                                 <?php
-                                    if(!empty($post->postTag)) {
+                                    if(!empty($post->postTag) && count($post->postTag) > 0) {
                                         foreach($post->postTag as $postTag) {
                                 ?>
-                                <a href="#"> {{$postTag['tag']['tag_name']}}</a>
+                                <a href="{{url('tag', Helpers::encode_url($postTag['tag']['id']))}}"> {{$postTag['tag']['tag_name']}}</a>
                                 <?php 
                                         }
+                                    } else { 
+                                        ?>
+                                        <p>No tags selected.</p>
+                                <?php        
                                     }
                                 ?>    
                             </div>  
@@ -517,11 +551,13 @@
                         <div class="category">
                             <h2>Uploaded Files</h2>
                             <div class="idea-grp post-category">
+                                <div class="member-wrap files-upload">
                                 <?php
-                                //dd($post->postAttachment);
+                                    //dd($post->postAttachment);
+                                    if(!empty($post->postAttachment) && count($post->postAttachment) > 0) {
                                     foreach($post->postAttachment as $attachment) {
                                 ?>
-                                <div class="member-wrap files-upload">
+                                
                                     <div class="member-img">
                                         <img src="{{asset('assets/img/uploadfiles1.PNG')}}" alt="no">
                                     </div>
@@ -529,8 +565,12 @@
                                         <h3>{{$attachment->file_name}}</h3>
                                         <p>Uploaded By:<a href="#">{{$attachment->attachmentUser->name}}</a></p>
                                     </div>
-                                </div>
-                                    <?php } ?>
+                                    <?php } }
+                                        else {
+                                            echo "<p>No files uploaded.</p>";
+                                        }
+                                    ?>
+                                </div>    
                             </div> 
                     </div>
                         <?php
@@ -548,39 +588,50 @@
 <script type="text/javascript">
     function markSolution(commentid, userid, postid)
     {
-    swal({
-    title: "Are you sure?",
-            text: "This will be consider as answer and publish to post user.",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: true,
-            showLoaderOnConfirm: true
-    }, function () {
-    var _token = CSRF_TOKEN;
-    var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
-    $.ajax({
-    url: SITE_URL + '/comment_solution',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-            var res = JSON.parse(response);
-            var html = "";
-            if (res.status == 1) {
-            html += '<i class="fa fa-star" aria-hidden="true">';
-            } else if (res.status == 2) {
-            html += '<i class="fa fa-star" aria-hidden="true">';
-            swal("Error", res.msg, "error");
-            } else {
-            html += '<i class="fa fa-star-o" aria-hidden="true">';
-            swal("Error", res.msg, "error");
-            }
-            $('#solution_' + commentid).html(html);
-            },
-            error: function(e) {
-            swal("Error", e, "error");
-            }
-    });
-    });
+        swal({
+        title: "Are you sure?",
+                text: "This will be consider as answer and publish to post user.",
+                type: "info",
+                showCancelButton: true,
+                closeOnConfirm: true,
+                showLoaderOnConfirm: true
+        }, function () {
+        var _token = CSRF_TOKEN;
+        var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
+            $.ajax({
+            url: SITE_URL + '/comment_solution',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        var res = JSON.parse(response);
+                        var html = "";
+                        if (res.status == 1) {
+                        if($('#icon_'+commentid).hasClass('fa-star-o')) {
+                            $('#icon_'+commentid).removeClass('fa-star-o');
+                            $('#icon_'+commentid).addClass('fa-star');
+                        }
+                        //html += '<i class="fa fa-star" aria-hidden="true">';
+                        } else if (res.status == 2) {
+                        //html += '<i class="fa fa-star" aria-hidden="true">';
+                            if($('#icon_'+commentid).hasClass('fa-star-o')) {
+                                $('#icon_'+commentid).removeClass('fa-star-o');
+                                $('#icon_'+commentid).addClass('fa-star');
+                            }
+                        swal("Error", res.msg, "error");
+                        } else {
+                        //html += '<i class="fa fa-star-o" aria-hidden="true">';
+                            if($('#icon_'+commentid).hasClass('fa-star')) {
+                                $('#icon_'+commentid).removeClass('fa-star');
+                                $('#icon_'+commentid).addClass('fa-star-o');
+                            }
+                        swal("Error", res.msg, "error");
+                        }
+                    //$('#solution_' + commentid).before(html);
+                    },error: function(e) {
+                        swal("Error", e, "error");
+                    }
+            });
+        });
     }
     function comment_reply() {
         var commentid = $('#modalComment').attr('data-id');
@@ -608,6 +659,59 @@
                  }*/
                 console.log(commentid, "::::", srno);
                 $('#commentreply_' + commentid + ' #' + srno).before(response);
+            },
+            error: function(e) {
+                swal("Error", e, "error");
+            }
+        });
+    }
+    function editComment(id) {
+        $('#comment_text_'+id).removeProp('readonly');
+        $('#update_comment_'+id).css('display','block');
+    }
+    function updateComment(id) {
+        if($('#commentbox_form').valid() == 1) {
+            var comment = $('#comment_text_'+id).val();
+            var _token = CSRF_TOKEN;
+            formData = {id:id,comment:comment,_token};
+            $.ajax({
+                url: SITE_URL + '/comment_update',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        //swal("Success", res.msg, "success");
+                        $('#comment_text_'+id).attr('readonly',true);
+                        $('#update_comment_'+id).css('display','none');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function allComments() {
+        var _token = CSRF_TOKEN;
+        var post_id = $('#post_id').val();
+        formData = {post_id:post_id,offset:3,_token};
+        $.ajax({
+            url: SITE_URL + '/allComments',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                $('#allcomments_box').html(response);
+                //res = JSON.parse(response);
+                /*if (res.status == 1) {
+                    if(res.data != "") {
+                        
+                    }
+                } else {
+                    swal("Error", res.msg, "error");
+                }*/
             },
             error: function(e) {
                 swal("Error", e, "error");

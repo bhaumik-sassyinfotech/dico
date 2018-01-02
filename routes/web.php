@@ -59,6 +59,7 @@
         Route::post('comment_reply' , 'PostController@comment_reply');
         Route::get('deletecommentReply/{id}','PostController@deletecommentReply');
         Route::get('tags' , 'PostController@tags');
+        Route::get('edit_challenge/{id}','PostController@edit_challenge');
     
         Route::get( 'meeting/deleteMeeting/{id}','MeetingController@deleteMeeting')->name('deleteMeeting');
         Route::post('meeting/saveComment/{id}','MeetingController@savecomment');

@@ -22,92 +22,72 @@
             </ul>
         </div>
     @endif
-    {!! Form::open(['method' => 'PUT', 'route' => ['idea.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form']) !!}
-    {{ csrf_field() }}
-    <div id="page-content">
+    <div id="page-content" class="post-details create-post">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
                     <li><a href="{{ url('/home') }}">Dashboard</a></li>
                     <li><a href="{{ route('post.index') }}">Post</a></li>
-                    <li class="active">Update Post</li>
+                    <li class="active">Edit Post</li>
                 </ol>
-                <h1>Post</h1>
+                <h1 class="tp-bp-0">Edit Post</h1>
+                <hr class="border-out-hr">
+                <?php /*<div class="options">
+                    <div class="btn-toolbar">
+                        <a href="{{ route('post.index') }}" class="btn btn-default">Back</a>
+                        <input type="submit" name="save" id="save" class="btn btn-primary">
+                    </div>
+                </div>*/?>
             </div>
             <div class="container">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label class="col-xs-12">Post<span>*</span></label><br>
-                                <div class="col-xs-4 form-group"><label for="post_type_idea"><input type="checkbox" class="post_type"
-                                                                                                    name="post_type"
-                                                                                                    id="post_type_idea"
-                                                                                                    value="idea" {{ $post->post_type == 'idea' ? "checked" : ''}}>
-                                        Idea</label>
+                <div class="row">
+                    {!! Form::open(['method' => 'PUT', 'route' => ['idea.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form', 'class' => 'common-form']) !!}
+                    {{ csrf_field() }}
+                    <div class="col-sm-8" id="post-detail-left">
+                        <div class="form-group">
+                            <label class="text-15">Post<span>*</span></label>
+                                <div class="check-wrap box-check">
+                                    <label class="check idea-check">Idea
+                                        <input type="checkbox" class="post_type" name="post_type" id="post_type_idea" disabled="" value="idea" {{ $post->post_type == 'idea' ? "checked" : ''}}>
+                                        <span class="checked"></span>
+                                    </label>
+                                    <label class="check question-check">Question
+                                        <input type="checkbox" class="post_type" name="post_type" id="post_type_question" disabled="" value="question" {{ $post->post_type == 'question' ? "checked" : ''}}>
+                                        <span class="checked"></span>
+                                    </label>
+                                    <label class="check challenges-check">Challenge
+                                        <input type="checkbox" class="post_type" name="post_type" id="post_type_challenges" disabled="" value="challenge" {{ $post->post_type == 'challenge' ? "checked" : ''}}>
+                                        <span class="checked"></span>
+                                    </label>
                                 </div>
-                                <div class="col-xs-4 form-group"><label for="post_type_question"><input type="checkbox" class="post_type"
-                                                                                                        name="post_type"
-                                                                                                        id="post_type_question"
-                                                                                                        value="question" {{ $post->post_type == 'question' ? "checked" : ''}}>
-                                        Question</label>
-                                </div>
-                                <div class="col-xs-4 form-group"><label for="post_type_challenges"><input
-                                                type="checkbox" class="post_type" name="post_type"
-                                                id="post_type_challenges"
-                                                value="challenge" {{ $post->post_type == 'challenge' ? "checked" : ''}}>
-                                        Challenges</label>
-                                </div>
-                                <div class="col-md-12" id="err_post_type"></div>
-                            </div>
+                            <div class="col-md-12" id="err_post_type"></div>
+                        </div>        
+                        <div class="form-group">
+                            <label>Post Title<span>*</span></label>
+                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" class="form-control required">
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Post Title<span>*</span></label>
-                                <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}"
-                                       placeholder="Post Title" class="form-control required">
-                            </div>
+                        <div class="form-group">
+                            <label>Post Description</label>
+                            <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control">{{nl2br($post->post_description)}}</textarea>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Post Description</label>
-                                <textarea name="post_description" id="post_description" placeholder="Post Description"
-                                          class="form-control">{{nl2br($post->post_description)}}</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label id="is_anonymous"><input type="checkbox" name="is_anonymous"
-                                                                id="is_anonymous" {{  $post->is_anonymous == 1 ? "checked" : '' }}>Anonymous</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <span class="btn btn-primary fileinput-button">
-                                    <i class="fa fa-upload"></i>
-                                    <span>upload</span>
-                                    <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
-                                    <?php
-                                    if ( !empty($post[ 'postAttachment' ]) )
-                                    {
-                                        echo $post[ 'postAttachment' ][ 'file_name' ];
-                                    }
-                                    ?>
-                                </span>
+                        <div class="btn-wrap-div">
+                            <label class="check">Post as Anonymous
+                                <input type="checkbox" name="is_anonymous" id="is_anonymous" {{  $post->is_anonymous == 1 ? "checked" : '' }}>
+                                <span class="checkmark"></span>
+                            </label>
+                            <a href="{{ route('post.index') }}" class="st-btn">Back</a>
+                            <input type="submit" name="save" id="save" class="st-btn">
+                            <div class="upload-btn-wrapper">
+                                <button class="upload-btn">Upload Files</button>
+                                <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="btn-toolbar col-xs-12">
-                                <a href="{{ route('post.index') }}" class="btn btn-default">Back</a>
-                                <input type="submit" name="save" id="save" class="btn btn-primary">
-                            </div>
-                        </div>
-                    </div>
+                {!! Form::close() !!}            
+                </div>
                 </div>
             </div>
         </div>
     </div>
-    {!! Form::close() !!}
+    
 @stop

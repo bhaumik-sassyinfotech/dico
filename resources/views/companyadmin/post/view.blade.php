@@ -141,7 +141,7 @@
                                             $profile_image = 'public/assets/demo/avatar/jackson.png';
                                         }
                         ?>
-                        <div class="row">
+                        <div class="row" id="commentreply_{{$postComment['id']}}">
                             <div class="col-sm-2 user-image">
                                 <div class="img-wrap">
                                     <img alt="post user" src="{{asset($profile_image)}}" id="profile"/>
@@ -241,17 +241,54 @@
                                         <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
                                         <!-- <img alt="post-rply" src="assets/img/post-rply.png"> <p>04</p>-->
                                     </div> 
-                                   <div class="rply_count">
+                                    <div class="rply_count">
                                        <a href="javascript:void(0);" data-toggle="modal" data-id="{{$postComment['id']}}" id="modalComment" data-target="#myModalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
                                    </div>
+                                    
+                                    <!-- reply box start -->
+                                    <?php
+                                    if (!empty($postComment['commentReply'])) {
+                                        $srno = 0;
+                                        foreach ($postComment['commentReply'] as $commentReply) {
+                                            $srno++;
+                                            ?>
+                                            <div class="form-group row cmry" id="{{$srno}}"><div class="col-md-12">
+                                                    <span style="float:left;">
+                                                        <?php if ($commentReply['is_anonymous'] == 0) { ?>
+                                                            <b><?php echo $commentReply['commentReplyUser']['name']; ?></b>
+                                                            <?php
+                                                        } else {
+                                                            echo "<b>Anonymous</b>";
+                                                        }
+                                                        ?>
+
+                                                        <br>
+                                                        <small><?php echo " - on " . date(DATE_FORMAT, strtotime($commentReply['created_at'])); ?></small>
+                                                    </span>  <br>
+                                                    <div class="col-md-12">    
+                                                        <?php echo $commentReply['comment_reply']; ?></div>
+                                                </div>  
+                                                <?php if ($commentReply['user_id'] == Auth::user()->id) { ?>
+                                                    <span style="float:right;">
+                                                        <a href="{{url('/deletecommentReply',$commentReply['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    </span><?php } ?></div>
+                                            <?php
+                                        }
+                                    } ?>
+                                    <!-- reply box end -->
+                                    
                                 </div>
                         </div>
                         </div>
                                     <?php } 
                                          
                             } 
-                        } ?>
+                            //if(count($post['postComment']) > COMMENT_DISPLAY_LIMIT) {
+                            ?>
                             <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allComments();">View all comments</a></div>
+                                <?php // }
+                        } ?>
+                            
                             <div class="modal fade" id="LoadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
@@ -491,24 +528,26 @@
                         <div class="category">
                             <h2>Group</span></h2>
                             <div class="idea-grp post-category">
-                                <div class="member-wrap">
-                                    <div class="member-details">
+                                
                                     <?php
                                         if(!empty($post_group)) {
                                             foreach($post_group as $group) {
                                     ?>
-                                            <h3>{{$group->group_name}}</h3>
-                                            <p>Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
+                                    <div class="member-wrap">
+                                        <div class="member-details">
+                                            <h3 class="text-12">{{$group->group_name}}</h3>
+                                            <p class="text-10">Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
+                                        </div>
+                                    </div>               
                                     <?php
                                             }
                                         } else {
                                     ?>
-                                            <p>No group selected.</p>
+                                <div class="member-wrap"><div class="member-details"><p class="text-10">No group selected.</p></div></div>
                                     <?php        
                                         }
                                     ?>
-                                    </div>
-                                </div>       
+                                    
                             </div>  
                         </div>
                         <div class="category">
@@ -627,13 +666,14 @@
             });
         });
     }
-    function comment_reply() {
-        var commentid = $('#modalComment').attr('data-id');
+    function comment_reply(commentid) {
+        //var commentid = $('#modalComment').attr('data-id');
         var _token = CSRF_TOKEN;
         var post_id = $('#post_id').val();
         var comment_reply = $('#comment_text_' + commentid).val();
         var anonymous = 0;
         var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
+        console.log(commentid, "::::", srno);
         if ($("#is_anonymous_" + commentid).is(':checked')) {
             anonymous = 1;
         } else {

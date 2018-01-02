@@ -21,86 +21,94 @@
     </ul>
 </div>
 @endif
-<div id="page-content">
+<div id="page-content" class="post-details create-post">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
                 <li><a href="{{ url('/home') }}">Dashboard</a></li>
                 <li><a href="{{ route('post.index') }}">Post</a></li>
-                <li class="active">Update Post</li>
+                <li class="active">Edit Post</li>
             </ol>
-            <h1>Post</h1>
+            <h1 class="tp-bp-0">Edit Post</h1>
+            <hr class="border-out-hr">
         </div>
         <div class="container">
-            <div class="panel panel-default">
-                {!! Form::model($post, ['method' => 'PUT', 'route' => ['post.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form']) !!}
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Post<span>*</span></label><br>
-                                <div class="col-xs-4 form-group"><input type="checkbox" name="post_type" id="post_type_idea" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>> Idea</div>
-                                <div class="col-xs-4 form-group"><input type="checkbox" name="post_type" id="post_type_question" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>> Question</div>
-                                <div class="col-xs-4 form-group"><input type="checkbox" name="post_type" id="post_type_challenges" value="challenges" <?php if($post->post_type == 'challenges') { echo "checked"; } ?>> Challenges</div>
-                                <div id="err_post_type"></div>
+            <div class="row">
+                {!! Form::model($post, ['method' => 'PUT', 'route' => ['post.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form', 'class'=>'common-form']) !!}
+                    <div class="col-sm-8" id="post-detail-left">
+                        <div class="form-group">
+                            <label class="text-15">Post<span>*</span></label>
+                            <div class="check-wrap box-check">
+                                <label class="check idea-check"> Idea 
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_idea" disabled="" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>><span class="checked"></span>
+                                </label>
+                                <label class="check question-check"> Question
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_question" disabled="" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>><span class="checked"></span>
+                                </label>
+                                <label class="check challenges-check"> Challenge
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenges" disabled="" value="challenges" <?php if($post->post_type == 'challenges') { echo "checked"; } ?>><span class="checked"></span>
+                                </label>
                             </div>
+                            <div id="err_post_type"></div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Post Title<span>*</span></label>
-                                <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" class="form-control required">
-                            </div>
+                        <div class="form-group">
+                            <label>Post Title<span>*</span></label>
+                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" class="form-control required">
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Post Description</label>
-                                <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control">{{$post->post_description}}</textarea>
-                            </div>
+                        <div class="form-group">
+                            <label>Post Description</label>
+                            <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control">{{$post->post_description}}</textarea>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <span class="btn btn-primary fileinput-button">
-                                    <i class="fa fa-upload"></i>
-                                    <span>upload</span>
-                                    <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
-                                    <?php
-                                        if(!empty($post['postAttachment'])) {
-                                           echo $post['postAttachment']['file_name']; 
+                        <?php /* ?><div class="form-group">
+                            <span class="btn btn-primary fileinput-button">
+                                <i class="fa fa-upload"></i>
+                                <span>upload</span>
+                                <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                <?php
+                                    if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
+                                       echo $post['postAttachment']['file_name']; 
+                                    }
+                                ?>
+                            </span>
+                        </div><?php */ ?>
+                        <div class="form-group">
+                            <label>Tags</label>
+                            <?php 
+                                $tags = "";
+                                if(!empty($post['postTag'])) {
+                                    $i = 0;
+                                    foreach($post['postTag'] as $postTags) {
+                                        if($i > 0) {
+                                            $tags .= ",";
                                         }
-                                    ?>
-                                </span>
-                            </div>
-                        </div>
+                                        $tags .= $postTags['tag']['tag_name'];
+                                        $i++;
+                                    }
+                                }
+                            ?>   
+                            <input type="hidden" name="post_tags" id="mySingleField" value="{{$tags}}">
+                            <ul id="singleFieldTags"></ul>
+                        </div> 
                         <?php
                             if(isset($company) && $company->allow_anonymous == 1) {
                         ?>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Is Anonymous</label><br/>
-                                <input type="checkbox" name="is_anonymous" id="is_anonymous" <?php if($post->is_anonymous == 1) { echo "checked"; } ?>>
-                            </div>
+                        <div class="btn-wrap-div">
+                            <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous" <?php if($post->is_anonymous == 1) { echo "checked"; } ?>>
+                            <span class="checkmark"></span></label>
+                            <a href="{{ route('post.index') }}" class="st-btn">Back</a>
+                            <input type="submit" name="save" id="save" value="Submit" class="st-btn">
+                            <div class="upload-btn-wrapper">
+                                <button class="upload-btn fileinput-button">Upload Files</button>
+                                <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                <?php
+                                    if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
+                                       //echo $post['postAttachment']['file_name']; 
+                                    }
+                                ?>
+                            </div>        
                         </div>
                             <?php } ?>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>Tags</label><br/>
-                                <?php 
-                                    $tags = "";
-                                    if(!empty($post['postTag'])) {
-                                        $i = 0;
-                                        foreach($post['postTag'] as $postTags) {
-                                            if($i > 0) {
-                                                $tags .= ",";
-                                            }
-                                            $tags .= $postTags['tag']['tag_name'];
-                                            $i++;
-                                        }
-                                    }
-                                 ?>   
-                                <input type="hidden" name="post_tags" id="mySingleField" value="{{$tags}}">
-                                <ul id="singleFieldTags"></ul>
-                            </div>
-                        </div> 
-                        <div class="row">
+                        <?php /* <div class="row">
                                 <div class="col-xs-12 form-group">
                                     <label class="control-label" for="user_groups">Group:</label>
                                     <select name="user_groups[]" id="user_groups" class="form-control" multiple="multiple">
@@ -123,16 +131,64 @@
                                         ?>
                                     </select>
                                 </div>
+                            </div>*/?>
+                    </div>
+                    <div class="col-sm-4" id="post-detail-right">
+                        <div class="category">
+                            <div class="main-group-wrap">
+                                <div class="category-tab tp-bp-0"> 
+                                    <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
+                                      <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                                <?php
+                                    if(!empty($post->group_id)) { 
+                                        $post_group = explode(",", $post->group_id);
+                                    }
+                                    else {
+                                        $post_group = array();
+                                    }
+                                    if(!empty($groups)) {
+                                       foreach($groups as $group) { 
+                                ?>
+                                <div class="category-detials">
+                                    <label class="check text-12">{{$group->group_name}}
+                                        <input type="checkbox" name="user_groups[]" id="user_groups_{{$group->id}}" value="{{$group->id}}" <?php if(in_array($group->id, $post_group)) { echo "checked"; } ?>>
+                                        <span class="checkmark"></span>
+                                     </label>
+                                </div> 
+                                <?php } } else { ?>
+                                 <div class="category-detials">No group found.</div>
+                                <?php } ?>
                             </div>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="row col-xs-12">
-                        <div class="btn-toolbar">
-                            <a href="{{ route('post.index') }}" class="btn btn-default">Back</a>
-                            <input type="submit" name="save" id="save" value="Submit" class="btn btn-primary">
                         </div>
-                        <div style="clear: both;"></div>
-                    </div>
+                        
+                        <?php
+                            if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
+                               //echo $post['postAttachment']['file_name']; 
+                        ?>
+                            <div class="category">
+                                <h2>Uploaded Files</h2>
+                                <div class="idea-grp post-category">
+                                    <?php
+                                    //dd($post->postAttachment);
+                                        foreach($post['postAttachment'] as $attachment) {
+                                    ?>
+                                    <div class="member-wrap files-upload">
+                                        <div class="member-img">
+                                            <img src="{{asset('assets/img/uploadfiles1.PNG')}}" alt="no">
+                                        </div>
+                                        <div class="member-details">
+                                            <h3>{{$attachment['file_name']}}</h3>
+                                             <p>Uploaded By:<a href="#">{{$attachment['attachmentUser']['name']}}</a></p>
+                                        </div>
+                                    </div>
+                                    <?php
+                                        }
+                                    ?>
+                                </div>        
+                            </div>
+                        <?php } ?>
                     </div>
                {!! Form::close() !!}
             </div>
@@ -142,9 +198,9 @@
 @stop
 @push('javascripts')
 <script>
-        $(function(){
+       // $(function(){
             var sampleTags = [];
-            $(document).ready(function() {
+            //$(document).ready(function() {
                 $.ajax({
                     url: SITE_URL + '/tags',
                     type: 'GET',
@@ -161,7 +217,7 @@
                         }
                     }
                 });
-            });
+            //});
             //var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
 
             //-------------------------------
@@ -260,6 +316,16 @@
                 removeConfirmation: true
             });
             
-        });
+            $("#checkAll").click(function () {
+                $("input[name*='user_groups[]']").not(this).prop('checked', this.checked);
+            });
+            var checkboxes = $( "input[name*='user_groups[]']" );
+            if ( checkboxes.filter( ':checked' ).length == checkboxes.length )
+            {
+                $("#checkAll").prop( 'checked', true );
+            } else {
+                $("#checkAll").removeProp( 'checked' );
+            }
+       // });
     </script>
     @endpush

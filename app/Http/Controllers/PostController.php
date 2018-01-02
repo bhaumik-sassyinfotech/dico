@@ -76,6 +76,7 @@
         
         public function store(Request $request)
         {
+           // return dd($request->all());
             try
             {
                 if ( Auth::user() )
@@ -959,6 +960,10 @@
             {
                 $post_id = $request->input('post_id');
             }
+        }
+        
+        public function edit_challenge($id , Request $request) {
+            return view($this->folder . '.post.edit_challenge');
         }
 
     }

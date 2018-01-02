@@ -162,6 +162,14 @@
 }
 @media screen and (max-width:1024px){
 
+.all-group-list.main-user-profile .nav.nav-tabs li a {
+  font-size: 12px;
+  padding: 5px 18px;
+}
+    
+.all-group-list.main-user-profile .btn-group.top-set {
+  padding: 20px 0 0;
+}    
 .point-page.super-user-employee .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li a {
   font-size: 12px;
   padding: 0 12px;
@@ -483,12 +491,14 @@ body .employe-profile .employ-box {
 
 
 @media screen and (max-width:767px){
-    
 
+.main-user-profile .nav-tabs {
+  padding-top: 20px;
+}
+    
 .create-post .common-form .btn-wrap-div {
   margin-left: 0;
 }    
-
 .point-page .btn-group {
   display: block !important;
 }
@@ -1056,12 +1066,7 @@ p.user-icon {
   font-size: 12px;
   font-weight: bold;
   text-align: center;
-
 }    
-    
-    
-}
-
 .create-post .common-form .btn-wrap-div, .new-meeting-details .common-form .btn-wrap-div {
   margin-left: 0;
 }
@@ -1091,12 +1096,13 @@ p.user-icon {
 }    
 .posts #page-heading .options {
   right: 30px;
+}    
+    
 }
 
-    
+
 @media screen and (max-width:480px){
  
-    
 .active-admin, .deactive-admin {
   border-radius: 0;
   font-size: 9px;
@@ -1133,4 +1139,13 @@ p.user-icon {
   font-size: 9px;
   padding: 5px 9px;
 }
+    
+}
+
+@media screen and (max-width:360px){
+    
+.main-user-profile .nav-tabs {
+  padding-top: 30px;
+}
+    
 }
