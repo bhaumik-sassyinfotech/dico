@@ -212,3 +212,17 @@ function dislikeComment(id) {
         }
     });
 }
+function cutString(text){
+    alert("here");
+    var wordsToCut = 55;
+    var wordsArray = text.split(" ");
+    if(wordsArray.length>wordsToCut){
+        var strShort = "";
+        for(i = 0; i < wordsToCut; i++){
+            strShort += wordsArray[i] + " ";
+        }   
+        document.write(strShort+"...");
+    }else{
+        document.write(text);
+    }
+}

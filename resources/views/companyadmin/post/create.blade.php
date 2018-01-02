@@ -21,7 +21,7 @@
             </ul>
         </div>
     @endif
-    <div id="page-content">
+    <div id="page-content" class="post-details create-post">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -29,50 +29,42 @@
                     <li><a href="{{ route('post.index') }}">Post</a></li>
                     <li class="active">Create Post</li>
                 </ol>
-                <h1>Post</h1>
-                <?php /*<div>
-                <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('user.index') }}">User</a> > Create User</p></div>
-            </div>*/?>
+                <h1 class="tp-bp-0">Create Post</h1>
+                <hr class="border-out-hr">
             </div>
             <div class="container">
-                <div class="panel panel-default">
-                    <form name="post_form" id="post_form" method="post" action="{{route('post.store')}}"
-                          enctype="multipart/form-data">
-                        {{ csrf_field() }}
-                        
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
-                                    <label>Post<span>*</span></label><br>
-                                    <div class="col-xs-4 form-group"><input type="checkbox" name="post_type"
-                                                                            id="post_type_idea" value="idea" class="post_type"> Idea
-                                    </div>
-                                    <div class="col-xs-4 form-group"><input type="checkbox" name="post_type"
-                                                                            id="post_type_question" value="question" class="post_type">
-                                        Question
-                                    </div>
-                                    <div class="col-xs-4 form-group"><input type="checkbox" name="post_type"
-                                                                            id="post_type_challenges"
-                                                                            value="challenge" class="post_type"> Challenge
-                                    </div>
-                                    <div id="err_post_type"></div>
+                <div class="row">
+                    <div class="col-sm-8" id="post-detail-left">
+                        <form name="post_form" id="post_form" method="post" class="common-form" action="{{route('post.store')}}"
+                              enctype="multipart/form-data">
+                            {{ csrf_field() }}
+                            <div class="form-group">
+                                <label class="text-15">Post<span>*</span></label>
+                                <div class="check-wrap box-check">
+                                    <label class="check idea-check">Idea    
+                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea">
+                                        <span class="checked"></span>
+                                    </label>
+                                    <label class="check question-check">Question    
+                                        <input type="checkbox" name="post_type" id="post_type_question" value="question">
+                                        <span class="checked"></span>
+                                    </label>
+                                    <label class="check challenges-check">Challenge    
+                                        <input type="checkbox" name="post_type" id="post_type_challenges" value="challenge">
+                                        <span class="checked"></span>
+                                    </label>
                                 </div>
+                                <div id="err_post_type"></div>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
-                                    <label>Post Title<span>*</span></label>
-                                    <input type="text" name="post_title" id="post_title" placeholder="Post Title"
-                                           class="form-control required">
-                                </div>
+                            <div class="form-group m-b-20">
+                                    <label class="text-15">Post Title<span>*</span></label>
+                                    <input type="text" name="post_title" id="post_title" placeholder="Post Title" class="form-control required">
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
-                                    <label>Post Description</label>
-                                    <textarea name="post_description" id="post_description"
-                                              placeholder="Post Description" class="form-control"></textarea>
-                                </div>
+                            <div class="form-group">
+                                    <label class="text-15">Post Description</label>
+                                    <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control"></textarea>
                             </div>
-                            <div class="row">
+                            <?php /*<div class="form-group">
                                 <div class="col-xs-12 form-group">
                                 <span class="btn btn-primary fileinput-button">
                                     <i class="fa fa-upload"></i>
@@ -80,26 +72,29 @@
                                     <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 </span>
                                 </div>
-                            </div>
-                            <?php
-                            if(isset($company) && $company->allow_anonymous == 1) {
-                            ?>
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
-                                    <label>Is Anonymous</label><br/>
-                                    <input type="checkbox" name="is_anonymous" id="is_anonymous">
-                                </div>
-                            </div>
-                            <?php } ?>
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
+                            </div>*/?>
+                            <div class="form-group">
                                     <label>Tags</label><br/>
                                     <input type="hidden" name="post_tags" id="mySingleField" value="">
                                     <ul id="singleFieldTags"></ul>
-                                </div>
                             </div>  
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
+                            <?php
+                            if(isset($company) && $company->allow_anonymous == 1) {
+                            ?>
+                            <div class="btn-wrap-div">
+                                <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous">
+                                    <span class="checkmark"></span>
+                                </label> 
+                                <div class="upload-btn-wrapper">
+                                    <button class="upload-btn">Upload Files</button>
+                                    <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                </div>
+                                <a href="{{ route('post.index') }}" class="st-btn btn-default">Back</a>
+                                <input type="submit" name="save" id="save" value="Submit" class="st-btn">
+                            </div>
+                            <?php } ?>
+                            
+                            <?php /*<div class="form-group">
                                     <label class="control-label" for="user_groups">Group:</label>
                                     <select name="user_groups[]" id="user_groups" class="form-control" multiple="multiple">
                                         <?php
@@ -112,32 +107,55 @@
                                             }
                                         ?>
                                     </select>
+                            </div><?php */?>
+                            <?php /*<div class="panel-footer">
+                                <div class="row col-xs-12">
+                                <div class="btn-toolbar">
+                                    <a href="{{ route('post.index') }}" class="btn btn-default">Back</a>
+                                    <input type="submit" name="save" id="save" value="Submit" class="btn btn-primary">
+                                </div>
+                                <div style="clear: both;"></div>
+                            </div>
+                            </div>*/?>
+                        </form>
+                    </div>
+                    <div class="col-sm-4" id="post-detail-right">
+                    <div class="category">
+                                 <div class="main-group-wrap">
+                                    <div class="category-tab tp-bp-0"> 
+                                      <label class="check">Groups<input type="checkbox">
+                                          <span class="checkmark"></span>
+                                      </label>
+                                    </div>
+                                    <?php
+                                        if(!empty($groups)) {
+                                           foreach($groups as $group) { 
+                                    ?>
+                                        <div class="category-detials">
+                                        <label class="check text-12">{{$group->group_name}}
+                                            <input type="checkbox" name="user_groups[]" id="user_groups" value="{{$group->id}}">
+                                          <span class="checkmark"></span>
+                                         </label>
+                                        </div> 
+                                           <?php } } ?> 
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="row col-xs-12">
-                            <div class="btn-toolbar">
-                                <a href="{{ route('post.index') }}" class="btn btn-default">Back</a>
-                                <input type="submit" name="save" id="save" value="Submit" class="btn btn-primary">
-                            </div>
-                            <div style="clear: both;"></div>
-                        </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 @stop
 @push('javascripts')
-<script>
-        $(function(){
+<script type="text/javascript">
+       // $(function(){
             var sampleTags = [];
-            $(document).ready(function() {
+           // $(document).ready(function() {
+                //var _token = CSRF_TOKEN;
                 $.ajax({
                     url: SITE_URL + '/tags',
                     type: 'GET',
+                    //data: {_token},
                     success: function(response) {
                         var res = JSON.parse(response);
                         if(res.status == 1) {
@@ -151,7 +169,7 @@
                         }
                     }
                 });
-            });
+            //});
             //var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
 
             //-------------------------------
@@ -249,7 +267,6 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
-            
-        });
+       // });
     </script>
     @endpush
