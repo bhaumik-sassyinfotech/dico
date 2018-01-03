@@ -34,9 +34,9 @@ class UserController extends Controller {
 
     public function __construct(Request $request) {
         $this->middleware(function ($request, $next) {
-            if (Auth::user()->role_id == 3) {
-                return redirect('/index');
-            }
+//            if (Auth::user()->role_id == 3) {
+//                return redirect('/index');
+//            }
             if (Auth::user()->role_id == 1) {
                 $this->folder = 'superadmin';
             } else if (Auth::user()->role_id == 2) {
@@ -448,5 +448,20 @@ class UserController extends Controller {
 
         return "template not found";
     }
-
+    
+    public function getUserProfile( Request $request )
+    {
+        if($request->ajax())
+        {
+            $user_id       = $request->input('user_id');
+            $response_data = [ 'status' => 0, 'data' => [] ];
+            $profile       = User::where('id', $user_id)->first();
+            if ( !empty($profile) ) {
+                $response_data = [ 'status' => 1, 'data' => $profile ];
+            }
+    
+            return response()->json($response_data);
+        }
+    }
+    
 }
