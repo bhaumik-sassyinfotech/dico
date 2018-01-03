@@ -176,10 +176,14 @@
             $count['total_users'] = $groupData->groupUsers->count();
             $count['total_posts'] = $userPosts->count();
 //            dd($groupData->groupUsers->pluck('user_id')->toArray());
+            $currUserIsAdmin = 1;
+            $admin = GroupUser::where('is_admin' , '1')->where('user_id' , Auth::user()->id)->where('group_id',$groupId)->first();
+            if(is_null($admin))
+                $currUserIsAdmin = 0;
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id' , '!=' , 1)->whereNotIn('id' , $groupUsers)->get();
             
-            return view($this->folder . '.groups.edit' , compact('groupData' , 'count','companies' , 'companyEmployee' , 'groupId','userPosts'));
+            return view($this->folder . '.groups.edit' , compact('groupData' , 'count','companies' , 'companyEmployee' , 'groupId','userPosts','currUserIsAdmin'));
         }
         
         /**

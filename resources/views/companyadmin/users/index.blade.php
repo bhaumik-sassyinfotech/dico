@@ -10,13 +10,17 @@
                 <li class="active">User</li>
             </ol>
             <h1>User</h1>
-            <div class="options">
+            <?php
+            /*
+             <div class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
                         <a href="{{ route('user.create') }}" class="btn btn-primary">Add New</a>
                     </div>
                 </div>
             </div>
+             */
+            ?>
         </div>    
         <div class="container">
             <div class="panel panel-default">

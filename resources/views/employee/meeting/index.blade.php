@@ -21,6 +21,7 @@
     
             <div class="container">
                 <div class="row">
+                    @include('template.notification')
                     <div class="profile-page col-sm-12 col-md-12">
                         <div class="panel panel-midnightblue group-tabs">
                             <div class="panel-heading">

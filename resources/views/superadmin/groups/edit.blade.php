@@ -55,8 +55,10 @@
                                 <input type="hidden" id="company_id" value="{{ $groupData->company_id }}">
     
                                 <div class="update-wrap">
+                                    @if($currUserIsAdmin == '1')
                                     <input type="file" id="image" name="group_picture" class="fileinput">
                                     <label>Upload Photo</label>
+                                    @endif
                                     <div class="preview_box">
                                         @php
                                             $img = asset('assets/img/upload-image.png');
@@ -66,7 +68,11 @@
                                         <img id="preview_img" src="{{ $img }}">
                                     </div>
                                 </div>
-                                <input class="update-button st-btn" style="position:relative;display: block; width: 100%;" type="submit" value="Submit" name="">
+                                @if($currUserIsAdmin == '1')
+                                    <input class="update-button st-btn"
+                                           style="position:relative;display: block; width: 100%;" type="submit"
+                                           value="Submit" name="">
+                                @endif
                             </form>
                         </div>
                         <div class="group-left-list grp-left">
@@ -75,7 +81,9 @@
                                     <h4>Group Description:</h4>
                                     <div class="pull-right">
                                         <a href="#"><img  src="{{ asset('assets/img/notification.png') }}" alt="notification"></a>
-                                        <a href="javascript:;" data-group-id="{{ $groupId }}" data-company-id="{{ $groupData->company_id }}" class="addUserToGroup"><img  src="{{ asset('assets/img/add-agent.png') }}" alt="add user"></a>
+                                        @if($currUserIsAdmin == '1')
+                                            <a href="javascript:;" data-group-id="{{ $groupId }}" data-company-id="{{ $groupData->company_id }}" class="addUserToGroup"><img  src="{{ asset('assets/img/add-agent.png') }}" alt="add user"></a>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="panel-body">

@@ -82,22 +82,23 @@
                                 </div>
                             </div>
                             <hr class="border-in-hr">
+                            @if(in_array(Auth::user()->id , $meeting_user_ids))
                                 <form name="post_comment_form" id="post_comment_form" method="post"
-                                      action="{{url('/meeting/saveComment',$meeting->id)}}" enctype="multipart/form-data" class="post-form">
-                                    {{ csrf_field() }}
-                                <input type="hidden" name="post_id" id="post_id" value="{{$meeting->id }}">
-                                <div class="field-group comment">
-                                    <textarea name="comment_text" placeholder="Leave a comment here"></textarea>
-                                </div>
-                                <div class="btn-wrap-div">
-                                    <input type="submit" class="st-btn" value="Submit">
-                                    <div class="upload-btn-wrapper">
-                                        <button class="upload-btn">Upload Files</button>
-                                        <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                          action="{{url('/meeting/saveComment',$meeting->id)}}" enctype="multipart/form-data" class="post-form">
+                                        {{ csrf_field() }}
+                                    <input type="hidden" name="post_id" id="post_id" value="{{$meeting->id }}">
+                                    <div class="field-group comment">
+                                        <textarea name="comment_text" placeholder="Leave a comment here"></textarea>
                                     </div>
-                                </div>
-                            </form>
-                            
+                                    <div class="btn-wrap-div">
+                                        <input type="submit" class="st-btn" value="Submit">
+                                        <div class="upload-btn-wrapper">
+                                            <button class="upload-btn">Upload Files</button>
+                                            <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                        </div>
+                                    </div>
+                                </form>
+                            @endif
                             <hr class="border-in-hr">
                             <div class="container">
                                 @foreach($meeting->meetingComment as $comment)

@@ -1615,6 +1615,7 @@ body .new-meeting-details .new-meeting-tab li.active > a {
   font-weight: 400;
   margin-bottom: 15px;
   padding-left: 25px;
+  display: block;
 }
 
 .category-detials .check:last-child {

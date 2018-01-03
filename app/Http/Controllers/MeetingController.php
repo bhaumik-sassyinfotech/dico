@@ -54,10 +54,10 @@
             //
             $currUser = Auth::user();
             $user_id  = $currUser->id;
-    
+            
             /*fetch list of meeting's id which current user is part of*/
             $user_meetings = MeetingUser::where('user_id', $user_id)->pluck('meeting_id')->toArray();
-    
+            
             /*
              * Private meetings will only be included in listing if user is part of it.
              * So select meeting's id user is currently in and then check against the primary_key in `meetings` table
@@ -112,7 +112,7 @@
 //                    dd("abc");
                     $group        = $users = [];
                     $meeting_id   = $meeting->id;
-                    $meetingUsers = [ [ 'user_id' => $currUser->id, 'is_admin' => 1, 'group_id' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now() ] ];
+                    $meetingUsers = [ ['meeting_id' => $meeting->id , 'user_id' => $currUser->id, 'is_admin' => 1, 'group_id' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now() ] ];
                     if ( !empty($request->employees) )
                     {
                         foreach ( $request->employees as $emp )
@@ -139,7 +139,7 @@
                                 $is_admin = 0;
                                 if ( $v != $currUser->id )
                                 {
-                                    $meetingUsers[] = [ 'user_id' => $v, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
+                                    $meetingUsers[] = [ 'meeting_id' => $meeting->id ,'user_id' => $v, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
                                 }
                             }
                         }
@@ -153,7 +153,7 @@
                             $is_admin = 0;
                             if ( $val != $currUser->id )
                             {
-                                $meetingUsers[] = [ 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
+                                $meetingUsers[] = [ 'meeting_id' => $meeting->id , 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
                             }
                         }
                     }
@@ -172,6 +172,7 @@
                 }
             }
             catch ( Exception $ex ) {
+                
                 DB::rollBack();
                 
                 return redirect()->back()->with('err_msg', $ex->getMessage())->withInput();
@@ -198,12 +199,17 @@
             $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
             $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
             $meeting_users    = User::whereIn('id', $meeting_user_ids)->get();
+            if($meeting->privacy == '1')
+            {
+                if(!in_array(Auth::user()->id , $meeting_user_ids))
+                    return Redirect::route('meeting.index')->with('err_msg' , 'You are not allowed to access a private meeting as you not a part of it.');
+            }
 //            return $uploadedFiles = MeetingAttachment::with(['attachmentUser'])->whereIn('user_id',$meeting_user_ids)->get();
 //             $comments = Meeting::with()->where('id', $id)->get();
 
 //                ->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
 //            dd($meeting);
-            return view($this->folder . '.meeting.detail', compact('meeting', 'meeting_users', 'comments','uploadedFiles'));
+            return view($this->folder . '.meeting.detail', compact('meeting', 'meeting_users', 'meeting_user_ids' , 'comments','uploadedFiles'));
         }
         
         /**
@@ -244,7 +250,7 @@
 //            dd($request->all());
             $id = Helpers::decode_url($id);
             $meeting = Meeting::find($id);
-    
+            
             $privacy                      = ($request->privacy[ 0 ] == 'public') ? 0 : 1;
             $meeting->meeting_title       = $request->input('meeting_title');
             $meeting->meeting_description = $request->input('meeting_description');
@@ -284,7 +290,7 @@
                     }
                 }
                 DB::commit();
-                return back();
+                return Redirect::route('meeting.index')->with('success','Meeting details has been saved successfully.');
             } else
             {
                 DB::rollBack();
@@ -441,10 +447,10 @@
             }
             return Response::json($response_data);
         }
-    
+        
         public function validation( Request $request )
         {
-    
+            
             $rulesArray = [];
             switch ( $request->method() )
             {
@@ -463,7 +469,7 @@
             }
             return  Validator::make($request->all(), $rulesArray);
         }
-    
+        
         public function deleteMeeting( $meeting_id )
         {
             $meeting_id = Helpers::decode_url($meeting_id);
@@ -491,7 +497,7 @@
             }
             return Redirect::route('meeting.index')->with('error_msg','Please try again later.');
         }
-    
+        
         public function finalizeMeeting( Request $request )
         {
             $meeting_id = $request->input('meeting_id');
@@ -507,7 +513,7 @@
             
             return back()->with('error',"Please try again later.");
         }
-    
+        
         public function updateComment( Request $request )
         {
             try
@@ -530,7 +536,7 @@
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         }
-    
+        
         public function replyToComment( Request $request )
         {
             $comment_id = $request->input('comment_id');

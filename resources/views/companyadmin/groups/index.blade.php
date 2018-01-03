@@ -16,7 +16,12 @@
                                         class="fa fa-filter fa-6" aria-hidden="true"></i><span
                                         class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
                         </div>
-                        <a href="{{ route('group.create') }}" class="btn btn-primary">Add New</a>
+                        
+                        <?php
+                        /*
+                            <a href="{{ route('group.create') }}" class="btn btn-primary">Add New</a>
+                         */
+                        ?>
                     </div>
                 </div>
             </div>
