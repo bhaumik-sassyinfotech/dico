@@ -89,10 +89,12 @@
         }
         public function tagpost($id = null)
         {
+            
             if (Auth::user() && !empty($id))
             {
                 $id = Helpers::decode_url($id);
-                if(is_numeric($id)) {
+                if(is_numeric($id))
+                {
                     $tag = Tag::where('id',$id)->first()->toArray(); 
                     $query = Post::whereHas('postTag', function ($qr) use ($id) {
                         return $qr->where('tag_id',$id);

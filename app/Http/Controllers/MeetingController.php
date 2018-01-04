@@ -2,6 +2,7 @@
     
     namespace App\Http\Controllers;
     
+    use App\Attachment;
     use App\Company;
     use App\Group;
     use App\GroupUser;
@@ -201,7 +202,7 @@
             $meeting_users    = User::whereIn('id', $meeting_user_ids)->get();
             if($meeting->privacy == '1')
             {
-                if(!in_array(Auth::user()->id , $meeting_user_ids))
+                if( !in_array( Auth::user()->id , $meeting_user_ids ) )
                     return Redirect::route('meeting.index')->with('err_msg' , 'You are not allowed to access a private meeting as you not a part of it.');
             }
 //            return $uploadedFiles = MeetingAttachment::with(['attachmentUser'])->whereIn('user_id',$meeting_user_ids)->get();
@@ -556,5 +557,41 @@
                 }
             }
             return Response::json($response_data);
+        }
+    
+        public function leaveMeeting( Request $request )
+        {
+            $currUser   = Auth::user();
+            $meeting_id = $request->input('meeting_id');
+            
+            $response_data = ['status' => 0 , 'msg' => 'Please try again later.' ,'data' => []];
+            if(Auth::check() && !empty($meeting_id))
+            {
+                DB::beginTransaction();
+                try
+                {
+                    $meeting_users    = MeetingUser::where('meeting_id', $meeting_id)->where('user_id', $currUser->id);
+                    $meeting_comments = MeetingComment::where('meeting_id', $meeting_id)->where('user_id', $currUser->id);
+                    $comments_id      = $meeting_comments->get()->pluck('id')->toArray();
+                    
+                    MeetingCommentReply::whereIn('comment_id', $comments_id)->delete();
+                    $meeting_comments->delete();
+                    $delete = $meeting_users->delete();
+                    DB::commit();
+                    $response_data = [ 'status' => 1, 'msg' => 'You have successfully left the meeting.', 'data' => [] ];
+                }
+                catch (Exception $ex)
+                {
+                    DB::rollBack();
+                    $response_data = [ 'status' => 0, 'msg' => 'Please try again later.', 'data' => $ex ];
+                }
+            }
+            return Response::json($response_data);
+        }
+    
+        public function deleteIdeaPost( $id, Request $request )
+        {
+            Post::where('id',$id)->delete();
+            Attachment::where('post_id',$id)->delete();
         }
     }
