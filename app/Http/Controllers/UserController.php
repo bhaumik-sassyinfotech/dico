@@ -77,6 +77,7 @@ class UserController extends Controller {
     public function create() {
         
         if (Auth::user()) {
+            $currUser = Auth::user();
             $company_id = Auth::user()->company_id;
             $usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();
             if ($usercompany) {
@@ -86,7 +87,15 @@ class UserController extends Controller {
                     $role_id = [3];
                 }
                 $roles = Role::whereIn('id', $role_id)->get();
-                $companies = Company::whereNull('deleted_at')->get();
+                $companies = [];
+                if($currUser->role_id == '2')
+                {
+                    //if company admin is adding a user then show him the groups of his company only
+                    $companies = Company::where('id', $company_id)->get();
+                } else
+                {
+                    $companies = Company::whereNull('deleted_at')->get();
+                }
 
                 return view($this->folder . '.users.create', compact('roles', 'companies'));
             }
@@ -205,7 +214,8 @@ class UserController extends Controller {
     public function edit($id) {
         $id = Helpers::decode_url($id);
         if (Auth::user()) {
-            $company_id = Auth::user()->company_id;
+            $user = User::find($id);
+            $company_id = $user->company_id;
             $usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();
             if ($usercompany) {
                 if ($usercompany->allow_add_admin == 1) {
@@ -220,7 +230,11 @@ class UserController extends Controller {
                 //dd(DB::getQueryLog());
                 $roles = Role::whereIn('id', $role_id)->get();
                 $companies = Company::whereNull('deleted_at')->get();
-                return view($this->folder . '.users.edit', compact('user', 'roles', 'companies'));
+                
+                $user_group_ids = GroupUser::where('user_id',$id)->get()->pluck('group_id')->toArray();
+                $groups = Group::whereIn('id',$user_group_ids)->where('company_id',$company_id)->get();
+                
+                return view($this->folder . '.users.edit', compact('user', 'roles', 'companies','groups','user_group_ids'));
             }
         } else {
             return redirect('/index');
@@ -232,7 +246,7 @@ class UserController extends Controller {
             $this->validate($request, [
                 'user_name' => 'required',
                 'user_email' => 'required|email|unique:users,email,' . $id,
-                'company_id' => 'required',
+//                'company_id' => 'required',
                 'role_id' => 'required',
             ]);
             if ($request->input('is_active')) {
@@ -245,15 +259,58 @@ class UserController extends Controller {
             } else {
                 $is_suspended = 0;
             }
-
+            DB::beginTransaction();
+            $user = User::find($id);
+            $company_id = $user->company_id;
+          
+            $user_group_ids = GroupUser::where('user_id',$id)->get()->pluck('group_id')->toArray();
+            
+            $removed   = array_diff($user_group_ids, $request->input('user_groups'));
+            if(!empty($removed) && count($removed) > 0)
+            {
+                foreach ($removed as $val)
+                {
+                    $group = Group::find($val);
+                    if(!empty($group))
+                    {
+                        if ( $group->group_owner == $user->id )
+                        {
+                            $group_name = $group->group_name;
+                            DB::rollBack();
+        
+                            return back()->with('err_msg', 'User cannot be removed from ' . $group_name . ' as the user is the group owner.');
+                        } else
+                        {
+                            GroupUser::where([ 'user_id' => $user->id, 'group_id' => $group->id ])->delete();
+                        }
+                    }
+                }
+            }
+            
+            $new_added = array_diff($request->input('user_groups'),$user_group_ids);
+            if( !empty($new_added) && count($new_added) > 0)
+            {
+                $addData = [];
+                $now = Carbon\Carbon::now();
+                foreach ($new_added as $val)
+                {
+                    $addData[] = ['user_id' => $user->id , 'group_id' => $group->id , 'company_id' => $company_id,'created_at' => $now , 'updated_at' => $now];
+                }
+                GroupUser::insert($addData);
+            }
+            
+            dd([$request->input('user_groups'),$removed,$new_added]);
             $postData = array('name' => $request->input('user_name'), 'email' => $request->input('user_email'), 'role_id' => $request->input('role_id'), 'company_id' => $request->input('company_id'), 'is_active' => $is_active, 'is_suspended' => $is_suspended, 'updated_at' => Carbon\Carbon::now());
             $res = User::where('id', $id)->update($postData);
             if ($res) {
+                DB::commit();
                 return redirect()->route('user.index')->with('success', 'User ' . Config::get('constant.UPDATE_MESSAGE'));
             } else {
+                DB::rollBack();
                 return redirect()->route('user.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
             }
         } catch (\exception $e) {
+//            dd($e);
             return Redirect::back()->with('err_msg', $e->getMessage());
         }
     }

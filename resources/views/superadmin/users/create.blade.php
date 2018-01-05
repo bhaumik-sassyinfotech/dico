@@ -60,6 +60,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label>Groups:</label>
+                                <select name="user_groups[]" id="user_groups" class="form-control select"
+                                        multiple="multiple" style="width: 71%">
+                                    <option value="">Select company first.</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <div class="blank">
                                     <label class="check">
                                         <p>Active</p>

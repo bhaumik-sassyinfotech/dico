@@ -50,6 +50,7 @@
         ?>
         <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>User</span></a>
             <ul class="acc-menu">
+                <li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
                 <li><a href="{{ route('user.index') }}"><span>View User</span></a></li>
             </ul>
         </li>

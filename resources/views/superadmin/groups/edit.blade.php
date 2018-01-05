@@ -121,14 +121,14 @@
                                         <div class="member-wrap">
                                             <div class="member-img">
                                                 @if($user->userDetail->profile_image != "")
-                                                    <img src="{{ asset('uploads/img/'.$user->userDetail->profile_image) }}" alt="no">
+                                                    <img src="{{ asset('public/uploads/profile_pic/'.$user->userDetail->profile_image) }}" alt="no">
                                                 @else
                                                     <img src="{{ asset('assets/img/member1.PNG') }}" alt="no">
                                                 @endif
                                             </div>
                                             <div class="member-details">
                                                 <h3 class="text-12">{{ $user->userDetail->name }}</h3>
-                                                <a href="mailto:ricardo_ranchet@gmail.com">{{ $user->userDetail->email }}</a>
+                                                <a href="mailto:{{ $user->userDetail->email }}">{{ $user->userDetail->email }}</a>
                                             </div>
                                         </div>
                                     @endif
@@ -154,7 +154,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane" id="threads">
+                                    <div tabindex="5000" class="tab-pane" id="threads">
                                         <div  class="post-slider owl-carousel">
                                             @if(count($userPosts) == 0)
                                                 <div class="item">
@@ -306,7 +306,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane tab-border active" id="users">
+                                    <div tabindex="5002" class="tab-pane tab-border active" id="users">
                                         <table class="table table-responsive" id="group_users_edit_table">
                                             <thead>
                                             <tr>

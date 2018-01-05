@@ -63,7 +63,7 @@
                             
                             
                             <div class="form-group">
-                                <label>Question 2<span>*</span></label>
+                                <label>Question 3<span>*</span></label>
                                 <div class="select">
                                     <select name="question_3" id="question_3"
                                             class="form-control required sec_question">
@@ -81,15 +81,22 @@
                                 <input type="text" name="answer_3" id="answer_3" placeholder="Answer 3"
                                        class="form-control required">
                             </div>
-                            
                             <div class="form-group">
-                                <div class="btn-wrap-div">
+                                <div id="upload_form" class="btn-wrap-div">
+                                    <input type="file" class="fileinput" name="profile_picture" id="image">
+                                    <label style="left: 139px;">Upload Photo</label>
+                                    <div class="preview_box">
+                                        <img src="{{ asset('assets/img/emplye-image.png') }}" id="preview_img">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-wrap-div" style="width: 100%">
                                     <input type="submit" class="st-btn" value="Submit">
                                     <a href="{{ url()->previous() }}" class="st-btn">Back</a>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

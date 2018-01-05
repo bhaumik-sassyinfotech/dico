@@ -167,7 +167,7 @@
         public function edit($id , Request $request)
         {
             $id = Helpers::decode_url($id);
-            
+//            dd($id);
             $groupId   = $id;
             $companies = Company::all();
             $groupData = Group::with([ 'groupUsers','groupUsers.userDetail' ,'groupUsers.followers','groupUsers.following' ])->where('id' , $id)->first();
@@ -182,7 +182,7 @@
                 $currUserIsAdmin = 0;
             $groupUsers      = $groupData->groupUsers->pluck('user_id')->toArray();
             $companyEmployee = User::where('company_id' , $groupData->company_id)->where('role_id' , '!=' , 1)->whereNotIn('id' , $groupUsers)->get();
-            
+//            dd($groupData);
             return view($this->folder . '.groups.edit' , compact('groupData' , 'count','companies' , 'companyEmployee' , 'groupId','userPosts','currUserIsAdmin'));
         }
         
@@ -275,7 +275,7 @@
             $query        = $users = $groupUsers = $groupUserId = [];
             
             $company_id = $request->get('company_id');
-            
+            $company = Company::find($company_id);
             $group_id = $request->get('group_id');
             
             $groupUserId  = $request->get('groupUserId');
@@ -329,24 +329,35 @@
     
             $i = 25;
 //            $rowCount = 0;
-            return DataTables::of($groupUsers)->addColumn('admin' , function ($row) use ($groupDetails)
+            return DataTables::of($groupUsers)->addColumn('admin' , function ($row) use ($groupDetails,$company)
             {
                 $btn = '';
                 if ( $row->user_id == $groupDetails->group_owner )
                 {
                     return "<p><a class='deactive-admin'>Group Owner</a></p>";
-                } else if ( $row->is_admin == 1 )
-                {
-                    $admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class="active-admin demoteToUser">Promote to admin</a>';
-                    $admin .= ' <a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser "><i class="fa fa-trash-o"></i></a></p>';
                 } else
                 {
-                    $admin  = '<p><a href="#" data-group-user-id="' . $row->id . '" class=" promoteToAdmin deactive-admin">Promote to admin</a>';
-                    $admin  .=  ' <a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a></p>';
+                    $admin = '';
+                    if($company->allow_add_admin == '1')
+                    {
+                        if ( $row->is_admin == 1 )
+                        {
+                            $admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class="active-admin demoteToUser">Promote to admin</a>';
+                            $admin .= ' <a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="'.asset('assets/img/icon-delete.png').'" alt="icon delete"></a></p>';
+                        } else
+                        {
+                            $admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class=" promoteToAdmin deactive-admin">Promote to admin</a>';
+                            $admin .= ' <a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="'.asset('assets/img/icon-delete.png').'" alt="icon delete"></a></p>';
+                        }
+                    }else {
+//                        $admin = ' <a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a></p>';
+                        $admin = ' <p><a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="'.asset('assets/img/icon-delete.png').'" alt="icon delete"></a></p>';
+                    }
                 }
                 return $admin;
             })->addColumn('detail',function($row) {
-                return '<p class="blue">'. $row->userDetail->name .'<span>'.$row->userDetail->email.'</span></p>';
+                $url = url('view_profile/'.Helpers::encode_url($row->userDetail->id));
+                return '<p class="blue"><a href="'.$url.'">'. $row->userDetail->name .'</a><span>'.$row->userDetail->email.'</span></p>';
             })->addColumn('following',function($row) {
                 return '<p >'. count($row->following).'<span></span></p>';
             })->addColumn('followers',function($row) {
@@ -364,7 +375,7 @@
                     
                 return $removeBtn;
 //
-            })->rawColumns([ 'admin' , 'action' ,'following','followers','detail','points' ])->make(TRUE);
+            })->rawColumns([ 'admin' ,'detail', 'action' ,'following','followers','detail','points' ])->make(TRUE);
         }
         
         public function validation($request)

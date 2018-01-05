@@ -17,8 +17,9 @@
                 <div class="row">
                     @include('template.notification')
                     <div id="create-user-from">
-                        <form class="common-form" name="user_form" id="user_form" method="PUT" enctype= 'multipart/form-data'
+                        <form class="common-form" name="user_form" id="user_form" method="POST" enctype= 'multipart/form-data'
                               action="{{route('user.update',[$user->id])}}">
+                            {{ method_field('PUT') }}
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <label>Company<span>*</span></label>
@@ -58,6 +59,18 @@
                                         @endif
                                     </select>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Groups:</label>
+                                <select name="user_groups[]" id="user_groups" class="form-control select"
+                                        multiple="multiple" style="width: 71%">
+                                    @if(count($groups) > 0)
+                                        @foreach($groups as $group)
+                                            <option value="{{ $group->id }}" {{ ( in_array($group->id, $user_group_ids) ) ? 'selected ': ' ' }}>{{$group->group_name}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+    
                             </div>
                             <div class="form-group">
                                 <div class="blank">

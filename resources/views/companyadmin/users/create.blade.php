@@ -1,132 +1,141 @@
 @extends('template.default')
 <title>DICO - User</title>
 @section('content')
-
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
-            {{ session()->get('err_msg') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    <form name="user_form" id="user_form" method="post" action="{{route('user.store')}}">
-        <div id="page-content">
-            <div id='wrap'>
-                <div id="page-heading">
-                    <ol class="breadcrumb">
-                        <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                        <li><a href="{{ route('user.index') }}">User</a></li>
-                        <li class="active">Create User</li>
-                    </ol>
-                    <h1>User</h1>
-                    <?php /*<div>
-                <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('user.index') }}">User</a> > Create User</p></div>
-            </div>*/?>
-                </div>
-                <div class="container">
-                    <div class="panel panel-default">
-                        {{ csrf_field() }}
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-xs-6 form-group">
-                                    <label>Company Name<span>*</span></label>
+    <div id="page-content" class="create-user create-user-popup">
+        <div id='wrap'>
+            <div id="page-heading">
+                <ol class="breadcrumb">
+                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                    <li><a href="{{ route('user.index') }}">User</a></li>
+                    <li class="active">Create User</li>
+                </ol>
+                <h1 class="tp-bp-0">Create User</h1>
+                <hr class="border-out-hr">
+            
+            </div>
+            <div class="container">
+                <div class="row">
+                    @include('template.notification')
+                    <div id="create-user-from">
+                        <form class="common-form" name="user_form" id="user_form" method="post"
+                              action="{{route('user.store')}}">
+                            {{ csrf_field() }}
+                            <div class="form-group">
+                                <label>Company<span>*</span></label>
+                                <div class="select">
                                     <select id="company_id" name="company_id" class="form-control">
                                         <option value="">------ Select ------</option>
-                                        <?php
-                                        if(!empty($companies)) {
-                                        foreach($companies as $company) {
-                                        ?>
-                                        <option value="{{$company->id}}">{{$company->company_name}}</option>
-                                        <?php
-                                        }
-                                        }
-                                        ?>
+                                        @if( !empty($companies) )
+                                            @foreach($companies as $company)
+                                                <option value="{{$company->id}}">{{$company->company_name}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-6 form-group">
-                                    <label>Full Name<span>*</span></label>
-                                    <input type="text" name="user_name" id="user_name" placeholder="Full Name"
-                                           class="form-control required">
-                                </div>
-
+                            
+                            <div class="form-group">
+                                <label class="text-15">Full Name<span>*</span></label>
+                                <input type="text" name="user_name" id="user_name" placeholder="Full Name"
+                                       class="form-control required">
                             </div>
-                            <div class="row">
-                                <div class="col-xs-6 form-group">
-                                    <label>User Email<span>*</span></label>
-                                    <input type="text" name="user_email" id="user_email" placeholder="User Email"
-                                           class="form-control">
-                                </div>
+                            
+                            <div class="form-group">
+                                <label class="text-15">Email Id<span>*</span></label>
+                                <input type="text" name="user_email" id="user_email" placeholder="User Email"
+                                       class="form-control">
                             </div>
-                            <div class="row">
-                                <div class="col-xs-6 form-group">
-                                    <label>Role<span>*</span></label>
+                            <div class="form-group">
+                                <label>Role:</label>
+                                <div class="select">
                                     <select id="role_id" name="role_id" class="form-control">
                                         <option value="">------ Select ------</option>
-                                        <?php
-                                        if(!empty($roles)) {
-                                        foreach($roles as $role) {
-                                        ?>
-                                        <option value="{{$role->id}}">{{$role->role_name}}</option>
-                                        <?php
-                                        }
-                                        }
-                                        ?>
+                                        
+                                        @if(!empty($roles))
+                                            @foreach($roles as $role)
+                                                <option value="{{$role->id}}">{{$role->role_name}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
-                                    <label><input type="checkbox" name="is_active" id="is_active">Is Active</label><br/>
-                                    <p class="help-block">If user is inactive, than user will not be able to login into the system.</p>
+                            <div class="form-group">
+                                <label>Groups:</label>
+                                <select name="user_groups[]" id="user_groups" class="form-control select"
+                                        multiple="multiple" style="width: 71%">
+                                    <option value="">Select company first.</option>
+                                </select>
+                            
+                            </div>
+                            <div class="form-group">
+                                <div class="blank">
+                                    <label class="check">
+                                        <p>Active</p>
+                                        If user is inactive, than user will not be able to login into the system.
+                                        <input type="checkbox" name="is_active" id="is_active"  >
+                                        <span class="checkmark"></span>
+                                    </label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12 form-group">
-                                    <label><input type="checkbox" name="is_suspended"
-                                                  id="is_suspended">Suspended</label><br/>
-                                    <p class="help-block">If user is suspended, than user can login but will not be able to create a new post.</p>
+                            <div class="form-group">
+                                <div class="blank">
+                                    <label class="check"><p>Suspend</p>If user is suspended, than user can login but will not be able to create a new post.
+                                        <input type="checkbox" name="is_suspended" id="is_suspended" >
+                                        <span class="checkmark"></span>
+                                    </label>
                                 </div>
                             </div>
-
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="control-label" for="user_groups">Group:</label>
-                                    <select name="user_groups[]" id="user_groups" class="form-control"
-                                            multiple="multiple">
-
-                                    </select>
+                            <div class="form-group">
+                                <div class="btn-wrap-div">
+                                    <input type="submit" class="st-btn" value="Submit" />
+                                    
+                                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1"
+                                         id="myModal" class="modal fade" style="display: none;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button aria-hidden="true" data-dismiss="modal"
+                                                            class="desktop-close" type="button">×
+                                                    </button>
+                                                    <div class="create-user-wrap">
+                                                        <div class="create-box S-letter">
+                                                            <a href="super-user.php">
+                                                                <h1>S</h1>
+                                                                <p>Super User</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="create-box A-letter">
+                                                            <a href="admin-user.php">
+                                                                <h1>A</h1>
+                                                                <p>Admin</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="create-box E-letter">
+                                                            <a href="employee-user.php">
+                                                                <h1>E</h1>
+                                                                <p>Employee</p>
+                                                            </a>
+                                                        </div>
+                                                    
+                                                    </div>
+                                                </div>
+                                            
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div>
+                                    <a href="{{ url()->previous() }}" class="st-btn">Cancel</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="row col-xs-12">
-                                <div class="btn-toolbar">
-                                    <a href="{{ route('user.index') }}" class="btn btn-default">Back</a>
-                                    <input type="submit" name="save" id="save" class="btn btn-primary">
-                                </div>
-                            </div>
-                            <div style="clear: both;"></div>
-                        </div>
+                        
+                        </form>
+                    
+                    
                     </div>
                 </div>
             </div>
+        
         </div>
-    </form>
+    </div> <!-- container -->
 @stop
 @section('javascript')
     <script type="text/javascript">

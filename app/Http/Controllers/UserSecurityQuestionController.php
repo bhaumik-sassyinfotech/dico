@@ -126,6 +126,19 @@
                 {
                     $user              = User::find($auth->id);
                     $user->first_login = 1;
+                    $file = $request->file('profile_picture');
+//                    dd($request->all());
+                    if ( $file != "" )
+                    {
+                        $fileName        = $file->getClientOriginalName();
+                        $extension       = $file->getClientOriginalExtension() ? : 'png';
+                        $folderName      = 'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR;
+                        $destinationPath = public_path($folderName);
+                        $safeName        = str_random(10).'.'.$extension;
+//                        dd($destinationPath);
+                        $file->move($destinationPath, $safeName);
+                        $user->profile_image = $safeName;
+                    }
                     $user->save();
                     return redirect()->route('company.index');
                 }
