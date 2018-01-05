@@ -21,7 +21,7 @@
             </ul>
         </div>
     @endif
-    <div id="page-content" class="idea-details padding-box">
+    <div id="page-content" class="idea-details padding-box post-details">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -42,27 +42,16 @@
                             </div>
                             <div class="pull-right">
                                 <div class="options">
-                                    <div class="btn-toolbar">
-                                        <div class="btn-group hidden-xs">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                <div class="btn-toolbar">
-                                                    <line></line>
-                                                    <line></line>
-                                                    <line></line>
-                                                </div>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#">Notification off</a></li>
-                                                <?php
-                                                    if ($post['user_id'] == Auth::user()->id) {
-                                                        ?>
-                                                        <li><a href="{{route('idea.edit',$post->id)}}">Edit Post</a></li>
-                                                        <?php
-                                                    }
-                                                ?>
-                                                <li><a href="#">Delete Post</a></li>
-                                            </ul>
-                                        </div>
+                                    <div class="fmr-10">
+                                        <a class="set-alarm" href="">a</a>
+                                        <?php
+                                            if ($post['user_id'] == Auth::user()->id) {
+                                        ?>
+                                        <a class="set-edit" href="{{route('idea.edit',$post->id)}}">w</a>
+                                        <?php
+                                            }
+                                        ?>
+                                        <a class="set-delete" href="">w</a>
                                     </div>
                                 </div>
                             </div>  

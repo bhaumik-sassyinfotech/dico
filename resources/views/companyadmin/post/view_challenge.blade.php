@@ -43,32 +43,16 @@
                         </div> 
                         <div class="pull-right">
                             <div class="options">
-                                <!-- <div class="fmr-10">
+                                <div class="fmr-10">
                                     <a class="set-alarm" href="">a</a>
-                                    <a class="set-edit" href="">w</a>
+                                    <?php
+                                        if ($post['user_id'] == Auth::user()->id) {
+                                    ?>
+                                    <a class="set-edit" href="{{url('edit_challenge',Helpers::encode_url($post->id))}}">w</a>
+                                    <?php
+                                        }
+                                    ?>
                                     <a class="set-delete" href="">w</a>
-                                </div> -->
-                                <div class="btn-toolbar">
-                                    <div class="btn-group hidden-xs">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <div class="btn-toolbar">
-                                                <line></line>
-                                                <line></line>
-                                                <line></line>
-                                            </div>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Notification off</a></li>
-                                            <?php
-                                                if ($post['user_id'] == Auth::user()->id) {
-                                                    ?>
-                                                    <li><a href="{{url('edit_challenge',Helpers::encode_url($post->id))}}">Edit Post</a></li>
-                                                    <?php
-                                                }
-                                            ?>
-                                            <li><a href="#">Delete Post</a></li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
                         </div>  
@@ -126,7 +110,7 @@
                                 <label class="check">Post as Anonymous <input type="checkbox" name="is_anonymous" id="is_anonymous"><span class="checkmark"></span></label>
                             </div>
                             <div class="pull-right">
-                                <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">
+                                <input type="submit" name="submit" id="submit" value="Submit" class="st-btn">
                             </div>
                         </div>
                     </form>
@@ -179,7 +163,22 @@
                                     <div class="pull-right post-reply-pop">
                                         <div class="options">
                                             <div class="star-wrap">
-                                                <?php if ($post['user_id'] == Auth::user()->id) { ?>
+                                                <?php
+                                                    $active = "";
+                                                    if ($postComment['is_correct'] == 0) { 
+                                                        $active = "disactive";
+                                                    } else { 
+                                                        $active = "active"; 
+                                                    }
+                                                ?> 
+                                                <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
+                                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                        <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
+                                                    <?php } else { ?>
+                                                        Correct  
+                                                    <?php } ?>    
+                                                </p>
+                                                <?php /*if ($post['user_id'] == Auth::user()->id) { ?>
                                                     <?php 
                                                         if ($postComment['is_correct'] == 1) { ?>
                                                         <i class="fa fa-star" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
@@ -193,7 +192,7 @@
                                                     if ($postComment['is_correct'] == 1) {
                                                         ?><i class="fa fa-star" aria-hidden="true"></i>Solution<?php
                                                     }
-                                                }
+                                                }*/
                                                 ?>
                                             </div>            
                                             <div class="fmr-10">

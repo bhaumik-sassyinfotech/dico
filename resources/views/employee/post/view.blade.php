@@ -43,27 +43,14 @@
                         </div> 
                         <div class="pull-right">
                             <div class="options">
-                                <div class="btn-toolbar">
-                                    <div class="btn-group hidden-xs">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <div class="btn-toolbar">
-                                                <line></line>
-                                                <line></line>
-                                                <line></line>
-                                            </div>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Notification off</a></li>
-                                            <?php
-                                                if ($post['user_id'] == Auth::user()->id) {
-                                                    ?>
-                                                    <li><a href="{{route('post.edit',Helpers::encode_url($post->id))}}">Edit Post</a></li>
-                                                    <?php
-                                                }
-                                            ?>
-                                            <li><a href="#">Delete Post</a></li>
-                                        </ul>
-                                    </div>
+                                <div class="fmr-10">
+                                    <a class="set-alarm" href="">a</a>
+                                    <?php
+                                        if ($post['user_id'] == Auth::user()->id) {
+                                    ?>
+                                    <a class="set-edit" href="{{route('post.edit',Helpers::encode_url($post->id))}}">e</a>
+                                    <?php } ?>
+                                    <a class="set-warning" href="">w</a>  
                                 </div>
                             </div>
                         </div>  
@@ -174,6 +161,28 @@
                                     <div class="pull-right post-reply-pop">
                                         <div class="options">
                                             <div class="star-wrap">
+                                                <?php
+                                                    $active = "";
+                                                    if ($postComment['is_correct'] == 0) { 
+                                                        $active = "disactive";
+                                                    } else { 
+                                                        $active = "active"; 
+                                                    }
+                                                ?> 
+                                                <p class="<?php echo $active; ?>">
+                                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                        <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
+                                                    <?php } else { ?>
+                                                        Correct  
+                                                    <?php } ?>    
+                                                </p>
+                                            </div>
+                                            <div class="fmr-10">
+                                                <a class="set-warning" href="">w</a>
+                                                <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-edit" href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">e</a>
+                                                <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a><?php } ?>
+                                            </div>
+                                            <?php /*<div class="star-wrap">
                                                 <?php if ($post['user_id'] == Auth::user()->id) { ?>
                                                     <?php 
                                                         if ($postComment['is_correct'] == 1) { ?>
@@ -191,25 +200,25 @@
                                                 }
                                                 ?>
                                             </div>            
-                                                  <div class="btn-toolbar">
-                                                    <div class="btn-group hidden-xs">
-                                                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                                            <div class="btn-toolbar">
-                                                                <line></line>
-                                                                <line></line>
-                                                                <line></line>
-                                                            </div>
-                                                        </a>
-                                                        <ul class="dropdown-menu">
-                                                            <?php if ($commentUser['id'] == Auth::user()->id) { ?>
-                                                                <li><a href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">Edit Comment</a></li>
-                                                            <?php } ?>
-                                                            <li><a href="#">Report Comment</a></li>
-                                                             <?php if ($commentUser['id'] == Auth::user()->id) { ?>
-                                                            <li><a href="{{url('/deletecomment',$postComment['id'])}}">Delete Comment</a></li><?php } ?>
-                                                        </ul>
-                                                    </div>
+                                            <div class="btn-toolbar">
+                                                <div class="btn-group hidden-xs">
+                                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                        <div class="btn-toolbar">
+                                                            <line></line>
+                                                            <line></line>
+                                                            <line></line>
+                                                        </div>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                            <li><a href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">Edit Comment</a></li>
+                                                        <?php } ?>
+                                                        <li><a href="#">Report Comment</a></li>
+                                                         <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                        <li><a href="{{url('/deletecomment',$postComment['id'])}}">Delete Comment</a></li><?php } ?>
+                                                    </ul>
                                                 </div>
+                                            </div> */?>
                                         </div>    
                                     </div> 
                                 </div>
@@ -241,19 +250,52 @@
                                         <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
                                         <!-- <img alt="post-rply" src="assets/img/post-rply.png"> <p>04</p>-->
                                     </div> 
-                                   <div class="rply_count">
+                                    <div class="rply_count">
                                        <a href="javascript:void(0);" data-toggle="modal" data-id="{{$postComment['id']}}" id="modalComment" data-target="#myModalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
                                    </div>
+                                    
+                                    <!-- reply box start -->
+                                    <?php
+                                    if (!empty($postComment['commentReply'])) {
+                                        $srno = 0;
+                                        foreach ($postComment['commentReply'] as $commentReply) {
+                                            $srno++;
+                                            ?>
+                                            <div class="form-group row cmry" id="{{$srno}}"><div class="col-md-12">
+                                                    <span style="float:left;">
+                                                        <?php if ($commentReply['is_anonymous'] == 0) { ?>
+                                                            <b><?php echo $commentReply['commentReplyUser']['name']; ?></b>
+                                                            <?php
+                                                        } else {
+                                                            echo "<b>Anonymous</b>";
+                                                        }
+                                                        ?>
+
+                                                        <br>
+                                                        <small><?php echo " - on " . date(DATE_FORMAT, strtotime($commentReply['created_at'])); ?></small>
+                                                    </span>  <br>
+                                                    <div class="col-md-12">    
+                                                        <?php echo $commentReply['comment_reply']; ?></div>
+                                                </div>  
+                                                <?php if ($commentReply['user_id'] == Auth::user()->id) { ?>
+                                                    <span style="float:right;">
+                                                        <a href="{{url('/deletecommentReply',$commentReply['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    </span><?php } ?></div>
+                                            <?php
+                                        }
+                                    } ?>
+                                    <!-- reply box end -->
+                                    
                                 </div>
                         </div>
                         </div>
                                     <?php } 
                                          
                             } 
-                                if(count($post['postComment']) >= COMMENT_DISPLAY_LIMIT) {
+                            //if(count($post['postComment']) > COMMENT_DISPLAY_LIMIT) {
                             ?>
                             <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allComments();">View all comments</a></div>
-                                <?php }
+                                <?php // }
                         } ?>
                             
                             <div class="modal fade" id="LoadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -633,13 +675,14 @@
             });
         });
     }
-    function comment_reply() {
-        var commentid = $('#modalComment').attr('data-id');
+    function comment_reply(commentid) {
+        //var commentid = $('#modalComment').attr('data-id');
         var _token = CSRF_TOKEN;
         var post_id = $('#post_id').val();
         var comment_reply = $('#comment_text_' + commentid).val();
         var anonymous = 0;
         var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
+        console.log(commentid, "::::", srno);
         if ($("#is_anonymous_" + commentid).is(':checked')) {
             anonymous = 1;
         } else {
