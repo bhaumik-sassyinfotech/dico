@@ -15,6 +15,7 @@
     use App\Tag;
     use App\PostTag;
     use App\Group;
+    use App\User;
     use DB;
     use Validator;
     use Redirect;
@@ -175,7 +176,6 @@
             //dd("here");
             if ( Auth::user())
             {
-
                 $query = Post::with(['postUser','postLike','postDisLike','postComment'=> function ($q) {
                    return $q->take(4);
                 },'postTag.tag', 'postUserLike' => function ($q) {
@@ -191,14 +191,35 @@
                     return $q->where('user_id' , Auth::user()->id);
                 } ,'postUserDisLike' => function ($q) {
                    return $q->where('user_id' , Auth::user()->id);
-                } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->orderBy('post_like_count','desc');
+                } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])
+                        ->orderBy('post_like_count','desc');
                 $count_user_post = count($user_query->get());
                 $user_posts = $user_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                
+                $groupusers = User::with(['groupUserDetails' => function ($q) {
+                    return $q->where('user_id' , Auth::user()->id);
+                }])->where('id',Auth::user()->id)->first();
+                if($groupusers) {
+                    if(count($groupusers['groupUserDetails']) > 0) {
+                        $group_id = $groupusers['groupUserDetails']['group_id'];
+                        $group_query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
+                            return $q->where('user_id' , Auth::user()->id);
+                        } ,'postUserDisLike' => function ($q) {
+                           return $q->where('user_id' , Auth::user()->id);
+                        } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)")
+                                ->orderBy('post_like_count','desc');
+                        $count_group_post = count($group_query->get());
+                        $group_posts = $group_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                    }else {
+                        $count_group_post = 0;
+                        $group_posts = array();
+                    } 
+                }
             } else
             {
                 return redirect('/index');
             }
-            return view($this->folder . '.post.index' , compact('posts','user_posts','count_post','count_user_post'));
+            return view($this->folder . '.post.index' , compact('posts','user_posts','group_posts','count_post','count_user_post','count_group_post'));
         }
         
         public function loadmorepost(Request $request) {
@@ -215,6 +236,7 @@
                     if(!empty($request->get('search_text'))) {
                         $search_text = $request->get('search_text');
                          $query->where('post_title', 'like','%'.$search_text.'%');
+                         $query->orWhere('post_description', 'like', '%'.$search_text.'%');
                     }
                     $query->orderBy('post_like_count','desc');
                     $count_post = count($query->get());
@@ -251,6 +273,7 @@
                     if(!empty($request->get('search_text'))) {
                         $search_text = $request->get('search_text');
                         $user_query->where('post_title', 'like', '%'.$search_text.'%');
+                        $user_query->orWhere('post_description', 'like', '%'.$search_text.'%');
                     }
                     $user_query->orderBy('post_like_count','desc');
                     $count_user_post = count($user_query->get());
@@ -258,6 +281,51 @@
                     
                     $html = view::make($this->folder . '.post.ajaxmypost' , compact('user_posts','count_user_post'));
                     $output = array('html'=>$html->render(),'count'=>$count_user_post);
+                    return $output;
+                }
+                else
+                {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));
+                }
+            }
+            catch ( \exception $e )
+            {
+                DB::rollback();
+                
+                return Redirect::back()->with('err_msg' , $e->getMessage());
+            }
+        }
+        
+        public function loadmoregrouppost(Request $request) {
+            try
+            {
+                if ($request)
+                {
+                    $offset = $request->get('offset');
+                    $groupusers = User::with(['groupUserDetails' => function ($q) {
+                            return $q->where('user_id' , Auth::user()->id);
+                    }])->where('id',Auth::user()->id)->first();
+                    if($groupusers) {
+                        if(count($groupusers['groupUserDetails']) > 0) {
+                            $group_id = $groupusers['groupUserDetails']['group_id']; 
+                            $group_query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
+                                return $q->where('user_id' , Auth::user()->id);
+                            } ,'postUserDisLike' => function ($q) {
+                               return $q->where('user_id' , Auth::user()->id);
+                            } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
+                            if(!empty($request->get('search_text'))) {
+                            $search_text = $request->get('search_text');
+                                $group_query->where('post_title', 'like', '%'.$search_text.'%');
+                                $group_query->orWhere('post_description', 'like', '%'.$search_text.'%');
+                            }
+                            $group_query->orderBy('post_like_count','desc');
+                            $count_group_post = count($group_query->get());
+                            $group_posts = $group_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                        }
+                    }
+                    
+                    $html = view::make($this->folder . '.post.ajaxgrouppost' , compact('group_posts','count_group_post'));
+                    $output = array('html'=>$html->render(),'count'=>$count_group_post);
                     return $output;
                 }
                 else
@@ -492,18 +560,20 @@
         $currUser = Auth::user();
         $id = Helpers::decode_url($id);
         $view = Helpers::postViews($id,Auth::user()->id);
+         //DB::connection()->enableQueryLog();
         $post = Post::with('postUser','postUser.following')->with(['postLike','postDisLike','postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
                 },'postAttachment','postAttachment.attachmentUser','postComment'=> function ($q) {
-                   return $q->take(COMMENT_DISPLAY_LIMIT);
+                   $q->take(COMMENT_DISPLAY_LIMIT)->orderBy('is_correct','desc');
                 },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postTag.tag'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->whereNULL('deleted_at')->where('id',$id)->first();
+                //dd(DB::getQueryLog());
                 //dd($post);
         $post_group = [];
         if($post) {
@@ -959,7 +1029,7 @@
                     $offset = $request->input('offset');
                     //$comments = Comment::with('commentUser')->where('post_id',$post_id)->take($offset)->get();
                     $post = Post::with('postUser','postUser.following')->with(['postComment'=> function ($q) {
-                                return $q->take(100)->skip(COMMENT_DISPLAY_LIMIT);
+                                //return $q->take(100)->skip(COMMENT_DISPLAY_LIMIT);
                 },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                             $q->where('user_id',  Auth::user()->id)->first(); 
                         },'postComment.commentUserDisLike' => function($q) {

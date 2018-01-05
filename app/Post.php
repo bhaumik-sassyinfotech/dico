@@ -57,7 +57,7 @@
         
         public function postComment()
         {
-            return $this->hasMany('App\Comment' , 'post_id' , 'id')->orderBy('id' , 'desc');
+            return $this->hasMany('App\Comment' , 'post_id' , 'id');
         }
     
         public function ideaUser()

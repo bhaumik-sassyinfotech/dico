@@ -1,7 +1,6 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
-
 <div id="page-content" class="post-details">
     <div id='wrap'>
         <div id="page-heading">
@@ -43,27 +42,14 @@
                         </div> 
                         <div class="pull-right">
                             <div class="options">
-                                <div class="btn-toolbar">
-                                    <div class="btn-group hidden-xs">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <div class="btn-toolbar">
-                                                <line></line>
-                                                <line></line>
-                                                <line></line>
-                                            </div>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Notification off</a></li>
-                                            <?php
-                                                if ($post['user_id'] == Auth::user()->id) {
-                                                    ?>
-                                                    <li><a href="{{route('post.edit',Helpers::encode_url($post->id))}}">Edit Post</a></li>
-                                                    <?php
-                                                }
-                                            ?>
-                                            <li><a href="#">Delete Post</a></li>
-                                        </ul>
-                                    </div>
+                                <div class="fmr-10">
+                                    <a class="set-alarm" href="">a</a>
+                                    <?php
+                                        if ($post['user_id'] == Auth::user()->id) {
+                                    ?>
+                                    <a class="set-edit" href="{{route('post.edit',Helpers::encode_url($post->id))}}">e</a>
+                                    <?php } ?>
+                                    <a class="set-warning" href="">w</a>  
                                 </div>
                             </div>
                         </div>  
@@ -174,6 +160,28 @@
                                     <div class="pull-right post-reply-pop">
                                         <div class="options">
                                             <div class="star-wrap">
+                                                <?php
+                                                    $active = "";
+                                                    if ($postComment['is_correct'] == 0) { 
+                                                        $active = "disactive";
+                                                    } else { 
+                                                        $active = "active"; 
+                                                    }
+                                                ?> 
+                                                <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
+                                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                        <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
+                                                    <?php } else { ?>
+                                                        Correct  
+                                                    <?php } ?>    
+                                                </p>
+                                            </div>
+                                            <div class="fmr-10">
+                                                <a class="set-warning" href="">w</a>
+                                                <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-edit" href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">e</a>
+                                                <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a><?php } ?>
+                                            </div>
+                                            <?php /*<div class="star-wrap">
                                                 <?php if ($post['user_id'] == Auth::user()->id) { ?>
                                                     <?php 
                                                         if ($postComment['is_correct'] == 1) { ?>
@@ -191,25 +199,25 @@
                                                 }
                                                 ?>
                                             </div>            
-                                                  <div class="btn-toolbar">
-                                                    <div class="btn-group hidden-xs">
-                                                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                                            <div class="btn-toolbar">
-                                                                <line></line>
-                                                                <line></line>
-                                                                <line></line>
-                                                            </div>
-                                                        </a>
-                                                        <ul class="dropdown-menu">
-                                                            <?php if ($commentUser['id'] == Auth::user()->id) { ?>
-                                                                <li><a href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">Edit Comment</a></li>
-                                                            <?php } ?>
-                                                            <li><a href="#">Report Comment</a></li>
-                                                             <?php if ($commentUser['id'] == Auth::user()->id) { ?>
-                                                            <li><a href="{{url('/deletecomment',$postComment['id'])}}">Delete Comment</a></li><?php } ?>
-                                                        </ul>
-                                                    </div>
+                                            <div class="btn-toolbar">
+                                                <div class="btn-group hidden-xs">
+                                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                        <div class="btn-toolbar">
+                                                            <line></line>
+                                                            <line></line>
+                                                            <line></line>
+                                                        </div>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                            <li><a href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">Edit Comment</a></li>
+                                                        <?php } ?>
+                                                        <li><a href="#">Report Comment</a></li>
+                                                         <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                        <li><a href="{{url('/deletecomment',$postComment['id'])}}">Delete Comment</a></li><?php } ?>
+                                                    </ul>
                                                 </div>
+                                            </div> */?>
                                         </div>    
                                     </div> 
                                 </div>
@@ -243,10 +251,11 @@
                                     </div> 
                                     <div class="rply_count">
                                        <a href="javascript:void(0);" data-toggle="modal" data-id="{{$postComment['id']}}" id="modalComment" data-target="#myModalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
-                                   </div>
+                                       <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentReply']); ?></span>
+                                    </div>
                                     
                                     <!-- reply box start -->
-                                    <?php
+                                    <?php /*
                                     if (!empty($postComment['commentReply'])) {
                                         $srno = 0;
                                         foreach ($postComment['commentReply'] as $commentReply) {
@@ -274,7 +283,7 @@
                                                     </span><?php } ?></div>
                                             <?php
                                         }
-                                    } ?>
+                                    } ?>*/?>
                                     <!-- reply box end -->
                                     
                                 </div>
@@ -731,7 +740,8 @@
     function allComments() {
         var _token = CSRF_TOKEN;
         var post_id = $('#post_id').val();
-        formData = {post_id:post_id,offset:3,_token};
+        //formData = {post_id:post_id,offset:3,_token};
+        formData = {post_id:post_id,offset:0,_token};
         $.ajax({
             url: SITE_URL + '/allComments',
             type: 'POST',

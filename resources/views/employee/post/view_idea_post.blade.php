@@ -2,8 +2,27 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
-    
-    <div id="page-content" class="idea-details post-details padding-box">
+
+    @if(session()->has('success'))
+        <div class="alert alert-success">
+            {{ session()->get('success') }}
+        </div>
+    @endif
+    @if(session()->has('err_msg'))
+        <div class="alert alert-danger">
+            {{ session()->get('err_msg') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <div id="page-content" class="idea-details padding-box post-details">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -36,10 +55,14 @@
                                 <div class="options">
                                     <div class="fmr-10">
                                         <a class="set-alarm" href="">a</a>
-                                        @if ($post['user_id'] == Auth::user()->id)
-                                            <a class="set-edit" href="{{route('idea.edit',$post->id)}}">w</a>
-                                            <a class="set-delete" href="{{ url('meeting/deleteIdeaPost/'.$post->id) }}">w</a>
-                                        @endif
+                                        <?php
+                                            if ($post['user_id'] == Auth::user()->id) {
+                                        ?>
+                                        <a class="set-edit" href="{{route('idea.edit',$post->id)}}">w</a>
+                                        <?php
+                                            }
+                                        ?>
+                                        <a class="set-delete" href="{{ url('meeting/deleteIdeaPost/'.$post->id) }}">w</a>
                                     </div>
                                 </div>
                             </div>
