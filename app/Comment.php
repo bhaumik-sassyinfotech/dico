@@ -23,6 +23,10 @@ class Comment extends Model
     {
         return $this->hasMany('App\CommentLike','comment_id','id')->where('flag',1);
     }
+    public function commentLikeCount()
+    {
+        return $this->commentLike;
+    }
     public function commentDisLike()
     {
         return $this->hasMany('App\CommentLike','comment_id','id')->where('flag',2);

@@ -98,11 +98,11 @@
                             <a href="{{ route('post.index') }}" class="st-btn">Back</a>
                             <input type="submit" name="save" id="save" value="Submit" class="st-btn">
                             <div class="upload-btn-wrapper">
-                                <button class="upload-btn fileinput-button">Upload Files</button>
+                                <button class="upload-btn">Upload Files</button>
                                 <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 <?php
                                     if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
-                                       //echo $post['postAttachment']['file_name']; 
+                                       echo $post['postAttachment']['file_name']; 
                                     }
                                 ?>
                             </div>        

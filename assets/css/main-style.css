@@ -4065,3 +4065,8 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
   position: relative;
   z-index: 999;
 }
+.desc-content {
+    overflow: hidden; 
+    height: 3em;
+    line-height: 1em;
+}

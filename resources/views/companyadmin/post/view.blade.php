@@ -1,7 +1,6 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
-
 <div id="page-content" class="post-details">
     <div id='wrap'>
         <div id="page-heading">
@@ -252,10 +251,11 @@
                                     </div> 
                                     <div class="rply_count">
                                        <a href="javascript:void(0);" data-toggle="modal" data-id="{{$postComment['id']}}" id="modalComment" data-target="#myModalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
-                                   </div>
+                                       <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentReply']); ?></span>
+                                    </div>
                                     
                                     <!-- reply box start -->
-                                    <?php
+                                    <?php /*
                                     if (!empty($postComment['commentReply'])) {
                                         $srno = 0;
                                         foreach ($postComment['commentReply'] as $commentReply) {
@@ -283,7 +283,7 @@
                                                     </span><?php } ?></div>
                                             <?php
                                         }
-                                    } ?>
+                                    } ?>*/?>
                                     <!-- reply box end -->
                                     
                                 </div>
@@ -740,7 +740,8 @@
     function allComments() {
         var _token = CSRF_TOKEN;
         var post_id = $('#post_id').val();
-        formData = {post_id:post_id,offset:3,_token};
+        //formData = {post_id:post_id,offset:3,_token};
+        formData = {post_id:post_id,offset:0,_token};
         $.ajax({
             url: SITE_URL + '/allComments',
             type: 'POST',

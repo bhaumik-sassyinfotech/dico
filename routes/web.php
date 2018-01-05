@@ -74,6 +74,7 @@
         Route::resource('meeting','MeetingController');
         Route::post('loadmorepost','PostController@loadmorepost');
         Route::post('loadmoremypost','PostController@loadmoremypost');
+        Route::post('loadmoregrouppost','PostController@loadmoregrouppost');
         Route::get('tag/{id}','TagController@tagpost');
         Route::post('loadmoretagpost','TagController@loadmoretagpost');
         Route::post('comment_update','PostController@comment_update');
