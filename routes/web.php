@@ -63,12 +63,14 @@
         Route::get('edit_challenge/{id}','PostController@edit_challenge');
     
         Route::get( 'meeting/deleteMeeting/{id}','MeetingController@deleteMeeting')->name('deleteMeeting');
+        Route::get( 'meeting/deleteIdeaPost/{id}','MeetingController@deleteIdeaPost');
         Route::match(['get','post'],'meeting/finalizeMeeting','MeetingController@finalizeMeeting')->name('finalizeMeeting');
         Route::post('meeting/saveComment/{id}','MeetingController@savecomment');
         Route::match( ['get','post'],'meeting/deleteComment','MeetingController@deletecomment')->name('deleteMeetingComment');
         Route::match( ['get','post'],'meeting/UpdateComment','MeetingController@updateComment')->name('updateMeetingComment');
         Route::match( ['get','post'],'meeting/commentReply','MeetingController@replyToComment')->name('replyToMeetingComment');
         Route::match(['get','post'],'/meeting/list','MeetingController@meetingList');
+        Route::match(['get','post'],'/meeting/leaveMeeting','MeetingController@leaveMeeting');
         Route::resource('meeting','MeetingController');
         Route::post('loadmorepost','PostController@loadmorepost');
         Route::post('loadmoremypost','PostController@loadmoremypost');

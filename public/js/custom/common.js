@@ -1,8 +1,16 @@
 /*enable `save` button once the page is loaded to ensure that jquery validations are applied.*/
 $("#save").prop('disabled',true);
-$('.profanity').profanityFilter({
-    externalSwears: EXTERNAL_SWEARS,
-});
+window.onload = function() {
+    // console.log(EXTERNAL_SWEARS);
+
+    setTimeout(function () {
+        jQuery(".profanity").profanityFilter({
+            replaceWith:'*',
+            externalSwears: '/dico/public/profanity/swearWords.json'
+            // externalSwears: EXTERNAL_SWEARS,
+        });
+    } , 10);
+};
 /*Yajratables default parameters*/
 $.extend(true, jQuery.fn.dataTable.defaults, {
     "stateSave": true,

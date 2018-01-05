@@ -19,7 +19,7 @@
                     <div id="post-detail-left" class="col-sm-8">
                         <div class="group-wrap">
                             <div class="pull-left">
-                                <h3>{{$meeting->meeting_title}}</h3>
+                                <h3 class="profanity">{{$meeting->meeting_title}}</h3>
                                 <p class="user-icon">-{{ $meeting->meetingCreator->name }}<span>on {{ date('d-m-Y' , strtotime($meeting->created_at)) }}</span></p>
                             </div>
                             <div class="pull-right">
@@ -36,16 +36,21 @@
                                 </div>
                             </div>
                             <div class="post-wrap-details">
-                                <p class="text-12">
+                                <p class="text-12 profanity">
                                     {{ nl2br($meeting->meeting_description) }}
                                 </p>
-                                @if($meeting->created_by == Auth::user()->id && $meeting->is_finalized == '0')
+                                
                                     <div class="post-btn-wrap">
                                         <div class="post-btn deny">
+                                            @if($meeting->created_by == Auth::user()->id && $meeting->is_finalized == '0')
                                             <a href="javascript:void(0);" data-toggle="modal" data-target="#finalizeMeeting">Finalise Meeting</a>
+                                            @endif
+                                            @if($meeting->created_by != Auth::user()->id &&  (in_array(Auth::user()->id , $meeting_user_ids)))
+                                                <a href="javascript:void(0);" class="leaveMeeting">Leave Meeting</a>
+                                            @endif
                                         </div>
                                     </div>
-                                @endif
+                                
                             </div>
                             <div id="finalizeMeeting" class="modal fade" role="dialog">
                                 <div class="modal-dialog modal-lg">
@@ -58,7 +63,7 @@
                                         <div class="modal-body">
                                             <form action="{{ route('finalizeMeeting') }}" method="POST" id="finalize_meeting_form">
                                                 {{ csrf_field() }}
-                                                <input type="hidden" value="{{ $meeting->id }}" name="meeting_id">
+                                                <input type="hidden" value="{{ $meeting->id }}" name="meeting_id" id="meeting_id">
                                                 <div class="row">
                                                     <div class="col-xs-12">
                                                         <label for="">Comment</label>
@@ -98,110 +103,120 @@
                                         </div>
                                     </div>
                                 </form>
+                                <hr class="border-in-hr">
                             @endif
-                            <hr class="border-in-hr">
                             <div class="container">
-                                @foreach($meeting->meetingComment as $comment)
-                                <div class="row" id="comment_box_{{ $comment->id }}">
-                                    
-                                    <div class="col-sm-2 user-image">
-                                        <div class="img-wrap">
+                                @if(count($meeting->meetingComment) > 0)
+                                    @foreach($meeting->meetingComment as $comment)
+                                        <div class="row" id="comment_box_{{ $comment->id }}">
+                                            <div class="col-sm-2 user-image">
+                                                <div class="img-wrap">
+                                                    <?php
+                                                        $profile_img = '';
+                                                        $profile_pic = $comment->commentUser->profile_image;
+                                                        if($profile_pic == "")
+                                                            $profile_img = asset('assets/img/default_user.jpg');
+                                                        else
+                                                            $profile_img = asset('public/uploads/profile_pic/'.$profile_pic);
+                                                    ?>
+                                                    <img alt="post user" src="{{ $profile_img }}">
+                                                </div>
                                             <?php
-                                                $profile_img = '';
-                                                $profile_pic = $comment->commentUser->profile_image;
-                                                if($profile_pic == "")
-                                                    $profile_img = asset('assets/img/default_user.jpg');
-                                                else
-                                                    $profile_img = asset('public/uploads/profile_pic/'.$profile_pic);
-                                            ?>
-                                            <img alt="post user" src="{{ $profile_img }}">
-                                        </div>
-                                    <?php
-                                        $commentUser = $comment->commentUser;
-                                        $comment_id = Helpers::encode_url($commentUser->id);
-                                        
-                                        if (!empty($commentUser->following && count($commentUser->following) > 0 && $commentUser->id != Auth::user()->id))
-                                        {
-                                            if ($commentUser['following'][0]->status == 1)
-                                            { ?>
-                                                <a href="{{ url('/view_profile/'.$comment_id) }}">Unfollow</a>
-                                                <?php
-                                            } else
-                                            { ?>
-                                                <a href="{{ url('/view_profile/'.$comment_id) }}"
-                                                >Follow</a>
-                                              <?php
-                                            }
-                                        } else if ($commentUser->id != Auth::user()->id)
-                                        { ?>
-                                                <a href="{{ url('/view_profile/'.$comment_id) }}"
-                                                >Follow</a>
-                                            <?php
-                                        }
-                                        ?>
-                                    </div>
-                                    <div class="col-sm-10 user-rply">
-                                        <div class="post-inner-reply">
-                                            <div class="pull-left post-user-nam">
-                                                <h3>{{ $comment->commentUser->name }}</h3>
-                                                <p>- on {{ date('d-m-Y',strtotime($comment->created_at)) }}</p>
+                                                $commentUser = $comment->commentUser;
+                                                $comment_id = Helpers::encode_url($commentUser->id);
+                                                
+                                                if (!empty($commentUser->following && count($commentUser->following) > 0 && $commentUser->id != Auth::user()->id))
+                                                {
+                                                    if ($commentUser['following'][0]->status == 1)
+                                                    { ?>
+                                                        <a href="{{ url('/view_profile/'.$comment_id) }}">Unfollow</a>
+                                                        <?php
+                                                    } else
+                                                    { ?>
+                                                        <a href="{{ url('/view_profile/'.$comment_id) }}"
+                                                        >Follow</a>
+                                                      <?php
+                                                    }
+                                                } else if ($commentUser->id != Auth::user()->id)
+                                                { ?>
+                                                        <a href="{{ url('/view_profile/'.$comment_id) }}"
+                                                        >Follow</a>
+                                                    <?php
+                                                }
+                                                ?>
                                             </div>
-                                            @if($comment->commentUser->id == Auth::user()->id)
-                                                <div class="pull-right post-reply-pop">
-                                                    <div class="options">
-                                                        <div class="fmr-10">
-                                                            <a class="set-edit" onclick="editComment({{ $comment->id }});" href="javascript:void(0)">e</a>
-                                                            <a class="set-alarm deleteComment" data-comment-id="{{ $comment->id }}" href="javascript:void(0);">a</a>
+                                            <div class="col-sm-10 user-rply">
+                                                <div class="post-inner-reply">
+                                                    <div class="pull-left post-user-nam">
+                                                        <h3>{{ $comment->commentUser->name }}</h3>
+                                                        <p>- on {{ date('d-m-Y',strtotime($comment->created_at)) }}</p>
+                                                    </div>
+                                                    @if($comment->commentUser->id == Auth::user()->id)
+                                                        <div class="pull-right post-reply-pop">
+                                                            <div class="options">
+                                                                <div class="fmr-10">
+                                                                    <a class="set-edit" onclick="editComment({{ $comment->id }});" href="javascript:void(0)">e</a>
+                                                                    <a class="set-alarm deleteComment" data-comment-id="{{ $comment->id }}" href="javascript:void(0);">a</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                    @endif
+                                                </div>
+                                                <p class="text-12" >
+                                                    <input type="text" class="profanity" id="comment_text_{{ $comment->id }}" value="{{ $comment->comment_reply }}" readonly >
+                                                    <p class="profanity">{{ $comment->comment_reply }}</p>
+                                                    <button style="display:none;" class="saveComment st-btn" onclick="updateComment({{ $comment->id }})" id="update_comment_{{ $comment->id }}">Save</button>
+                                                </p>
+                                                <div class="rply-box">
+                                                    <div class="rply-count">
+                                                        <a href="#myModal" data-toggle="modal"><img
+                                                                    src="{{ asset('assets/img/post-rply.png') }}"
+                                                                    alt="post-rply"> </a>
+                                                        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog"
+                                                             tabindex="-1" id="myModal" class="modal fade"
+                                                             style="display: none;">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button aria-hidden="true" data-dismiss="modal"
+                                                                                class="desktop-close" type="button">×
+                                                                        </button>
+                                                                        <h4 class="modal-title">Reply to Comment</h4>
+                                                                    </div>
+                                                                    <form method="post" class="common-form">
+                                                                        <div class="form-group">
+                                                                            <label>Message To Author:</label>
+                                                                            <textarea type="text" id="comment_reply_text_{{ $comment->id }}"
+                                                                                      placeholder="Type here"></textarea>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="btn-wrap-div">
+                                                                                <input data-comment-id="{{ $comment->id }}" class="st-btn reply_to_comment" type="button"
+                                                                                       value="Submit">
+                                                                                <input value="Cancel" class="st-btn"
+                                                                                       aria-hidden="true" data-dismiss="modal"
+                                                                                       type="reset">
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div><!-- /.modal-content -->
+                                                            </div><!-- /.modal-dialog -->
+                                                        </div>
+                                                        <p id="reply_count_{{ $comment->id }}">{{ count($comment->commentReply) }}</p>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            </div>
                                         </div>
-                                        <p class="text-12">
-                                            <input type="text" id="comment_text_{{ $comment->id }}" value=" {{ $comment->comment_reply }}" readonly >
-                                            <button style="display:none;" class="saveComment st-btn" onclick="updateComment({{ $comment->id }})" id="update_comment_{{ $comment->id }}">Save</button>
-                                        </p>
-                                        <div class="rply-box">
-                                            <div class="rply-count">
-                                                <a href="#myModal" data-toggle="modal"><img
-                                                            src="{{ asset('assets/img/post-rply.png') }}"
-                                                            alt="post-rply"> </a>
-                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog"
-                                                     tabindex="-1" id="myModal" class="modal fade"
-                                                     style="display: none;">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button aria-hidden="true" data-dismiss="modal"
-                                                                        class="desktop-close" type="button">×
-                                                                </button>
-                                                                <h4 class="modal-title">Reply to Comment</h4>
-                                                            </div>
-                                                            <form method="post" class="common-form">
-                                                                <div class="form-group">
-                                                                    <label>Message To Author:</label>
-                                                                    <textarea type="text" id="comment_reply_text_{{ $comment->id }}"
-                                                                              placeholder="Type here"></textarea>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <div class="btn-wrap-div">
-                                                                        <input data-comment-id="{{ $comment->id }}" class="st-btn reply_to_comment" type="button"
-                                                                               value="Submit">
-                                                                        <input value="Cancel" class="st-btn"
-                                                                               aria-hidden="true" data-dismiss="modal"
-                                                                               type="reset">
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal-dialog -->
-                                                </div>
-                                                <p id="reply_count_{{ $comment->id }}">{{ count($comment->commentReply) }}</p>
+                                    @endforeach
+                                @else
+                                    <div class="row" id="comment">
+                                        <div class="col-sm-10 user-rply">
+                                            <div class="post-inner-reply">
+                                                <p>Currently there are no comments in this meeting.</p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                @endforeach
+                                @endif
                             </div>
                         
                         </div>

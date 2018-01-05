@@ -487,6 +487,10 @@ $('.ideaStatus').click(function (ev) {
 
 $("#createMeeting").validate({
     rules: {
+        'meeting_title': {
+            required: true,
+            maxlength: 255
+        },
         'privacy[]': {
             required: true,
             minlength: 1
@@ -585,3 +589,25 @@ $("#finalize_meeting_form").validate({
     }
 });
 
+$(document).on('click','.leaveMeeting',function () {
+    var meeting_id = $("#meeting_id").val();
+    var dataString = {_token: CSRF_TOKEN , meeting_id:meeting_id };
+    $.ajax({
+        url:SITE_URL+'/meeting/leaveMeeting',
+        data: dataString,
+        method: "POST",
+        success: function (response)
+        {
+            var status = response.status;
+            var msg = response.msg;
+            var data = response.data;
+            if (status == '1') {
+                $('.leaveMeeting').remove();
+                alert(msg);
+                location.reload();
+            } else {
+                swal("Error!", msg, "error");
+            }
+        }
+    });
+});

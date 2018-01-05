@@ -77,7 +77,7 @@
         
         public function store(Request $request)
         {
-           // return dd($request->all());
+            
             try
             {
                 if ( Auth::user() )
@@ -103,6 +103,7 @@
                     $post->is_anonymous     = $is_anonymous;
                     //=== groups saving start ===//
                     $post_groups = $request->input('user_groups');
+                    
                     if(!empty($post_groups)) {
                         $groups = implode(",", $post_groups);
                         $post->group_id     = $groups;
@@ -130,9 +131,11 @@
                     }
                     //=== tags saving start ===//
                     $post_tags = $request->input('post_tags');
-                    if(!empty($post_tags)) {
+                    if(!empty($post_tags))
+                    {
                         $tags = explode(",", $post_tags);
-                        foreach($tags as $tag) {
+                        foreach($tags as $tag)
+                        {
                             $existTag = Tag::where("tag_name",$tag)->first();
                             if($existTag) {
                                 $tag_id = $existTag->id;
@@ -332,6 +335,7 @@
         
         public function update($id , Request $request)
         {
+            
             try
             {
                 if ( Auth::user() )
@@ -563,7 +567,7 @@
                 ->whereNULL('deleted_at')->where('id',$id)->first();
                 //dd(DB::getQueryLog());
                 //dd($post);
-        $post_group = '';        
+        $post_group = [];
         if($post) {
             if(!empty($post->group_id)) {
                 $groupId = explode(',', $post->group_id);
@@ -578,6 +582,7 @@
             }else if($post['post_type'] == 'challenge') {
                 $view_page = 'view_challenge';
             }
+//            dd($post);
             return view($this->folder.'.post.'.$view_page, compact('post','post_group','currUser'));
         }else {
             return redirect('/index'); 
@@ -804,20 +809,37 @@
     
     public function idea_update($id , Request $request)
     {
+//        dd($request->all());
         $this->validate($request , [
-            'post_type'  => 'required' ,
+//            'post_type'  => 'required' ,
             'post_title' => 'required' ,
         ]);
+        
         DB::beginTransaction();
         try
         {
             $currUser               = Auth::user();
             $post                   = Post::find($id);
             $post->post_title       = $request->post_title;
-            $post->post_type        = $request->post_type;
+//            $post->post_type        = $request->post_type;
             $post->post_description = $request->post_description;
             $post->user_id          = $currUser->id;
+            $post->group_id         = (!empty($request->input('user_groups')) ? implode(',', $request->input('user_groups')) : 0);
             $post->is_anonymous     = $request->get('is_anonymous') ? 1 : 0;
+            
+            $post_tags = $request->input('post_tags');
+            if(!empty($post_tags)) {
+                $tags = explode(",", $post_tags);
+                foreach($tags as $tag) {
+                    $existTag = Tag::where("tag_name",$tag)->first();
+                    if($existTag) {
+                        $tag_id = $existTag->id;
+                    } else {
+                        $tag_id = Tag::insertGetId(array("tag_name"=>$tag,"created_at"=>Carbon\Carbon::now()));
+                    }
+                    $post_tags = PostTag::insert(array( "post_id" => $id , "tag_id" => $tag_id , "created_at" => Carbon\Carbon::now() ));
+                }
+            }
             if ( $post->save() )
             {
                 $file = $request->file('file_upload');
@@ -849,7 +871,7 @@
                     }
                 }
                 DB::commit();
-                return back();
+                return Redirect::route('post.index')->with('success','Idea post has been saved successfully.');
             } else
             {
                 DB::rollBack();
@@ -869,14 +891,13 @@
             $currUser  = Auth::user();
             $userId    = $currUser->id;
             $companyId = $currUser->company_id;
-            
-            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment' ])->first();
-            
+            $groups = Group::where('company_id' , Auth::user()->company_id)->get();
+            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment','postTag.tag' ])->first();
             if($post == null )
                 return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
             
 //            dd($post);
-            return view($this->folder . '.post.edit_idea_post' , compact('post'));
+            return view($this->folder . '.post.edit_idea_post' , compact('post','groups'));
         }
         
         public function idea_show($id)
@@ -891,6 +912,7 @@
                 $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
             }])->with('postAttachment')->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->where('post_type','=','idea')->where('id',$id)->first();
+            
 //            dd($post);
             if($post == null)
                 return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
