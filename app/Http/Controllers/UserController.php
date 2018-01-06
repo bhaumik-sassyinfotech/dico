@@ -61,8 +61,9 @@ class UserController extends Controller {
                 }
                 $roles = Role::whereIn('id', $role_id)->get();
                 $companies = Company::whereNull('deleted_at')->get();
-
-                return view($this->folder . '.users.index', compact('roles', 'companies'));
+                $users = User::with(['following','followers'])->where('role_id',3)->get();
+                $company_admins = User::with(['following','followers'])->where('role_id',2)->get();
+                return view($this->folder . '.users.index', compact('roles', 'companies','users','company_admins'));
             }
         } else {
             return redirect('/index');

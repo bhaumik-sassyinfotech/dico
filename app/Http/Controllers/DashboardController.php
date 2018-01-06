@@ -55,7 +55,7 @@
         public function edit_profile(Request $request) {
             if(Auth::user()) {
                 $user_id = Auth::user()->id;
-                $user = User::where('id', $user_id)->first();
+                $user = User::with(['followers','following'])->where('id', $user_id)->first();
                 $questions = SecurityQuestion::all();
                 $userquestions = UserSecurityQuestion::where('user_id', $user_id)->get();
                 return view($this->folder.'.users.edit_profile', compact('user', 'questions', 'userquestions'));
@@ -111,13 +111,16 @@
             if(Auth::user() && !empty($id))
             {
                 $user_id = $id;
-                
+                $company_id = User::find($id)->company_id;
                 $user = User::with(['followers','following','followers.followUser','following.followingUser'])->where('id', $user_id)->first();
                 $group_ids = GroupUser::select('group_id')->where('user_id',$user_id)->pluck('group_id');
+    
                 $groupDetails = GroupUser::select(DB::raw('count(group_users.user_id) as total_members, count(posts.id) as total_posts , groups.* ' ))
                     ->leftJoin('groups','groups.id','=','group_users.group_id')->leftJoin('posts','groups.id','=','posts.group_id')
                     ->whereIn('group_users.group_id',$group_ids)->groupBy('group_users.group_id')->orderByDesc('posts.created_at')->get();
-                 $userPosts = Post::with(['postLike','postComment','postTag','postUser'])->whereIn('group_id',$group_ids)->get();
+                
+                 $userPosts = Post::with(['postLike','postComment','postTag.tag','postUser'])->whereIn('group_id',$group_ids)->get();
+                 
                 //$questions = SecurityQuestion::all();
                 //$userquestions = UserSecurityQuestion::where('user_id', $user_id)->get();
                 return view($this->folder.'.users.view_profile', compact('user','groupDetails','userPosts'));

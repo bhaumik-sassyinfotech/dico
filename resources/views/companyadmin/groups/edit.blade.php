@@ -121,13 +121,13 @@
                                         <div class="member-wrap">
                                             <div class="member-img">
                                                 @if($user->userDetail->profile_image != "")
-                                                    <img src="{{ asset('uploads/img/'.$user->userDetail->profile_image) }}" alt="no">
+                                                    <img src="{{ asset('public/uploads/profile_pic/'.$user->userDetail->profile_image) }}" alt="no">
                                                 @else
                                                     <img src="{{ asset('assets/img/member1.PNG') }}" alt="no">
                                                 @endif
                                             </div>
                                             <div class="member-details">
-                                                <h3 class="text-12">{{ $user->userDetail->name }}</h3>
+                                                <h3 class="text-12"><a href="{{ url('view_profile/'.Helpers::encode_url($user->userDetail->id)) }}">{{ $user->userDetail->name }}</a></h3>
                                                 <a href="mailto:ricardo_ranchet@gmail.com">{{ $user->userDetail->email }}</a>
                                             </div>
                                         </div>

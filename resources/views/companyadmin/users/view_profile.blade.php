@@ -135,7 +135,7 @@
                             <div class="group-item one">
                                 <p>Name : <span>{{$user->name}}</span></p>
                                 <p>Email Id : <span>{{$user->email}}</span></p>
-                                <p>Role : <span><a href="#">@if($user->role_id == '2') "Company Admin" @elseif($user->role_id == '3') {{ "Employee" }} @else {{ "Super Admin" }} @endif</a></span></p>
+                                <p>Role : <span><a href="#">@if($user->role_id == '2')  @elseif($user->role_id == '3') {{ "Employee" }} @else {{ "Super Admin" }} @endif</a></span></p>
                                 <p>Points : <span>2365</span></p>
                             </div>
                             <div class="group-item two">
@@ -198,7 +198,7 @@
                                                             </p>
                                                             <div class="panel-body-wrap">
                                                                 <div class="follower-text pull-left">
-                                                                    <p>Total Posts:<span>{{ $group->total_posts }}</span></p>
+                                                                    <p>Total Posts:<span>0</span></p>
                                                                 </div>
                                                                 <div class="follower-text pull-right">
                                                                     <p>Total Members:<span>{{ $group->total_members }}</span></p>
@@ -278,13 +278,13 @@
                                                     
                                                     </div>
                                                     <div class="panel-body">
-                                                        <h4>{{ $post->post_title }}</h4>
+                                                        <h4><a href="{{ url('viewpost/'.Helpers::encode_url($post->id)) }}">{{ $post->post_title }}</a></h4>
                                                         <p class="user-icon">-{{ $post->postUser->name }}<span>on {{ date('Y-m-d H:i' , strtotime($post->created_at)) }}</span></p>
                                                         <fieldset>
                                                             <p>{{ $post->post_description }}</p>
                                                         </fieldset>
                                                         <div class="btn-wrap">
-                                                            <a href="{{ url('viewpost/'.Helpers::encode_url($post->id)) }}">Read More</a>
+                                                            <a href="#">Read More</a>
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="wrap-social pull-left">
@@ -299,9 +299,9 @@
                                                         <hr>
                                                         <div class="post-circle">
                                                             @if(isset($post->postTag))
-{{--                                                                @foreach($post->postTag as $tag)--}}
-                                                                    <a href="#"> Dummy</a>
-                                                                {{--@endforeach--}}
+                                                                @foreach($post->postTag as $tag)
+                                                                    <a href="{{ url('tag/'.Helpers::encode_url($tag->tag->id)) }}"> {{ $tag->tag->tag_name }}</a>
+                                                                @endforeach
                                                             @endif
                                                         </div>
                                                     </div>
