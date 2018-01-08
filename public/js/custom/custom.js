@@ -371,4 +371,28 @@ $('#commentbox_form').validate({
     ],
     searching : false              
 });*/
+$('#post_flagged_form').validate({
+    rules: {
+        post_message_autor: {
+            required: true,
+        }
+    },
+    messages: {
+        post_message_autor: {
+            required: 'This field is required',
+        }
+    }
+});
+$('#comment_flagged_form').validate({
+    rules: {
+        comment_message_autor: {
+            required: true,
+        }
+    },
+    messages: {
+        comment_message_autor: {
+            required: 'This field is required',
+        }
+    }
+});
 //============================================================//

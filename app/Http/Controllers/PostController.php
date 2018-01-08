@@ -16,6 +16,7 @@
     use App\PostTag;
     use App\Group;
     use App\User;
+    use App\PostFlag;
     use DB;
     use Validator;
     use Redirect;
@@ -561,20 +562,23 @@
         $id = Helpers::decode_url($id);
         $view = Helpers::postViews($id,Auth::user()->id);
          //DB::connection()->enableQueryLog();
-        $post = Post::with('postUser','postUser.following')->with(['postLike','postDisLike','postUserLike' => function($q) {
+        $post = Post::with(['postUser.following','postLike','postDisLike','postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-                },'postAttachment','postAttachment.attachmentUser','postComment'=> function ($q) {
+                },'postAttachment.attachmentUser','postComment'=> function ($q) {
                    $q->take(COMMENT_DISPLAY_LIMIT)->orderBy('is_correct','desc');
+                   //$q->count();
                 },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postTag.tag'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at')->where('id',$id)->first();
+                ->whereNULL('deleted_at')->where('id',$id)->first();//orderBy(DB::raw('count(postComment.commentLike)', 'DESC'))->first();
                 //dd(DB::getQueryLog());
                 //dd($post);
+       // $post = Post::with(['postComment.commentLikeCount'])->first();
+        //dd($post);
         $post_group = [];
         if($post) {
             if(!empty($post->group_id)) {
@@ -1057,6 +1061,35 @@
         public function edit_challenge($id , Request $request) {
             return view($this->folder . '.post.edit_challenge');
         }
-
+        
+        public function post_flagged(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $this->validate($request , [
+                        'reason' => 'required' ,
+                    ]);
+                    $post_id = $request->get('post_id');
+                    $user_id = $request->get('user_id');
+                    $reason = $request->get('reason');
+                    $check_flag = PostFlag::where('post_id',$post_id)->get();
+                    if(count($check_flag) >= 2) {
+                        $res = Post::where('id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+                    } else {
+                        $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
+                    }
+                    if($res) {
+                        echo json_encode(array('status' => 1,'msg' => 'Post flagged successfully'));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                    }
+                } else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
     }
 ?>
