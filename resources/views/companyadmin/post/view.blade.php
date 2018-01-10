@@ -145,6 +145,8 @@
                                         <h4 class="modal-title">Request flagged in the Comment</h4>
                                     </div>
                                     <form method="post" class="common-form" name="comment_flagged_form" id="comment_flagged_form">
+                                        <input type="hidden" name="comment_flagged_id" id="comment_flagged_id">
+                                        <input type="hidden" name="comment_user_id" id="comment_user_id">
                                      <div class="form-group">
                                         <label>Message To Author:</label> 
                                         <textarea type="text" placeholder="Type here" id="comment_message_autor" name="comment_message_autor"></textarea>
@@ -221,7 +223,7 @@
                                                 </p>
                                             </div>
                                             <div class="fmr-10">
-                                                <a class="set-warning" href="#flaggedComment" onclick="openFlagComment({{$postComment['id']}})">w</a>
+                                                <a class="set-warning" href="javascript:void(0)" onclick="openFlagComment({{$postComment['id']}}, {{$commentUser['id']}})">w</a>
                                                 <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-edit" href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">e</a>
                                                 <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a><?php } ?>
                                             </div>
@@ -268,7 +270,7 @@
                                 <input type="text" name="comment_text" id="comment_text_<?=$postComment['id']?>" value="<?php echo $postComment['comment_text']; ?>" readonly="" class="text-12"/>
                                 <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" onclick="updateComment(<?=$postComment['id']?>)" style="display: none;"/>
                                 <div class="rply-box">
-                                    <div class="rply-count">
+                                    <div class="rply-count like">
                                         <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
                                             <?php
                                             if (!empty($postComment['commentUserLike'])) {
@@ -280,7 +282,7 @@
                                         </a><span id="comment_like_count_{{$postComment['id']}}"><?php echo count($postComment['commentLike']) ?></span>
                                         <!-- <img alt="post-like" src="assets/img/like.png"><p>08</p>-->
                                     </div> 
-                                    <div class="rply-count">
+                                    <div class="rply-count dislike">
                                         <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}});" >
                                             <?php
                                             if (!empty($postComment['commentUserDisLike'])) {
@@ -293,7 +295,7 @@
                                         <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
                                         <!-- <img alt="post-rply" src="assets/img/post-rply.png"> <p>04</p>-->
                                     </div> 
-                                    <div class="rply_count">
+                                    <div class="rply-count">
                                        <a href="javascript:void(0);" data-toggle="modal" data-id="{{$postComment['id']}}" id="modalComment" data-target="#myModalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
                                        <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentReply']); ?></span>
                                     </div>
@@ -835,12 +837,42 @@
             });
         }
     }
-    function openFlagComment(id) {
-        
+    function openFlagComment(comment_id,user_id) {
+        $('#comment_message_autor').val('');
+        $('#comment_flagged_id').val(comment_id);
+        $('#comment_user_id').val(user_id);
+        $('#flaggedComment').modal('show');
     }
     function reportCommentFlagged() {
         if($('#comment_flagged_form').valid() == 1) {
-        alert($(this).attr('data-id'));
+            var comment_id = $('#comment_flagged_id').val();
+            var user_id  = $('#comment_user_id').val();
+            var comment_message_autor = $('#comment_message_autor').val();
+            var flag_by = {{Auth::user()->id}};
+            var _token = CSRF_TOKEN;
+            formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
+            console.log(formData);
+            $.ajax({
+                url: SITE_URL + '/comment_flagged',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        swal("Success", res.msg, "success");
+                        $('#flaggedComment').modal('hide');
+                        //window.location.href = SITE_URL + '/post';
+                        //location.reload();
+                        //$('#comment_text_'+id).attr('readonly',true);
+                        //$('#update_comment_'+id).css('display','none');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
         }
     }
 </script>

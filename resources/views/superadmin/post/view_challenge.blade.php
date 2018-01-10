@@ -52,7 +52,29 @@
                                     <?php
                                         }
                                     ?>
-                                    <a class="set-delete" href="">w</a>
+                                    <a class="set-warning" href="#flagged" data-toggle="modal">w</a>
+                                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="flagged" class="modal fade" style="display: none;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
+                                                    <h4 class="modal-title">Request flagged in the Post</h4>
+                                                </div>
+                                                <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
+                                                 <div class="form-group">
+                                                    <label>Message To Author:</label> 
+                                                    <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
+                                                 </div> 
+                                                 <div class="form-group">
+                                                     <div class="btn-wrap-div">
+                                                         <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportPostFlagged();">
+                                                          <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                     </div>     
+                                                 </div>     
+                                                </form>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                     </div>   
                                 </div>
                             </div>
                         </div>  
@@ -118,6 +140,30 @@
                     <hr>
                     <!-- Comment Box start -->
                     <div class="container">
+                        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="flaggedComment" class="modal fade" style="display: none;">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
+                                        <h4 class="modal-title">Request flagged in the Comment</h4>
+                                    </div>
+                                    <form method="post" class="common-form" name="comment_flagged_form" id="comment_flagged_form">
+                                        <input type="hidden" name="comment_flagged_id" id="comment_flagged_id">
+                                        <input type="hidden" name="comment_user_id" id="comment_user_id">
+                                     <div class="form-group">
+                                        <label>Message To Author:</label> 
+                                        <textarea type="text" placeholder="Type here" id="comment_message_autor" name="comment_message_autor"></textarea>
+                                     </div> 
+                                     <div class="form-group">
+                                         <div class="btn-wrap-div">
+                                             <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportCommentFlagged();">
+                                              <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                         </div>     
+                                     </div>     
+                                    </form>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div>   
                         <form name="commentbox_form" id="commentbox_form" class="form-horizontal row-border">
                         <?php
                             if (!empty($post['postComment'])) {
@@ -196,7 +242,7 @@
                                                 ?>
                                             </div>            
                                             <div class="fmr-10">
-                                                <a class="set-warning" href="">w</a>
+                                                <a class="set-warning" href="javascript:void(0)" onclick="openFlagComment({{$postComment['id']}}, {{$commentUser['id']}})">w</a>
                                                 <?php if ($commentUser['id'] == Auth::user()->id) { ?>
                                                 <a class="set-edit" href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">e</a>
                                                 <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a>
@@ -467,6 +513,73 @@
                         //swal("Success", res.msg, "success");
                         $('#comment_text_'+id).attr('readonly',true);
                         $('#update_comment_'+id).css('display','none');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function reportPostFlagged() {
+        if($('#post_flagged_form').valid() == 1) {
+            var reason = $('#post_message_autor').val();
+            var post_id = {{$post['id']}};
+            var user_id = {{Auth::user()->id}};
+            var _token = CSRF_TOKEN;
+            formData = {post_id:post_id,user_id:user_id,reason:reason,_token};
+            $.ajax({
+                url: SITE_URL + '/post_flagged',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        swal("Success", res.msg, "success");
+                        window.location.href = SITE_URL + '/post';
+                        //location.reload();
+                        //$('#comment_text_'+id).attr('readonly',true);
+                        //$('#update_comment_'+id).css('display','none');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function openFlagComment(comment_id,user_id) {
+        $('#comment_message_autor').val('');
+        $('#comment_flagged_id').val(comment_id);
+        $('#comment_user_id').val(user_id);
+        $('#flaggedComment').modal('show');
+    }
+    function reportCommentFlagged() {
+        if($('#comment_flagged_form').valid() == 1) {
+            var comment_id = $('#comment_flagged_id').val();
+            var user_id  = $('#comment_user_id').val();
+            var comment_message_autor = $('#comment_message_autor').val();
+            var flag_by = {{Auth::user()->id}};
+            var _token = CSRF_TOKEN;
+            formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
+            console.log(formData);
+            $.ajax({
+                url: SITE_URL + '/comment_flagged',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        swal("Success", res.msg, "success");
+                        $('#flaggedComment').modal('hide');
+                        //window.location.href = SITE_URL + '/post';
+                        //location.reload();
+                        //$('#comment_text_'+id).attr('readonly',true);
+                        //$('#update_comment_'+id).css('display','none');
                     } else {
                         swal("Error", res.msg, "error");
                     }

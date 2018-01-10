@@ -80,6 +80,7 @@
         Route::post('comment_update','PostController@comment_update');
         Route::post('allComments','PostController@allComments');
         Route::post('post_flagged','PostController@post_flagged');
+        Route::post('comment_flagged','PostController@comment_flagged');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

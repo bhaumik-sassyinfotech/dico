@@ -17,6 +17,7 @@
     use App\Group;
     use App\User;
     use App\PostFlag;
+    use App\CommentFlag;
     use DB;
     use Validator;
     use Redirect;
@@ -1079,8 +1080,43 @@
                         $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
                     }
                     if($res) {
+                        $request->session()->flash('success', 'Post flagged successfully');
                         echo json_encode(array('status' => 1,'msg' => 'Post flagged successfully'));
                     }else {
+                        $request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                    }
+                } else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        
+        public function comment_flagged(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $this->validate($request , [
+                        'reason' => 'required' ,
+                    ]);
+                    $comment_id = $request->get('comment_id');
+                    $user_id = $request->get('user_id');
+                    $reason = $request->get('reason');
+                    $flag_by = $request->get('flag_by');
+                    $check_flag = CommentFlag::where('comment_id',$comment_id)->get();
+                    /*if(count($check_flag) >= 2) {
+                        $res = Comment::where('id',$comment_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+                    } else {*/
+                        $res = CommentFlag::insert(['comment_id'=>$comment_id,'user_id'=>$user_id,'reason'=>$reason,'flag_by'=>$flag_by]);
+                    //}
+                    if($res) {
+                        $request->session()->flash('success', 'Comment flagged successfully');
+                        echo json_encode(array('status' => 1,'msg' => 'Comment flagged successfully'));
+                    }else {
+                        $request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
                         echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
                     }
                 } else {
