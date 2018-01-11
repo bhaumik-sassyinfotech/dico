@@ -4,13 +4,17 @@ window.onload = function() {
     // console.log(EXTERNAL_SWEARS);
 
     setTimeout(function () {
-        jQuery(".profanity").profanityFilter({
+        runProfanity();
+    } , 10);
+};
+
+function runProfanity(){
+    jQuery(".profanity").profanityFilter({
             replaceWith:'*',
             externalSwears: '/dico/public/profanity/swearWords.json'
             // externalSwears: EXTERNAL_SWEARS,
         });
-    } , 10);
-};
+}
 /*Yajratables default parameters*/
 $.extend(true, jQuery.fn.dataTable.defaults, {
     "stateSave": true,
