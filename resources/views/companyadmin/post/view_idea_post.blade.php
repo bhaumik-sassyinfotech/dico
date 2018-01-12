@@ -24,7 +24,7 @@
                                 <div class="user-wrap">
                                     <div class="user-img">
                                         @if(empty($post->postUser->profile_image))
-                                            <img src="{{ asset('assets/img/client-icon.PNG') }}">
+                                            <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
                                         @else
                                             <img src="{{ asset('public/uploads/profile_pic/'.$post->postUser->profile_image) }}">
                                         @endif
@@ -40,10 +40,42 @@
                                             if ($post['user_id'] == Auth::user()->id) {
                                         ?>
                                         <a class="set-edit" href="{{route('idea.edit',$post->id)}}">w</a>
+                                        <a class="set-delete" href="{{ url('meeting/deleteIdeaPost/'.$post->id) }}">w</a>
                                         <?php
                                             }
                                         ?>
-                                        <a class="set-delete" href="{{ url('meeting/deleteIdeaPost/'.$post->id) }}">w</a>
+                                        <?php 
+                                            if(!empty($post['postFlagged'])) {
+                                                if($post['postFlagged']['user_id'] == Auth::user()->id) {
+                                        ?>
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                        <?php } else { ?>
+                                        <a class="set-warning" href="#flagged" data-toggle="modal">w</a>
+                                        <?php } } else { ?>
+                                        <a class="set-warning" href="#flagged" data-toggle="modal">w</a>
+                                        <?php } ?>
+                                        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="flagged" class="modal fade" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
+                                                        <h4 class="modal-title">Request flagged in the Post</h4>
+                                                    </div>
+                                                    <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
+                                                        <div class="form-group">
+                                                           <label>Message To Author:</label> 
+                                                           <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
+                                                        </div> 
+                                                        <div class="form-group">
+                                                            <div class="btn-wrap-div">
+                                                                <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportPostFlagged();">
+                                                                 <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                            </div>     
+                                                        </div>     
+                                                    </form>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div>   
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +83,7 @@
                         <div class="post-wrap-details">
                             <p class="text-12">{{$post->post_description}}</p>
                             <div class="post-details-like">
-                                <div class="like">
+                                <div class="like like-wrap">
                                     <p>
                                         <a href="javascript:void(0)" id="like_post" onclick="likePost({{$post->id}})">
                                             <?php
@@ -65,7 +97,7 @@
                                         <span id="post_like_count"><?php echo count($post->postLike);?></span>
                                     </p>
                                 </div>
-                                <div class="unlike">
+                                <div class="unlike like-wrap">
                                     <p>
                                         <a href="javascript:void(0)" id="dislike_post" onclick="dislikePost({{$post->id}})">
                                             <?php
@@ -113,7 +145,7 @@
                                     </div>
                                 @endif
                             @endif
-                            <hr class="border-in-hr">
+                            <!-- <hr class="border-in-hr">-->
                             <form id="post-form" class="post-form">
                             {{--<form name="post_comment_form" class="post-form" id="post_comment_form" method="post" action="{{url('savecomment',$post->id)}}">--}}
                                 {{ csrf_field() }}
@@ -136,7 +168,7 @@
                             </form>
                         
                         </div>
-                        <hr class="border-in-hr">
+                        <!-- <hr class="border-in-hr">-->
                        
                             <?php
                             /*
@@ -274,9 +306,16 @@
                             <div class="idea-grp post-category">
                                 @if(count($post_group) > 0)
                                     @foreach($post_group as $grp)
+                                        <?php 
+                                            if(!empty($grp->group_image)) {
+                                                $group_image = GROUP_PATH.$grp->group_image;
+                                            } else {
+                                                $group_image = DEFAULT_GROUP_IMAGE;
+                                            }
+                                        ?>        
                                         <div class="member-wrap">
                                             <div class="member-img">
-                                                <img src="{{ asset('assets/img/custome-service.png') }}" alt="no">
+                                                <img src="{{ asset($group_image) }}" alt="no">
                                             </div>
                                             <div class="member-details">
                                                 <h3 class="text-12">{{ $grp->group_name }}</h3>
@@ -286,9 +325,7 @@
                                     @endforeach
                                 @else
                                     <div class="member-wrap">
-                                        <div class="member-details">
-                                            <h3 class="text-12">This post is not featured in any group currently.</h3>
-                                        </div>
+                                            <p class="text-12">No group selected.</p>
                                     </div>
                                 @endif
                             </div>
@@ -296,9 +333,13 @@
                         <div class="category">
                             <h2>Tags</h2>
                             <div class="post-circle post-category">
+                                 @if(count($post->postTag) > 0)
                                 @foreach($post->postTag as $tag)
                                     <a href="{{ url('tag/'.Helpers::encode_url($tag->tag_id)) }}"> {{ $tag->tag->tag_name }}</a>
                                 @endforeach
+                                @else
+                                    <p class="text-12">No group selected.</p>
+                                @endif
                             </div>
                         </div>
                         
@@ -363,3 +404,70 @@
     </div> <!-- container -->
     
 @stop
+@push('javascripts')
+<script type="text/javascript">
+    function reportPostFlagged() {
+        if($('#post_flagged_form').valid() == 1) {
+            var reason = $('#post_message_autor').val();
+            var post_id = {{$post['id']}};
+            var user_id = {{Auth::user()->id}};
+            var _token = CSRF_TOKEN;
+            formData = {post_id:post_id,user_id:user_id,reason:reason,_token};
+            $.ajax({
+                url: SITE_URL + '/post_flagged',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        swal("Success", res.msg, "success");
+                        window.location.href = SITE_URL + '/post';
+                        //location.reload();
+                        //$('#comment_text_'+id).attr('readonly',true);
+                        //$('#update_comment_'+id).css('display','none');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function openFlagComment(comment_id,user_id) {
+        $('#comment_message_autor').val('');
+        $('#comment_flagged_id').val(comment_id);
+        $('#comment_user_id').val(user_id);
+        $('#flaggedComment').modal('show');
+    }
+    function reportCommentFlagged() {
+        if($('#comment_flagged_form').valid() == 1) {
+            var comment_id = $('#comment_flagged_id').val();
+            var user_id  = $('#comment_user_id').val();
+            var comment_message_autor = $('#comment_message_autor').val();
+            var flag_by = {{Auth::user()->id}};
+            var _token = CSRF_TOKEN;
+            formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
+            console.log(formData);
+            $.ajax({
+                url: SITE_URL + '/comment_flagged',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        swal("Success", res.msg, "success");
+                        $('#flaggedComment').modal('hide');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+</script>
+@endpush

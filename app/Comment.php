@@ -43,4 +43,8 @@ class Comment extends Model
     {
         return $this->hasMany('App\CommentReply','comment_id','id')->orderBy('id','desc');
     }
+    public function commentFlagged()
+    {
+        return $this->hasOne('App\CommentFlag' , 'comment_id' , 'id');
+    }
 }

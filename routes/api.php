@@ -23,3 +23,8 @@ define('POST_TITLE_LIMIT',50);
 define('POST_DESCRIPTION_LIMIT',130);
 define('POST_DISPLAY_LIMIT',2);
 define('COMMENT_DISPLAY_LIMIT',6);
+define('PROFILE_PATH','public/uploads/profile_pic/');
+define('GROUP_PATH','public/uploads/groups/');
+define('DEFAULT_GROUP_IMAGE','assets/img/custome-service.png');
+define('DEFAULT_PROFILE_IMAGE','assets/img/post-userone.PNG');
+define('DEFAULT_ATTACHMENT_IMAGE','assets/img/uploadfiles1.PNG');

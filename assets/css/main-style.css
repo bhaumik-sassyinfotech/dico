@@ -4,6 +4,15 @@
 /*------------------------------------------------------*/
 /* group list Page */
 /*------------------------------------------------------*/
+/*ankita changes */
+.desc-content {
+ overflow: hidden; 
+ height: 3em;
+ line-height: 1em;
+}
+
+/*ankita changes */
+
 body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6, body label {
   font-family: Open Sans;
   font-weight: normal;
@@ -466,10 +475,7 @@ body .group-tabs[class*="panel-"] .panel-primary .panel-body {
   color: #000;
   text-decoration: none;
 }
-.panel-body-wrap .wrap-inner-icon i {
-  color: #a3a3a3;
-  font-size: 12px;
-}
+.panel-body-wrap .wrap-inner-icon i { color: #a3a3a3; font-size: 16px; }
 .group-tabs .panel-body > h4 {
   color: #000;
   font-size: 15px;
@@ -704,7 +710,7 @@ p.user-icon {
   color: #d70b27;
   line-height: 100%;
 }
-.post-details-like > a p {
+.post-details-like .like-wrap  p {
   display: inline-block;
   font-size: 24px;
   font-weight: bold;
@@ -715,7 +721,7 @@ p.user-icon {
 .post-details-like .like i {
   color: #80b764;
 }
-.post-details-like > div i {
+.post-details-like .like-wrap  i {
   font-size: 36px;
   font-weight: 100;
 }
@@ -724,7 +730,7 @@ p.user-icon {
   margin-bottom: 30px;
   text-align: center;
 }
-.post-details-like > a {
+.post-details-like .like-wrap {
   display: inline-block;
   margin-right: 10px;
   vertical-align: top;
@@ -732,15 +738,19 @@ p.user-icon {
 .post-details-like .unlike i {
   color: #d70b27;
 }
-.post-details-like > a:last-child {
-  margin-right: 0;
-  margin-top: 7px;
+.post-details-like .unlike,
+.comment.like-wrap p{
+  margin-top: 4px;
 }
+
 body .text-12{
   font-size: 14px;
   font-weight: 100;
   line-height: 150%;
   text-align: justify;
+}
+.comment.like-wrap,.comment.like-wrap a {
+  color: #fac039;
 }
 .member-details p {
   color: #969696;
@@ -967,7 +977,7 @@ body .text-12{
   text-align: center;
   width: 100%;
 }
-.post-user-nam a {
+.post-user-nam .user-a {
   font-size: 15px;
   font-weight: 400;
   line-height: 100%;
@@ -1097,7 +1107,7 @@ body .text-12{
   width: 100%;
 }
 .post-links > a:hover,
-.post-user-nam a:hover,
+.post-user-nam .user-a:hover,
 .member-details > a:hover{
   color: #4f8edc;
   text-decoration: none;
@@ -2861,7 +2871,7 @@ select::-ms-expand {
   position: absolute;
   right: 0;
   top: 0;
-  width: 100%;
+  width: auto;
 }
 
 .follow-block .group-box {
@@ -3046,9 +3056,7 @@ select::-ms-expand {
   font-size: 12px;
   line-height: 120%;
 }
-.profile-page .group-tabs .panel-body-wrap .wrap-social span {
-  line-height: 200%;
-}
+.profile-page .group-tabs .panel-body-wrap .wrap-social span { line-height: 155%; }
 
 .profile-page .group-tabs .panel-body-wrap span, 
 .profile-page .group-tabs .panel-body-wrap p {
@@ -3416,6 +3424,7 @@ body .idea-page #page-heading h1.icon-mark {
   right: 0;
   width: 25px;
   z-index: 99;
+  top:10;
 }
 .profile-page .modal-header > button:hover {
   background-color: #ccc;
@@ -4163,7 +4172,7 @@ body a:hover, body a:focus {
   bottom: 0;
   padding: 15px 15px 40px;
   position: fixed;
-  width: 229px;
+  width: 230px;
 }
 
 .bottom-sidebar a {
@@ -4247,7 +4256,6 @@ body .modal-dialog.updatesecurity .modal-content,
 .wrap-name-upload .select {
   display: block;
   float: left;
-  height: 100%;
   line-height: 100%;
   padding: 7px 10px;
   width: 50%;
@@ -4259,17 +4267,23 @@ body .modal-dialog.updatesecurity .modal-content,
 }
 
 .wrap-name-upload .select:before {
-  content: "";
+  content: "\f0dc";
   font-family: FontAwesome;
   left: 0;
   margin-left: 20px;
   position: absolute;
-  top: 10px;
+  top: 50%;
+ -webkit-transform: translateY(-50%);
+ -moz-transform: translateY(-50%);
+ -ms-transform: translateY(-50%);
+ -o-transform: translateY(-50%);
+ transform: translateY(-50%);
+
 }
 
 .wrap-name-upload .select:after {
   font-size: 10px;
-  padding: 13px 16px;
+  padding:16px;
 }
 
 .wrap-name-upload .upload-btn-wrapper {
@@ -4283,7 +4297,7 @@ body .modal-dialog.updatesecurity .modal-content,
   font-size: 14px;
   font-weight: normal;
   margin: 0;
-  padding: 8px 10px;
+  padding: 11px 10px;
   width: 100%;
 }
 
@@ -4297,7 +4311,7 @@ body .modal-dialog.updatesecurity .modal-content,
 }
 .wrap-name-upload .select select {
     padding-left: 24px;
-    padding-top: 3px;
+    padding-top: 1px;
 }
 .rply-count.dislike img {
   -webkit-transform: scaleY(-1);
@@ -4398,4 +4412,7 @@ nav#page-leftbar {
 .bottom-logo {
   margin-top: 5px;
 }
+.idea-details #post-detail-left .modal-body .user-image { width: 12%; } .idea-details #post-detail-left .user-rply { width: 87%; } body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialog { width: 760px; } 
+
+.textarea-width { width: 100%; height: 150px; resize: none; padding: 0px; border: none; text-align: justify; background-color: transparent; } 
 /*close 08-01-2017*/

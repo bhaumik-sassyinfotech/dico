@@ -234,3 +234,31 @@ function cutString(text){
         document.write(text);
     }
 }
+function uploadFile() {
+    var file_data = $('#file_upload').prop('files')[0];
+    var postId = $('#postId').val();
+    var form_data = new FormData();
+    var _token = CSRF_TOKEN;
+    form_data.append('file_upload', file_data);
+    form_data.append('post_id',postId);
+    //console.log(form_data);
+    $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': _token
+        }
+    });
+    $.ajax({
+        url: SITE_URL + '/uploadFile',
+        type:"post",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: form_data,
+        success: function(res) {
+            $('#postAttachment').html(res);
+        },
+        error: function(e) {
+            swal("Error", e, "error");
+        }
+    });
+}

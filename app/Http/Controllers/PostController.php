@@ -568,14 +568,14 @@
                 },'postUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
                 },'postAttachment.attachmentUser','postComment'=> function ($q) {
-                   $q->take(COMMENT_DISPLAY_LIMIT)->orderBy('is_correct','desc');
+                    $q->take(COMMENT_DISPLAY_LIMIT)->orderBy('is_correct','desc');
                    //$q->count();
                 },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postComment.commentUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
-                },'postTag.tag'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->whereNULL('deleted_at')->where('id',$id)->first();//orderBy(DB::raw('count(postComment.commentLike)', 'DESC'))->first();
+                },'postComment.commentFlagged','postTag.tag','postFlagged'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                ->whereNULL('deleted_at')->where('id',$id)->withCount('postComment')->first();//orderBy(DB::raw('count(postComment.commentLike)', 'DESC'))->first();
                 //dd(DB::getQueryLog());
                 //dd($post);
        // $post = Post::with(['postComment.commentLikeCount'])->first();
@@ -1034,6 +1034,7 @@
                     $offset = $request->input('offset');
                     //$comments = Comment::with('commentUser')->where('post_id',$post_id)->take($offset)->get();
                     $post = Post::with('postUser','postUser.following')->with(['postComment'=> function ($q) {
+                                $q->orderBy('is_correct','desc');
                                 //return $q->take(100)->skip(COMMENT_DISPLAY_LIMIT);
                 },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
                             $q->where('user_id',  Auth::user()->id)->first(); 
@@ -1124,6 +1125,41 @@
                 }
             }
             catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function uploadFile(Request $request) {
+            
+            try
+            {
+                if(Auth::user()) {
+                    $id = $request->get('post_id');
+                    $file = $request->file('file_upload');
+                    if ($file != "")
+                    {
+                        $postData = array();
+                        //echo "here";die();
+                        $fileName        = $file->getClientOriginalName();
+                        $extension       = $file->getClientOriginalExtension();
+                        $folderName      = '/uploads/';
+                        $destinationPath = public_path() . $folderName;
+                        $safeName        = str_random(10) . '.' . $extension;
+                        $file->move($destinationPath , $safeName);
+                        //$attachment = new Attachment;
+                        $postData[ 'file_name' ] = $safeName;
+                        $postData[ 'type' ]      = 1;
+                        $postData[ 'type_id' ]   = $id;
+                        $postData[ 'user_id' ]   = Auth::user()->id;
+                        $attachment              = Attachment::insert($postData);
+                        if($attachment) {
+                            $post = Post::with(['postAttachment','postAttachment.attachmentUser'])->where('id',$id)->first();
+                            return view($this->folder . '.post.attachmentList',compact('post'));
+                        }
+                    }
+                }else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }catch (Exception $ex) {
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         }

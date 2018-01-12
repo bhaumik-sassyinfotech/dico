@@ -2,19 +2,20 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
 
+/*
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-    /* Safari and Chrome, if Chrome rule needed */
-    .create-post .common-form .check .checked:before {
+  */  /* Safari and Chrome, if Chrome rule needed */
+  /*  .create-post .common-form .check .checked:before {
     margin:  4px 16px;
     }
-
+*/
     /* Safari 5+ ONLY */
-    ::i-block-chrome, .create-post .common-form .check .checked:before {
+  /*  ::i-block-chrome, .create-post .common-form .check .checked:before {
     margin:  4px 16px;
     }
 }
 
-
+*/
 
 
 @media screen and (max-width:1258px){
@@ -42,6 +43,10 @@
 .super-user-employee tr label {
   font-size: 10px;
   line-height: 160%;
+}   
+body .modal-dialog.updatesecurity .modal-content, 
+.modal-dialog.updatesecurity {
+  width: 90%;
 }    
     
 }
@@ -78,10 +83,9 @@
 .profile-post-tabs .btn-wrap > a{
     font-size: 7px;
 }
-.profile-post-tabs .post-circle > a{
-    padding: 3px 5px;
+.profile-post-tabs .post-circle > a {
+  padding: 8px 15px;
 }
-
 .profile-page .group-tabs .panel-body-wrap .wrap-social span {
     line-height: 160%;
 }
@@ -93,7 +97,6 @@
     font-size: 10px;
 }
 .profile-post-tabs .panel-body fieldset p {
-    font-size: 7px;
     margin: 10px 0 0;
     padding: 0;
 }    
@@ -133,7 +136,11 @@
 .create-post .common-form .box-check .check {
   padding: 10px 10px 10px 40px;
   font-size: 13px;    
-}   
+}  
+body .modal-dialog.updatesecurity .modal-content, 
+.modal-dialog.updatesecurity {
+  width: 85%;
+}    
     
 }
 /*Mobile view*/
@@ -161,6 +168,11 @@
     
 }
 @media screen and (max-width:1024px){
+
+.group-listing tbody tr:last-child td p {
+  border: medium none;
+  line-height: 127%;    
+}    
 
 .all-group-list.main-user-profile .nav.nav-tabs li a {
   font-size: 12px;
@@ -229,9 +241,7 @@
 .category-detials .check {
   font-size: 12px;
 }
-.create-post .common-form .check .checked:before {
-  top: -10px;
-}    
+  
 .post-category .member-img {
   float: left;
   margin-right: 5%;
@@ -445,12 +455,11 @@ body .employe-profile .employ-box {
   -o-transform: translateY(-30%) translate(0px, 0px) !important;
   transform: translateY(-30%) translate(0px, 0px) !important;
 }
-    
 .upload-btn {
   padding: 5px 28px;
 }    
-.create-post .common-form .check .checked:before {
-  margin: 3px -28px;
+.create-post .common-form .check .checked::before {
+  left: 15px;
 }    
     
 
@@ -470,7 +479,7 @@ body .employe-profile .employ-box {
   padding: 16px 0;
 }    
 .group-listing tbody tr td p {
-  font-size: 11px;
+  font-size: 12px;
   padding: 23px 0;
 }
 .group-listing tbody tr td:first-child p {
@@ -492,6 +501,28 @@ body .employe-profile .employ-box {
 
 @media screen and (max-width:767px){
 
+body .padding-box hr {
+    border-color: #ccc;
+    margin: 10px 0;
+}  
+.group-listing .form-group:last-child {
+  margin: 0;
+}    
+.group-left-list .panel-body > p {
+  padding: 0 0 10px;
+} 
+.color-changes .dropdown-menu {
+    margin: 44px 0 0;
+}    
+.group-listing .dropdown-menu{
+  margin: 10px -20px 0;
+}
+.bottom-sidebar {
+  display: none;
+}
+.show-leftbar .bottom-sidebar {
+  display: block;
+}
 .main-user-profile .nav-tabs {
   padding-top: 20px;
 }
@@ -539,10 +570,6 @@ body #wrap .border-in-hr {
   width: 100%;
 }
 
-.group-listing .table-responsive {
-  display: inline-block;
-  overflow: scroll;
-}
 .group-listing .table thead tr:first-child th:first-child, .group-listing .table thead tr th {
   font-size: 12px;
   padding: 5px;
@@ -725,7 +752,7 @@ body #wrap .border-out-hr {
 }    
 .common-form .form-group > textarea {
   float: none;
-  height: 140px;
+  height: 100px;
   padding: 10px;
   width: 100%;
 }
@@ -748,7 +775,7 @@ body #wrap .border-out-hr {
 }
 .common-form .form-group > input:not([type="submit"]) {
   float: none;
-  width: 100%;
+  width: 100% !important;
 }
 .newmeeting-form .form-group:first-child {
   margin-bottom: 0;
@@ -878,11 +905,9 @@ body #wrap .border-out-hr {
 }
 .follow-block .group-item p,
 .profile-slider .grid-details > h4,
-.profile-page .group-tabs .panel-body > h4{
-    font-size: 12px;
-}
+.profile-page .group-tabs .panel-body > h4,
 .group-tabs .profile-slider .panel-body > p, .profile-page .group-tabs .panel-body-wrap span, .profile-page .group-tabs .panel-body-wrap p, .profile-post-tabs .post-circle > a, .profile-post-tabs .btn-wrap > a {
-    font-size: 10px;
+    font-size: 12px;
 }
 .post-slider .panel-body-wrap .wrap-inner-icon i {
     line-height: 180%;
@@ -1028,13 +1053,11 @@ p.user-icon {
 .common-form .check {
   margin-right: 5px;
  }    
-.create-post .common-form .check .checked:before {
-  left: 4px;
-  top: -11px;
-}   
+    
+    
 .create-post .common-form .box-check .check {
   font-size: 11px;
-  padding: 12px 10px 10px 35px;
+  padding: 12px 14px 12px 43px;
 }  
 .idea-details hr {
   margin: 0;
@@ -1097,23 +1120,42 @@ p.user-icon {
 .posts #page-heading .options {
   right: 30px;
 }    
-    
+#post-detail-left .group-wrap .pull-left, .new-meeting-details .form-group > textarea, .new-meeting-details .form-group > input:not([type="submit"]):not([type="reset"]) {
+    width: 100%;
+}   
+.form-group > textarea, 
+.form-group > input:not([type="submit"]):not([type="reset"]) {
+  height: 40px;
+}    
+.updatesecurity .form-group select {
+  font-size: 12px;
+  height: 40px;
+  padding: 0 4px;
+  vertical-align: top;    
+}
+.updatesecurity .common-form .form-group > input:not([type="submit"]) {
+  font-size: 12px;
+}    
+.profile-page .panel .panel-heading .nav.nav-tabs > li.active {
+  border-right: 1px solid #d0d1d3 !important;
+}    
+.btn-toolbar > .btn-default {
+  margin-right: 5px;
+}    
+.group-listing tbody tr:last-child td p {
+  border-bottom: medium none;
+}    
 }
 
 
 @media screen and (max-width:480px){
- 
+    
 .active-admin, .deactive-admin {
   border-radius: 0;
   font-size: 9px;
-  padding: 2px;
-}  
-.group-listing tbody tr td:last-child p {
-  padding: 9px 0;
-}    
-.group-listing tbody tr td:last-child p {
-  padding: 21.5px 0;
-}    
+  line-height: 143%;
+  padding: 0 4px;
+}
 .padding-box .modal-title {
   font-size: 18px;
 }
@@ -1129,23 +1171,71 @@ p.user-icon {
   -o-transform: translateY(-60%) translate(0px, 0px) !important;
   transform: translateY(-60%) translate(0px, 0px) !important;
 }
-    
-.group-listing tbody tr td:last-child p {
-  line-height: 140%;
-  padding: 17px 0;
-}
+
 .active-admin, .deactive-admin {
   border-radius: 0;
-  font-size: 9px;
-  padding: 5px 9px;
+  display: block;
+  font-size: 8px;
+  line-height: 117%;
+  padding: 9px 16px;
 }
+body .group-listing tbody tr td p.blue {
+  line-height: 146%;
+  padding: 17px 9px;
+}   
+.group-listing .table-responsive {
+  display: inline-block;
+  min-height: 100%;
+  overflow: scroll;
+}
+.group-listing tbody tr td:last-child p {
+  line-height: 160%;
+  padding: 12px 0;
+  text-align: center;
+}    
     
+}
+
+@media screen and (max-width:450px){
+
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  display: block;
+  font-size: 8px;
+  line-height: 121%;
+  padding: 4px 15px;
+}
+
+
+}
+
+@media screen and (max-width:400px){
+
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  display: block;
+  font-size: 8px;
+  line-height: 114%;
+  padding: 0 12px;
+}
+
 }
 
 @media screen and (max-width:360px){
     
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  font-size: 8px;
+  line-height: 100%;
+  padding: 2px 8px;
+}
+    
 .main-user-profile .nav-tabs {
   padding-top: 30px;
 }
+.common-form .col-xs-8,
+.common-form .col-xs-4{
+  width: 100%;
+} 
     
 }
