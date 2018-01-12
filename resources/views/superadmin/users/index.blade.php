@@ -1,7 +1,7 @@
 @extends('template.default')
 <title>DICO - User</title>
 @section('content')
-    
+
     <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
         <div id='wrap'>
             <div id="page-heading">
@@ -32,7 +32,7 @@
                                 </ul>
                             </div>
                         </div>
-                    
+
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                         <div class="panel panel-danger">
                             <div class="panel-body no-gapping">
                                 <div class="row no-gapping">
-                                    
+
                                     <div class="col-md-12 no-gapping">
                                         <div class="border-tabs">
                                             <div class="btn-toolbar form-group clearfix">
@@ -66,7 +66,7 @@
                                                                         hidden="true"></i><span class="hidden-xs">Other Managers</span></a>
                                                     </li>
                                                 </ul>
-                                                
+
                                                 <div class="btn-group top-set">
                                                     <form method="post" class="search-form">
                                                         <input type="text" placeholder="Search User"/>
@@ -83,7 +83,7 @@
                                                              class="block">
                                                         <img src="assets/img/icon/grid-view-hover.png" alt="group list"
                                                              class="none" style="display:none">
-                                                    
+
                                                     </button>
                                                 </div>
                                             </div>
@@ -93,10 +93,10 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="gallery list-unstyled">
-                                            
+
                                             <li data-name="Rusty" class="mix industrial mix_all"
                                                 style="display: inline-block;  opacity: 1;">
-                                                
+
                                                 <div class="list-block super-user">
                                                     <div class="panel-heading">
                                                         <div class="pull-right">
@@ -104,7 +104,7 @@
                                                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                             <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                         </div>
-                                                    
+
                                                     </div>
                                                     <div class="panel-body">
                                                         <fieldset>
@@ -116,17 +116,17 @@
                                                                 <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
                                                                 <h4>Super User</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
+                                                                <p>Followers:<span>63</span></p>
                                                             </div>
                                                             <div class="follower-text pull-right">
                                                                 <p>Following:<span>215</span></p>
@@ -135,7 +135,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
+
                                             <li data-name="Enchanted Creek" class="mix nature mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block admin">
@@ -145,7 +145,7 @@
                                                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                             <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                         </div>
-                                                    
+
                                                     </div>
                                                     <div class="panel-body">
                                                         <fieldset>
@@ -157,13 +157,13 @@
                                                                 <a href="mailto:mary_jane4@gmail.com">mary_jane4@gmail.com</a>
                                                                 <h4 class="text-color">Admin</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -176,7 +176,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
+
                                             <li data-name="Building" class="mix architecture mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block employee">
@@ -197,13 +197,13 @@
                                                                 <a href="mailto:mike_shinoda69@linkinpark.com">mike_shinoda69@linkinpark.com</a>
                                                                 <h4 class="text-color">Employee</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -216,8 +216,8 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
-                                            
+
+
                                             <li data-name="Machiery" class="mix industrial mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block super-user">
@@ -227,7 +227,7 @@
                                                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                             <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                         </div>
-                                                    
+
                                                     </div>
                                                     <div class="panel-body">
                                                         <fieldset>
@@ -239,13 +239,13 @@
                                                                 <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
                                                                 <h4>Super User</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -258,7 +258,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
+
                                             <li data-name="Fire Escape" class="mix architecture mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block super-user">
@@ -268,7 +268,7 @@
                                                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                             <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                         </div>
-                                                    
+
                                                     </div>
                                                     <div class="panel-body">
                                                         <fieldset>
@@ -280,13 +280,13 @@
                                                                 <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
                                                                 <h4>Super User</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -299,7 +299,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
+
                                             <li data-name="Mossy Tree" class="mix nature mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block super-user">
@@ -320,13 +320,13 @@
                                                                 <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
                                                                 <h4>Super User</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -339,7 +339,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
+
                                             <li data-name="Demolition" class="mix industrial mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block super-user">
@@ -349,7 +349,7 @@
                                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                                                         </div>
-                                                    
+
                                                     </div>
                                                     <div class="panel-body">
                                                         <fieldset>
@@ -361,13 +361,13 @@
                                                                 <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
                                                                 <h4>Super User</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -380,7 +380,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
+
                                             <li data-name="Fountain" class="mix architecture mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block super-user">
@@ -401,13 +401,13 @@
                                                                 <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
                                                                 <h4>Super User</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -420,7 +420,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            
+
                                             <li data-name="Rider" class="mix nature mix_all"
                                                 style="display: inline-block;  opacity: 1;">
                                                 <div class="list-block super-user">
@@ -441,13 +441,13 @@
                                                                 <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
                                                                 <h4>Super User</h4>
                                                             </div>
-                                                        
+
                                                         </fieldset>
-                                                        
+
                                                         <div class="btn-wrap">
                                                             <a href="#">Follow</a>
                                                             <a href="#">Point:246</a>
-                                                        
+
                                                         </div>
                                                         <div class="panel-body-wrap">
                                                             <div class="follower-text pull-left">
@@ -465,7 +465,7 @@
                                             <div tabindex="5000"
                                                  class="tab-pane active employee-tab" id="employee">
                                                 <div class="container">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info" style="overflow-x:auto;">
@@ -511,7 +511,7 @@
                                                                                 <td><p>235</p></td>
                                                                                 <td><p>34</p></td>
                                                                                 <td><p>240</p></td>
-                                                                            
+
                                                                             </tr>
                                                                             </tbody>
                                                                             <tbody>
@@ -529,7 +529,7 @@
                                                                                 <td><p>235</p></td>
                                                                                 <td><p>34</p></td>
                                                                                 <td><p>240</p></td>
-                                                                            
+
                                                                             </tr>
                                                                             </tbody>
                                                                             <tbody>
@@ -569,13 +569,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                
+
                                                 </div>
                                             </div>
                                             <div tabindex="5002"  class="tab-pane"
                                                  id="users">
                                                 <div class="container">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info" style="overflow-x:auto;">
@@ -623,7 +623,7 @@
                                                                                 <td><p>235</p></td>
                                                                                 <td><p>34</p></td>
                                                                                 <td><p>6854</p></td>
-                                                                            
+
                                                                             </tr>
                                                                             </tbody>
                                                                             <tbody>
@@ -643,7 +643,7 @@
                                                                                 <td><p>235</p></td>
                                                                                 <td><p>34</p></td>
                                                                                 <td><p>6854</p></td>
-                                                                            
+
                                                                             </tr>
                                                                             </tbody>
                                                                             <tbody>
@@ -686,12 +686,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                
+
                                                 </div>
                                             </div>
                                             <div tabindex="5002" class="tab-pane" id="other-managers">
                                                 <div class="container">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info" style="overflow-x:auto;">
@@ -737,7 +737,7 @@
                                                                                 <td><p>235</p></td>
                                                                                 <td><p>34</p></td>
                                                                                 <td><p>240</p></td>
-                                                                            
+
                                                                             </tr>
                                                                             </tbody>
                                                                             <tbody>
@@ -755,7 +755,7 @@
                                                                                 <td><p>235</p></td>
                                                                                 <td><p>34</p></td>
                                                                                 <td><p>240</p></td>
-                                                                            
+
                                                                             </tr>
                                                                             </tbody>
                                                                             <tbody>
@@ -795,7 +795,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                
+
                                                 </div>
                                             </div>
                                         </div>

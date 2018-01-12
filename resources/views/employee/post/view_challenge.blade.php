@@ -16,27 +16,9 @@
         <div class="container">
             <div class="row">
                 <div id="post-detail-left" class="col-sm-8">
-                    @if(session()->has('success'))
-                        <div class="alert alert-success">
-                            {{ session()->get('success') }}
-                        </div>
-                    @endif
-                    @if(session()->has('err_msg'))
-                        <div class="alert alert-danger">
-                            {{ session()->get('err_msg') }}
-                        </div>
-                    @endif
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                   @include('template.notification')
                     <!-- START TITLE -->
-                    <div class="group-wrap">   
+                    <div class="group-wrap">
                         <div class="pull-left">
                             <h3>{{$post->post_title}}</h3>
                             <div class="user-wrap">
@@ -50,13 +32,14 @@
                                 <p class="user-icon">-<?php if ($post['is_anonymous'] == 0) { echo $post->postUser->name; } else { echo "Anonymous"; } ?> <span>on {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>      
                             </div>    
                         </div> 
+
                         <div class="pull-right">
                             <div class="options">
                                 <div class="fmr-10">
                                     <a class="set-alarm" href="">a</a>
                                     <?php
-                                        if ($post['user_id'] == Auth::user()->id) {
-                                    ?>
+if ($post['user_id'] == Auth::user()->id) {
+	?>
                                     <a class="set-edit" href="{{url('edit_challenge',Helpers::encode_url($post->id))}}">w</a>
                                     <a class="set-delete" href="javascript:void(0);" onclick="deletepost({{$post->id}})">w</a>
                                     <?php
@@ -66,6 +49,7 @@
                                     ?>
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                     <?php } else { ?>
+
                                     <a class="set-warning" href="#flagged" data-toggle="modal">w</a>
                                         <?php } } else { ?>
                                     <a class="set-warning" href="#flagged" data-toggle="modal">w</a>
@@ -79,44 +63,44 @@
                                                 </div>
                                                 <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
                                                  <div class="form-group">
-                                                    <label>Message To Author:</label> 
+                                                    <label>Message To Author:</label>
                                                     <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
-                                                 </div> 
+                                                 </div>
                                                  <div class="form-group">
                                                      <div class="btn-wrap-div">
                                                          <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportPostFlagged();">
                                                           <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
-                                                     </div>     
-                                                 </div>     
+                                                     </div>
+                                                 </div>
                                                 </form>
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
-                                     </div>   
+                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                     <!-- END TITLE -->
-                    <div class="post-wrap-details"> 
+                    <div class="post-wrap-details">
                         <p class="text-12">{{$post->post_description}}</p>
                         <div class="post-details-like">
                             <div class="like like-wrap"><a href="javascript:void(0)" id="like_post" onclick="likePost({{$post['id']}})">
                                 <?php
-                                if (!empty($post['postUserLike'])) {
-                                    ?>
+if (!empty($post['postUserLike'])) {
+	?>
                                     <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                <?php } else { ?>
+                                <?php } else {?>
                                     <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                                <?php } ?></a>
+                                <?php }?></a>
                                 <p id="post_like_count"><?php echo count($post['postLike']); ?></p></div>
                             <div class="unlike like-wrap"><a href="javascript:void(0)" id="dislike_post" onclick="dislikePost({{$post['id']}})">
                                     <?php
-                                    if (!empty($post['postUserDisLike'])) {
-                                        ?>
+if (!empty($post['postUserDisLike'])) {
+	?>
                                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                                    <?php } else { ?>
+                                    <?php } else {?>
                                         <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-                                    <?php } ?>
+                                    <?php }?>
                                 </a><p id="post_dislike_count"><?php echo count($post['postDisLike']); ?></p></div>
                         
                             <div class="comment like-wrap"><a href="javascript:void(0)">
@@ -170,19 +154,19 @@
                                         <input type="hidden" name="comment_flagged_id" id="comment_flagged_id">
                                         <input type="hidden" name="comment_user_id" id="comment_user_id">
                                      <div class="form-group">
-                                        <label>Message To Author:</label> 
+                                        <label>Message To Author:</label>
                                         <textarea type="text" placeholder="Type here" id="comment_message_autor" name="comment_message_autor"></textarea>
-                                     </div> 
+                                     </div>
                                      <div class="form-group">
                                          <div class="btn-wrap-div">
                                              <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportCommentFlagged();">
                                               <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
-                                         </div>     
-                                     </div>     
+                                         </div>
+                                     </div>
                                     </form>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
-                        </div>   
+                        </div>
                         <form name="commentbox_form" id="commentbox_form" class="form-horizontal row-border">
                         <?php
                             if (!empty($post['postComment'])) {
@@ -196,32 +180,33 @@
                                             $profile_image = DEFAULT_PROFILE_IMAGE;
                                         }
                         ?>
-                        <div class="row">
+                        <div class="row" id="commentreply_{{$postComment['id']}}">
+
                             <div class="col-sm-2 user-image">
                                 <div class="img-wrap">
                                     <img alt="post user" src="{{asset($profile_image)}}" id="profile"/>
                                 </div>
                                 <?php
-                                    $comment_id = Helpers::encode_url($commentUser->id);
-                                    if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
-                                        if ($commentUser['following'][0]->status == 1) {
-                                            ?>
+$comment_id = Helpers::encode_url($commentUser->id);
+			if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
+				if ($commentUser['following'][0]->status == 1) {
+					?>
                                             <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Unfollow</a>
                                             <?php
-                                        } else {
-                                            ?>
+} else {
+					?>
                                             <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
                                             <?php
-                                        }
-                                    } else if ($commentUser->id != Auth::user()->id) {
-                                        ?>
+}
+			} else if ($commentUser->id != Auth::user()->id) {
+				?>
                                         <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
                                         <?php
-                                    }
-                                ?>
+}
+			?>
                             </div>
                             <div class="col-sm-10 user-rply">
-                                <div class="post-inner-reply"> 
+                                <div class="post-inner-reply">
                                     <div class="pull-left post-user-nam">
                                         <h3 class="text-12"><?php if ($postComment['is_anonymous'] == 0) { echo $commentUser['name']; } else { echo "<b>Anonymous</b>"; } ?></h3>
                                         <p>- on <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
@@ -230,37 +215,37 @@
                                         <div class="options">
                                             <div class="star-wrap">
                                                 <?php
-                                                    $active = "";
-                                                    if ($postComment['is_correct'] == 0) { 
-                                                        $active = "disactive";
-                                                    } else { 
-                                                        $active = "active"; 
-                                                    }
-                                                ?> 
+$active = "";
+			if ($postComment['is_correct'] == 0) {
+				$active = "disactive";
+			} else {
+				$active = "active";
+			}
+			?>
                                                 <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                                    <?php if ($commentUser['id'] == Auth::user()->id) {?>
                                                         <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
-                                                    <?php } else { ?>
-                                                        Correct  
-                                                    <?php } ?>    
+                                                    <?php } else {?>
+                                                        Correct
+                                                    <?php }?>
                                                 </p>
                                                 <?php /*if ($post['user_id'] == Auth::user()->id) { ?>
-                                                    <?php 
-                                                        if ($postComment['is_correct'] == 1) { ?>
-                                                        <i class="fa fa-star" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
-                                                        } else { ?>
-                                                                <i class="fa fa-star-o" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
-                                                            } ?>  
-                                                        <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">
-                                                        Solution</a> 
-                                                    <?php
-                                                } else {
-                                                    if ($postComment['is_correct'] == 1) {
-                                                        ?><i class="fa fa-star" aria-hidden="true"></i>Solution<?php
-                                                    }
-                                                }*/
-                                                ?>
-                                            </div>            
+			<?php
+			if ($postComment['is_correct'] == 1) { ?>
+			<i class="fa fa-star" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
+			} else { ?>
+			<i class="fa fa-star-o" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
+			} ?>
+			<a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">
+			Solution</a>
+			<?php
+			} else {
+			if ($postComment['is_correct'] == 1) {
+			?><i class="fa fa-star" aria-hidden="true"></i>Solution<?php
+			}
+			}*/
+			?>
+                                            </div>
                                             <div class="fmr-10">
                                                 <?php    
                                                 if(!empty($postComment['commentFlagged'])) {
@@ -273,12 +258,13 @@
                                                 <a class="set-warning" href="javascript:void(0)" onclick="openFlagComment({{$postComment['id']}}, {{$commentUser['id']}})">w</a>
                                                 <?php } ?>
                                                 <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+
                                                 <a class="set-edit" href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">e</a>
                                                 <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a>
-                                                <?php } ?>
+                                                <?php }?>
                                             </div>
-                                        </div>    
-                                    </div> 
+                                        </div>
+                                    </div>
                                 </div>
                                 <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
                                 <div class="btn-wrap-div">
@@ -287,26 +273,28 @@
                                 </div>
                                 <div class="rply-box">
                                     <div class="rply-count like">
+
                                         <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
                                             <?php
-                                            if (!empty($postComment['commentUserLike'])) {
-                                                ?>
+if (!empty($postComment['commentUserLike'])) {
+				?>
                                                 <i class="fa fa-thumbs-up"></i>
-                                            <?php } else { ?>
+                                            <?php } else {?>
                                                 <i class="fa fa-thumbs-o-up"></i>
-                                            <?php } ?>
+                                            <?php }?>
                                         </a><span id="comment_like_count_{{$postComment['id']}}"><?php echo count($postComment['commentLike']) ?></span>
                                         <!-- <img alt="post-like" src="assets/img/like.png"><p>08</p>-->
                                     </div> 
                                     <div class="rply-count dislike">
+
                                         <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}});" >
                                             <?php
-                                            if (!empty($postComment['commentUserDisLike'])) {
-                                                ?>
+if (!empty($postComment['commentUserDisLike'])) {
+				?>
                                                 <i class="fa fa-thumbs-down"></i>
-                                            <?php } else { ?>
+                                            <?php } else {?>
                                                 <i class="fa fa-thumbs-o-down"></i>
-                                            <?php } ?>
+                                            <?php }?>
                                         </a>
                                         <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
                                         <!-- <img alt="post-rply" src="assets/img/post-rply.png"> <p>04</p>-->
@@ -321,7 +309,30 @@
                                     <?php } 
                                          
                             } 
+                                if($post['post_comment_count'] > COMMENT_DISPLAY_LIMIT) {
+                            ?>
+                            <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allComments();">View all comments</a></div>
+                                <?php }
                         } ?>
+                            <div class="modal fade" id="LoadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">View all comments</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                      <div class="modal-body" id="allcomments_box" style="height: 280px;overflow: auto;">
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+8
                         </form>
                         <div id="myModalComment" class="modal fade" role="dialog">
                         <div class="modal-dialog">
@@ -347,10 +358,10 @@
                             </div>
 
                         </div></div>
-                    </div>    
+                    </div>
                     <!-- Comment Box end -->
-                    </div>  
-               
+                    </div>
+
                     <div class="col-sm-4" id="post-detail-right">
                     <!-- START RIGHT SIDEBAR -->
                         <div class="category">
@@ -365,6 +376,7 @@
                                                     $group_image = DEFAULT_GROUP_IMAGE;
                                                 }
                                     ?>
+
                                     <div class="member-wrap">
                                         <div class="member-img">
                                             <img src="{{ asset($group_image)}}" alt="no">
@@ -373,26 +385,26 @@
                                             <h3 class="text-12">{{$group->group_name}}</h3>
                                             <p class="text-10">Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
                                         </div>
-                                    </div>    
+                                    </div>
                                     <?php
-                                            }
-                                        } else {
-                                    ?>
+}
+} else {
+	?>
                                         <div class="member-wrap">
                                             <p class="text-10">No group selected.</p>
                                         </div>
-                                    <?php        
-                                        }
-                                    ?>
-                            </div>  
+                                    <?php
+}
+?>
+                            </div>
                         </div>
                         <div class="category">
                             <h2>Tags</h2>
                             <div class="post-circle post-category">
                                 <?php
-                                    if(!empty($post->postTag) && count($post->postTag) > 0) {
-                                        foreach($post->postTag as $postTag) {
-                                ?>
+if (!empty($post->postTag) && count($post->postTag) > 0) {
+	foreach ($post->postTag as $postTag) {
+		?>
                                 <a href="{{url('tag', Helpers::encode_url($postTag['tag']['id']))}}"> {{$postTag['tag']['tag_name']}}</a>
                                 <?php 
                                         }
@@ -405,6 +417,7 @@
                             </div>  
                         </div>  
 
+
                         <div class="category">
                             <h2>Similar Posts</h2>
                             <div class="post-links">
@@ -412,11 +425,11 @@
                                 <a href="#">who has any right to find fault with....</a>
                                 <a href="#">who has any right to find fault with....</a>
                                 <a href="#">who has any right to find fault with....</a>
-                            </div>  
-                        </div> 
+                            </div>
+                        </div>
                         <?php
-                           // if(!empty($post->postAttachment)) {
-                        ?>
+// if(!empty($post->postAttachment)) {
+?>
                         <div class="category">
                             <h2>Uploaded Files</h2>
                             <div class="wrap-name-upload">
@@ -443,6 +456,7 @@
                                     foreach($post->postAttachment as $attachment) {
                                 ?>
                                 <div class="member-wrap files-upload">
+
                                     <div class="member-img">
                                         <img src="{{asset(DEFAULT_ATTACHMENT_IMAGE)}}" alt="no">
                                     </div>
@@ -458,11 +472,12 @@
                                 ?>
                             </div> 
                         </div>
+
                         <?php
-                           // }
-                        ?>
+// }
+?>
                     <!-- END RIGHT SIDEBAR -->
-                </div> 
+                </div>
                  </div>
             </div>
         </div>
@@ -554,9 +569,11 @@
     }
     function editComment(id) {
         $('#comment_text_'+id).removeProp('readonly');
+        $('#comment_text_'+id).css('background-color','white');
         $('#update_comment_'+id).css('display','inline-block');
         $('#cancel_comment_'+id).css('display','inline-block');
     }
+
     function updateComment(id) {
         if($('#commentbox_form').valid() == 1) {
             var comment = $('#comment_text_'+id).val();
@@ -571,8 +588,10 @@
                     if (res.status == 1) {
                         //swal("Success", res.msg, "success");
                         $('#comment_text_'+id).attr('readonly',true);
+                        $('#comment_text_'+id).css('background-color','transparent');
                         $('#update_comment_'+id).css('display','none');
                         $('#cancel_comment_'+id).css('display','none');
+
                     } else {
                         swal("Error", res.msg, "error");
                     }
@@ -585,6 +604,7 @@
     }
     function closeComment(id) {
         $('#comment_text_'+id).attr('readonly',true);
+        $('#comment_text_'+id).css('background-color','transparent');
         $('#update_comment_'+id).css('display','none');
         $('#cancel_comment_'+id).css('display','none');
     }
@@ -654,6 +674,22 @@
     function openCommentReplyBox(commentid) {
         $('#myModalComment').modal('show');
         $('#commentId').val(commentid);
+    }
+    function allComments() {
+        var _token = CSRF_TOKEN;
+        var post_id = $('#post_id').val();
+        formData = {post_id:post_id,offset:0,_token};
+        $.ajax({
+            url: SITE_URL + '/allComments',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                $('#allcomments_box').html(response);
+            },
+            error: function(e) {
+                swal("Error", e, "error");
+            }
+        });
     }
 </script>
 @endpush

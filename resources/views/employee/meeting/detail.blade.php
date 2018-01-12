@@ -1,8 +1,8 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
-    
-    
+
+
     <div id="page-content">
         <div id='wrap'>
             <div id="page-heading">
@@ -17,6 +17,7 @@
             <div class="container">
                 <div class="row">
                     <div id="post-detail-left" class="col-sm-8">
+                        @include('template.notification')
                         <div class="group-wrap">
                             <div class="pull-left">
                                 <h3 class="profanity">{{$meeting->meeting_title}}</h3>
@@ -39,7 +40,7 @@
                                 <p class="text-12 profanity">
                                     {{ nl2br($meeting->meeting_description) }}
                                 </p>
-                                
+
                                     <div class="post-btn-wrap">
                                         <div class="post-btn deny">
                                             @if($meeting->created_by == Auth::user()->id && $meeting->is_finalized == '0')
@@ -50,7 +51,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                
+
                             </div>
                             <div id="finalizeMeeting" class="modal fade" role="dialog">
                                 <div class="modal-dialog modal-lg">
@@ -83,7 +84,7 @@
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
-        
+
                                 </div>
                             </div>
                             <hr class="border-in-hr">
@@ -112,38 +113,35 @@
                                             <div class="col-sm-2 user-image">
                                                 <div class="img-wrap">
                                                     <?php
-                                                        $profile_img = '';
-                                                        $profile_pic = $comment->commentUser->profile_image;
-                                                        if($profile_pic == "")
-                                                            $profile_img = asset('assets/img/default_user.jpg');
-                                                        else
-                                                            $profile_img = asset('public/uploads/profile_pic/'.$profile_pic);
-                                                    ?>
+$profile_img = '';
+$profile_pic = $comment->commentUser->profile_image;
+if ($profile_pic == "") {
+	$profile_img = asset('assets/img/default_user.jpg');
+} else {
+	$profile_img = asset('public/uploads/profile_pic/' . $profile_pic);
+}
+?>
                                                     <img alt="post user" src="{{ $profile_img }}">
                                                 </div>
                                             <?php
-                                                $commentUser = $comment->commentUser;
-                                                $comment_id = Helpers::encode_url($commentUser->id);
-                                                
-                                                if (!empty($commentUser->following && count($commentUser->following) > 0 && $commentUser->id != Auth::user()->id))
-                                                {
-                                                    if ($commentUser['following'][0]->status == 1)
-                                                    { ?>
+$commentUser = $comment->commentUser;
+$comment_id = Helpers::encode_url($commentUser->id);
+
+if (!empty($commentUser->following && count($commentUser->following) > 0 && $commentUser->id != Auth::user()->id)) {
+	if ($commentUser['following'][0]->status == 1) {?>
                                                         <a href="{{ url('/view_profile/'.$comment_id) }}">Unfollow</a>
                                                         <?php
-                                                    } else
-                                                    { ?>
+} else {?>
                                                         <a href="{{ url('/view_profile/'.$comment_id) }}"
                                                         >Follow</a>
                                                       <?php
-                                                    }
-                                                } else if ($commentUser->id != Auth::user()->id)
-                                                { ?>
+}
+} else if ($commentUser->id != Auth::user()->id) {?>
                                                         <a href="{{ url('/view_profile/'.$comment_id) }}"
                                                         >Follow</a>
                                                     <?php
-                                                }
-                                                ?>
+}
+?>
                                             </div>
                                             <div class="col-sm-10 user-rply">
                                                 <div class="post-inner-reply">
@@ -163,8 +161,8 @@
                                                     @endif
                                                 </div>
                                                 <p class="text-12" >
-                                                    <input type="text" class="profanity" id="comment_text_{{ $comment->id }}" value="{{ $comment->comment_reply }}" readonly >
-                                                    <p class="profanity">{{ $comment->comment_reply }}</p>
+                                                    <input style="display: none;" type="text" class="profanity" id="comment_text_{{ $comment->id }}" value="{{ $comment->comment_reply }}" readonly >
+                                                    <p class="profanity" id="comment_disp_{{ $comment->id }}">{{ $comment->comment_reply }}</p>
                                                     <button style="display:none;" class="saveComment st-btn" onclick="updateComment({{ $comment->id }})" id="update_comment_{{ $comment->id }}">Save</button>
                                                 </p>
                                                 <div class="rply-box">
@@ -218,7 +216,7 @@
                                     </div>
                                 @endif
                             </div>
-                        
+
                         </div>
                     </div>
                     <div id="post-detail-right" class="col-sm-4">
@@ -229,17 +227,17 @@
                                     <div class="member-wrap">
                                         <div class="member-img">
                                             <?php
-                                            $path = 'assets/img/member1.PNG';
-                                            $admin_icon = asset('assets/img/member-icon.PNG');
-                                            $profile_picture = (!empty($user->profile_image)) ? asset('public/uploads/profile_pic/') . '/' . $user->profile_image : asset($path); ?>
+$path = 'assets/img/member1.PNG';
+$admin_icon = asset('assets/img/member-icon.PNG');
+$profile_picture = (!empty($user->profile_image)) ? asset('public/uploads/profile_pic/') . '/' . $user->profile_image : asset($path);?>
                                             <img src="{{ $profile_picture }}" alt="no">
                                             @if($user->is_admin == '1')
                                                 <figure><img src="{{ $admin_icon }}" alt="member-icon"></figure>
                                             @endif
                                         </div>
                                         <div class="member-details">
-                                            <h3 class="text-12">{{ $user->name }}</h3>
-                                            <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                                            <h3 class="text-12"><a href="{{ url('view_profile/'.Helpers::encode_url($user->id)) }}">{{ $user->name }}</a></h3>
+                                            <a href="#">{{ $user->email }}</a>
                                         </div>
                                     </div>
                                 @endforeach
@@ -281,16 +279,16 @@
             var button = $(event.relatedTarget);
             // Extract info from data-* attributes
             var comment_id = button.data('comment-id');
-            console.log("Comment ID: " + comment_id);
+            // console.log("Comment ID: " + comment_id);
 
             var modal = $(this);
-            
+
             // $('.reply_to_comment').unbind().click(function (e) {
-           
+
         });
         $('.reply_to_comment').click(function (e) {
             e.preventDefault();
-            console.log("clicked"+Math.random());
+            // console.log("clicked"+Math.random());
             var comment_id = $(this).data('commentId');
             replyToComment(comment_id);
         });
@@ -324,12 +322,13 @@
         });
 
         function editComment(id) {
-            $('#comment_text_' + id).removeProp('readonly');
+            $('#comment_text_' + id).removeProp('readonly').slideDown('fast');
             $('#update_comment_' + id).css('display', 'block');
+             $("#comment_disp_"+id).slideUp('fast');
         }
 
         function updateComment(id) {
-            
+
                 var comment = $.trim($('#comment_text_' + id).val());
                 var _token = CSRF_TOKEN;
             if (comment != "" && comment.length > 0)
@@ -346,8 +345,11 @@
                         if (res.status == 1)
                         {
                             //swal("Success", res.msg, "success");
-                            $('#comment_text_' + id).attr('readonly', true);
+                            $('#comment_text_' + id).attr('readonly', true).slideUp('fast');
                             $('#update_comment_' + id).css('display', 'none');
+                            $("#comment_disp_"+id).html(comment).slideDown('fast');
+
+                            runProfanity();
                         } else {
                             swal("Error", res.msg, "error");
                         }
@@ -390,7 +392,7 @@
                 }
             });
         }
-        
+
         $(document).on('click','.deleteComment',function () {
             var comment_id = $(this).data('commentId');
             var dataString = {_token: CSRF_TOKEN , comment_id:comment_id};
@@ -424,8 +426,8 @@
                     });
                 }});
         });
-        
+
     </script>
-    
-    
+
+
 @endpush
