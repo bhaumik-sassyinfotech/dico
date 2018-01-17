@@ -323,6 +323,7 @@ $('#post_form').validate({
         },
         post_title: {
             required: true,
+            maxlength: POST_TITLE_LIMIT,
         }
     },
     messages: {
@@ -331,6 +332,7 @@ $('#post_form').validate({
         },
         post_title: {
             required: 'This field is required',
+            maxlength: 'you can enter only '+POST_TITLE_LIMIT+' characters',
         }
     },
     errorPlacement: function (error, element) {
@@ -349,6 +351,18 @@ $('#commentbox_form').validate({
     },
     messages: {
         comment_text: {
+            required: 'This field is required',
+        }
+    }
+});
+$('#comment_replybox_form').validate({
+    rules: {
+        comment_replybox_form: {
+            required: true,
+        }
+    },
+    messages: {
+        comment_replybox_form: {
             required: 'This field is required',
         }
     }

@@ -79,7 +79,10 @@ if (!empty($posts)) {
                                                          </div>
                                                          <div class="panel-body">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                             <p>-<?php if ($post['is_anonymous'] == 0) {echo $post['post_user']['name'];} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+
+                                                             <p>-<?php if ($post['is_anonymous'] == 0) {?>
+                                                                 <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
+                                                            <?php } else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              <fieldset>
                                                                  <p class="desc-content" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
@@ -182,7 +185,16 @@ if (!empty($group_posts)) {
                                                             </div>
                                                             <div class="panel-body">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                                <p>-<?php if ($grouppost['is_anonymous'] == 0) {echo $grouppost['post_user']['name'];} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+
+                                                                <p>-<?php if ($grouppost['is_anonymous'] == 0) {
+			?>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
+                                                                    <?php
+} else {
+			echo "Anonymous";
+		}
+		?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
@@ -284,7 +296,12 @@ if (!empty($user_posts)) {
                                                             </div>
                                                             <div class="panel-body">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                                <p>-<?php if ($mypost['is_anonymous'] == 0) {echo $mypost['post_user']['name'];} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
+
+                                                                <p>-<?php if ($mypost['is_anonymous'] == 0) {
+			?>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}">{{$mypost['post_user']['name']}}</a>
+                                                                <?php
+} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
@@ -439,7 +456,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             type: "POST",
             data: formData,
             success: function (response) {
-                console.log(response);
+                //console.log(response);
                 if(response != '') {
                     if(response.html != "") {
                         $('#users .userpostlist:last').after(response.html);

@@ -86,7 +86,7 @@
                 {
                     $this->validate($request , [
                         'post_type'  => 'required' ,
-                        'post_title' => 'required' ,
+                        'post_title' => 'required|max:'.POST_TITLE_LIMIT,
                     ]);
                     if ( $request->input('is_anonymous') )
                     {
@@ -345,14 +345,13 @@
         
         public function update($id , Request $request)
         {
-            
             try
             {
                 if ( Auth::user() )
                 {
                     $this->validate($request , [
                         'post_type'  => 'required' ,
-                        'post_title' => 'required' ,
+                        'post_title' => 'required|max:'.POST_TITLE_LIMIT ,
                     ]);
                     $post = new Post;
                     if ( $request->input('is_anonymous') )
@@ -579,9 +578,16 @@
                 //dd(DB::getQueryLog());
                 //dd($post);
        // $post = Post::with(['postComment.commentLikeCount'])->first();
-        //dd($post);
+        
         $post_group = [];
         if($post) {
+           // DB::connection()->enableQueryLog();
+            $tag_id = array_pluck($post->postTag,'id');
+            $similar_post = Post::with(['postTag' => function($q) use ($tag_id,$post) {
+                    $q->whereIn('id', $tag_id)->where('post_id',$post->id)->get(); 
+                }])->orWhere('post_title', 'like', '%'.$post->post_title.'%')->where('id','!=',$post->id)->get();
+            //dd(DB::getQueryLog());
+            //dd($similar_post);
             if(!empty($post->group_id)) {
                 $groupId = explode(',', $post->group_id);
                 $post_group = Group::with('groupUsersCount')->whereIn('id',$groupId)->get(); 
@@ -596,7 +602,7 @@
                 $view_page = 'view_challenge';
             }
 //            dd($post);
-            return view($this->folder.'.post.'.$view_page, compact('post','post_group','currUser'));
+            return view($this->folder.'.post.'.$view_page, compact('post','post_group','currUser','similar_post'));
         }else {
             return redirect('/index'); 
         }
@@ -976,6 +982,30 @@
             }
         }
         
+        public function comment_reply_update(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $this->validate($request , [
+                        'comment' => 'required' ,
+                    ]);
+                    $comment_id = $request->get('id');
+                    $comment_text = $request->get('comment');
+                    $res = CommentReply::where('id',$comment_id)->update(['comment_reply'=>$comment_text]);
+                    if($res) {
+                        echo json_encode(array('status' => 1,'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+                    }else {
+                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                    }
+                } else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        
         public function comment_reply(Request $request) {
             try
             {
@@ -1003,6 +1033,7 @@
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         }
+        
         public function deletecommentReply($id = null) {
             $deleteCommentReply = CommentReply::where('id', $id)->delete();
             if($deleteCommentReply) {
@@ -1155,6 +1186,24 @@
                             $post = Post::with(['postAttachment','postAttachment.attachmentUser'])->where('id',$id)->first();
                             return view($this->folder . '.post.attachmentList',compact('post'));
                         }
+                    }
+                }else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function getCommentReply(Request $request) {
+            try
+            {
+                if(!empty($request)) {
+                    $comment_id = $request->get('comment_id');
+                    $comment = Comment::with(['commentReply','commentReply.commentReplyUser'])->where('id',$comment_id)->first();
+                    if($comment) {
+                        return view($this->folder . '.post.commentReply',compact('comment'));
+                    } else {
+                       return back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));  
                     }
                 }else {
                     return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 

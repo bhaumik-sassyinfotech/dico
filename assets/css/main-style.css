@@ -4409,7 +4409,7 @@ body .modal-dialog.updatesecurity .modal-content,
 nav#page-leftbar {
   background-color: #e6e7e8;
   height: 100%;
-  position: fixed;
+  /*position: fixed;*/
 }
 .bottom-logo {
   margin-top: 5px;

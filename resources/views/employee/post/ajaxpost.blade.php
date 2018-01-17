@@ -21,7 +21,10 @@
                         </div>
                         <div class="panel-body">
                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                            <p>-<?php if($post['is_anonymous'] == 0) { echo $post['post_user']['name']; } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                            <p>-<?php if($post['is_anonymous'] == 0) { ?>
+                                <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a> 
+                            <?php    
+                            } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                             <fieldset>
                                 <?php /*<p class="desc_content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                 <p class="desc-content" id="desc_content_{{$post['id']}}">{{ $post['post_description'] }}</p>

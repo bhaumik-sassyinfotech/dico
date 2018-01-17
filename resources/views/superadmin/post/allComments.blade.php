@@ -38,9 +38,9 @@ if (!empty($post['postComment'])) {
                     <div class="post-inner-reply"> 
                         <div class="pull-left post-user-nam">
                             <h3 class="text-12"><?php
-                                if ($postComment['is_anonymous'] == 0) {
-                                    echo $commentUser['name'];
-                                } else {
+                                if ($postComment['is_anonymous'] == 0) { ?>
+                                <a href="{{url('view_profile', Helpers::encode_url($commentUser['id']))}}"><?php echo $commentUser['name'];?></a>
+                                <?php } else {
                                     echo "Anonymous";
                                 }
                                 ?></h3>
@@ -62,7 +62,7 @@ if (!empty($post['postComment'])) {
                                             <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                         <?php } else { ?>
                                             Correct  
-            <?php } ?>    
+                                    <?php } ?>    
                                     </p>
                                 </div>
                                 <div class="fmr-10">
@@ -89,16 +89,16 @@ if (!empty($post['postComment'])) {
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
                                     </div>   
-            <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-edit" href="javascript:void(0)" onclick="editComment(<?= $postComment['id'] ?>);">e</a>
+                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-edit" href="javascript:void(0)" onclick="editComment('<?= 'popup_'.$postComment['id'] ?>');">e</a>
                                         <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a><?php } ?>
                                 </div>
                             </div>    
                         </div> 
                     </div>
-                    <textarea name="comment_text" id="comment_text_<?= $postComment['id'] ?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
+                    <textarea name="comment_text" id="comment_text_popup_<?= $postComment['id'] ?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
                     <div class="btn-wrap-div">
-                        <input type="button" name="update_comment" id="update_comment_<?= $postComment['id'] ?>" value="Save" onclick="updateComment(<?= $postComment['id'] ?>)" style="display: none;"/>
-                        <input type="button" name="cancel_comment" id="cancel_comment_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment(<?=$postComment['id']?>)" style="display: none;"/>
+                        <input type="button" name="update_comment" id="update_comment_popup_<?= $postComment['id'] ?>" value="Save" onclick="updateComment(<?= $postComment['id'] ?>,'<?= 'popup_'.$postComment['id'] ?>')" class="st-btn" style="display: none;"/>
+                        <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment('<?= 'popup_'.$postComment['id']?>')" style="display: none;"/>
                     </div>
                     <div class="rply-box">
                         <div class="rply-count like">
@@ -127,7 +127,7 @@ if (!empty($post['postComment'])) {
                             <!-- <img alt="post-rply" src="assets/img/post-rply.png"> <p>04</p>-->
                         </div> 
                         <div class="rply-count">
-                            <a href="javascript:void(0);" data-toggle="modal" data-id="{{$postComment['id']}}" id="modalComment" data-target="#myModalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
+                            <a href="javascript:void(0);" onclick="openCommentReplyBox({{$postComment['id']}})" id="modalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
                             <span><?php echo count($postComment['commentReply']); ?></span>
                         </div>
                     </div>
