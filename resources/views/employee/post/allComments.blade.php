@@ -7,7 +7,7 @@ if (!empty($post['postComment'])) {
             if (!empty($commentUser->profile_image) && $postComment['is_anonymous'] == 0) {
                 $profile_image = 'public/uploads/profile_pic/' . $commentUser->profile_image;
             } else {
-                $profile_image = 'public/assets/demo/avatar/jackson.png';
+                $profile_image = DEFAULT_PROFILE_IMAGE;
             }
             ?>
             <div class="row">
@@ -37,11 +37,11 @@ if (!empty($post['postComment'])) {
                 <div class="col-sm-10 user-rply">
                     <div class="post-inner-reply"> 
                         <div class="pull-left post-user-nam">
-                            <h3><?php
+                            <h3 class="text-12"><?php
                                 if ($postComment['is_anonymous'] == 0) {
                                     echo $commentUser['name'];
                                 } else {
-                                    echo "<b>Anonymous</b>";
+                                    echo "Anonymous";
                                 }
                                 ?></h3>
                             <p>- on <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
@@ -95,10 +95,13 @@ if (!empty($post['postComment'])) {
                             </div>    
                         </div> 
                     </div>
-                    <input type="text" name="comment_text" id="comment_text_<?= $postComment['id'] ?>" value="<?php echo $postComment['comment_text']; ?>" readonly="" class="text-12"/>
-                    <input type="button" name="update_comment" id="update_comment_<?= $postComment['id'] ?>" value="Save" onclick="updateComment(<?= $postComment['id'] ?>)" style="display: none;"/>
+                    <textarea name="comment_text" id="comment_text_<?= $postComment['id'] ?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
+                    <div class="btn-wrap-div">
+                        <input type="button" name="update_comment" id="update_comment_<?= $postComment['id'] ?>" value="Save" onclick="updateComment(<?= $postComment['id'] ?>)" style="display: none;"/>
+                        <input type="button" name="cancel_comment" id="cancel_comment_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment(<?=$postComment['id']?>)" style="display: none;"/>
+                    </div>
                     <div class="rply-box">
-                        <div class="rply-count">
+                        <div class="rply-count like">
                             <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
                                 <?php
                                 if (!empty($postComment['commentUserLike'])) {
@@ -110,7 +113,7 @@ if (!empty($post['postComment'])) {
                             </a><span id="comment_like_count_{{$postComment['id']}}"><?php echo count($postComment['commentLike']) ?></span>
                             <!-- <img alt="post-like" src="assets/img/like.png"><p>08</p>-->
                         </div> 
-                        <div class="rply-count">
+                        <div class="rply-count dislike">
                             <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}});" >
                                 <?php
                                 if (!empty($postComment['commentUserDisLike'])) {
@@ -123,8 +126,9 @@ if (!empty($post['postComment'])) {
                             <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
                             <!-- <img alt="post-rply" src="assets/img/post-rply.png"> <p>04</p>-->
                         </div> 
-                        <div class="rply_count">
+                        <div class="rply-count">
                             <a href="javascript:void(0);" data-toggle="modal" data-id="{{$postComment['id']}}" id="modalComment" data-target="#myModalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
+                            <span><?php echo count($postComment['commentReply']); ?></span>
                         </div>
                     </div>
                 </div>

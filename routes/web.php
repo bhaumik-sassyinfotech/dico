@@ -1,4 +1,5 @@
 <?php
+
 Route::get('/', function () {
 	return redirect('/index');
 });
@@ -10,8 +11,12 @@ Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@fi
 Route::group(['middleware' => 'admin'], function () {
 	Route::resource('company', 'CompanyController');
 	Route::resource('security_question', 'SecurityQuestionController');
-	Route::match(['get', 'post'], '/user/employeeList', 'UserController@getEmployeeListing');
-	Route::match(['get', 'post'], '/user/adminList', 'UserController@getGroupAdminListing');
+	Route::match(['get', 'post'], '/user/employeeList', 'UserController@getEmployeeListing'); // employee-datatable
+	Route::match(['get', 'post'], '/user/employeeGrid', 'UserController@getEmployeeGrid'); // employee-grid view
+	Route::match(['get', 'post'], '/user/adminGrid', 'UserController@getGroupAdminGrid'); // admin-grid view
+	Route::match(['get', 'post'], '/user/adminList', 'UserController@getGroupAdminList'); // admin-list view
+	Route::match(['get', 'post'], '/user/otherManagersList', 'UserController@getOtherManagerList'); // other_managers-list view
+	Route::match(['get', 'post'], '/user/otherManagersGrid', 'UserController@getOtherManagerGrid'); // admin-grid view
 	Route::resource('employee', 'EmployeeController');
 	Route::get('get_company', 'CompanyController@get_company');
 	Route::get('get_security_question', 'SecurityQuestionController@get_security_question');
@@ -83,6 +88,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('allComments', 'PostController@allComments');
 	Route::post('post_flagged', 'PostController@post_flagged');
 	Route::post('comment_flagged', 'PostController@comment_flagged');
+	Route::post('uploadFile', 'PostController@uploadFile');
 });
 
 Route::get('/home', 'DashboardController@index')->name('home');

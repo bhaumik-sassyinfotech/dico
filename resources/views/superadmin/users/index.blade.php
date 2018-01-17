@@ -12,7 +12,7 @@
                 <h1 class="tp-bp-0">Users</h1>
                 <div class="options">
                     <div class="btn-toolbar">
-                        <a class="btn btn-default" href="create-user.php">
+                        <a class="btn btn-default" href="{{ route('user.create') }}">
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
                             <span class="hidden-xs hidden-sm">Create User</span>
                         </a>
@@ -48,28 +48,28 @@
                                         <div class="border-tabs">
                                             <div class="btn-toolbar form-group clearfix">
                                                 <ul class="nav nav-tabs">
-                                                    <li class="active"><a href="#employee" data-toggle="tab"
-                                                                          data-order="desc" data-sort="default"
-                                                                          class="btn btn-default sort active"><i
+                                                    <li class="active"><a href="#employee" onclick="superUserGrid(1)" data-toggle="tab"
+                                                                          data-order="desc1" data-sort="default"
+                                                                          class="btn btn-default sort active "><i
                                                                     class="fa fa-list visible-xs icon-scale"></i><span
-                                                                    class="hidden-xs">Employee</span></a></li>
-                                                    <li class=""><a href="#users" data-toggle="tab" data-order="desc"
+                                                                    class=" hidden-xs">Employee</span></a></li>
+                                                    <li class=""><a href="#users" onclick="superUserGrid(2)" data-toggle="tab" data-order="desc2"
                                                                     data-sort="data-name"
-                                                                    class="btn btn-default sort"><span class=""><i
+                                                                    class="btn btn-default sort "><span class=""><i
                                                                         class="fa fa-user fa-6 visible-xs"
-                                                                        aria-hidden="true"></i><span class="hidden-xs">Group Admin</span></a>
+                                                                        aria-hidden="true"></i><span class=" hidden-xs">Group Admin</span></a>
                                                     </li>
-                                                    <li class=""><a href="#other-managers" data-toggle="tab"
+                                                    <li class=""><a href="#other-managers" onclick="superUserGrid(3)" data-toggle="tab"
                                                                     data-order="asc" data-sort="data-name"
-                                                                    class="btn btn-default sort"><span class=""><i
+                                                                    class="btn btn-default sort "><span class=""><i
                                                                         class="fa fa-group visible-xs" aria=""
-                                                                        hidden="true"></i><span class="hidden-xs">Other Managers</span></a>
+                                                                        hidden="true"></i><span class=" hidden-xs">Other Managers</span></a>
                                                     </li>
                                                 </ul>
 
                                                 <div class="btn-group top-set">
                                                     <form method="post" class="search-form">
-                                                        <input type="text" placeholder="Search User"/>
+                                                        <input id="search_query" type="text" placeholder="Search User"/>
                                                         <input type="button" value="#" class="search-icon"/>
                                                     </form>
                                                     <button id="GoList" class="grid-view">
@@ -92,376 +92,73 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <ul class="gallery list-unstyled">
+                                        <!-- Employee GRID START -->
+                                        <input type="hidden" name="offset" id="offset" data-tab="1" value="0">
+                                        <ul class="gallery list-unstyled" id="display-grid">
+                                            @if(count($users) > 0)
+                                                @foreach($users as $user)
+                                                @php
+                                                    $class = 'industrial';
+                                                    if($loop->index % 3 == 1)
+                                                        $class = 'nature';
+                                                    else if($loop->index % 3 == 2)
+                                                        $class = 'architecture';
+                                                @endphp
+                                                <li data-name="{{ $user->name }}" class="mix {{ $class }} mix_all userList" style="display: inline-block;  opacity: 1;">
+                                                    <div class="list-block super-user">
+                                                        <div class="panel-heading">
+                                                            <div class="pull-right">
+                                                                <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
+                                                                <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                            </div>
 
-                                            <li data-name="Rusty" class="mix industrial mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-
-                                                <div class="list-block super-user">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                         </div>
+                                                        <div class="panel-body">
+                                                            <fieldset>
+                                                                <div class="grid-image">
+                                                                    @php
+                                                                        $profile_pic = asset('assets/img/super-user.PNG');
+                                                                        if($user->profile_image != "")
+                                                                            $profile_pic = asset(PROFILE_PATH.$user->profile_image);
+                                                                    @endphp
+                                                                    <img src="{{ $profile_pic }}" alt="super-user">
+                                                                </div>
+                                                                <div class="grid-details">
+                                                                    <h4>{{ $user->name }}</h4>
+                                                                    <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                                                                    <h4>Employee</h4>
+                                                                </div>
 
+                                                            </fieldset>
+                                                            <div class="btn-wrap">
+                                                                <a href="#">Follow</a>
+                                                                <a href="#">Point:246</a>
+
+                                                            </div>
+                                                            <div class="panel-body-wrap">
+                                                                <div class="follower-text pull-left">
+                                                                    <p>Followers:<span>{{ count($user->followers) }}</span></p>
+                                                                </div>
+                                                                <div class="follower-text pull-right">
+                                                                    <p>Following:<span>{{ count($user->following) }}</span></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/super-user.PNG" alt="super-user">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Jason Belmonte</h4>
-                                                                <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
-                                                                <h4>Super User</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>63</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                </li>
+                                                @endforeach
+                                                @if($users_count > POST_DISPLAY_LIMIT)
+                                                <div class="all_viewmore col-md-12">
+                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
                                                 </div>
-                                            </li>
+                                                @endif
 
-                                            <li data-name="Enchanted Creek" class="mix nature mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block admin">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/admin.PNG" alt="admin">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Mary Jane</h4>
-                                                                <a href="mailto:mary_jane4@gmail.com">mary_jane4@gmail.com</a>
-                                                                <h4 class="text-color">Admin</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li data-name="Building" class="mix architecture mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block employee">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/employee.PNG" alt="employee">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Mike Shinoda</h4>
-                                                                <a href="mailto:mike_shinoda69@linkinpark.com">mike_shinoda69@linkinpark.com</a>
-                                                                <h4 class="text-color">Employee</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-
-                                            <li data-name="Machiery" class="mix industrial mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block super-user">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/super-user.PNG" alt="super-user">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Jason Belmonte</h4>
-                                                                <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
-                                                                <h4>Super User</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li data-name="Fire Escape" class="mix architecture mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block super-user">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/super-user.PNG" alt="super-user">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Jason Belmonte</h4>
-                                                                <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
-                                                                <h4>Super User</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li data-name="Mossy Tree" class="mix nature mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block super-user">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/super-user.PNG" alt="super-user">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Jason Belmonte</h4>
-                                                                <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
-                                                                <h4>Super User</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li data-name="Demolition" class="mix industrial mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block super-user">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <i aria-hidden="true" class="fa fa-bell-o"></i>
-                                                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/super-user.PNG" alt="super-user">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Jason Belmonte</h4>
-                                                                <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
-                                                                <h4>Super User</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li data-name="Fountain" class="mix architecture mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block super-user">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/super-user.PNG" alt="super-user">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Jason Belmonte</h4>
-                                                                <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
-                                                                <h4>Super User</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li data-name="Rider" class="mix nature mix_all"
-                                                style="display: inline-block;  opacity: 1;">
-                                                <div class="list-block super-user">
-                                                    <div class="panel-heading">
-                                                        <div class="pull-right">
-                                                            <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <fieldset>
-                                                            <div class="grid-image">
-                                                                <img src="assets/img/super-user.PNG" alt="super-user">
-                                                            </div>
-                                                            <div class="grid-details">
-                                                                <h4>Jason Belmonte</h4>
-                                                                <a href="mailto:jason_belmonte24@gmail.com">jason_belmonte24@gmail.com</a>
-                                                                <h4>Super User</h4>
-                                                            </div>
-
-                                                        </fieldset>
-
-                                                        <div class="btn-wrap">
-                                                            <a href="#">Follow</a>
-                                                            <a href="#">Point:246</a>
-
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="follower-text pull-left">
-                                                                <p>Followers:<span>62</span></p>
-                                                            </div>
-                                                            <div class="follower-text pull-right">
-                                                                <p>Following:<span>215</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            @endif
                                         </ul>
-                                        <div class="hide-table">
+                                        <input type="hidden" name="role_id" id="role_id" value="3">
+                                        <!-- Employee GRID END -->
+                                        <div class="hide-table none">
                                             <div tabindex="5000"
                                                  class="tab-pane active employee-tab" id="employee">
                                                 <div class="container">
@@ -479,74 +176,23 @@
                                                                 </div>
                                                                 <div class="panel-body">
                                                                     <div class="row">
-                                                                        <table class="table">
+                                                                        <table class="table" id="emp-table">
                                                                             <thead>
-                                                                            <tr>
-                                                                                <th>
-                                                                                    <label class="check">User Name<input
-                                                                                                type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </th>
-                                                                                <th><label>User Email Id</label></th>
-                                                                                <th><label>Role</label></th>
-                                                                                <th><label>Position</label></th>
-                                                                                <th><label>Following</label></th>
-                                                                                <th><label>Followers</label></th>
-                                                                                <th><label>Points</label></th>
-                                                                            </tr>
+                                                                                <tr>
+                                                                                    <th>
+                                                                                        <label class="check">User Name<input
+                                                                                                    type="checkbox">
+                                                                                            <span class="checkmark"></span>
+                                                                                        </label>
+                                                                                    </th>
+                                                                                    <th><label>User Email Id</label></th>
+                                                                                    <th><label>Role</label></th>
+                                                                                    <th><label>Following</label></th>
+                                                                                    <th><label>Followers</label></th>
+                                                                                    <th><label>Points</label></th>
+                                                                                </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Jason
-                                                                                        Durelo<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>jason_durelo123@gamil.com</p>
-                                                                                </td>
-                                                                                <td><p>Employee</p></td>
-                                                                                <td><p>Marketing Head</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>240</p></td>
-
-                                                                            </tr>
-                                                                            </tbody>
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Melllisa
-                                                                                        McCarty<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>melllisa_mc45m@gmail.com</p></td>
-                                                                                <td><p><a href="#">Super User</a></p>
-                                                                                </td>
-                                                                                <td><p>Logistics Head</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>240</p></td>
-
-                                                                            </tr>
-                                                                            </tbody>
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Vennesa
-                                                                                        Jay<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>vennesa_jay@gmail.com</p></td>
-                                                                                <td><p>Employee</p></td>
-                                                                                <td><p>Sr. Finance Manager</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>240</p></td>
-                                                                            </tr>
                                                                             </tbody>
                                                                         </table>
                                                                         <div class="notice">
@@ -589,7 +235,7 @@
                                                                 </div>
                                                                 <div class="panel-body">
                                                                     <div class="row">
-                                                                        <table class="table">
+                                                                        <table class="table" id="company-manager">
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>
@@ -705,7 +351,7 @@
                                                                 </div>
                                                                 <div class="panel-body">
                                                                     <div class="row">
-                                                                        <table class="table">
+                                                                        <table class="table" id="other-managers-table">
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>
@@ -723,56 +369,7 @@
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Jason
-                                                                                        Durelo<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>jason_durelo123@gamil.com</p>
-                                                                                </td>
-                                                                                <td><p><a href="#">Employee</a></p></td>
-                                                                                <td><p>Marketing Head</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>240</p></td>
 
-                                                                            </tr>
-                                                                            </tbody>
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Melllisa
-                                                                                        McCarty<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>melllisa_mc45m@gmail.com</p></td>
-                                                                                <td><p><a href="#">Super User</a></p>
-                                                                                </td>
-                                                                                <td><p>Logistics Head</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>240</p></td>
-
-                                                                            </tr>
-                                                                            </tbody>
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Vennesa
-                                                                                        Jay<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>vennesa_jay@gmail.com</p></td>
-                                                                                <td><p><a href="#">Employee</a></p></td>
-                                                                                <td><p>Sr. Finance Manager</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>240</p></td>
-                                                                            </tr>
                                                                             </tbody>
                                                                         </table>
                                                                         <div class="notice">
@@ -810,3 +407,51 @@
     </div>
 @endsection
 
+@push('javascripts')
+    <script type="text/javascript">
+        function loadMorePost() {
+            var offSet_selector = $('#offset');
+            var tab_id = offSet_selector.data('tab');
+            var id = offSet_selector.val();
+            var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
+            var searchText = $('#search_text').val();
+            var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            console.log(formData);
+            var new_url = '/user/employeeGrid';
+
+            if(tab_id == 2)
+                new_url = '/user/adminGrid';
+            else if(tab_id == 3)
+                new_url = '/user/otherManagersGrid';
+
+            $.ajax({
+                url: SITE_URL+new_url,
+                type: "POST",
+                data: formData,
+                async:true,
+                success: function (response)
+                {
+                    if(response != "")
+                    {
+                        if(response.html != "")
+                        {
+                            // $("#display-grid").empty();
+                            $("#display-grid li.userList:last").after(response.html);
+                            offSet_selector.attr('value',offset);
+                            if( $('.userList').length == response.count )
+                            {
+                                $('#load_post').hide();
+                                $(".all_viewmore").hide();
+                            }
+                            $(".all_viewmore").not(':last').remove();
+                        } else {
+                            //$('#threads .postlist:last').after("No post found.");
+                        }
+                    }
+                },
+                error: function() {
+                }
+            });
+        }
+    </script>
+@endpush

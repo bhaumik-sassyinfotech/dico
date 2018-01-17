@@ -17,12 +17,12 @@
                     </div>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
-                        
+
                     </div>
-                    
+
                 </div>
             </div>
-        </div>    
+        </div>
         <div class="container">
             <div class="row">
                 <div class=" profile-page col-sm-12 col-md-12">
@@ -57,29 +57,29 @@
                                 <!-- START ALL POST -->
                                 <div tabindex="5000" class="tab-pane active" id="threads">
                                     <?php
-                                        if (!empty($posts)) {
-                                            foreach ($posts as $post) { 
-                                                $post_type = $post['post_type'];
-                                                if($post_type == "idea") {
-                                                    $post_class = 1;
-                                                }else if($post_type == "question") {
-                                                    $post_class = 2;
-                                                }else if($post_type == "challenge") {
-                                                    $post_class = 3;
-                                                }
-                                                ?>
+if (!empty($posts)) {
+	foreach ($posts as $post) {
+		$post_type = $post['post_type'];
+		if ($post_type == "idea") {
+			$post_class = 1;
+		} else if ($post_type == "question") {
+			$post_class = 2;
+		} else if ($post_type == "challenge") {
+			$post_class = 3;
+		}
+		?>
                                                 <div class="col-md-4 postlist">
                                                     <div class="panel-{{$post_class}} panel-primary">
                                                          <div class="panel-heading">
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                                                              <div class="pull-right i-con-set">
-                                                               <a><img src="assets/img/notification-icon.png"></a>  
+                                                               <a><img src="assets/img/notification-icon.png"></a>
                                                                <a><img src="assets/img/warning-icon.png"></a>
                                                              </div>
                                                          </div>
                                                          <div class="panel-body">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                             <p>-<?php if($post['is_anonymous'] == 0) { echo $post['post_user']['name']; } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                             <p>-<?php if ($post['is_anonymous'] == 0) {echo $post['post_user']['name'];} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              <fieldset>
                                                                  <p class="desc-content" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
@@ -91,24 +91,24 @@
                                                                  <div class="wrap-social pull-left">
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">
                                                                          <?php
-                                                                         if (!empty($post['post_user_like'])) {
-                                                                             ?>
+if (!empty($post['post_user_like'])) {
+			?>
                                                                              <i class="fa fa-thumbs-up"></i>
-                                                                         <?php } else { ?>
+                                                                         <?php } else {?>
                                                                              <i class="fa fa-thumbs-o-up"></i>
-                                                                         <?php } ?>
+                                                                         <?php }?>
                                                                          </a>
                                                                          <span id="post_like_count_{{$post['id']}}"><?php echo count($post['post_like']); ?></span>
                                                                      </div>
 
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="dislike_post_{{$post['id']}}" onclick="dislike_post({{$post['id']}})">
                                                                          <?php
-                                                                         if (!empty($post['post_user_dis_like'])) {
-                                                                             ?>
+if (!empty($post['post_user_dis_like'])) {
+			?>
                                                                              <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                                                                         <?php } else { ?>
+                                                                         <?php } else {?>
                                                                              <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-                                                                         <?php } ?>
+                                                                         <?php }?>
                                                                          </a>
                                                                          <span id="post_dislike_count_{{$post['id']}}"><?php echo count($post['post_dis_like']); ?></span>
                                                                      </div>
@@ -117,70 +117,72 @@
 
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                          <?php
-                                                                             if (!empty($post['post_comment'])) {
-                                                                                 ?>
+if (!empty($post['post_comment'])) {
+			?>
                                                                                  <i class="fa fa-comments"></i>
-                                                                             <?php } else { ?>
+                                                                             <?php } else {?>
                                                                                  <i class="fa fa-comments-o"></i>
-                                                                             <?php } ?>
+                                                                             <?php }?>
                                                                          </a></div>
                                                                      <span><?php echo count($post['post_comment']); ?></span>
                                                                  </div>
                                                                  <div class="status pull-right">
                                                                        <p>Status:<span>Active</span></p>
-                                                                 </div>  
-                                                             </div> 
+                                                                 </div>
+                                                             </div>
                                                              <?php
-                                                                 if(!empty($post['post_tag'])) {
-                                                             ?>
+if (!empty($post['post_tag'])) {
+			?>
                                                              <hr>
                                                              <div class="post-circle">
-                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
+                                                                 <?php foreach ($post['post_tag'] as $post_tag) {?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?=$post_tag['tag']['tag_name'];?></a><?php }?>
                                                               </div>
-                                                                 <?php } ?>
+                                                                 <?php }?>
                                                          </div>
                                                     </div>
-                                                </div> 
-                                    <?php 
-                                            } 
-                                        }  else {
-                                            echo "No post found.";
-                                        }
-                                    ?>
-                                    <?php if(!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
-                                    ?>
-                                    <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a></div>
+                                                </div>
                                     <?php
-                                            } ?>
+}
+} else {
+	echo "No post found.";
+}
+?>
+                                    <?php if (!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
+	?>
+                                    <div class="all_viewmore col-md-12">
+                                        <a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a>
+                                    </div>
+                                    <?php
+}?>
                                     <input type="hidden" id="count_post" value="{{$count_post}}">
                                 </div>
                                 <!-- END ALL POST -->
                                 <!-- START GROUP POST -->
                                 <div tabindex="5002" class="tab-pane" id="groups">
                                     <?php
-                                        if (!empty($group_posts)) {
-                                            foreach ($group_posts as $grouppost) { 
-                                                $mypost_type = $grouppost['post_type'];
-                                                if($mypost_type == "idea") {
-                                                    $mypost_class = 1;
-                                                }else if($mypost_type == "question") {
-                                                    $mypost_class = 2;
-                                                }else if($mypost_type == "challenge") {
-                                                    $mypost_class = 3;
-                                                }
-                                                ?>
+if (!empty($group_posts)) {
+	foreach ($group_posts as $grouppost) {
+		$mypost_type = $grouppost['post_type'];
+		if ($mypost_type == "idea") {
+			$mypost_class = 1;
+		} else if ($mypost_type == "question") {
+			$mypost_class = 2;
+		} else if ($mypost_type == "challenge") {
+			$mypost_class = 3;
+		}
+		?>
                                                 <div class="col-md-4 grouppostlist">
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($grouppost['post_type'])}}</h4>
                                                                 <div class="pull-right i-con-set">
-                                                                  <a><img src="assets/img/notification-icon.png"></a>  
+                                                                  <a><img src="assets/img/notification-icon.png"></a>
                                                                   <a><img src="assets/img/warning-icon.png"></a>
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                                <p>-<?php if($grouppost['is_anonymous'] == 0) { echo $grouppost['post_user']['name']; } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+                                                                <p>-<?php if ($grouppost['is_anonymous'] == 0) {echo $grouppost['post_user']['name'];} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
@@ -192,97 +194,97 @@
                                                                     <div class="wrap-social pull-left">
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$grouppost['id']}}" onclick="like_post({{$grouppost['id']}})">
                                                                             <?php
-                                                                            if (!empty($grouppost['post_user_like'])) {
-                                                                                ?>
+if (!empty($grouppost['post_user_like'])) {
+			?>
                                                                                 <i class="fa fa-thumbs-up"></i>
-                                                                            <?php } else { ?>
+                                                                            <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-up"></i>
-                                                                            <?php } ?>
+                                                                            <?php }?>
                                                                             </a>
                                                                             <span id="post_like_count_{{$grouppost['id']}}"><?php echo count($grouppost['post_like']); ?></span>
                                                                         </div>
-                                                                        
+
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="dislike_post_{{$grouppost['id']}}" onclick="dislike_post({{$grouppost['id']}})">
                                                                             <?php
-                                                                            if (!empty($grouppost['post_user_dis_like'])) {
-                                                                                ?>
+if (!empty($grouppost['post_user_dis_like'])) {
+			?>
                                                                                 <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                                                                            <?php } else { ?>
+                                                                            <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-                                                                            <?php } ?>
+                                                                            <?php }?>
                                                                             </a>
                                                                             <span id="post_dislike_count_{{$grouppost['id']}}"><?php echo count($grouppost['post_dis_like']); ?></span>
                                                                         </div>
-                                                                        
+
                                                                         <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>{{$grouppost['post_view_count']}}</span></div>
-                                                                        
+
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                             <?php
-                                                                                if (!empty($grouppost['post_comment'])) {
-                                                                                    ?>
+if (!empty($grouppost['post_comment'])) {
+			?>
                                                                                     <i class="fa fa-comments"></i>
-                                                                                <?php } else { ?>
+                                                                                <?php } else {?>
                                                                                     <i class="fa fa-comments-o"></i>
-                                                                                <?php } ?>
+                                                                                <?php }?>
                                                                             </a></div>
                                                                         <span><?php echo count($grouppost['post_comment']); ?></span>
                                                                     </div>
                                                                     <div class="status pull-right">
                                                                           <p>Status:<span>Active</span></p>
-                                                                    </div>  
-                                                                </div> 
+                                                                    </div>
+                                                                </div>
                                                                 <?php
-                                                                    if(!empty($grouppost['post_tag'])) {
-                                                                ?>
+if (!empty($grouppost['post_tag'])) {
+			?>
                                                                 <hr>
                                                                 <div class="post-circle">
-                                                                    <?php foreach($grouppost['post_tag'] as $mypost_tag) { ?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?= $mypost_tag['tag']['tag_name'];?></a><?php } ?>
+                                                                    <?php foreach ($grouppost['post_tag'] as $mypost_tag) {?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
                                                                  </div>
-                                                                    <?php } ?>
+                                                                    <?php }?>
                                                             </div>
                                                        </div>
-                                                   </div> 
-                                    <?php 
-                                            } 
-                                        } else {
-                                            echo "No post found.";
-                                        }
-                                        ?>
+                                                   </div>
                                     <?php
-                                    if(!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
-                                    ?>
+}
+} else {
+	echo "No post found.";
+}
+?>
+                                    <?php
+if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
+	?>
                                     <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">View More</a></div>
                                     <?php
-                                            } ?>
+}?>
                                     <input type="hidden" id="count_grouppost" value="{{$count_group_post}}">
                                 </div>
                                 <!-- END GROUP POST -->
                                 <!-- START USER POST -->
                                 <div tabindex="5002" class="tab-pane" id="users">
                                     <?php
-                                        if (!empty($user_posts)) {
-                                            foreach ($user_posts as $mypost) { 
-                                                $mypost_type = $mypost['post_type'];
-                                                if($mypost_type == "idea") {
-                                                    $mypost_class = 1;
-                                                }else if($mypost_type == "question") {
-                                                    $mypost_class = 2;
-                                                }else if($mypost_type == "challenge") {
-                                                    $mypost_class = 3;
-                                                }
-                                                ?>
+if (!empty($user_posts)) {
+	foreach ($user_posts as $mypost) {
+		$mypost_type = $mypost['post_type'];
+		if ($mypost_type == "idea") {
+			$mypost_class = 1;
+		} else if ($mypost_type == "question") {
+			$mypost_class = 2;
+		} else if ($mypost_type == "challenge") {
+			$mypost_class = 3;
+		}
+		?>
                                                 <div class="col-md-4 userpostlist">
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($mypost['post_type'])}}</h4>
                                                                 <div class="pull-right i-con-set">
-                                                                  <a><img src="assets/img/notification-icon.png"></a>  
+                                                                  <a><img src="assets/img/notification-icon.png"></a>
                                                                   <a><img src="assets/img/warning-icon.png"></a>
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                                <p>-<?php if($mypost['is_anonymous'] == 0) { echo $mypost['post_user']['name']; } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
+                                                                <p>-<?php if ($mypost['is_anonymous'] == 0) {echo $mypost['post_user']['name'];} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
@@ -294,68 +296,68 @@
                                                                     <div class="wrap-social pull-left">
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$mypost['id']}}" onclick="like_post({{$mypost['id']}})">
                                                                             <?php
-                                                                            if (!empty($mypost['post_user_like'])) {
-                                                                                ?>
+if (!empty($mypost['post_user_like'])) {
+			?>
                                                                                 <i class="fa fa-thumbs-up"></i>
-                                                                            <?php } else { ?>
+                                                                            <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-up"></i>
-                                                                            <?php } ?>
+                                                                            <?php }?>
                                                                             </a>
                                                                             <span id="post_like_count_{{$mypost['id']}}"><?php echo count($mypost['post_like']); ?></span>
                                                                         </div>
-                                                                        
+
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="dislike_post_{{$mypost['id']}}" onclick="dislike_post({{$mypost['id']}})">
                                                                             <?php
-                                                                            if (!empty($mypost['post_user_dis_like'])) {
-                                                                                ?>
+if (!empty($mypost['post_user_dis_like'])) {
+			?>
                                                                                 <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                                                                            <?php } else { ?>
+                                                                            <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-                                                                            <?php } ?>
+                                                                            <?php }?>
                                                                             </a>
                                                                             <span id="post_dislike_count_{{$mypost['id']}}"><?php echo count($mypost['post_dis_like']); ?></span>
                                                                         </div>
-                                                                        
+
                                                                         <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>{{$post['post_view_count']}}</span></div>
-                                                                        
+
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                             <?php
-                                                                                if (!empty($mypost['post_comment'])) {
-                                                                                    ?>
+if (!empty($mypost['post_comment'])) {
+			?>
                                                                                     <i class="fa fa-comments"></i>
-                                                                                <?php } else { ?>
+                                                                                <?php } else {?>
                                                                                     <i class="fa fa-comments-o"></i>
-                                                                                <?php } ?>
+                                                                                <?php }?>
                                                                             </a></div>
                                                                         <span><?php echo count($mypost['post_comment']); ?></span>
                                                                     </div>
                                                                     <div class="status pull-right">
                                                                           <p>Status:<span>Active</span></p>
-                                                                    </div>  
-                                                                </div> 
+                                                                    </div>
+                                                                </div>
                                                                 <?php
-                                                                    if(!empty($mypost['post_tag'])) {
-                                                                ?>
+if (!empty($mypost['post_tag'])) {
+			?>
                                                                 <hr>
                                                                 <div class="post-circle">
-                                                                    <?php foreach($mypost['post_tag'] as $mypost_tag) { ?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?= $mypost_tag['tag']['tag_name'];?></a><?php } ?>
+                                                                    <?php foreach ($mypost['post_tag'] as $mypost_tag) {?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
                                                                  </div>
-                                                                    <?php } ?>
+                                                                    <?php }?>
                                                             </div>
                                                        </div>
-                                                   </div> 
-                                    <?php 
-                                            } 
-                                        } else {
-                                            echo "No post found.";
-                                        }
-                                        ?>
+                                                   </div>
                                     <?php
-                                    if(!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
-                                    ?>
+}
+} else {
+	echo "No post found.";
+}
+?>
+                                    <?php
+if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
+	?>
                                     <div class="user_viewmore col-md-12"><a href="javascript:void(0)" id="load_mypost" onclick="loadMoreMyPost();" data-id="0">View More</a></div>
                                     <?php
-                                            } ?>
+}?>
                                     <input type="hidden" id="count_mypost" value="{{$count_user_post}}">
                                 </div>
                                 <!-- END USER POST -->
@@ -508,7 +510,7 @@
                             $('#threads .postlist').remove();
                             $('#threads').append("<p class='postlist'>No post found.</p>");
                             $('#load_post').hide();
-                            
+
                         }
                     }
                 },
@@ -539,7 +541,7 @@
                             $('#users .userpostlist').remove();
                             $('#users').append("<p class='userpostlist'>No post found.</p>");
                             $('#load_mypost').hide();
-                            
+
                         }
                     }
                 },
@@ -570,7 +572,7 @@
                             $('#groups .grouppostlist').remove();
                             $('#groups').append("<p class='grouppostlist'>No post found.</p>");
                             $('#load_grouppost').hide();
-                            
+
                         }
                     }
                 },

@@ -68,5 +68,8 @@
         {
             return $this->hasMany('App\PostTag' , 'post_id' , 'id');
         }
-        
+        public function postFlagged()
+        {
+            return $this->hasOne('App\PostFlag' , 'post_id' , 'id');
+        }
     }
