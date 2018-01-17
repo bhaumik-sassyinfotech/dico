@@ -82,6 +82,9 @@
         Route::post('post_flagged','PostController@post_flagged');
         Route::post('comment_flagged','PostController@comment_flagged');
         Route::post('uploadFile','PostController@uploadFile');
+        Route::post('getCommentReply','PostController@getCommentReply');
+        Route::get('deletecommentReply/{id}','PostController@deletecommentReply');
+        Route::post('comment_reply_update','PostController@comment_reply_update');
     });
     
     Route::get('/home' , 'DashboardController@index')->name('home');

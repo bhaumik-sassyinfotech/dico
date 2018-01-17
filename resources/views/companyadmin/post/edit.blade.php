@@ -53,7 +53,7 @@
                         </div>
                         <div class="form-group">
                             <label>Post Title<span>*</span></label>
-                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" class="form-control required">
+                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
                         </div>
                         <div class="form-group">
                             <label>Post Description</label>
@@ -176,7 +176,7 @@
                                     ?>
                                     <div class="member-wrap files-upload">
                                         <div class="member-img">
-                                            <img src="{{asset('assets/img/uploadfiles1.PNG')}}" alt="no">
+                                            <img src="{{asset(DEFAULT_ATTACHMENT_IMAGE)}}" alt="no">
                                         </div>
                                         <div class="member-details">
                                             <h3>{{$attachment['file_name']}}</h3>

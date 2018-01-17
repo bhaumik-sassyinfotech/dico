@@ -19,9 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 define('ENC_KEY','ZF#48sp(');
 define('DATE_FORMAT','d/m/Y');
-define('POST_TITLE_LIMIT',50);
+define('POST_TITLE_LIMIT',60);
 define('POST_DESCRIPTION_LIMIT',130);
-define('POST_DISPLAY_LIMIT',2);
+define('POST_DISPLAY_LIMIT',6);
 define('COMMENT_DISPLAY_LIMIT',6);
 define('PROFILE_PATH','public/uploads/profile_pic/');
 define('GROUP_PATH','public/uploads/groups/');

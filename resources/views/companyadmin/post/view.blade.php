@@ -28,7 +28,9 @@
                                         <img src="{{ asset(PROFILE_PATH.$post->postUser->profile_image) }}">
                                     @endif
                                 </div>
-                                <p class="user-icon">-<?php if ($post['is_anonymous'] == 0) { echo $post->postUser->name; } else { echo "Anonymous"; } ?> <span>on {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>      
+                                <p class="user-icon">-<?php if ($post['is_anonymous'] == 0) { ?>
+                                    <a href="{{url('view_profile', Helpers::encode_url($post->postUser->id))}}">{{$post->postUser->name}}</a>
+                                    <?php } else { echo "Anonymous"; } ?> <span>on {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>      
                             </div>    
                         </div> 
 
@@ -37,8 +39,8 @@
                                 <div class="fmr-10">
                                     <a class="set-alarm" href="">a</a>
                                     <?php
-if ($post['user_id'] == Auth::user()->id) {
-	?>
+                                        if ($post['user_id'] == Auth::user()->id) {
+                                    ?>
                                     <a class="set-edit" href="{{route('post.edit',Helpers::encode_url($post->id))}}">e</a>
                                     <a class="set-delete" href="javascript:void(0);" onclick="deletepost({{$post->id}})">w</a>
                                     <?php } 
@@ -208,23 +210,24 @@ $comment_id = Helpers::encode_url($commentUser->id);
                             <div class="col-sm-10 user-rply">
                                 <div class="post-inner-reply">
                                     <div class="pull-left post-user-nam">
-                                        <a href="javascript:void(0)" class="text-12"><?php if ($postComment['is_anonymous'] == 0) { echo $commentUser['name']; } else { echo "Anonymous"; } ?></a>
-
+                                        <a href="javascript:void(0)" class="text-12"><?php if ($postComment['is_anonymous'] == 0) { ?>
+                                            <a href="{{url('view_profile', Helpers::encode_url($commentUser['id']))}}">{{$commentUser['name']}}</a>
+                                            <?php } else { echo "Anonymous"; } ?></a>
                                         <p>- on <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
                                     </div>
                                     <div class="pull-right post-reply-pop">
                                         <div class="options">
                                             <div class="star-wrap">
                                                 <?php
-$active = "";
-			if ($postComment['is_correct'] == 0) {
-				$active = "disactive";
-			} else {
-				$active = "active";
-			}
-			?>
+                                                    $active = "";
+                                                    if ($postComment['is_correct'] == 0) {
+                                                            $active = "disactive";
+                                                    } else {
+                                                            $active = "active";
+                                                    }
+                                                ?>
                                                 <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                                    <?php if ($commentUser['id'] == Auth::user()->id) {?>
+                                                    <?php if ($post['user_id'] == Auth::user()->id || $post->postUser->role_id > Auth::user()->role_id) {?>
                                                         <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                                     <?php } else {?>
                                                         Correct
@@ -288,7 +291,7 @@ $active = "";
                                 </div>
                                 <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
                                 <div class="btn-wrap-div">
-                                    <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$postComment['id']?>)" style="display: none;"/>
+                                    <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$postComment['id']?>,<?=$postComment['id']?>)" style="display: none;"/>
                                     <input type="button" name="cancel_comment" id="cancel_comment_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment(<?=$postComment['id']?>)" style="display: none;"/>
                                 </div>    
                                 <div class="rply-box">
@@ -388,14 +391,15 @@ if (!empty($postComment['commentUserDisLike'])) {
                         <div class="modal-dialog">
                             <!-- Modal content-->
                             <div class="modal-content">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <div id="commentReplyList"></div> 
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title">Comment Here</h4>
                                 </div>
                                 <div class="modal-body">
                                     <input type="hidden" id="commentId" name="commentId">
                                     <div class="row">
-                                        <textarea name="comment_text" id="comment_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                        <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
                                     </div>
                                     <div class="row">
                                         <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
@@ -637,8 +641,8 @@ echo "<b>Anonymous</b>";
                             <h2>Tags</h2>
                             <div class="post-circle post-category">
                                 <?php
-if (!empty($post->postTag) && count($post->postTag) > 0) {
-	foreach ($post->postTag as $postTag) {
+                                if (!empty($post->postTag) && count($post->postTag) > 0) {
+                                        foreach ($post->postTag as $postTag) {
 		?>
                                 <a href="{{url('tag', Helpers::encode_url($postTag['tag']['id']))}}"> {{$postTag['tag']['tag_name']}}</a>
                                 <?php 
@@ -656,10 +660,19 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                         <div class="category">
                             <h2>Similar Posts</h2>
                             <div class="post-links">
-                                <a href="#">who has any right to find fault with....</a>
-                                <a href="#">who has any right to find fault with....</a>
-                                <a href="#">who has any right to find fault with....</a>
-                                <a href="#">who has any right to find fault with....</a>
+                                <?php
+                                    if(!empty($similar_post) && count($similar_post) > 0) {
+                                        foreach($similar_post as $similar) {
+                                ?>
+                                <a href="#">{{$similar->post_title}}</a>
+                                <?php 
+                                        }
+                                    } else {
+                                ?>
+                                <a href="javascript:void(0)">No similar post found.</a>
+                                <?php
+                                    }
+                                ?>
                             </div>
                         </div>
                         <?php
@@ -773,7 +786,7 @@ if (!empty($post->postAttachment)) {
         var commentid = $('#commentId').val();
         var _token = CSRF_TOKEN;
         var post_id = $('#post_id').val();
-        var comment_reply = $('#comment_text_' + commentid).val();
+        var comment_reply = $('#comment_reply_text').val();
         var anonymous = 0;
         var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
         //console.log(commentid, "::::", srno);
@@ -794,8 +807,9 @@ if (!empty($post->postAttachment)) {
                  } else {
                  swal("Error", res.msg, "error");
                  }*/
-                console.log(commentid, "::::", srno);
+                //console.log(commentid, "::::", srno);
                 $('#commentreply_' + commentid + ' #' + srno).before(response);
+                location.reload();
             },
             error: function(e) {
                 swal("Error", e, "error");
@@ -810,9 +824,9 @@ if (!empty($post->postAttachment)) {
         $('#cancel_comment_'+id).css('display','inline-block');
     }
 
-    function updateComment(id) {
+    function updateComment(id,elementid) {
         if($('#commentbox_form').valid() == 1) {
-            var comment = $('#comment_text_'+id).val();
+            var comment = $('#comment_text_'+elementid).val();
             var _token = CSRF_TOKEN;
             formData = {id:id,comment:comment,_token};
             $.ajax({
@@ -823,11 +837,11 @@ if (!empty($post->postAttachment)) {
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         //swal("Success", res.msg, "success");
-                        $('#comment_text_'+id).attr('readonly',true);
-                        $('#comment_text_'+id).css('background-color','transparent');
-                        $('#update_comment_'+id).css('display','none');
-                        $('#cancel_comment_'+id).css('display','none');
-
+                        $('#comment_text_'+elementid).attr('readonly',true);
+                        $('#comment_text_'+elementid).css('background-color','transparent');
+                        $('#update_comment_'+elementid).css('display','none');
+                        $('#cancel_comment_'+elementid).css('display','none');
+                        location.reload();
                     } else {
                         swal("Error", res.msg, "error");
                     }
@@ -837,6 +851,45 @@ if (!empty($post->postAttachment)) {
                 }
             });
         }
+    }
+    function editCommentReply(id) {
+        $('#comment_reply_text_'+id).removeProp('readonly');
+        $('#comment_reply_text_'+id).css('background-color','white');
+        $('#update_comment_reply_'+id).css('display','inline-block');
+        $('#cancel_comment_reply_'+id).css('display','inline-block');
+    }
+    function updateCommentReply(id) {
+        if($('#comment_replybox_form').valid() == 1) {
+            var comment = $('#comment_reply_text_'+id).val();
+            var _token = CSRF_TOKEN;
+            formData = {id:id,comment:comment,_token};
+            $.ajax({
+                url: SITE_URL + '/comment_reply_update',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        //swal("Success", res.msg, "success");
+                        $('#comment_reply_text_'+id).attr('readonly',true);
+                        $('#comment_reply_text_'+id).css('background-color','transparent');
+                        $('#update_comment_reply_'+id).css('display','none');
+                        $('#cancel_comment_reply_'+id).css('display','none');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function closeCommentReply(id) {
+        $('#comment_reply_text_'+id).attr('readonly',true);
+        $('#comment_reply_text_'+id).css('background-color','transparent');
+        $('#update_comment_reply_'+id).css('display','none');
+        $('#cancel_comment_reply_'+id).css('display','none');
     }
     function closeComment(id) {
         $('#comment_text_'+id).attr('readonly',true);
@@ -936,8 +989,32 @@ if (!empty($post->postAttachment)) {
         }
     }
     function openCommentReplyBox(commentid) {
-        $('#myModalComment').modal('show');
-        $('#commentId').val(commentid);
+        if(commentid != "") {
+            var _token = CSRF_TOKEN;
+            formData = {comment_id:commentid,_token};
+            $.ajax({
+                url: SITE_URL + '/getCommentReply',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('#commentReplyList').html(response);
+                    /*res = JSON.parse(response);
+                    if (res.status == 1) {
+                        swal("Success", res.msg, "success");
+                        $('#flaggedComment').modal('hide');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }*/
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+            $('#myModalComment').modal('show');
+            $('#commentId').val(commentid);
+        }else {
+            swal("Error", "comment not found", "error");
+        }
     }
 </script>
 @endpush

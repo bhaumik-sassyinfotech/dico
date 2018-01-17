@@ -29,7 +29,9 @@
                                         <img src="{{ asset(PROFILE_PATH.$post->postUser->profile_image) }}">
                                     @endif
                                 </div>
-                                <p class="user-icon">-<?php if ($post['is_anonymous'] == 0) { echo $post->postUser->name; } else { echo "Anonymous"; } ?> <span>on {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>      
+                                <p class="user-icon">-<?php if ($post['is_anonymous'] == 0) { ?>
+                                    <a href="{{url('view_profile', Helpers::encode_url($post->postUser->id))}}">{{$post->postUser->name}}</a>
+                                    <?php } else { echo "Anonymous"; } ?> <span>on {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>      
                             </div>    
                         </div> 
 
@@ -187,7 +189,7 @@ if (!empty($post['postUserDisLike'])) {
                                     <img alt="post user" src="{{asset($profile_image)}}" id="profile"/>
                                 </div>
                                 <?php
-$comment_id = Helpers::encode_url($commentUser->id);
+                        $comment_id = Helpers::encode_url($commentUser->id);
 			if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
 				if ($commentUser['following'][0]->status == 1) {
 					?>
@@ -208,7 +210,9 @@ $comment_id = Helpers::encode_url($commentUser->id);
                             <div class="col-sm-10 user-rply">
                                 <div class="post-inner-reply">
                                     <div class="pull-left post-user-nam">
-                                        <h3 class="text-12"><?php if ($postComment['is_anonymous'] == 0) { echo $commentUser['name']; } else { echo "<b>Anonymous</b>"; } ?></h3>
+                                        <h3 class="text-12"><?php if ($postComment['is_anonymous'] == 0) { ?>
+                                            <a href="{{url('view_profile', Helpers::encode_url($commentUser['id']))}}">{{$commentUser['name']}}</a>
+                                         <?php } else { echo "<b>Anonymous</b>"; } ?></h3>
                                         <p>- on <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
                                     </div>
                                     <div class="pull-right post-reply-pop">
@@ -223,7 +227,8 @@ $active = "";
 			}
 			?>
                                                 <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                                    <?php if ($commentUser['id'] == Auth::user()->id) {?>
+                                                    <?php //if ($commentUser['id'] == Auth::user()->id) {?>
+                                                    <?php if ($post['user_id'] == Auth::user()->id || $post->postUser->role_id > Auth::user()->role_id) { ?>
                                                         <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                                     <?php } else {?>
                                                         Correct
@@ -268,7 +273,7 @@ $active = "";
                                 </div>
                                 <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
                                 <div class="btn-wrap-div">
-                                    <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$postComment['id']?>)" style="display: none;"/>
+                                    <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$postComment['id']?>,<?=$postComment['id']?>)" style="display: none;"/>
                                     <input type="button" name="cancel_comment" id="cancel_comment_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment(<?=$postComment['id']?>)" style="display: none;"/>
                                 </div>
                                 <div class="rply-box">
@@ -332,7 +337,6 @@ if (!empty($postComment['commentUserDisLike'])) {
                                   </div>
                                 </div>
                             </div>
-8
                         </form>
                         <div id="myModalComment" class="modal fade" role="dialog">
                         <div class="modal-dialog">
@@ -345,7 +349,7 @@ if (!empty($postComment['commentUserDisLike'])) {
                                 <div class="modal-body">
                                     <input type="hidden" id="commentId" name="commentId">
                                     <div class="row">
-                                        <textarea name="comment_text" id="comment_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                        <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
                                     </div>
                                     <div class="row">
                                         <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
@@ -539,7 +543,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         var commentid = $('#commentId').val();
         var _token = CSRF_TOKEN;
         var post_id = $('#post_id').val();
-        var comment_reply = $('#comment_text_' + commentid).val();
+        var comment_reply = $('#comment_reply_text').val();
         var anonymous = 0;
         var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
         if ($("#is_anonymous_" + commentid).is(':checked')) {
@@ -559,7 +563,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                  } else {
                  swal("Error", res.msg, "error");
                  }*/
-                console.log(commentid, "::::", srno);
+                //console.log(commentid, "::::", srno);
                 $('#commentreply_' + commentid + ' #' + srno).before(response);
             },
             error: function(e) {
@@ -574,9 +578,9 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         $('#cancel_comment_'+id).css('display','inline-block');
     }
 
-    function updateComment(id) {
+    function updateComment(id,elementid) {
         if($('#commentbox_form').valid() == 1) {
-            var comment = $('#comment_text_'+id).val();
+            var comment = $('#comment_text_'+elementid).val();
             var _token = CSRF_TOKEN;
             formData = {id:id,comment:comment,_token};
             $.ajax({
@@ -587,10 +591,10 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         //swal("Success", res.msg, "success");
-                        $('#comment_text_'+id).attr('readonly',true);
-                        $('#comment_text_'+id).css('background-color','transparent');
-                        $('#update_comment_'+id).css('display','none');
-                        $('#cancel_comment_'+id).css('display','none');
+                        $('#comment_text_'+elementid).attr('readonly',true);
+                        $('#comment_text_'+elementid).css('background-color','transparent');
+                        $('#update_comment_'+elementid).css('display','none');
+                        $('#cancel_comment_'+elementid).css('display','none');
 
                     } else {
                         swal("Error", res.msg, "error");

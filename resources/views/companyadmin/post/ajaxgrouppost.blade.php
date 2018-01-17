@@ -21,11 +21,11 @@ if (!empty($group_posts)) {
                 </div>
                 <div class="panel-body">
                     <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                    <p>-<?php if ($grouppost['is_anonymous'] == 0) {
-            echo $grouppost['post_user']['name'];
-        } else {
-            echo "Anonymous";
-        } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+                    <p>-<?php if ($grouppost['is_anonymous'] == 0) { ?>
+                        <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
+                    <?php } else {
+                        echo "Anonymous";
+                    } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                     <fieldset>
         <?php /* <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p> */ ?>
                         <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>

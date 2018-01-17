@@ -31,7 +31,8 @@
     var SITE_URL = '<?php echo url('/'); ?>';
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";
     var CSRF_TOKEN = "{{ csrf_token() }}";
-	var EXTERNAL_SWEARS = "{{ asset('public/profanity/swearWords.json') }}";
+    var EXTERNAL_SWEARS = "{{ asset('public/profanity/swearWords.json') }}";
+    var POST_TITLE_LIMIT = "{{POST_TITLE_LIMIT}}";
 </script>
 <style type="text/css">
 	.error {

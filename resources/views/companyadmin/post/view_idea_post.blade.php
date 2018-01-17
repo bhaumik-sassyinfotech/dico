@@ -29,7 +29,9 @@
                                             <img src="{{ asset('public/uploads/profile_pic/'.$post->postUser->profile_image) }}">
                                         @endif
                                     </div>
-                                    <p class="user-icon">-{{$post->postUser->name}}<span>on {{date('d/m/Y',strtotime($post->created_at))}}</span></p>
+                                    <p class="user-icon">-
+                                        <a href="{{url('view_profile', Helpers::encode_url($post->postUser->id))}}">{{$post->postUser->name}}</a>
+                                        <span>on {{date('d/m/Y',strtotime($post->created_at))}}</span></p>
                                 </div>
                             </div>
                             <div class="pull-right">
