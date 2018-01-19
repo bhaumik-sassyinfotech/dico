@@ -342,7 +342,6 @@ if (!empty($user_posts)) {
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($mypost['post_type'])}}</h4>
                                                                 <div class="pull-right i-con-set">
-<<<<<<< HEAD
                                                                   <a><img src="assets/img/notification-icon.png"></a> 
                                                                   <?php
                                                                      if(!empty($mypost['post_flagged'])) {
@@ -367,20 +366,7 @@ if (!empty($user_posts)) {
                                                                     <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}">{{$mypost['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                                                                 </div>
-=======
-                                                                  <a><img src="assets/img/notification-icon.png"></a>
-                                                                  <a><img src="assets/img/warning-icon.png"></a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="panel-body">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
 
-                                                                <p>-<?php if ($mypost['is_anonymous'] == 0) {
-			?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}">{{$mypost['post_user']['name']}}</a>
-                                                                <?php
-} else {echo "Anonymous";}?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
->>>>>>> 5f1dbc19352ff65a6aa085a58c51c9c055e63ed9
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
