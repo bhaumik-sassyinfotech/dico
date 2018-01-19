@@ -4423,4 +4423,8 @@ nav#page-leftbar {
 .bottom-sidebar a i,
 .collapse-leftbar nav#page-leftbar {
   display: none;
-}    
+}  
+  
+.none {
+    display: none;
+}

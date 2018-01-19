@@ -611,3 +611,87 @@ $(document).on('click','.leaveMeeting',function () {
         }
     });
 });
+
+
+// $(document).on('click','.superUser', function(){
+//     console.log($(this).text());
+//     console.log("============");
+// });
+function superUserGrid(type)
+{
+    // console.log(type);
+    // console.log('===============');
+    $("#offset").attr('data-tab',type);
+    $("#offset").val(0);
+    $('#load_post').slideDown();
+    var url = new_url = '';
+    if(type == 1)
+        url = '/user/employeeGrid';
+    else if(type == 2)
+        url = '/user/adminGrid';
+    else if(type == 3)
+        url = '/user/otherManagersGrid';
+    // console.log(url);
+    new_url = SITE_URL+url;
+    var dataString = { _token:CSRF_TOKEN};
+    $.ajax({
+        url:new_url,
+        data: dataString, 
+        method:"POST",
+        async: true,
+        success: function(response)
+        {
+            // console.log(response);
+            $("#display-grid").empty();
+            $("#display-grid").html(response.html);
+        }
+    }); 
+}
+
+/*users listing for super-user role */
+/*employee listing*/
+var employeeTable_superadmin = $("#emp-table").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL + '/user/employeeList',
+        data: function (d) {
+            d.role_id      = $("#role_id").val();
+            d.search_query = $("#search_query").val();
+        }
+    },
+    searching: false,
+    columns: [
+        {data: 'name'},
+        {data: 'email'},
+        {data: 'role'},
+        {data: 'followers_count'},
+        {data: 'following_count'},
+        {data: 'points'},
+        // {data: 'admin', sorting: false, orderable: false}
+    ]
+});
+
+var otherManagerTable_superadmin = $("#other-managers-table").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL + '/user/otherManagersList',
+        data: function (d) {
+            // d.role_id      = $("#role_id").val();
+            d.search_query = $("#search_query").val();
+        }
+    },
+    searching: false,
+    columns: [
+        {data: 'name'},
+        {data: 'email'},
+        {data: 'role'},
+        {data: 'position'},
+        {data: 'following_count'},
+        {data: 'followers_count'},
+        {data: 'points'},
+        // {data: 'admin', sorting: false, orderable: false}
+    ]
+});
+

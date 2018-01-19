@@ -267,3 +267,13 @@ function uploadFile() {
         }
     });
 }
+
+$(document).on('click',"#GoGrid",function(){
+    // alert("clicked");
+    $("div.hide-table").addClass('none');
+});
+
+$(document).on('click',"#GoList",function(){
+    // alert("clicked");
+    $("div.hide-table").removeClass('none');
+});
