@@ -41,23 +41,23 @@
                                 <label class="text-15">Post<span>*</span></label>
                                 <div class="check-wrap box-check">
                                     <label class="check idea-check">Idea    
-                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type"> 
+                                       
+                                    </label> <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check">
                                         <span class="checked"></span>
-                                    </label>
                                     <label class="check question-check">Question    
-                                        <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type">
+                                        
+                                    </label><input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type">
                                         <span class="checked"></span>
-                                    </label>
                                     <label class="check challenges-check">Challenge    
-                                        <input type="checkbox" name="post_type" id="post_type_challenges" value="challenge" class="post_type">
+                                        
+                                    </label><input type="checkbox" name="post_type" id="post_type_challenges" value="challenges" class="post_type">
                                         <span class="checked"></span>
-                                    </label>
                                 </div>
                                 <div id="err_post_type"></div>
                             </div>
                             <div class="form-group m-b-20">
                                     <label class="text-15">Post Title<span>*</span></label>
-                                    <input type="text" name="post_title" id="post_title" placeholder="Post Title" class="form-control required">
+                                    <input type="text" name="post_title" id="post_title" placeholder="Post Title" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
                             </div>
                             <div class="form-group">
                                     <label class="text-15">Post Description</label>

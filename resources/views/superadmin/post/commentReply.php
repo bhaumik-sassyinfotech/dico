@@ -1,4 +1,5 @@
 <!-- Comment Box start -->
+<form name="comment_replybox_form" id="comment_replybox_form" method="post" class="form-horizontal row-border  profile-page">
 <?php
 if (!empty($comment['commentReply'])) {
     foreach ($comment['commentReply'] as $commentReply) {
@@ -38,9 +39,9 @@ if (!empty($comment['commentReply'])) {
                     <div class="post-inner-reply"> 
                         <div class="pull-left post-user-nam">
                             <h3 class="text-12"><?php
-                                if ($commentReply['is_anonymous'] == 0) {
-                                    echo $commentUser['name'];
-                                } else {
+                                if ($commentReply['is_anonymous'] == 0) { ?>
+                                <a href="{{url('view_profile', Helpers::encode_url($commentUser['id']))}}"><?php echo $commentUser['name'];?></a>
+                                <?php } else {
                                     echo "Anonymous";
                                 }
                                 ?></h3>
@@ -49,15 +50,19 @@ if (!empty($comment['commentReply'])) {
                         <div class="pull-right post-reply-pop">
                             <div class="options">
                                 <div class="fmr-10">
-                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-alarm" href="<?php echo url('/deletecommentReply',$commentReply['id']);?>">a</a><?php } ?>
+                                    <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                    <a class="set-edit" href="javascript:void(0)" onclick="editCommentReply(<?=$commentReply['id']?>);">e</a>
+                                    <a class="set-alarm" href="<?php echo url('/deletecommentReply',$commentReply['id']);?>">a</a>
+                                    <?php } ?>
                                 </div>
                             </div>    
                         </div> 
                     </div>
-                    <textarea name="comment_text" id="comment_text_<?= $commentReply['id'] ?>" readonly="" class="text-12 textarea-width"><?php echo $commentReply['comment_reply']; ?></textarea>
+                    <p class="profanity" id="comment_reply_text_disp_<?=$commentReply['id']?>"><?php echo $commentReply['comment_reply']; ?></p>
+                    <textarea name="comment_reply_text" id="comment_reply_text_<?= $commentReply['id'] ?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $commentReply['comment_reply']; ?></textarea>
                     <div class="btn-wrap-div">
-                        <input type="button" name="update_comment" id="update_comment_<?=$commentReply['id'] ?>" value="Save" onclick="updateComment(<?= $commentReply['id'] ?>)" style="display: none;"/>
-                        <input type="button" name="cancel_comment" id="cancel_comment_<?=$commentReply['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment(<?=$commentReply['id']?>)" style="display: none;"/>
+                        <input type="button" name="update_comment_reply" id="update_comment_reply_<?=$commentReply['id'] ?>" value="Save" class="st-btn" onclick="updateCommentReply(<?= $commentReply['id'] ?>)" style="display: none;"/>
+                        <input type="button" name="cancel_comment_reply" id="cancel_comment_reply_<?=$commentReply['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeCommentReply(<?=$commentReply['id']?>)" style="display: none;"/>
                     </div>
                 </div>
             </div>
@@ -66,4 +71,5 @@ if (!empty($comment['commentReply'])) {
     }
 }
 ?>
+</form>
 <!-- Comment Box end -->

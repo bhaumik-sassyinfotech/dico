@@ -16,19 +16,32 @@ if (!empty($group_posts)) {
                     <h4 class="icon">{{ucfirst($grouppost['post_type'])}}</h4>
                     <div class="pull-right i-con-set">
                         <a><img src="assets/img/notification-icon.png"></a>  
-                        <a><img src="assets/img/warning-icon.png"></a>
+                        <?php
+                            if(!empty($grouppost['post_flagged'])) {
+                        ?>
+                           <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                        <?php } else { ?>
+                           <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                        <?php } ?>
                     </div>
                 </div>
                 <div class="panel-body">
-                    <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                    <p>-<?php if ($grouppost['is_anonymous'] == 0) { ?>
-                        <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
-                    <?php } else {
-                        echo "Anonymous";
-                    } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+                    <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                    <div class="user-wrap"> 
+                        <div class="user-img"> 
+                            @if(empty($grouppost['post_user']['profile_image']) || $grouppost['is_anonymous'] == 1)
+                                <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                            @else
+                                <img src="{{ asset(PROFILE_PATH.$grouppost['post_user']['profile_image']) }}">
+                            @endif
+                        </div> 
+                        <p class="user-icon">-<?php if($grouppost['is_anonymous'] == 0) { ?>
+                            <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
+                            <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+                    </div>
                     <fieldset>
         <?php /* <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p> */ ?>
-                        <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
+                        <p class="desc-content profanity" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
                     </fieldset>
                     <div class="btn-wrap" id="mypostread{{$grouppost['id']}}">
                         <a href="#" onclick ="mypostReadMore({{$grouppost['id']}})">Read More</a>

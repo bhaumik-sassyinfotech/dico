@@ -40,13 +40,13 @@
                             <label class="text-15">Post<span>*</span></label>
                             <div class="check-wrap box-check">
                                 <label class="check idea-check"> Idea 
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_idea" disabled="" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>><span class="checked"></span>
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_idea" onclick="return false;" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                                 <label class="check question-check"> Question
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_question" disabled="" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>><span class="checked"></span>
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_question" onclick="return false;" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                                 <label class="check challenges-check"> Challenge
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenges" disabled="" value="challenges" <?php if($post->post_type == 'challenges') { echo "checked"; } ?>><span class="checked"></span>
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenge" onclick="return false;" value="challenge" <?php if($post->post_type == 'challenges') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                             </div>
                             <div id="err_post_type"></div>

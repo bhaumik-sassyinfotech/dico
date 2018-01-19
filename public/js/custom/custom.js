@@ -357,12 +357,12 @@ $('#commentbox_form').validate({
 });
 $('#comment_replybox_form').validate({
     rules: {
-        comment_replybox_form: {
+        comment_reply_textarea: {
             required: true,
         }
     },
     messages: {
-        comment_replybox_form: {
+        comment_reply_textarea: {
             required: 'This field is required',
         }
     }
@@ -405,6 +405,18 @@ $('#comment_flagged_form').validate({
     },
     messages: {
         comment_message_autor: {
+            required: 'This field is required',
+        }
+    }
+});
+$('#reply_form').validate({
+    rules: {
+        comment_reply_text: {
+            required: true,
+        }
+    },
+    messages: {
+        comment_reply_text: {
             required: 'This field is required',
         }
     }

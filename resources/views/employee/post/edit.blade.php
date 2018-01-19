@@ -40,20 +40,20 @@
                             <label class="text-15">Post<span>*</span></label>
                             <div class="check-wrap box-check">
                                 <label class="check idea-check"> Idea 
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_idea" disabled="" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>><span class="checked"></span>
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_idea" onclick="return false;" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                                 <label class="check question-check"> Question
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_question" disabled="" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>><span class="checked"></span>
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_question" onclick="return false;" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                                 <label class="check challenges-check"> Challenge
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenges" disabled="" value="challenges" <?php if($post->post_type == 'challenges') { echo "checked"; } ?>><span class="checked"></span>
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenges" onclick="return false;" value="challenges" <?php if($post->post_type == 'challenges') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                             </div>
                             <div id="err_post_type"></div>
                         </div>
                         <div class="form-group">
                             <label>Post Title<span>*</span></label>
-                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" class="form-control required">
+                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
                         </div>
                         <div class="form-group">
                             <label>Post Description</label>
@@ -98,11 +98,11 @@
                             <a href="{{ route('post.index') }}" class="st-btn">Back</a>
                             <input type="submit" name="save" id="save" value="Submit" class="st-btn">
                             <div class="upload-btn-wrapper">
-                                <button class="upload-btn">Upload Files</button>
+                                <button class="upload-btn fileinput-button">Upload Files</button>
                                 <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 <?php
                                     if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
-                                      // echo $post['postAttachment']['file_name']; 
+                                       //echo $post['postAttachment']['file_name']; 
                                     }
                                 ?>
                             </div>        
@@ -176,7 +176,7 @@
                                     ?>
                                     <div class="member-wrap files-upload">
                                         <div class="member-img">
-                                            <img src="{{asset('assets/img/uploadfiles1.PNG')}}" alt="no">
+                                            <img src="{{asset(DEFAULT_ATTACHMENT_IMAGE)}}" alt="no">
                                         </div>
                                         <div class="member-details">
                                             <h3>{{$attachment['file_name']}}</h3>

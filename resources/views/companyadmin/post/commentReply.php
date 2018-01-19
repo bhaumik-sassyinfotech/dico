@@ -1,5 +1,5 @@
 <!-- Comment Box start -->
-<form name="comment_replybox_form" id="comment_replybox_form" class="form-horizontal row-border  profile-page">
+<form name="comment_replybox_form" id="comment_replybox_form" method="post" class="form-horizontal row-border  profile-page">
 <?php
 if (!empty($comment['commentReply'])) {
     foreach ($comment['commentReply'] as $commentReply) {
@@ -58,7 +58,8 @@ if (!empty($comment['commentReply'])) {
                             </div>    
                         </div> 
                     </div>
-                    <textarea name="comment_reply_text" id="comment_reply_text_<?= $commentReply['id'] ?>" readonly="" class="text-12 textarea-width"><?php echo $commentReply['comment_reply']; ?></textarea>
+                    <p class="profanity" id="comment_reply_text_disp_<?=$commentReply['id']?>"><?php echo $commentReply['comment_reply']; ?></p>
+                    <textarea name="comment_reply_text" id="comment_reply_text_<?= $commentReply['id'] ?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $commentReply['comment_reply']; ?></textarea>
                     <div class="btn-wrap-div">
                         <input type="button" name="update_comment_reply" id="update_comment_reply_<?=$commentReply['id'] ?>" value="Save" class="st-btn" onclick="updateCommentReply(<?= $commentReply['id'] ?>)" style="display: none;"/>
                         <input type="button" name="cancel_comment_reply" id="cancel_comment_reply_<?=$commentReply['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeCommentReply(<?=$commentReply['id']?>)" style="display: none;"/>

@@ -10,7 +10,7 @@
  height: 3em;
  line-height: 1em;
 }
-
+.idea-details #post-detail-left .modal-body .user-image { width: 12%; } .idea-details #post-detail-left .user-rply { width: 87%; } body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialog { width: 760px; }
 /*ankita changes */
 
 body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6, body label {
@@ -4409,12 +4409,12 @@ body .modal-dialog.updatesecurity .modal-content,
 nav#page-leftbar {
   background-color: #e6e7e8;
   height: 100%;
-  /*position: fixed;*/
+  position: fixed;
 }
 .bottom-logo {
   margin-top: 5px;
 }
-.idea-details #post-detail-left .modal-body .user-image { width: 12%; } .idea-details #post-detail-left .user-rply { width: 87%; } body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialog { width: 760px; } 
+.idea-details #post-detail-left .modal-body .user-image { width: 20%; } .idea-details #post-detail-left .user-rply { width: 78%; } body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialog { width: 760px; } 
 
 .textarea-width { width: 100%; height: 150px; resize: none; padding: 0px; border: none; text-align: justify; background-color: transparent; } 
 

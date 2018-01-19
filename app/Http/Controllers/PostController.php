@@ -16,6 +16,7 @@
     use App\PostTag;
     use App\Group;
     use App\User;
+    use App\GroupUser;
     use App\PostFlag;
     use App\CommentFlag;
     use DB;
@@ -79,7 +80,7 @@
         
         public function store(Request $request)
         {
-            
+            //dd($request->input('post_type'));
             try
             {
                 if ( Auth::user() )
@@ -184,7 +185,9 @@
                     return $q->where('user_id' , Auth::user()->id);
                 } ,'postUserDisLike' => function ($q) {
                    return $q->where('user_id' , Auth::user()->id);
-                } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
+                } ,'postAttachment','postFlagged' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
                         ->orderBy('post_like_count','desc');
                 $count_post = count($query->get());
                 $posts = $query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
@@ -193,7 +196,9 @@
                     return $q->where('user_id' , Auth::user()->id);
                 } ,'postUserDisLike' => function ($q) {
                    return $q->where('user_id' , Auth::user()->id);
-                } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])
+                } ,'postAttachment','postFlagged' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])
                         ->orderBy('post_like_count','desc');
                 $count_user_post = count($user_query->get());
                 $user_posts = $user_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
@@ -204,11 +209,14 @@
                 if($groupusers) {
                     if(count($groupusers['groupUserDetails']) > 0) {
                         $group_id = $groupusers['groupUserDetails']['group_id'];
+                        //dd($group_id);
                         $group_query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
                             return $q->where('user_id' , Auth::user()->id);
                         } ,'postUserDisLike' => function ($q) {
                            return $q->where('user_id' , Auth::user()->id);
-                        } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)")
+                        } ,'postAttachment','postFlagged' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)")
                                 ->orderBy('post_like_count','desc');
                         $count_group_post = count($group_query->get());
                         $group_posts = $group_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
@@ -221,6 +229,7 @@
             {
                 return redirect('/index');
             }
+            //dd($group_posts);
             return view($this->folder . '.post.index' , compact('posts','user_posts','group_posts','count_post','count_user_post','count_group_post'));
         }
         
@@ -234,7 +243,9 @@
                         return $q->where('user_id' , Auth::user()->id);
                     } ,'postUserDisLike' => function ($q) {
                        return $q->where('user_id' , Auth::user()->id);
-                    } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id);
+                    } ,'postAttachment','postFlagged' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id);
                     if(!empty($request->get('search_text'))) {
                         $search_text = $request->get('search_text');
                          $query->where('post_title', 'like','%'.$search_text.'%');
@@ -271,7 +282,9 @@
                         return $q->where('user_id' , Auth::user()->id);
                     } ,'postUserDisLike' => function ($q) {
                        return $q->where('user_id' , Auth::user()->id);
-                    } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id]);
+                    } ,'postAttachment','postFlagged' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id]);
                     if(!empty($request->get('search_text'))) {
                         $search_text = $request->get('search_text');
                         $user_query->where('post_title', 'like', '%'.$search_text.'%');
@@ -314,7 +327,9 @@
                                 return $q->where('user_id' , Auth::user()->id);
                             } ,'postUserDisLike' => function ($q) {
                                return $q->where('user_id' , Auth::user()->id);
-                            } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
+                            } ,'postAttachment','postFlagged' => function ($q) {
+                                return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id,'user_id'=>Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
                             if(!empty($request->get('search_text'))) {
                             $search_text = $request->get('search_text');
                                 $group_query->where('post_title', 'like', '%'.$search_text.'%');
@@ -345,13 +360,14 @@
         
         public function update($id , Request $request)
         {
+            //return $request;
             try
             {
                 if ( Auth::user() )
                 {
                     $this->validate($request , [
-                        'post_type'  => 'required' ,
-                        'post_title' => 'required|max:'.POST_TITLE_LIMIT ,
+                        'post_type'  => 'required',
+                        'post_title' => 'required',
                     ]);
                     $post = new Post;
                     if ( $request->input('is_anonymous') )
@@ -421,7 +437,6 @@
             catch ( \exception $e )
             {
                 DB::rollback();
-                
                 return Redirect::back()->with('err_msg' , $e->getMessage());
             }
         }
@@ -581,11 +596,29 @@
         
         $post_group = [];
         if($post) {
-           // DB::connection()->enableQueryLog();
-            $tag_id = array_pluck($post->postTag,'id');
+            //DB::connection()->enableQueryLog();
+            //dd(Auth::user());
+            $tag_id = array_pluck($post->postTag,'tag_id');
+            /*$groups_id = GroupUser::where('user_id',Auth::user()->id)->get();
+            if($groups_id) {
+                $groups_id = array_pluck($groups_id,'group_id');
+                if(!empty($groups_id)) {
+                    $group_id = implode(",", $groups_id);
+                }
+            } else {
+                $group_id = '';
+            }*/
+            
+            //print_r($tag_id);
             $similar_post = Post::with(['postTag' => function($q) use ($tag_id,$post) {
-                    $q->whereIn('id', $tag_id)->where('post_id',$post->id)->get(); 
-                }])->orWhere('post_title', 'like', '%'.$post->post_title.'%')->where('id','!=',$post->id)->get();
+                $q->whereIn('tag_id', $tag_id)->get(); 
+            }])->where('id','!=',$post->id)->where('company_id',Auth::user()->company_id)->has('postTag')->orWhere('post_title', 'like', '%'.$post->post_title.'%')->get();
+            /*if(!empty($group_id)) {
+                $similar_query->whereRaw("FIND_IN_SET($group_id,group_id)");
+            }
+            $similar_post = $similar_query->get();*/
+                ////->get();//->whereRaw("FIND_IN_SET($group_id,group_id)")->get();
+               // ->orWhere('post_title', 'like', '%'.$post->post_title.'%')
             //dd(DB::getQueryLog());
             //dd($similar_post);
             if(!empty($post->group_id)) {
@@ -933,9 +966,14 @@
                 ->where('post_type','=','idea')->where('id',$id)->first();
             
 //            dd($post);
-            if($post == null)
+            if($post == null){
+                    $tag_id = array_pluck($post->postTag,'id');
+                    $similar_post = Post::with(['postTag' => function($q) use ($tag_id,$post) {
+                                        $q->whereIn('id', $tag_id)->where('post_id',$post->id)->get(); 
+                                    }])->orWhere('post_title', 'like', '%'.$post->post_title.'%')->where('id','!=',$post->id)->get();
                 return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
-            return view($this->folder . '.post.view_idea_post' , compact('post','postViews','currUser'));
+            }
+            return view($this->folder . '.post.view_idea_post' , compact('post','postViews','currUser','similar_post'));
         }
         
         public function change_status(Request $request)
@@ -1096,6 +1134,7 @@
         }
         
         public function post_flagged(Request $request) {
+             DB::beginTransaction();
             try
             {
                 if(Auth::user()) {
@@ -1107,27 +1146,38 @@
                     $reason = $request->get('reason');
                     $check_flag = PostFlag::where('post_id',$post_id)->get();
                     if(count($check_flag) >= 2) {
-                        $res = Post::where('id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+                        $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
+                        $user = Post::with(['postUser'])->where('id',$post_id)->first();
+                        if($user) {
+                            $userId = $user->postUser->id;
+                            $user_res = User::where('id',$userId)->update(['is_suspended'=>1]);
+                        }
+                        $res1 = Post::where('id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
                     } else {
                         $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
                     }
                     if($res) {
+                        DB::commit();
                         $request->session()->flash('success', 'Post flagged successfully');
                         echo json_encode(array('status' => 1,'msg' => 'Post flagged successfully'));
                     }else {
+                        DB::rollBack();
                         $request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
                         echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
                     }
                 } else {
+                    DB::rollBack();
                     return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
                 }
             }
             catch (Exception $ex) {
+                DB::rollBack();
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         }
         
         public function comment_flagged(Request $request) {
+            DB::beginTransaction();
             try
             {
                 if(Auth::user()) {
@@ -1145,17 +1195,21 @@
                         $res = CommentFlag::insert(['comment_id'=>$comment_id,'user_id'=>$user_id,'reason'=>$reason,'flag_by'=>$flag_by]);
                     //}
                     if($res) {
+                        DB::commit();
                         $request->session()->flash('success', 'Comment flagged successfully');
                         echo json_encode(array('status' => 1,'msg' => 'Comment flagged successfully'));
                     }else {
+                        DB::rollBack();
                         $request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
                         echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
                     }
                 } else {
+                    DB::rollBack();
                     return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
                 }
             }
             catch (Exception $ex) {
+                DB::rollBack();
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         }

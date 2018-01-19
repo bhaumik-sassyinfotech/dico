@@ -95,7 +95,8 @@ if (!empty($post['postComment'])) {
                             </div>    
                         </div> 
                     </div>
-                    <textarea name="comment_text" id="comment_text_popup_<?= $postComment['id'] ?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
+                    <p class="profanity" id="comment_disp_popup_<?=$postComment['id']?>"><?php echo $postComment['comment_text']; ?></p>
+                    <textarea name="comment_text" id="comment_text_popup_<?= $postComment['id'] ?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $postComment['comment_text']; ?></textarea>
                     <div class="btn-wrap-div">
                         <input type="button" name="update_comment" id="update_comment_popup_<?= $postComment['id'] ?>" value="Save" onclick="updateComment(<?= $postComment['id'] ?>,'<?= 'popup_'.$postComment['id'] ?>')" class="st-btn" style="display: none;"/>
                         <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment('<?= 'popup_'.$postComment['id']?>')" style="display: none;"/>

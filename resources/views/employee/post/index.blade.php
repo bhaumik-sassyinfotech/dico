@@ -73,17 +73,32 @@
                                                          <div class="panel-heading">
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                                                              <div class="pull-right i-con-set">
-                                                               <a><img src="assets/img/notification-icon.png"></a>  
-                                                               <a><img src="assets/img/warning-icon.png"></a>
+                                                               <a><img src="assets/img/notification-icon.png"></a>
+                                                                <?php
+                                                                     if(!empty($post['post_flagged'])) {
+                                                                ?>
+                                                                    <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                                <?php } else { ?>
+                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                <?php } ?>
                                                              </div>
                                                          </div>
                                                          <div class="panel-body">
-                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                             <p>-<?php if($post['is_anonymous'] == 0) { ?>
-                                                                 <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
-                                                            <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                             <div class="user-wrap"> 
+                                                                <div class="user-img">
+                                                                    @if(empty($post['post_user']['profile_image']) || $post['is_anonymous'] == 1)
+                                                                        <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                                                                    @else
+                                                                        <img src="{{ asset(PROFILE_PATH.$post['post_user']['profile_image']) }}">
+                                                                    @endif
+                                                                </div> 
+                                                                <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
+                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                             </div>
                                                              <fieldset>
-                                                                 <p class="desc-content" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
+                                                                 <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                              </fieldset>
                                                              <div class="btn-wrap" id="postread{{$post['id']}}">
@@ -177,19 +192,29 @@
                                                                 <h4 class="icon">{{ucfirst($grouppost['post_type'])}}</h4>
                                                                 <div class="pull-right i-con-set">
                                                                   <a><img src="assets/img/notification-icon.png"></a>  
-                                                                  <a><img src="assets/img/warning-icon.png"></a>
+                                                                  <?php
+                                                                     if(!empty($grouppost['post_flagged'])) {
+                                                                ?>
+                                                                    <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                                <?php } else { ?>
+                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                <?php } ?>
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                                <p>-<?php if($grouppost['is_anonymous'] == 0) { 
-                                                                    ?>
+                                                                <div class="user-wrap"> 
+                                                                <div class="user-img"> 
+                                                                    @if(empty($grouppost['post_user']['profile_image']) || $grouppost['is_anonymous'] == 1)
+                                                                        <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                                                                    @else
+                                                                        <img src="{{ asset(PROFILE_PATH.$grouppost['post_user']['profile_image']) }}">
+                                                                    @endif
+                                                                </div> 
+                                                                <p class="user-icon">-<?php if($grouppost['is_anonymous'] == 0) { ?>
                                                                     <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
-                                                                    <?php    
-                                                                    } else { 
-                                                                            echo "Anonymous"; 
-                                                                    } 
-                                                                        ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+                                                                </div>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
@@ -285,22 +310,36 @@
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($mypost['post_type'])}}</h4>
                                                                 <div class="pull-right i-con-set">
-                                                                  <a><img src="assets/img/notification-icon.png"></a>  
-                                                                  <a><img src="assets/img/warning-icon.png"></a>
+                                                                  <a><img src="assets/img/notification-icon.png"></a> 
+                                                                  <?php
+                                                                     if(!empty($mypost['post_flagged'])) {
+                                                                ?>
+                                                                    <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                                <?php } else { ?>
+                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                <?php } ?>
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                                <p>-<?php if($mypost['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}">{{$mypost['post_user']['name']}}</a> 
-                                                                <?php    
-                                                                } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
+                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <div class="user-wrap"> 
+                                                                <div class="user-img"> 
+                                                                    @if(empty($mypost['post_user']['profile_image']) || $mypost['is_anonymous'] == 1)
+                                                                        <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                                                                    @else
+                                                                        <img src="{{ asset(PROFILE_PATH.$mypost['post_user']['profile_image']) }}">
+                                                                    @endif
+                                                                </div> 
+                                                                <p class="user-icon">-<?php if($mypost['is_anonymous'] == 0) { ?>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}">{{$mypost['post_user']['name']}}</a>
+                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
+                                                                </div>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
                                                                 </fieldset>
-                                                                <div class="btn-wrap" id="mypostread{{$post['id']}}">
-                                                                   <a href="#" onclick ="mypostReadMore({{$post['id']}})">Read More</a>
+                                                                <div class="btn-wrap" id="mypostread{{$mypost['id']}}">
+                                                                   <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">Read More</a>
                                                                 </div>
                                                                 <div class="panel-body-wrap">
                                                                     <div class="wrap-social pull-left">
@@ -426,6 +465,7 @@
                 if(response != "") {
                     if(response.html != "") {
                         $('#threads .postlist:last').after(response.html);
+                        runProfanity();
                         $('#load_post').attr('data-id',offset);
                         if($('.postlist').length == response.count) {
                             $('#load_post').hide();
@@ -453,6 +493,7 @@
                 if(response != '') {
                     if(response.html != "") {
                         $('#users .userpostlist:last').after(response.html);
+                        runProfanity();
                         $('#load_mypost').attr('data-id',offset);
                         if($('.userpostlist').length == response.count) {
                             $('#load_mypost').hide();
@@ -479,6 +520,7 @@
                 if(response != '') {
                     if(response.html != "") {
                         $('#groups .grouppostlist:last').after(response.html);
+                        runProfanity();
                         $('#load_grouppost').attr('data-id',offset);
                         if($('.grouppostlist').length == response.count) {
                             $('#load_grouppost').hide();
@@ -509,6 +551,7 @@
                             $('#threads .postlist').remove();
                             //$('#count_post').remove();
                             $('#threads .all_viewmore').before(response.html);
+                            runProfanity();
                             $('#load_post').attr('data-id',offset);
                             //console.log(response.count+":::"+{{POST_DISPLAY_LIMIT}});
                             if(response.count <= {{POST_DISPLAY_LIMIT}}) {
@@ -541,6 +584,7 @@
                         if(response.html != "") {
                             $('#users .userpostlist').remove();
                             $('#users .user_viewmore').before(response.html);
+                            runProfanity();
                             $('#load_mypost').attr('data-id',offset);
                             if(response.count <= {{POST_DISPLAY_LIMIT}}) {
                                 $('#load_mypost').hide();
@@ -572,6 +616,7 @@
                         if(response.html != "") {
                             $('#groups .grouppostlist').remove();
                             $('#groups .group_viewmore').before(response.html);
+                            runProfanity();
                             $('#load_grouppost').attr('data-id',offset);
                             if(response.count <= {{POST_DISPLAY_LIMIT}}) {
                                 $('#load_grouppost').hide();

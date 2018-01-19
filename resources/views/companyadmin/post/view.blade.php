@@ -19,7 +19,7 @@
                     <!-- START TITLE -->
                     <div class="group-wrap">
                         <div class="pull-left">
-                            <h3>{{$post->post_title}}</h3>
+                            <h3 class="profanity">{{$post->post_title}}</h3>
                             <div class="user-wrap">
                                 <div class="user-img">
                                     @if(empty($post->postUser->profile_image))
@@ -82,7 +82,7 @@
                     </div>
                     <!-- END TITLE -->
                     <div class="post-wrap-details">
-                        <p class="text-12">{{$post->post_description}}</p>
+                        <p class="text-12 profanity">{{$post->post_description}}</p>
                         <div class="post-details-like">
                             <div class="like like-wrap"><a href="javascript:void(0)" id="like_post" onclick="likePost({{$post['id']}})">
                                 <?php
@@ -123,7 +123,6 @@
                         <input type="hidden" name="post_id" id="post_id" value="{{$post['id']}}">
                         <div class="field-group comment">
                             <textarea name="comment_text" id="comment_text" class="form-control autosize" placeholder="Leave a comment here" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 71.9792px;"></textarea>
-
                         </div>
                         <?php /*<div class="field-group files">
                                     <input disabled="disabled" placeholder="upload file" id="uploadFile">
@@ -168,7 +167,8 @@
                                     </form>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
-                         </div>   
+                         </div>  
+                        <!-- Start comment box -->
                         <form name="commentbox_form" id="commentbox_form" class="form-horizontal row-border  profile-page">
                         <?php
                             if (!empty($post['postComment'])) {
@@ -289,7 +289,8 @@ $comment_id = Helpers::encode_url($commentUser->id);
                                         </div>
                                     </div>
                                 </div>
-                                <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
+                                <p class="profanity" id="comment_disp_<?=$postComment['id']?>"><?php echo $postComment['comment_text']; ?></p>
+                                <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $postComment['comment_text']; ?></textarea>
                                 <div class="btn-wrap-div">
                                     <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$postComment['id']?>,<?=$postComment['id']?>)" style="display: none;"/>
                                     <input type="button" name="cancel_comment" id="cancel_comment_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment(<?=$postComment['id']?>)" style="display: none;"/>
@@ -387,220 +388,38 @@ if (!empty($postComment['commentUserDisLike'])) {
                                 </div>
                           </div>
                         </form>
+                        <!-- End comment box -->
+                        <!-- Start comment reply popupbox -->
                         <div id="myModalComment" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <!-- Modal content-->
                             <div class="modal-content">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <div id="commentReplyList"></div> 
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Comment Here</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="commentId" name="commentId">
-                                    <div class="row">
-                                        <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <div id="commentReplyList"></div> 
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Comment Here</h4>
                                     </div>
-                                    <div class="row">
-                                        <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
+                                    <form name="reply_form" id="reply_form" class="form-horizontal row-border  profile-page">
+                                    <div class="modal-body">
+                                        <input type="hidden" id="commentId" name="commentId">
+                                        <div class="row">
+                                            <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="comment_reply()">Submit</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" onclick="comment_reply()">Submit</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
                             </div>
 
                         </div></div>
+                        <!-- End comment reply popupbox -->
                     </div>
-                    <?php /*<form class="form-horizontal row-border">
-<div class="panel-body">
-<div class="row">
-<?php
-if (!empty($post['postComment'])) {
-foreach ($post['postComment'] as $postComment) {
-?>
-<div class="form-group" id="commentreply_{{$postComment['id']}}">
-<div class="row" style="margin:0 !important;">
-<div class="col-md-2">
-<div class="row">
-<?php if (!empty($postComment['commentUser'])) { ?>
-<div class="col-md-2">
-<?php
-$commentUser = $postComment['commentUser'];
-if (!empty($commentUser->profile_image) && $postComment['is_anonymous'] == 0) {
-$profile_image = 'public/uploads/profile_pic/' . $commentUser->profile_image;
-} else {
-$profile_image = 'public/assets/demo/avatar/jackson.png';
-}
-?>
-<img src="{{asset($profile_image)}}" id="profile" alt="" class="pull-left" height="100px" width="100px" style="margin: 0 20px 20px 0"/>
-</div>
-</div>
-<div class="row">
-<?php
-//dd($commentUser);
-$comment_id = Helpers::encode_url($commentUser->id);
-if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
-if ($commentUser['following'][0]->status == 1) {
-?>
-<a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Unfollow</a>
-<?php
-} else {
-?>
-<a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
-<?php
-}
-} else if ($commentUser->id != Auth::user()->id) {
-?>
-<a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
-<?php
-}
-}
-?>
-
-</div>
-</div>
-<div class="col-md-10">
-<div class="row">
-<span style="float:left;">
-<?php if ($postComment['is_anonymous'] == 0) { ?>
-<b><?php echo $commentUser['name']; ?></b>
-<?php
-} else {
-echo "<b>Anonymous</b>";
-}
-?><br>
-<small><?php echo " - on " . date('m/d/Y', strtotime($commentUser['created_at'])); ?></small></span>
-<?php if ($post['user_id'] == Auth::user()->id) { ?>
-<span style="float: right;">
-<a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">
-<?php if ($postComment['is_correct'] == 1) { ?>
-<i class="fa fa-star" aria-hidden="true"></i>
-<?php } else { ?>
-<i class="fa fa-star-o" aria-hidden="true"></i>
-<?php } ?>  </a>Solution
-</span>
-<?php
-} else {
-if ($postComment['is_correct'] == 1) {
-?><span style="float: right;"><a href="javascript:void(0)"><i class="fa fa-star" aria-hidden="true"></i></a> Solution</span><?php
-}
-}
-?><br>
-<?php if ($commentUser['id'] == Auth::user()->id) { ?>
-<span style="float:right;">
-<a href="{{url('/deletecomment',$postComment['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-</span><?php } ?>
-</div>
-<div class="row">
-<?php echo $postComment['comment_text']; ?>
-</div>
-<?php
-if (!empty($postComment['commentAttachment'])) {
-?>
-<div class="row"><b>Attachment : </b>
-<a href="#">{{$postComment['commentAttachment']['file_name']}}</a>
-</div><?php } ?>
-</div>
-</div>
-<div class="row">
-<div class="col-md-9"></div>
-<div class="col-md-3">
-<div class="col-md-1">
-<a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
-<?php
-if (!empty($postComment['commentUserLike'])) {
-?>
-<i class="fa fa-thumbs-up"></i>
-<?php } else { ?>
-<i class="fa fa-thumbs-o-up"></i>
-<?php } ?>
-</a>
-<span id="comment_like_count_{{$postComment['id']}}"><?php echo count($postComment['commentLike']) ?></span>
-</div>
-<div class="col-md-1"><a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}});" >
-<?php
-if (!empty($postComment['commentUserDisLike'])) {
-?>
-<i class="fa fa-thumbs-down"></i>
-<?php } else { ?>
-<i class="fa fa-thumbs-o-down"></i>
-<?php } ?>
-</a>
-<span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
-</div>
-<div class="col-md-1"><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal{{$postComment['id']}}"><i class="fa fa-reply" aria-hidden="true"></i></a></div>
-<div id="myModal{{$postComment['id']}}" class="modal fade" role="dialog">
-<div class="modal-dialog">
-
-<!-- Modal content-->
-<div class="modal-content">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">Comment Here</h4>
-</div>
-<div class="modal-body">
-<div class="row">
-<textarea name="comment_text" id="comment_text_{{$postComment['id']}}" class="form-control autosize" placeholder="Leave a comment here"></textarea>
-</div>
-<div class="row">
-<label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous_{{$postComment['id']}}">Anonymous</label><br>
-</div>
-</div>
-<div class="modal-footer">
-<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="comment_reply({{$postComment['id']}})">Submit</button>
-<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-</div>
-</div>
-
-</div>
-</div>
-</div>
-</div>
-
-<!-- comment reply box start -->
-<?php
-//dd($postComment['commentReply']);
-if (!empty($postComment['commentReply'])) {
-$srno = 0;
-foreach ($postComment['commentReply'] as $commentReply) {
-$srno++;
-?>
-<div class="form-group row cmry" id="{{$srno}}"><div class="col-md-12">
-<span style="float:left;">
-<?php if ($commentReply['is_anonymous'] == 0) { ?>
-<b><?php echo $commentReply['commentReplyUser']['name']; ?></b>
-<?php
-} else {
-echo "<b>Anonymous</b>";
-}
-?>
-
-<br>
-<small><?php echo " - on " . date('d/m/Y', strtotime($commentReply['created_at'])); ?></small>
-</span>  <br>
-<div class="col-md-12">
-<?php echo $commentReply['comment_reply']; ?></div>
-</div>
-<?php if ($commentReply['user_id'] == Auth::user()->id) { ?>
-<span style="float:right;">
-<a href="{{url('/deletecommentReply',$commentReply['id'])}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-</span><?php } ?></div>
-<?php
-}
-}
-?>
-<!-- comment reply box end -->
-</div>
-<?php
-}
-}
-?>
-</div>
-</div>
-</form>  */?>
-                    <!-- Comment Box end -->
                     </div>
 
                     <div class="col-sm-4" id="post-detail-right">
@@ -664,7 +483,7 @@ echo "<b>Anonymous</b>";
                                     if(!empty($similar_post) && count($similar_post) > 0) {
                                         foreach($similar_post as $similar) {
                                 ?>
-                                <a href="#">{{$similar->post_title}}</a>
+                                <a href="{{url('viewpost', Helpers::encode_url($similar->id))}}" class="profanity">{{$similar->post_title}}</a>
                                 <?php 
                                         }
                                     } else {
@@ -783,44 +602,55 @@ if (!empty($post->postAttachment)) {
     }
     function comment_reply() {
         //var commentid = $('#modalComment').attr('data-id');
-        var commentid = $('#commentId').val();
-        var _token = CSRF_TOKEN;
-        var post_id = $('#post_id').val();
-        var comment_reply = $('#comment_reply_text').val();
-        var anonymous = 0;
-        var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
-        //console.log(commentid, "::::", srno);
-        if ($("#is_anonymous_" + commentid).is(':checked')) {
-            anonymous = 1;
-        } else {
-            anonymous = 0;
-        }
-        var formData = {comment_id:commentid, comment_reply:comment_reply, post_id:post_id, is_anonymous:anonymous, srno:srno, _token};
-        $.ajax({
-            url: SITE_URL + '/comment_reply',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                /*res = JSON.parse(response);
-                 if (res.status == 1) {
-                 location.reload();
-                 } else {
-                 swal("Error", res.msg, "error");
-                 }*/
-                //console.log(commentid, "::::", srno);
-                $('#commentreply_' + commentid + ' #' + srno).before(response);
-                location.reload();
-            },
-            error: function(e) {
-                swal("Error", e, "error");
+        //alert($('#comment_replybox_form').valid());
+        if($('#reply_form').valid() == 1) {
+            var commentid = $('#commentId').val();
+            var _token = CSRF_TOKEN;
+            var post_id = $('#post_id').val();
+            var comment_reply = $('#comment_reply_text').val();
+            var anonymous = 0;
+            var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
+            //console.log(commentid, "::::", srno);
+            if ($("#is_anonymous_" + commentid).is(':checked')) {
+                anonymous = 1;
+            } else {
+                anonymous = 0;
             }
-        });
+            var formData = {comment_id:commentid, comment_reply:comment_reply, post_id:post_id, is_anonymous:anonymous, srno:srno, _token};
+            $.ajax({
+                url: SITE_URL + '/comment_reply',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    /*res = JSON.parse(response);
+                     if (res.status == 1) {
+                     location.reload();
+                     } else {
+                     swal("Error", res.msg, "error");
+                     }*/
+                    //console.log(commentid, "::::", srno);
+                    $('#commentreply_' + commentid + ' #' + srno).before(response);
+                    location.reload();
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
     }
 
-    function editComment(id) {
+    /*function editComment(id) {
         $('#comment_text_'+id).removeProp('readonly');
         $('#comment_text_'+id).css('background-color','white');
         $('#update_comment_'+id).css('display','inline-block');
+        $('#cancel_comment_'+id).css('display','inline-block');
+    }*/
+    
+    function editComment(id) {
+        $('#comment_text_' + id).removeProp('readonly').slideDown('fast');
+        $('#update_comment_' + id).css('display', 'inline-block');
+        $('#comment_text_'+id).css('background-color','white');
+        $("#comment_disp_"+id).slideUp('fast');
         $('#cancel_comment_'+id).css('display','inline-block');
     }
 
@@ -853,10 +683,16 @@ if (!empty($post->postAttachment)) {
         }
     }
     function editCommentReply(id) {
-        $('#comment_reply_text_'+id).removeProp('readonly');
+        $('#comment_reply_text_' + id).removeProp('readonly').slideDown('fast');
+        $('#update_comment_reply_' + id).css('display', 'inline-block');
+        $('#comment_reply_text_'+id).css('background-color','white');
+        $("#comment_reply_text_disp_"+id).slideUp('fast');
+        $('#cancel_comment_reply_'+id).css('display','inline-block');
+        
+        /*$('#comment_reply_text_'+id).removeProp('readonly');
         $('#comment_reply_text_'+id).css('background-color','white');
         $('#update_comment_reply_'+id).css('display','inline-block');
-        $('#cancel_comment_reply_'+id).css('display','inline-block');
+        $('#cancel_comment_reply_'+id).css('display','inline-block');*/
     }
     function updateCommentReply(id) {
         if($('#comment_replybox_form').valid() == 1) {
@@ -871,10 +707,18 @@ if (!empty($post->postAttachment)) {
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         //swal("Success", res.msg, "success");
-                        $('#comment_reply_text_'+id).attr('readonly',true);
+                        
+                        $('#comment_reply_text_' + id).removeProp('readonly').slideUp('fast');
+                        $('#update_comment_reply_' + id).css('display', 'none');
+                        $('#comment_reply_text_'+id).css('background-color','transparent');
+                        $("#comment_reply_text_disp_"+id).slideDown('fast');
+                        $("#comment_reply_text_disp_"+id).html($('#comment_reply_text_' + id).val());
+                        $('#cancel_comment_reply_'+id).css('display','none');
+                        runProfanity();
+                        /*$('#comment_reply_text_'+id).attr('readonly',true);
                         $('#comment_reply_text_'+id).css('background-color','transparent');
                         $('#update_comment_reply_'+id).css('display','none');
-                        $('#cancel_comment_reply_'+id).css('display','none');
+                        $('#cancel_comment_reply_'+id).css('display','none');*/
                     } else {
                         swal("Error", res.msg, "error");
                     }
@@ -886,15 +730,21 @@ if (!empty($post->postAttachment)) {
         }
     }
     function closeCommentReply(id) {
-        $('#comment_reply_text_'+id).attr('readonly',true);
+        /*$('#comment_reply_text_'+id).attr('readonly',true);
         $('#comment_reply_text_'+id).css('background-color','transparent');
         $('#update_comment_reply_'+id).css('display','none');
+        $('#cancel_comment_reply_'+id).css('display','none');*/
+        $('#comment_reply_text_' + id).removeProp('readonly').slideUp('fast');
+        $('#update_comment_reply_' + id).css('display', 'none');
+        $('#comment_reply_text_'+id).css('background-color','transparent');
+        $("#comment_reply_text_disp_"+id).slideDown('fast');
         $('#cancel_comment_reply_'+id).css('display','none');
     }
     function closeComment(id) {
-        $('#comment_text_'+id).attr('readonly',true);
+        $('#comment_text_'+id).removeProp('readonly').slideUp('fast');
+        $('#update_comment_' + id).css('display', 'none');
         $('#comment_text_'+id).css('background-color','transparent');
-        $('#update_comment_'+id).css('display','none');
+        $("#comment_disp_"+id).slideDown('fast');
         $('#cancel_comment_'+id).css('display','none');
     }
     function allComments() {
@@ -908,6 +758,7 @@ if (!empty($post->postAttachment)) {
             data: formData,
             success: function(response) {
                 $('#allcomments_box').html(response);
+                runProfanity();
                 //res = JSON.parse(response);
                 /*if (res.status == 1) {
                     if(res.data != "") {
@@ -998,6 +849,7 @@ if (!empty($post->postAttachment)) {
                 data: formData,
                 success: function(response) {
                     $('#commentReplyList').html(response);
+                    runProfanity();
                     /*res = JSON.parse(response);
                     if (res.status == 1) {
                         swal("Success", res.msg, "success");

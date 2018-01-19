@@ -87,6 +87,7 @@ jQuery.validator.addMethod("validName", function (value, element) {
 $(document).ready(function ()
 {
     /*enable `save` button once the page is loaded to ensure that jquery validations are applied.*/
+    
     $("#save").prop('disabled',false);
 
     /*Allow only one type of post to be checked*/

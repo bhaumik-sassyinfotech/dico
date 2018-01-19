@@ -3,7 +3,7 @@
 <title>DICO - Post</title>
 @section('content')
     
-    <div id="page-content" class="idea-details post-details padding-box">
+    <div id="page-content" class="idea-details post-details">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -20,7 +20,7 @@
                     <div id="post-detail-left" class="col-sm-8">
                         <div class="group-wrap">
                             <div class="pull-left">
-                                <h3>{{$post->post_title}}</h3>
+                                <h3 class="profanity">{{$post->post_title}}</h3>
                                 <div class="user-wrap">
                                     <div class="user-img">
                                         @if(empty($post->postUser->profile_image))
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="post-wrap-details">
-                            <p class="text-12">{{$post->post_description}}</p>
+                            <p class="text-12 profanity">{{$post->post_description}}</p>
                             <div class="post-details-like">
                                 <div class="like like-wrap">
                                     <p>
@@ -348,10 +348,19 @@
                         <div class="category">
                             <h2>Similar Posts</h2>
                             <div class="post-links">
-                                <a href="#">who has any right to find fault with....</a>
-                                <a href="#">At vero eos et accusamus et iusto....</a>
-                                <a href="#">Nam libero tempore, cum soluta nobis....</a>
-                                <a href="#">placeat facere possimus, omnis voluptas...</a>
+                                <?php
+                                    if(!empty($similar_post) && count($similar_post) > 0) {
+                                        foreach($similar_post as $similar) {
+                                ?>
+                                <a href="{{url('viewpost', Helpers::encode_url($similar->id))}}" class="profanity">{{$similar->post_title}}</a>
+                                <?php 
+                                        }
+                                    } else {
+                                ?>
+                                <a href="javascript:void(0)">No similar post found.</a>
+                                <?php
+                                    }
+                                ?>
                             </div>
                         </div>
                         {{--Uploaded files--}}

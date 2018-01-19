@@ -69,10 +69,10 @@
                                                              </div>
                                                          </div>
                                                          <div class="panel-body">
-                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <p>-<?php if($post['is_anonymous'] == 0) { echo $post['post_user']['name']; } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              <fieldset>
-                                                                 <p class="desc-content" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
+                                                                 <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                              </fieldset>
                                                              <div class="btn-wrap" id="postread{{$post['id']}}">
@@ -199,6 +199,7 @@
             success: function (response) {
                 if(response != "") {
                     $('#threads .postlist:last').after(response.html);
+                    runProfanity();
                     $('#load_post').attr('data-id',offset);
                     if($('.postlist').length == response.count) {
                         $('#load_post').hide();
@@ -227,6 +228,7 @@
                             $('#threads .postlist').remove();
                             //$('#count_post').remove();
                             $('#threads .all_viewmore').before(response.html);
+                            runProfanity();
                             $('#load_post').attr('data-id',offset);
                             if(response.count < {{POST_DISPLAY_LIMIT}}) {
                                 $('#load_post').hide();

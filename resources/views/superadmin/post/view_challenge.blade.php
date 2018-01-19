@@ -20,7 +20,7 @@
                     <!-- START TITLE -->
                     <div class="group-wrap">
                         <div class="pull-left">
-                            <h3>{{$post->post_title}}</h3>
+                            <h3 class="profanity">{{$post->post_title}}</h3>
                             <div class="user-wrap">
                                 <div class="user-img">
                                     @if(empty($post->postUser->profile_image))
@@ -84,7 +84,7 @@ if ($post['user_id'] == Auth::user()->id) {
                     </div>
                     <!-- END TITLE -->
                     <div class="post-wrap-details">
-                        <p class="text-12">{{$post->post_description}}</p>
+                        <p class="text-12 profanity">{{$post->post_description}}</p>
                         <div class="post-details-like">
                             <div class="like like-wrap"><a href="javascript:void(0)" id="like_post" onclick="likePost({{$post['id']}})">
                                 <?php
@@ -271,7 +271,8 @@ $active = "";
                                         </div>
                                     </div>
                                 </div>
-                                <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width"><?php echo $postComment['comment_text']; ?></textarea>
+                                <p class="profanity" id="comment_disp_<?=$postComment['id']?>"><?php echo $postComment['comment_text']; ?></p>
+                                <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $postComment['comment_text']; ?></textarea>
                                 <div class="btn-wrap-div">
                                     <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$postComment['id']?>,<?=$postComment['id']?>)" style="display: none;"/>
                                     <input type="button" name="cancel_comment" id="cancel_comment_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment(<?=$postComment['id']?>)" style="display: none;"/>
@@ -344,21 +345,24 @@ if (!empty($postComment['commentUserDisLike'])) {
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <div id="commentReplyList"></div>
                                     <h4 class="modal-title">Comment Here</h4>
                                 </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="commentId" name="commentId">
-                                    <div class="row">
-                                        <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                <form name="reply_form" id="reply_form" class="form-horizontal row-border  profile-page">
+                                    <div class="modal-body">
+                                        <input type="hidden" id="commentId" name="commentId">
+                                        <div class="row">
+                                            <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
+                                        </div>
                                     </div>
-                                    <div class="row">
-                                        <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" onclick="comment_reply()">Submit</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="comment_reply()">Submit</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
+                                </form>    
                             </div>
 
                         </div></div>
@@ -425,10 +429,19 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                         <div class="category">
                             <h2>Similar Posts</h2>
                             <div class="post-links">
-                                <a href="#">who has any right to find fault with....</a>
-                                <a href="#">who has any right to find fault with....</a>
-                                <a href="#">who has any right to find fault with....</a>
-                                <a href="#">who has any right to find fault with....</a>
+                                <?php
+                                    if(!empty($similar_post) && count($similar_post) > 0) {
+                                        foreach($similar_post as $similar) {
+                                ?>
+                                <a href="{{url('viewpost', Helpers::encode_url($similar->id))}}" class="profanity">{{$similar->post_title}}</a>
+                                <?php 
+                                        }
+                                    } else {
+                                ?>
+                                <a href="javascript:void(0)">No similar post found.</a>
+                                <?php
+                                    }
+                                ?>
                             </div>
                         </div>
                         <?php
@@ -540,41 +553,44 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
     }
     function comment_reply() {
         //var commentid = $('#modalComment').attr('data-id');
-        var commentid = $('#commentId').val();
-        var _token = CSRF_TOKEN;
-        var post_id = $('#post_id').val();
-        var comment_reply = $('#comment_reply_text').val();
-        var anonymous = 0;
-        var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
-        if ($("#is_anonymous_" + commentid).is(':checked')) {
-            anonymous = 1;
-        } else {
-            anonymous = 0;
-        }
-        var formData = {comment_id:commentid, comment_reply:comment_reply, post_id:post_id, is_anonymous:anonymous, srno:srno, _token};
-        $.ajax({
-            url: SITE_URL + '/comment_reply',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                /*res = JSON.parse(response);
-                 if (res.status == 1) {
-                 location.reload();
-                 } else {
-                 swal("Error", res.msg, "error");
-                 }*/
-                //console.log(commentid, "::::", srno);
-                $('#commentreply_' + commentid + ' #' + srno).before(response);
-            },
-            error: function(e) {
-                swal("Error", e, "error");
+        if($('#reply_form').valid() == 1) {
+            var commentid = $('#commentId').val();
+            var _token = CSRF_TOKEN;
+            var post_id = $('#post_id').val();
+            var comment_reply = $('#comment_reply_text').val();
+            var anonymous = 0;
+            var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
+            if ($("#is_anonymous_" + commentid).is(':checked')) {
+                anonymous = 1;
+            } else {
+                anonymous = 0;
             }
-        });
+            var formData = {comment_id:commentid, comment_reply:comment_reply, post_id:post_id, is_anonymous:anonymous, srno:srno, _token};
+            $.ajax({
+                url: SITE_URL + '/comment_reply',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    /*res = JSON.parse(response);
+                     if (res.status == 1) {
+                     location.reload();
+                     } else {
+                     swal("Error", res.msg, "error");
+                     }*/
+                    //console.log(commentid, "::::", srno);
+                    $('#commentreply_' + commentid + ' #' + srno).before(response);
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
     }
     function editComment(id) {
-        $('#comment_text_'+id).removeProp('readonly');
+        $('#comment_text_' + id).removeProp('readonly').slideDown('fast');
+        $('#update_comment_' + id).css('display', 'inline-block');
         $('#comment_text_'+id).css('background-color','white');
-        $('#update_comment_'+id).css('display','inline-block');
+        $("#comment_disp_"+id).slideUp('fast');
         $('#cancel_comment_'+id).css('display','inline-block');
     }
 
@@ -595,7 +611,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                         $('#comment_text_'+elementid).css('background-color','transparent');
                         $('#update_comment_'+elementid).css('display','none');
                         $('#cancel_comment_'+elementid).css('display','none');
-
+                        location.reload();
                     } else {
                         swal("Error", res.msg, "error");
                     }
@@ -607,9 +623,10 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         }
     }
     function closeComment(id) {
-        $('#comment_text_'+id).attr('readonly',true);
+        $('#comment_text_'+id).removeProp('readonly').slideUp('fast');
+        $('#update_comment_' + id).css('display', 'none');
         $('#comment_text_'+id).css('background-color','transparent');
-        $('#update_comment_'+id).css('display','none');
+        $("#comment_disp_"+id).slideDown('fast');
         $('#cancel_comment_'+id).css('display','none');
     }
     function reportPostFlagged() {
@@ -676,8 +693,33 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         }
     }
     function openCommentReplyBox(commentid) {
-        $('#myModalComment').modal('show');
-        $('#commentId').val(commentid);
+        if(commentid != "") {
+            var _token = CSRF_TOKEN;
+            formData = {comment_id:commentid,_token};
+            $.ajax({
+                url: SITE_URL + '/getCommentReply',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('#commentReplyList').html(response);
+                    runProfanity();
+                    /*res = JSON.parse(response);
+                    if (res.status == 1) {
+                        swal("Success", res.msg, "success");
+                        $('#flaggedComment').modal('hide');
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }*/
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+            $('#myModalComment').modal('show');
+            $('#commentId').val(commentid);
+        }else {
+            swal("Error", "comment not found", "error");
+        }
     }
     function allComments() {
         var _token = CSRF_TOKEN;
@@ -689,11 +731,61 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             data: formData,
             success: function(response) {
                 $('#allcomments_box').html(response);
+                runProfanity();
             },
             error: function(e) {
                 swal("Error", e, "error");
             }
         });
+    }
+    function editCommentReply(id) {
+        $('#comment_reply_text_' + id).removeProp('readonly').slideDown('fast');
+        $('#update_comment_reply_' + id).css('display', 'inline-block');
+        $('#comment_reply_text_'+id).css('background-color','white');
+        $("#comment_reply_text_disp_"+id).slideUp('fast');
+        $('#cancel_comment_reply_'+id).css('display','inline-block');
+    }
+    function updateCommentReply(id) {
+        if($('#comment_replybox_form').valid() == 1) {
+            var comment = $('#comment_reply_text_'+id).val();
+            var _token = CSRF_TOKEN;
+            formData = {id:id,comment:comment,_token};
+            $.ajax({
+                url: SITE_URL + '/comment_reply_update',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        //swal("Success", res.msg, "success");
+                        $('#comment_reply_text_' + id).removeProp('readonly').slideUp('fast');
+                        $('#update_comment_reply_' + id).css('display', 'none');
+                        $('#comment_reply_text_'+id).css('background-color','transparent');
+                        $("#comment_reply_text_disp_"+id).slideDown('fast');
+                        $("#comment_reply_text_disp_"+id).html($('#comment_reply_text_' + id).val());
+                        $('#cancel_comment_reply_'+id).css('display','none');
+                        runProfanity();
+                    } else {
+                        swal("Error", res.msg, "error");
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function closeCommentReply(id) {
+        /*$('#comment_reply_text_'+id).attr('readonly',true);
+        $('#comment_reply_text_'+id).css('background-color','transparent');
+        $('#update_comment_reply_'+id).css('display','none');
+        $('#cancel_comment_reply_'+id).css('display','none');*/
+        $('#comment_reply_text_' + id).removeProp('readonly').slideUp('fast');
+        $('#update_comment_reply_' + id).css('display', 'none');
+        $('#comment_reply_text_'+id).css('background-color','transparent');
+        $("#comment_reply_text_disp_"+id).slideDown('fast');
+        //$("#comment_reply_text_disp_"+id).html($('#comment_reply_text_' + id).val());
+        $('#cancel_comment_reply_'+id).css('display','none');
     }
 </script>
 @endpush
