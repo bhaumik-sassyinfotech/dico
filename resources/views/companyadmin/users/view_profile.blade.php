@@ -1,7 +1,7 @@
 @extends('template.default')
 <title>DICO - Profile</title>
 @section('content')
-    
+
     <div id="page-content" class="profile-page">
         <div id='wrap'>
             <div class="container">
@@ -10,26 +10,26 @@
                         <div id="follow-box">
                             <div class="preview-box">
                                 <?php
-                                $profile_image = '';
-                                    if (!empty($user->profile_image)) {
-                                        $profile_image = asset('public/uploads/profile_pic/' . $user->profile_image);
-                                    } else {
-                                        $profile_image = asset('public/assets/demo/avatar/jackson.png');
-                                    }
-                                ?>
+$profile_image = '';
+if (!empty($user->profile_image)) {
+	$profile_image = asset('public/uploads/profile_pic/' . $user->profile_image);
+} else {
+	$profile_image = asset('public/assets/demo/avatar/jackson.png');
+}
+?>
                                 <img src="{{ $profile_image }}" id="user-profile">
                             </div>
-                            
-                            @if(!empty($user->following) && count($user->following) > 0)
-                                @if($user->following[0]->status == 1)
-                                    <a href="{{ url('/unfollow/'.$user->id) }}">Unfollow</a>
+                            @if(Auth::user()->id != $user->id)
+                                @if(!empty($user->following) && count($user->following) > 0)
+                                    @if($user->following[0]->status == 1)
+                                        <a href="{{ url('/unfollow/'.$user->id) }}">Unfollow</a>
+                                    @else
+                                        <a href="{{ url('/follow/'.$user->id) }}"> Follow</a>
+                                    @endif
                                 @else
-                                    <a href="{{ url('/follow/'.$user->id) }}"> Follow</a>
+                                    <a href="{{ url('/follow/'.$user->id) }}" >Follow</a>
                                 @endif
-                            @else
-                                <a href="{{ url('/follow/'.$user->id) }}" >Follow</a>
                             @endif
-                            
                             <div style="display: none;" class="modal fade" id="followers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -42,13 +42,13 @@
                                                         <div class="followers-details">
                                                             <div class="follow-img">
                                                                 <?php
-                                                                $profile_image = '';
-                                                                if (!empty($follower->followUser->profile_image)) {
-                                                                    $profile_image = asset('public/uploads/profile_pic/' . $follower->followUser->profile_image);
-                                                                } else {
-                                                                    $profile_image = asset('public/assets/demo/avatar/jackson.png');
-                                                                }
-                                                                ?>
+$profile_image = '';
+if (!empty($follower->followUser->profile_image)) {
+	$profile_image = asset('public/uploads/profile_pic/' . $follower->followUser->profile_image);
+} else {
+	$profile_image = asset('public/assets/demo/avatar/jackson.png');
+}
+?>
                                                                 <img src="{{ $profile_image }}" alt="followers" >
                                                             </div>
                                                             <div class="follow-name">
@@ -73,9 +73,9 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                        
+
                                         </div>
-                                    
+
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal-dialog -->
                             </div>
@@ -91,13 +91,13 @@
                                                         <div class="followers-details">
                                                             <div class="follow-img">
                                                                 <?php
-                                                                $profile_image = '';
-                                                                if (!empty($following->followingUser->profile_image)) {
-                                                                    $profile_image = asset('public/uploads/profile_pic/' . $following->followingUser->profile_image);
-                                                                } else {
-                                                                    $profile_image = asset('public/assets/demo/avatar/jackson.png');
-                                                                }
-                                                                ?>
+$profile_image = '';
+if (!empty($following->followingUser->profile_image)) {
+	$profile_image = asset('public/uploads/profile_pic/' . $following->followingUser->profile_image);
+} else {
+	$profile_image = asset('public/assets/demo/avatar/jackson.png');
+}
+?>
                                                                 <img src="{{ $profile_image }}" alt="followers" >
                                                             </div>
                                                             <div class="follow-name">
@@ -122,9 +122,9 @@
                                                     </div>
                                                 @endif
                                             </div>
-                
+
                                         </div>
-            
+
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal-dialog -->
                             </div>
@@ -148,11 +148,11 @@
                             </div>
                         </div>
                     </div>
-                
+
                 </div>
             </div>
             <div class="container">
-                
+
                 <div class="row group-listing">
                     <div class="col-sm-12 col-md-12">
                         <div class="panel panel-midnightblue group-tabs profile-user-tabs">
@@ -164,55 +164,61 @@
                                 </h4>
                                 <div class="pull-right">
                                     <form method="post" class="search-form">
-                                        <input type="text" placeholder="Search Group">
-                                        <input type="button" value="#" class="search-icon">
+                                        <input type="text" id="search_group_text" placeholder="Search Group">
+                                        <input type="button" value="#" id="search_group_btn" class="search-icon">
                                     </form>
                                 </div>
                             </div>
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <div id="threads" class="tab-pane active" style="overflow-y: hidden;" tabindex="5000">
-                                        <div  class="profile-slider owl-carousel">
-                                            @foreach($groupDetails as $group)
-                                                <div class="item">
-                                                    <div class="list-block">
-                                                        <div class="panel-heading">
-                                                        </div>
-                                                        <div class="panel-body">
-                                                            <fieldset>
-                                                                <div class="grid-image">
-                                                                    @php
-                                                                        if(empty($group->group_image))
-                                                                            $group_img = asset('assets/img/business-development.png');
-                                                                        else
-                                                                            $group_img = asset('assets/img/'.$group->group_image);
-                                                                    @endphp
-                                                                    <img alt="super-user" src="{{ asset('assets/img/custome-service.png') }}">
-                                                                </div>
-                                                                <div class="grid-details">
-                                                                    <h4>{{ $group->group_name }}</h4>
-                                                                </div>
-                                                            </fieldset>
-                                                            <p>
-                                                                {{ $group->description }}
-                                                            </p>
-                                                            <div class="panel-body-wrap">
-                                                                <div class="follower-text pull-left">
-                                                                    <p>Total Posts:<span>0</span></p>
-                                                                </div>
-                                                                <div class="follower-text pull-right">
-                                                                    <p>Total Members:<span>{{ $group->total_members }}</span></p>
+                                        <div  class="profile-slider owl-carousel" id="groupDetailsContainer">
+                                            @if(count($groupDetails))
+                                                @foreach($groupDetails as $group)
+                                                    <div class="item">
+                                                        <div class="list-block">
+                                                            <div class="panel-heading">
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <fieldset>
+                                                                    <div class="grid-image">
+                                                                        @php
+                                                                            if(empty($group->group_image))
+                                                                                $group_img = asset('assets/img/business-development.png');
+                                                                            else
+                                                                                $group_img = asset('assets/img/'.$group->group_image);
+                                                                        @endphp
+                                                                        <img alt="super-user" src="{{ asset('assets/img/custome-service.png') }}">
+                                                                    </div>
+                                                                    <div class="grid-details">
+                                                                        <h4>{{ $group->group_name }}</h4>
+                                                                    </div>
+                                                                </fieldset>
+                                                                <p>
+                                                                    {{ $group->description }}
+                                                                </p>
+                                                                <div class="panel-body-wrap">
+                                                                    <div class="follower-text pull-left">
+                                                                        <p>Total Posts:<span>0</span></p>
+                                                                    </div>
+                                                                    <div class="follower-text pull-right">
+                                                                        <p>Total Members:<span>{{ $group->total_members }}</span></p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                @endforeach
+                                            @else
+                                                <div class="item">
+                                                    <p>No data found.</p>
                                                 </div>
-                                            @endforeach
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        
+
                         </div>
                         <div class="panel panel-midnightblue group-tabs profile-post-tabs">
                             <div class="panel-heading">
@@ -232,7 +238,7 @@
                                                     <li><a href="#">Delete Post</a></li>
                                                 </ul>
                                             </div>
-                                        
+
                                         </div>
                                         <a class="btn-left ">
                                             <form method="post" class="search-form">
@@ -247,6 +253,7 @@
                                 <div class="tab-content">
                                     <div id="threads" class="tab-pane active" style="overflow-y: hidden;" tabindex="5000">
                                         <div  class="post-slider owl-carousel">
+                                            @if(count($userPosts))
                                             @foreach($userPosts as $post)
                                             <div class="item">
                                                 @php
@@ -259,7 +266,7 @@
                                                     else
                                                         $panelClass = 'panel-3';
                                                 @endphp
-                                                
+
                                                 <div class="{{ $panelClass }} panel-primary">
                                                     <div class="panel-heading">
                                                         <h4 class="icon">{{ ucfirst($question_type) }}</h4>
@@ -275,7 +282,7 @@
                                                             @endif
                                                             </form>
                                                         </div>
-                                                    
+
                                                     </div>
                                                     <div class="panel-body">
                                                         <h4><a href="{{ url('viewpost/'.Helpers::encode_url($post->id)) }}">{{ $post->post_title }}</a></h4>
@@ -307,83 +314,94 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+
                                             <?php
-                                                /*
-                                                  <div class="item">
-                                                <div class="panel-2 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Questions</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
-                                                                <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4>Lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="question-details.php">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
-                                                            </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="panel-3 panel-primary">
-                                                    <div class="panel-heading">
-                                                        <h4 class="icon">Challenge</h4>
-                                                        <div class="pull-right">
-                                                            <a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
-                                                                <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4>Lorem lpsum is dummy text</h4>
-                                                        <p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-                                                        <fieldset>
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-                                                        </fieldset>
-                                                        <div class="btn-wrap">
-                                                            <a href="challenges.php">Read More</a>
-                                                        </div>
-                                                        <div class="panel-body-wrap">
-                                                            <div class="wrap-social pull-left">
-                                                                <div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
-                                                                <div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
-                                                                <div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
-                                                            </div>
-                                                            <div class="status pull-right">
-                                                                <p>Status:<span>Active</span></p>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        <div class="post-circle">
-                                                            <a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                                 */
-                                                ?>
+/*
+<div class="item">
+<div class="panel-2 panel-primary">
+<div class="panel-heading">
+<h4 class="icon">Questions</h4>
+<div class="pull-right">
+<a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
+<i class="fa fa-pencil" aria-hidden="true"></i></a>
+<a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+</div>
+</div>
+<div class="panel-body">
+<h4>Lorem lpsum is dummy text</h4>
+<p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
+<fieldset>
+<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+</fieldset>
+<div class="btn-wrap">
+<a href="question-details.php">Read More</a>
+</div>
+<div class="panel-body-wrap">
+<div class="wrap-social pull-left">
+<div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
+</div>
+<div class="status pull-right">
+<p>Status:<span>Active</span></p>
+</div>
+</div>
+<hr>
+<div class="post-circle">
+<a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
+</div>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="panel-3 panel-primary">
+<div class="panel-heading">
+<h4 class="icon">Challenge</h4>
+<div class="pull-right">
+<a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
+<i class="fa fa-pencil" aria-hidden="true"></i></a>
+<a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+</div>
+</div>
+<div class="panel-body">
+<h4>Lorem lpsum is dummy text</h4>
+<p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
+<fieldset>
+<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+</fieldset>
+<div class="btn-wrap">
+<a href="challenges.php">Read More</a>
+</div>
+<div class="panel-body-wrap">
+<div class="wrap-social pull-left">
+<div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
+</div>
+<div class="status pull-right">
+<p>Status:<span>Active</span></p>
+</div>
+</div>
+<hr>
+<div class="post-circle">
+<a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
+</div>
+</div>
+</div>
+</div>
+ */
+?>
                                             @endforeach
+                                        @else
+                                             <div class="item">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <p>No data found.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
@@ -393,7 +411,7 @@
                 </div>
             </div>
         </div>
-    
+
     </div> <!-- container -->
 @endsection
 @push('scripts')

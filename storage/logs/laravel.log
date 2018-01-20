@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [2017-12-26 11:26:34] local.ERROR: Undefined variable: currUser (View: D:\xampp\htdocs\dico\resources\views\companyadmin\post\view_idea_post.blade.php) {"userId":2,"email":"divyesh.sassyinfotech@gmail.com","exception":"[object] (ErrorException(code: 0): Undefined variable: currUser (View: D:\\xampp\\htdocs\\dico\esources\\views\\companyadmin\\post\\view_idea_post.blade.php) at D:\\xampp\\htdocs\\dico\\storage\\framework\\views\\c19cd58a7b183d366c9b8f460105a6dbe94e1f07.php:79, ErrorException(code: 0): Undefined variable: currUser at D:\\xampp\\htdocs\\dico\\storage\\framework\\views\\c19cd58a7b183d366c9b8f460105a6dbe94e1f07.php:79)
 [stacktrace]
 #0 D:\\xampp\\htdocs\\dico\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(45): Illuminate\\View\\Engines\\CompilerEngine->handleViewException(Object(ErrorException), 1)
@@ -13891,3 +13892,5 @@
 #64 D:\\xampp\\htdocs\\dico\\index.php(21): require_once('D:\\\\xampp\\\\htdocs...')
 #65 {main}
 "} 
+=======
+>>>>>>> f9daf929bbfa9d35774eb88b7760879c562544c5

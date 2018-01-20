@@ -695,3 +695,17 @@ var otherManagerTable_superadmin = $("#other-managers-table").DataTable({
     ]
 });
 
+$(document).on('click',"#search_group_btn",function(){
+    var search_text = $.trim($("#search_group_text").val());
+    if(search_text != "")
+    {
+        $.ajax({
+            url: SITE_URL+"",
+            data: dataString,
+            method:"POST",
+            success: function(response){
+
+            }
+        });
+    }   
+});
