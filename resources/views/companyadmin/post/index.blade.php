@@ -43,16 +43,6 @@
                             </div>
                          </div>
                         <div class="panel-body">
-                            @if(session()->has('success'))
-                            <div class="alert alert-success">
-                                {{ session()->get('success') }}
-                            </div>
-                            @endif
-                            @if(session()->has('err_msg'))
-                            <div class="alert alert-danger">
-                                {{ session()->get('err_msg') }}
-                            </div>
-                            @endif
                             <div class="tab-content">
                                 <!-- START ALL POST -->
                                 <div tabindex="5000" class="tab-pane active" id="threads">
@@ -109,8 +99,8 @@ if (!empty($posts)) {
                                                                  <div class="wrap-social pull-left">
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">
                                                                          <?php
-if (!empty($post['post_user_like'])) {
-			?>
+                                                                            if (!empty($post['post_user_like'])) {
+                                                                                                    ?>
                                                                              <i class="fa fa-thumbs-up"></i>
                                                                          <?php } else {?>
                                                                              <i class="fa fa-thumbs-o-up"></i>

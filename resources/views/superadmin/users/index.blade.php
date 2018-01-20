@@ -38,7 +38,6 @@
             </div>
             <div class="container">
                 <div class="row">
-                    @include('template.notification')
                     <div class="col-lg-12">
                         <div class="panel panel-danger">
                             <div class="panel-body no-gapping">

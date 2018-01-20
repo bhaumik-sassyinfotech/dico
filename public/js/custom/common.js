@@ -277,3 +277,16 @@ $(document).on('click',"#GoList",function(){
     // alert("clicked");
     $("div.hide-table").removeClass('none');
 });
+$('.alert-success').delay(5000).fadeOut('slow');
+$('.alert-danger').delay(5000).fadeOut('slow');
+$('.alert-warning').delay(5000).fadeOut('slow');
+function ajaxResponse(type,msg) {
+    if(type == 'success') {
+        $('#success_msg').html(msg);
+        $('#success_msg').show().delay(5000).fadeOut('slow');
+    }else {
+        $('#error_msg').html(msg);
+        $('#error_msg').show().delay(5000).fadeOut('slow');
+    }
+    $(window).scrollTop(0);
+}
