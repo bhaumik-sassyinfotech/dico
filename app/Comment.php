@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 
 class Comment extends Model
 {
@@ -33,11 +34,11 @@ class Comment extends Model
     }
     public function commentUserLike()
     {
-        return $this->hasOne('App\CommentLike','comment_id','id')->where('flag',1);
+        return $this->hasOne('App\CommentLike','comment_id','id')->where('flag',1)->where('user_id',Auth::user()->id);
     }
     public function commentUserDisLike()
     {
-        return $this->hasOne('App\CommentLike','comment_id','id')->where('flag',2);
+        return $this->hasOne('App\CommentLike','comment_id','id')->where('flag',2)->where('user_id',Auth::user()->id);
     }
     public function commentReply()
     {

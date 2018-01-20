@@ -577,18 +577,21 @@
         $id = Helpers::decode_url($id);
         $view = Helpers::postViews($id,Auth::user()->id);
          //DB::connection()->enableQueryLog();
+           /*$post = Post::with(['postUser' => function($q) {
+                    $q->withCount('following'); 
+                }])->get();
+                
+                
+           dd($post);*/
         $post = Post::with(['postUser.following','postLike','postDisLike','postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
                 },'postAttachment.attachmentUser','postComment'=> function ($q) {
                     $q->take(COMMENT_DISPLAY_LIMIT)->orderBy('is_correct','desc');
+                    $q->withCount('commentLike')->orderBy('comment_like_count','desc');
                    //$q->count();
-                },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
-                    $q->where('user_id',  Auth::user()->id)->first(); 
-                },'postComment.commentUserDisLike' => function($q) {
-                    $q->where('user_id',  Auth::user()->id)->first(); 
-                },'postComment.commentFlagged','postTag.tag','postFlagged'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike','postComment.commentUserDisLike','postComment.commentFlagged','postTag.tag','postFlagged'])->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
                 ->whereNULL('deleted_at')->where('id',$id)->withCount('postComment')->first();//orderBy(DB::raw('count(postComment.commentLike)', 'DESC'))->first();
                 //dd(DB::getQueryLog());
                 //dd($post);
@@ -1104,12 +1107,9 @@
                     //$comments = Comment::with('commentUser')->where('post_id',$post_id)->take($offset)->get();
                     $post = Post::with('postUser','postUser.following')->with(['postComment'=> function ($q) {
                                 $q->orderBy('is_correct','desc');
+                                $q->withCount('commentLike')->orderBy('comment_like_count','desc');
                                 //return $q->take(100)->skip(COMMENT_DISPLAY_LIMIT);
-                },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike' => function($q) {
-                            $q->where('user_id',  Auth::user()->id)->first(); 
-                        },'postComment.commentUserDisLike' => function($q) {
-                            $q->where('user_id',  Auth::user()->id)->first(); 
-                        },'postTag.tag'])->whereNULL('deleted_at')->where('id',$post_id)->first();
+                },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike','postComment.commentUserDisLike','postTag.tag'])->whereNULL('deleted_at')->where('id',$post_id)->first();
                     return view($this->folder . '.post.allComments', compact('post'));    
                 } else {
                     return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));  

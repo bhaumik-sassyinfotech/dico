@@ -65,12 +65,29 @@
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                                                              <div class="pull-right i-con-set">
                                                                <a><img src="{{asset('assets/img/notification-icon.png')}}"></a>  
-                                                               <a><img src="{{asset('assets/img/warning-icon.png')}}"></a>
+                                                                <?php
+                                                                     if(!empty($post['post_flagged'])) {
+                                                                ?>
+                                                                    <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                                <?php } else { ?>
+                                                                    <a href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
+                                                                <?php } ?>
                                                              </div>
                                                          </div>
                                                          <div class="panel-body">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
-                                                             <p>-<?php if($post['is_anonymous'] == 0) { echo $post['post_user']['name']; } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                             <div class="user-wrap"> 
+                                                                <div class="user-img">
+                                                                    @if(empty($post['post_user']['profile_image']) || $post['is_anonymous'] == 1)
+                                                                        <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                                                                    @else
+                                                                        <img src="{{ asset(PROFILE_PATH.$post['post_user']['profile_image']) }}">
+                                                                    @endif
+                                                                </div> 
+                                                                <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
+                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                             </div>
                                                              <fieldset>
                                                                  <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
@@ -136,12 +153,12 @@
                                             } 
                                         } 
                                     ?>
-                                    <input type="hidden" id="count_post" value="{{$count_post}}">
                                     <?php if(!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
                                     ?>
                                     <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a></div>
                                     <?php
                                             } ?>
+                                    <input type="hidden" id="count_post" value="{{$count_post}}">
                                 </div>
                                 <!-- END ALL POST -->
                             </div>

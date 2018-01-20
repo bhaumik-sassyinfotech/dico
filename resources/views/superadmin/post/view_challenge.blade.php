@@ -280,7 +280,7 @@ $active = "";
                                 <div class="rply-box">
                                     <div class="rply-count like">
 
-                                        <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
+                                        <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}},{{$postComment['id']}});" >
                                             <?php
 if (!empty($postComment['commentUserLike'])) {
 				?>
@@ -293,7 +293,7 @@ if (!empty($postComment['commentUserLike'])) {
                                     </div> 
                                     <div class="rply-count dislike">
 
-                                        <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}});" >
+                                        <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}},{{$postComment['id']}});" >
                                             <?php
 if (!empty($postComment['commentUserDisLike'])) {
 				?>
@@ -579,6 +579,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                      }*/
                     //console.log(commentid, "::::", srno);
                     $('#commentreply_' + commentid + ' #' + srno).before(response);
+                    location.reload();
                 },
                 error: function(e) {
                     swal("Error", e, "error");

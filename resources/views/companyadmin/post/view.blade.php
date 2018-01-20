@@ -227,7 +227,7 @@ $comment_id = Helpers::encode_url($commentUser->id);
                                                     }
                                                 ?>
                                                 <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                                    <?php if ($post['user_id'] == Auth::user()->id || $post->postUser->role_id > Auth::user()->role_id) {?>
+                                                    <?php if ($post['user_id'] == Auth::user()->id || $post->postUser->role_id > Auth::user()->role_id) { ?>
                                                         <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                                     <?php } else {?>
                                                         Correct
@@ -297,8 +297,9 @@ $comment_id = Helpers::encode_url($commentUser->id);
                                 </div>    
                                 <div class="rply-box">
                                     <div class="rply-count like">
-                                        <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
+                                        <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}},{{$postComment['id']}});">
                                             <?php
+                                            //echo "<pre>";print($postComment['commentUserLike']);
 if (!empty($postComment['commentUserLike'])) {
 				?>
                                                 <i class="fa fa-thumbs-up"></i>
@@ -309,7 +310,7 @@ if (!empty($postComment['commentUserLike'])) {
                                         <!-- <img alt="post-like" src="assets/img/like.png"><p>08</p>-->
                                     </div>
                                     <div class="rply-count dislike">
-                                        <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}});" >
+                                        <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}},{{$postComment['id']}});">
                                             <?php
 if (!empty($postComment['commentUserDisLike'])) {
 				?>
