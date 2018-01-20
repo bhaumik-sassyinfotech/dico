@@ -58,7 +58,7 @@ if (!empty($post['postComment'])) {
                                     }
                                     ?> 
                                     <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                        <?php if ($commentUser['id'] == Auth::user()->id) { ?>
+                                        <?php if ($commentUser['id'] == Auth::user()->id || $post->postUser->role_id > Auth::user()->role_id) { ?>
                                             <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                         <?php } else { ?>
                                             Correct  
@@ -103,19 +103,19 @@ if (!empty($post['postComment'])) {
                     </div>
                     <div class="rply-box">
                         <div class="rply-count like">
-                            <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}});" >
+                            <a href="javascript:void(0)" id="like_comment_popup_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}},'<?='popup_'.$postComment['id']?>');" >
                                 <?php
                                 if (!empty($postComment['commentUserLike'])) {
                                     ?>
                                     <i class="fa fa-thumbs-up"></i>
                                 <?php } else { ?>
                                     <i class="fa fa-thumbs-o-up"></i>
-            <?php } ?>
-                            </a><span id="comment_like_count_{{$postComment['id']}}"><?php echo count($postComment['commentLike']) ?></span>
+                                <?php } ?>
+                            </a><span id="comment_like_count_popup_{{$postComment['id']}}"><?php echo count($postComment['commentLike']) ?></span>
                             <!-- <img alt="post-like" src="assets/img/like.png"><p>08</p>-->
                         </div> 
                         <div class="rply-count dislike">
-                            <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}});" >
+                            <a href="javascript:void(0)" id="dislike_comment_popup_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}},'<?='popup_'.$postComment['id']?>');" >
                                 <?php
                                 if (!empty($postComment['commentUserDisLike'])) {
                                     ?>
@@ -124,7 +124,7 @@ if (!empty($post['postComment'])) {
                                     <i class="fa fa-thumbs-o-down"></i>
             <?php } ?>
                             </a>
-                            <span id="comment_dislike_count_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
+                            <span id="comment_dislike_count_popup_{{$postComment['id']}}"><?php echo count($postComment['commentDisLike']); ?></span>
                             <!-- <img alt="post-rply" src="assets/img/post-rply.png"> <p>04</p>-->
                         </div> 
                         <div class="rply-count">

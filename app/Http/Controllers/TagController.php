@@ -102,7 +102,9 @@
                         return $q->where('user_id' , Auth::user()->id);
                     } ,'postUserDisLike' => function ($q) {
                         return $q->where('user_id' , Auth::user()->id);
-                    } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
+                    } ,'postAttachment','postFlagged' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
                         ->orderBy('post_like_count','desc');//->get()->toArray();
                     $count_post = count($query->get());
                     $posts = $query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
@@ -129,7 +131,9 @@
                                 return $q->where('user_id' , Auth::user()->id);
                             } ,'postUserDisLike' => function ($q) {
                                 return $q->where('user_id' , Auth::user()->id);
-                            } ,'postAttachment'])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
+                            } ,'postAttachment','postFlagged' => function ($q) {
+                   return $q->where('user_id' , Auth::user()->id);
+                }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id' , Auth::user()->company_id)
                                 ->orderBy('post_like_count','desc');//->get()->toArray();
                     
                     if(!empty($request->get('search_text'))) {

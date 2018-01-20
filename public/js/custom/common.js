@@ -183,7 +183,7 @@ function dislike_post(id) {
     });
 }
 
-function likeComment(id) {
+function likeComment(id,elementid) {
     $.ajax({
         url: SITE_URL+'/like_comment/'+id,
         type: 'GET',
@@ -195,16 +195,16 @@ function likeComment(id) {
             } else {
                 html += '<i class="fa fa-thumbs-o-up"></i>';
             }
-            $('#comment_like_count_'+id).html(res.likecount);
-            $('#comment_dislike_count_'+id).html(res.dislikecount);
-            $('#like_comment_'+id).html(html);
-            $('#dislike_comment_'+id).html('<i class="fa fa-thumbs-o-down"></i>');
+            $('#comment_like_count_'+elementid).html(res.likecount);
+            $('#comment_dislike_count_'+elementid).html(res.dislikecount);
+            $('#like_comment_'+elementid).html(html);
+            $('#dislike_comment_'+elementid).html('<i class="fa fa-thumbs-o-down"></i>');
         },
         error: function() {
         }
     });
 }
-function dislikeComment(id) {
+function dislikeComment(id,elementid) {
     $.ajax({
         url: SITE_URL+'/dislike_comment/'+id,
         type: 'GET',
@@ -216,17 +216,17 @@ function dislikeComment(id) {
             } else {
                 html += '<i class="fa fa-thumbs-o-down"></i>';
             }
-            $('#comment_like_count_'+id).html(res.likecount);
-            $('#comment_dislike_count_'+id).html(res.dislikecount);
-            $('#dislike_comment_'+id).html(html);
-            $('#like_comment_'+id).html('<i class="fa fa-thumbs-o-up"></i>');
+            $('#comment_like_count_'+elementid).html(res.likecount);
+            $('#comment_dislike_count_'+elementid).html(res.dislikecount);
+            $('#dislike_comment_'+elementid).html(html);
+            $('#like_comment_'+elementid).html('<i class="fa fa-thumbs-o-up"></i>');
         },
         error: function() {
         }
     });
 }
 function cutString(text){
-    alert("here");
+    //alert("here");
     var wordsToCut = 55;
     var wordsArray = text.split(" ");
     if(wordsArray.length>wordsToCut){
