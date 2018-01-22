@@ -16,7 +16,6 @@
                 <div class="row">
                     <form class="common-form" method="POST" name="createMeeting" action="{{ route('meeting.store') }}" id="createMeeting">
                     <div class="col-sm-8" id="post-detail-left">
-                        @include('template.notification')
                             {{ method_field('POST') }}
                             {{ csrf_field() }}
                             <div class="form-group">
@@ -71,12 +70,10 @@
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 @endforeach
-                                                
                                             </div>
                                         </div>
                                     </div>
                                     <div id="profile1" class="tab-pane">
-                                
                                         <div class="category-tab">
                                                 {{--<input type="text" placeholder="Member Name" />--}}
                                                 <select name="employees[]" id="employees_listing" class="form-control" multiple="multiple" style="width: 84%">
@@ -84,11 +81,10 @@
                                                         <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <a href="javascript:;" class="st-btn ">ADD</a>
+                                                <input type="submit" value="ADD" class="st-btn">
                                             <div class="post-category" id="meeting_users_list">
                                             </div>
                                         </div>
-                                        
                                         @php
                                         /*
                                         <div class="post-category" id="meeting_users_list">
