@@ -17,16 +17,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 	return $request->user();
 });
 
-define('ENC_KEY','ZF#48sp(');
+define('ENC_KEY', 'ZF#48sp(');
 //define('DATE_FORMAT','d/m/Y');
-define('DATE_FORMAT','jS M Y');
-define('POST_TITLE_LIMIT',60);
-define('POST_DESCRIPTION_LIMIT',130);
-define('POST_DISPLAY_LIMIT',6);
-define('COMMENT_DISPLAY_LIMIT',6);
-define('PROFILE_PATH','public/uploads/profile_pic/');
-define('GROUP_PATH','public/uploads/groups/');
-define('DEFAULT_GROUP_IMAGE','assets/img/custome-service.png');
-define('DEFAULT_PROFILE_IMAGE','assets/img/post-userone.PNG');
-define('DEFAULT_ATTACHMENT_IMAGE','assets/img/uploadfiles1.PNG');
-
+define('DATE_FORMAT', 'jS M Y');
+define('POST_TITLE_LIMIT', 60);
+define('POST_DESCRIPTION_LIMIT', 130);
+define('POST_DISPLAY_LIMIT', 6);
+define('COMMENT_DISPLAY_LIMIT', 6);
+define('PROFILE_PATH', 'public/uploads/profile_pic/');
+define('GROUP_PATH', 'public/uploads/groups/');
+define('DEFAULT_GROUP_IMAGE', 'assets/img/custome-service.png');
+define('DEFAULT_PROFILE_IMAGE', 'assets/img/post-userone.PNG');
+define('DEFAULT_ATTACHMENT_IMAGE', 'assets/img/uploadfiles1.PNG');

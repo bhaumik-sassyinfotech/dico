@@ -60,9 +60,12 @@ class UserController extends Controller {
 				}
 				$roles = Role::whereIn('id', $role_id)->get();
 				$companies = Company::whereNull('deleted_at')->get();
-				$user_query = User::with(['following', 'followers'])->where('role_id', 3)->orderByDesc('created_at');
+				$user_query = User::with(['following', 'followers'])->where('role_id', 3);
+				if (Auth::user()->role_id == 2) {
+					$user_query = $user_query->where('company_id', $company_id);
+				}
 				$users_count = count($user_query->get());
-				$users = $user_query->limit(POST_DISPLAY_LIMIT)->get();
+				$users = $user_query->orderByDesc('created_at')->limit(POST_DISPLAY_LIMIT)->get();
 				$company_admins = User::with(['following', 'followers'])->where('role_id', 2)->get();
 				// dd($users);
 				return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
@@ -79,7 +82,7 @@ class UserController extends Controller {
 	 */
 	public function create() {
 
-		if (Auth::user()) {
+		if (Auth::user() && Auth::user()->role_id < 2) {
 			$currUser = Auth::user();
 			$company_id = Auth::user()->company_id;
 			$usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();
@@ -101,7 +104,7 @@ class UserController extends Controller {
 				return view($this->folder . '.users.create', compact('roles', 'companies'));
 			}
 		} else {
-			return redirect('/index');
+			return redirect('/index')->with('error_msg', "You don't have rights to create a user.");
 		}
 	}
 
@@ -179,7 +182,7 @@ class UserController extends Controller {
 			$auth = Auth::user();
 			$roleId = $auth->role_id;
 			//$users = new User;
-			$query = User::with('company')->select('*', DB::raw('CASE WHEN is_active = "1" THEN "Yes" ELSE "No" END AS active,CASE WHEN is_suspended = "1" THEN "Yes" ELSE "No" END AS suspended,CASE WHEN role_id = "2" THEN "Admin" WHEN role_id = "3" THEN "Employee" END AS role'));
+			$query = User::with(['company', 'followers', 'following'])->select('*', DB::raw('CASE WHEN is_active = "1" THEN "Yes" ELSE "No" END AS active,CASE WHEN is_suspended = "1" THEN "Yes" ELSE "No" END AS suspended,CASE WHEN role_id = "2" THEN "Admin" WHEN role_id = "3" THEN "Employee" END AS role'));
 			if ($roleId == 1) {
 				$query = $query->whereIn('role_id', [2, 3]);
 			} else if ($roleId == 2) {
@@ -519,7 +522,9 @@ class UserController extends Controller {
 
 		//$users = User::whereNull('deleted_at')->where('id', '!=' , Auth::user()->id)->get();
 		if (Auth::check()) {
-			$roleId = $request->get('role_id');
+			$currUser = Auth::user();
+
+			$roleId = 3; // role ID of employee
 
 			$query = User::select('users.*')->with(['followers', 'following'])->where('role_id', $roleId)->where('id', '!=', Auth::user()->id);
 
@@ -577,6 +582,13 @@ class UserController extends Controller {
 	public function getEmployeeGrid(Request $request) {
 
 		$query = User::select('users.*')->with(['followers', 'following'])->where('role_id', 3);
+		if ($request->has('search') && !empty($request->input('search'))) {
+			$query = $query->Where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
+		}
+		if (Auth::user()->role_id == 2) {
+			$query = $query->where('company_id', Auth::user()->company_id);
+		}
+
 		$offset = 0;
 		if ($request->has('offset')) {
 			$offset = $request->input('offset');
@@ -604,7 +616,7 @@ class UserController extends Controller {
 		$users_count = count($users_query->get());
 		$users = $users_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
 		$html = view::make($this->folder . '.users.ajax_other_managers', compact('users'));
-		$output = array('html' => $html->render(), 'count' => count($users_count));
+		$output = array('html' => $html->render(), 'count' => $users_count);
 		return $output;
 	}
 

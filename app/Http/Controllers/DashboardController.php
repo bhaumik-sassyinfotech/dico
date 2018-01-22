@@ -119,7 +119,7 @@ class DashboardController extends Controller {
 				->leftJoin('posts', 'groups.id', '=', 'posts.group_id')
 				->whereIn('group_users.group_id', $group_ids)->groupBy('group_users.group_id')->orderByDesc('posts.created_at')->get();
 
-			dd($groupDetails);
+			// dd($groupDetails);
 
 			$userPosts = Post::with(['postLike', 'postComment', 'postTag.tag', 'postUser'])
 				->whereIn('group_id', $group_ids)->where('user_id', $user_id)->get();

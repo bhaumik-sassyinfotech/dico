@@ -1,6 +1,6 @@
 @extends('template.default')
 @section('content')
-
+    
     <div id="page-content" class="point-page">
         <div id='wrap'>
             <div id="page-heading">
@@ -9,13 +9,14 @@
                     <li class="active">Group</li>
                 </ol>
                 <h1 class="tp-bp-0">Group</h1>
-                <div class="options" style="display: none;">
+                <div class="options">
                     <div class="btn-toolbar">
                         <div class="btn-group hidden-xs">
                             <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i
                                         class="fa fa-filter fa-6" aria-hidden="true"></i><span
                                         class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
                         </div>
+                        <a href="{{ route('group.create') }}" class="btn btn-primary">Add New</a>
                     </div>
                 </div>
             </div>
@@ -46,16 +47,16 @@
                                     <button id="GoGrid" class="grid-view">
                                         <img src="assets/img/icon/grid-view.png" alt="group list" class="block">
                                         <img src="assets/img/icon/grid-view-hover.png" alt="group list" class="none" style="display:none">
-
+                                    
                                     </button>
                                 </div>
                             </div>
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <div tabindex="5000" class="tab-pane active"
+                                    <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane active"
                                          id="threads">
                                         <div class="container">
-
+                                            
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="panel panel-info " style="overflow-x:auto;">
@@ -108,9 +109,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div tabindex="5002" class="tab-pane" id="users">
+                                    <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane" id="users">
                                         <div class="container">
-
+                                            
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="panel panel-info " style="overflow-x: auto;" >
