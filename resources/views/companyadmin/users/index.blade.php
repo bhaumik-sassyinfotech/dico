@@ -2,7 +2,8 @@
 <title>DICO - User</title>
 @section('content')
 
-    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+<div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -12,6 +13,7 @@
                 <h1 class="tp-bp-0">Users</h1>
                 <div class="options">
                     <div class="btn-toolbar">
+
                         <a class="btn btn-default" href="{{ route('user.create') }}">
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
                             <span class="hidden-xs hidden-sm">Create User</span>
@@ -52,24 +54,18 @@
                                                                           class="btn btn-default sort active "><i
                                                                     class="fa fa-list visible-xs icon-scale"></i><span
                                                                     class=" hidden-xs">Employee</span></a></li>
-                                                    <li class=""><a href="#users" onclick="superUserGrid(2)" data-toggle="tab" data-order="desc2"
-                                                                    data-sort="data-name"
-                                                                    class="btn btn-default sort "><span class=""><i
-                                                                        class="fa fa-user fa-6 visible-xs"
-                                                                        aria-hidden="true"></i><span class=" hidden-xs">Group Admin</span></a>
-                                                    </li>
-                                                    <li class=""><a href="#other-managers" onclick="superUserGrid(3)" data-toggle="tab"
-                                                                    data-order="asc" data-sort="data-name"
-                                                                    class="btn btn-default sort "><span class=""><i
-                                                                        class="fa fa-group visible-xs" aria=""
-                                                                        hidden="true"></i><span class=" hidden-xs">Other Managers</span></a>
+                                                    <li class=""><a href="#users" onclick="superUserGrid(2)" data-toggle="tab" data-order="desc2" data-sort="data-name" class="btn btn-default sort ">
+                                                                    <span class=""><i class="fa fa-user fa-6 visible-xs"
+                                                                    aria-hidden="true"></i>
+                                                                    <span class=" hidden-xs">Group Admin</span></a>
+
                                                     </li>
                                                 </ul>
 
                                                 <div class="btn-group top-set">
                                                     <form method="post" class="search-form">
                                                         <input id="search_query" type="text" placeholder="Search User"/>
-                                                        <input type="button" value="#" class="search-icon"/>
+                                                        <input type="button" value="#" id="search_btn" class="search-icon"/>
                                                     </form>
                                                     <button id="GoList" class="grid-view">
                                                         <img src="assets/img/icon/group-list.png" alt="group"
@@ -148,9 +144,9 @@
                                                 </li>
                                                 @endforeach
                                                 @if($users_count > POST_DISPLAY_LIMIT)
-                                                <div class="all_viewmore col-md-12">
-                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
-                                                </div>
+                                                    <div class="all_viewmore col-md-12">
+                                                        <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
+                                                    </div>
                                                 @endif
 
                                             @endif
@@ -175,7 +171,10 @@
                                                                 </div>
                                                                 <div class="panel-body">
                                                                     <div class="row">
-                                                                        <table class="table" id="emp-table">
+                                                                        <table class="table" id="company-users-table">
+
+                                                                        <!-- <table class="table" id="emp-table"> -->
+
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
@@ -391,7 +390,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -404,8 +402,8 @@
             </div>
         </div>
     </div>
-@endsection
 
+@endsection
 @push('javascripts')
     <script type="text/javascript">
         function loadMorePost() {
@@ -415,13 +413,14 @@
             var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
-            console.log(formData);
+            // console.log(formData);
             var new_url = '/user/employeeGrid';
 
             if(tab_id == 2)
                 new_url = '/user/adminGrid';
-            else if(tab_id == 3)
-                new_url = '/user/otherManagersGrid';
+            // else if(tab_id == 3)
+            //     new_url = '/user/otherManagersGrid';
+
 
             $.ajax({
                 url: SITE_URL+new_url,

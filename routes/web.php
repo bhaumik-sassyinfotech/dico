@@ -36,6 +36,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('unfollow/{id}', 'DashboardController@unfollow');
 	Route::get('view_profile/{id}', 'DashboardController@view_profile');
 	/*Group*/
+	Route::match(['get', 'post'], 'group/mygroups', 'GroupController@myGroupGrid');
 	Route::match(['get', 'post'], 'group/list', 'GroupController@groupListing');
 	Route::match(['get', 'post'], 'group/addUserByEmailAddress', 'GroupController@addUserByEmailAddress');
 	Route::match(['get', 'post'], 'group/uploadGroupPicture', 'GroupController@uploadGroupPicture');

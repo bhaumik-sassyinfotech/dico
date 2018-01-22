@@ -141,24 +141,22 @@ var companyuserTable = $('#company-users-table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + "/user/list",
+        url: SITE_URL + '/user/employeeList',
         data: function (d) {
-            d.user_name = $('input[name=user_name]').val();
-            d.user_email = $('input[name=user_email]').val();
-            d.role_id = $('#role_id :selected').val();
-            // d.company_id = $('#company_id :selected').val();
+            d.role_id      = $("#role_id").val();
+            d.search_query = $("#search_query").val();
         }
     },
+    searching: false,
     columns: [
-        {data: 'id'},
         {data: 'name'},
         {data: 'email'},
         {data: 'role'},
-        {data: 'active'},
-        {data: 'suspended'},
-        {data: 'actions', sorting: false, orderable: false}
-    ],
-    searching: false
+        {data: 'followers_count'},
+        {data: 'following_count'},
+        {data: 'points'},
+        // {data: 'admin', sorting: false, orderable: false}
+    ]
 });
 
 $("#user_form").validate({

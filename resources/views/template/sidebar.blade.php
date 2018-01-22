@@ -9,14 +9,13 @@
             </form>
         </li>
         <?php $currUser = Auth::user();
-        $role_id = $currUser->role_id;
-        ?>
+$role_id = $currUser->role_id;
+?>
         <li style="display: none;" class="divider"></li>
         <?php
-        //=====start superadmin menu=====//
-        if($role_id == 1)
-        {
-        ?>
+//=====start superadmin menu=====//
+if ($role_id == 1) {
+	?>
 
         <li><a href="javascript:;"><i class="fa fa-building-o"></i> <span>Company</span></a>
             <ul class="acc-menu">
@@ -47,14 +46,18 @@
         <li><a href="{{ route('points.index') }}"><i class="fa fa-usd" aria-hidden="true"></i><span>Points</span></a>
         </li>
         <?php
-        }
-        //=====end superadmin menu=====//
-        //=====start company admin menu=====//
-        else if($role_id == 2) {
-        ?>
+}
+//=====end superadmin menu=====//
+//=====start company admin menu=====//
+else if ($role_id == 2) {
+	?>
         <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>User</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
+                <?php
+/*
+	<li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
+	 */
+	?>
                 <li><a href="{{ route('user.index') }}"><span>View User</span></a></li>
             </ul>
         </li>
@@ -68,15 +71,15 @@
         <li><a href="{{ route('points.index') }}"><i class="fa fa-diamond" aria-hidden="true"></i><span>Points</span></a></li>
         <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
         <?php }
-        //=====end company admin menu=====//
-        //=====start employee menu=====//
-        else if($role_id == 3) {
-        ?>
+//=====end company admin menu=====//
+//=====start employee menu=====//
+else if ($role_id == 3) {
+	?>
         <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
         <?php
-        }
-        //=====start employee menu=====//
-        ?>
+}
+//=====start employee menu=====//
+?>
         @if($role_id > 1)
             <li><a href="javascript:;"><i class="fa fa-users"></i> <span>Meetings</span></a>
                 <ul class="acc-menu">

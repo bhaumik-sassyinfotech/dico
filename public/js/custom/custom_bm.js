@@ -31,6 +31,17 @@ $(".sec_question").on('focus', function () {
 
 $(document).ready(function () {
 
+    $('.checkAll').change(function(){
+        var ischecked= $('.checkAllBox').is(':checked');
+
+        if(ischecked)
+        {//checked
+            $('input:checkbox').not('.checkAllBox').prop('checked',true);
+        } else 
+        {//unchecked
+            alert('uncheckd ' + $(this).val());
+        }
+    });
     $('#users_listing').select2();
     $("#company_listing,#company_users,#group_owner").select2();
     $("#user_groups").select2();
@@ -135,8 +146,13 @@ $("#group_owner").change(function () {
 var groupTable = $('#group_table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: SITE_URL + '/group/list',
-    searching: true,
+    ajax: {
+        url: SITE_URL + '/group/list',
+        data: function (d) {
+            d.search_text = $("#search_query").val();
+        }
+    },
+    searching: false,
     columns: [
         {data: 'group_name'},
         {data: 'description'},
@@ -145,6 +161,11 @@ var groupTable = $('#group_table').DataTable({
         {data: 'actions', sorting: false, orderable: false}
     ]
 });
+
+//  $(document).on('click',".searchBtn" , function(){
+//     // groupTable.draw(); 
+//     // search();
+// });                                             
 
 var groupEditTable = $("#group_users_edit_table").DataTable({
     processing: true,
@@ -630,9 +651,10 @@ function superUserGrid(type)
         url = '/user/adminGrid';
     else if(type == 3)
         url = '/user/otherManagersGrid';
+    var search_text = $.trim($("#search_query").val());
     // console.log(url);
     new_url = SITE_URL+url;
-    var dataString = { _token:CSRF_TOKEN};
+    var dataString = { _token : CSRF_TOKEN , search : search_text };
     $.ajax({
         url:new_url,
         data: dataString, 
@@ -640,12 +662,68 @@ function superUserGrid(type)
         async: true,
         success: function(response)
         {
-            // console.log(response);
+            
             $("#display-grid").empty();
             $("#display-grid").html(response.html);
+            setTimeout(function()
+            {
+                if( $('.userList').length == response.count )
+                {
+                    $('#load_post').hide();
+                    $(".all_viewmore").hide();
+                } else
+                {
+                    $(".all_viewmore").not(':last').remove();
+                }
+            },10);
         }
     }); 
 }
+
+$(document).on('click',"#search_btn",function(){
+    var search_text = $.trim($("#search_query").val());
+    
+    $("#offset").val(0);
+    var type = $("#offset").attr('data-tab');
+    var url = new_url = '';
+    if(type == 1)
+    {
+        url = '/user/employeeGrid';
+    }
+    else if(type == 2)
+    {
+        url = '/user/adminGrid';
+    }
+    else if(type == 3)
+    {
+        url = '/user/otherManagersGrid';
+    }
+    var search_text = $.trim($("#search_query").val());
+    // console.log(url);
+    new_url = SITE_URL+url;
+    var dataString = { _token : CSRF_TOKEN , search : search_text,offset:0 };
+    $.ajax({
+        url:new_url,
+        data: dataString, 
+        method:"POST",
+        success: function(response)
+        {
+            $("#display-grid").empty();
+            $("#display-grid").html(response.html);
+            setTimeout(function()
+            {
+                if( $('.userList').length == response.count )
+                {
+                    $('#load_post').hide();
+                    $(".all_viewmore").hide();
+                } else
+                {
+                    $(".all_viewmore").not(':last').remove();
+                }
+            } , 10);
+        }
+    }); 
+});
 
 /*users listing for super-user role */
 /*employee listing*/
@@ -694,6 +772,8 @@ var otherManagerTable_superadmin = $("#other-managers-table").DataTable({
     ]
 });
 
+
+
 $(document).on('click',"#search_group_btn",function(){
     var search_text = $.trim($("#search_group_text").val());
     if(search_text != "")
@@ -708,3 +788,45 @@ $(document).on('click',"#search_group_btn",function(){
         });
     }   
 });
+
+
+
+function groupGrid(type)
+{
+    $("#offset").attr('data-tab',type);
+    $("#offset").val(0);
+    $('#load_post').slideDown();
+    var url = new_url = '';
+    if(type == 1)
+        url = '/';
+    else if(type == 2)
+        url = '/user/mygroups';
+
+    var search_text = $.trim($("#search_query").val());
+    // console.log(url);
+    new_url = SITE_URL+url;
+    var dataString = { _token : CSRF_TOKEN , offset: offset_val , search : search_text };
+    $.ajax({
+        url:new_url,
+        data: dataString, 
+        method:"POST",
+        async: true,
+        success: function(response)
+        {
+            $("#display-grid").empty();
+            $("#display-grid").html(response.html);
+            setTimeout(function()
+            {
+                if( $('.userList').length == response.count )
+                {
+                    $('#load_post').hide();
+                    $(".all_viewmore").hide();
+                } else
+                {
+                    $(".all_viewmore").not(':last').remove();
+                }
+            },10);
+        }
+    });    
+}
+

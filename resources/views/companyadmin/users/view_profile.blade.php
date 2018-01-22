@@ -231,7 +231,7 @@ if (!empty($following->followingUser->profile_image)) {
                                     <div class="btn-toolbar">
                                         <div class="btn-left  hidden-xs">
                                             <div class="btn-group color-changes">
-                                                <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
+                                                <a style="display:none; " data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="#">Notification off</a></li>
                                                     <li><a href="#">Edit Post</a></li>
@@ -285,10 +285,10 @@ if (!empty($following->followingUser->profile_image)) {
 
                                                     </div>
                                                     <div class="panel-body">
-                                                        <h4><a href="{{ url('viewpost/'.Helpers::encode_url($post->id)) }}">{{ $post->post_title }}</a></h4>
+                                                        <h4><a class="profanity" href="{{ url('viewpost/'.Helpers::encode_url($post->id)) }}">{{ $post->post_title }}</a></h4>
                                                         <p class="user-icon">-{{ $post->postUser->name }}<span>on {{ date('Y-m-d H:i' , strtotime($post->created_at)) }}</span></p>
                                                         <fieldset>
-                                                            <p>{{ $post->post_description }}</p>
+                                                            <p class="profanity">{{ $post->post_description }}</p>
                                                         </fieldset>
                                                         <div class="btn-wrap">
                                                             <a href="#">Read More</a>
