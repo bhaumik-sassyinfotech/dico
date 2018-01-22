@@ -13,7 +13,7 @@
             <div class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
-                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
+                        <a href="{{ route('post.create') }}" style="display: none;" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
                     </div>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
@@ -31,8 +31,8 @@
                             <h4>
                                 <ul class="nav nav-tabs">
                                        <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Posts</span></a></li>
-                                       <li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
-                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>
+                                       <?php /*<li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
+                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>*/?>
                                 </ul>
                             </h4>
                             <div class="pull-right search-form">

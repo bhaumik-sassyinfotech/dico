@@ -1,7 +1,6 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
-
 <div id="page-content" class="group-listing posts">
     <div id='wrap'>
         <div id="page-heading">
@@ -153,12 +152,12 @@
                                             } 
                                         } 
                                     ?>
-                                    <input type="hidden" id="count_post" value="{{$count_post}}">
                                     <?php if(!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
                                     ?>
                                     <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a></div>
                                     <?php
                                             } ?>
+                                    <input type="hidden" id="count_post" value="{{$count_post}}">
                                 </div>
                                 <!-- END ALL POST -->
                             </div>

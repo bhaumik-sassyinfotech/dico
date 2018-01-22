@@ -12,65 +12,56 @@
             <h1>Company</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                    <div class="btn-group hidden-xs">
-                        <a href="{{ route('company.create') }}" class="btn btn-primary">Add New</a>
-                    </div>
+                    <a class="btn btn-default" href="{{ route('company.create') }}">
+                        <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
+                        <span class="hidden-xs hidden-sm">New Company</span>
+                    </a>
                 </div>
             </div>
         </div>    
 
         <div class="container">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-
-                        @if(session()->has('success'))
-                        <div class="alert alert-success">
-                            {{ session()->get('success') }}
-                        </div>
-                        @endif
-                        @if(session()->has('err_msg'))
-                        <div class="alert alert-danger">
-                            {{ session()->get('err_msg') }}
-                        </div>
-                        @endif
-                        @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
-                        <form method="POST" id="search-form" class="form-inline" role="form">
-                            <div class="form-group">
-                                <label for="name">Company Name</label>
-                                <input type="text" class="form-control" name="company_name" id="company_name" placeholder="company name">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                        <div class="panel-heading">
+                            <div class="btn-group top-set">
+                                <form method="POST" id="search-form" role="form" class="search-form">
+                                   <input type="text" class="form-control" name="company_name" id="company_name" placeholder="company name">
+                                   <input class="search-icon" type="submit">
+                                </form>
                             </div>
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </form>
-                        <table class="table table-bordered table-striped" id="company_table">
-                            <thead>
-                                <tr>
-                                    <th>#ID</th>
-                                    <th>Company Name</th>
-                                    <th>Company Descripton</th>
-                                    <th>Allow Anonymous</th>
-                                    <th>Allow Add Admin</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
+                        </div>
+                        <div class="panel-body">
+                            <div class="panel panel-info " style="overflow-x:auto;">
+                            <div class="panel-heading trophy">
+                                <h4 class="icon">Company List</h4>
+                            </div>
+                            <div class="panel-body">
+                            <table class="table table-bordered table-striped" id="company_table">
+                                <thead>
+                                    <tr>
+                                        <th>#ID</th>
+                                        <th>Company Name</th>
+                                        <th>Company Descripton</th>
+                                        <th>Allow Anonymous</th>
+                                        <th>Allow Add Admin</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
 
-                        </table>
-                        <div class="col-lg-6"></div>
-                        <div class="col-lg-6">
+                            </table>
+                            <div class="col-lg-6"></div>
                             <div class="col-lg-6">
+                                <div class="col-lg-6">
 
-                            </div>
-                        </div>            
-                    </div>
+                                </div>
+                            </div>            
+                        </div>
+                        </div>
+                        </div>
                 </div>
-            </div>    
+            </div>
+        </div>    
         </div>
 
     </div>

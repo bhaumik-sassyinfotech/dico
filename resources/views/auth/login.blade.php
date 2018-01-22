@@ -1,30 +1,6 @@
 @extends('layouts.login')
-
+<title>DICO - Login</title>    
 @section('content')
-@if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
-            {{ session()->get('err_msg') }}
-        </div>
-    @endif
-    @if(session()->has('warning'))
-    <div class="alert alert-warning">
-        {{ session()->get('warning') }}
-    </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <style type="text/css">
         .error1{
             position: relative;
@@ -35,7 +11,7 @@
     <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
         <a data-original-title="Toggle Sidebar" id="leftmenu-trigger" class="tooltips" data-toggle="tooltip" data-placement="right" title=""></a>
         <div class="navbar-header pull-left">
-            <a class="navbar-brand" href="{{ url('/') }}">Avant</a>
+            <a class="navbar-brand" href="{{ url('/') }}">DICO</a>
         </div>
     </header>
     <div class="verticalcenter">

@@ -187,9 +187,7 @@
             //dd("here");
             if ( Auth::user())
             {
-                $query = Post::with(['postUser','postLike','postDisLike','postComment'=> function ($q) {
-                   return $q->take(4);
-                },'postTag.tag', 'postUserLike' => function ($q) {
+                $query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
                     return $q->where('user_id' , Auth::user()->id);
                 } ,'postUserDisLike' => function ($q) {
                    return $q->where('user_id' , Auth::user()->id);

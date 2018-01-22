@@ -2635,7 +2635,7 @@ form .form-group:last-child {
   width: 30px;
 }
 
-.search-form > input:not([type="button"]) {
+.search-form > input:not([type="button"]):not([type="submit"]) {
   border: 1px solid #949494;
   border-radius: 4px;
   color: #999;
@@ -4450,4 +4450,8 @@ nav#page-leftbar {
 }
 #spinner {
     display: none;
+}
+#company-from {
+  padding: 0 10px;
+  width: 60.5%;
 }

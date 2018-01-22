@@ -1,14 +1,14 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>DICO - Meetings</title>
 @section('content')
     
     
-    <div id="page-content">
+<div id="page-content" class="meeting-details padding-box idea-details">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
                     <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li><a href="{{ route('meeting.index') }}">Meeting</a></li>
+                    <li><a href="{{ route('meeting.index') }}">Meetings</a></li>
                     <li class="active">View Meeting</li>
                 </ol>
                 <h1 class="icon-mark tp-bp-0">Meeting Details</h1>
@@ -20,7 +20,17 @@
                         <div class="group-wrap">
                             <div class="pull-left">
                                 <h3>{{$meeting->meeting_title}}</h3>
-                                <p class="user-icon">-{{ $meeting->meetingCreator->name }}<span>on {{ date('d-m-Y' , strtotime($meeting->created_at)) }}</span></p>
+                                <div class="user-wrap"> 
+                                    <div class="user-img"> 
+                                        @if(empty($meeting->meetingCreator->profile_image))
+                                            <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                                        @else
+                                            <img src="{{ asset(PROFILE_PATH.$meeting->meetingCreator->profile_image) }}">
+                                        @endif
+                                    </div> 
+                                    <p class="user-icon">-
+                                    <a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}">{{ $meeting->meetingCreator->name }}</a><span>on {{ date(DATE_FORMAT , strtotime($meeting->created_at)) }}</span></p>
+                                </div>
                             </div>
                             <div class="pull-right">
                                 <div class="options">
@@ -35,6 +45,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                             <div class="post-wrap-details">
                                 <p class="text-12">
                                     {{ nl2br($meeting->meeting_description) }}
@@ -82,18 +93,15 @@
                                 </div>
                             </div>
                             <hr class="border-in-hr">
-                                <form name="post_comment_form" id="post_comment_form" method="post"
-                                      action="{{url('/meeting/saveComment',$meeting->id)}}" enctype="multipart/form-data" class="post-form">
+                                <form name="post_comment_form" id="post_comment_form" method="post" action="{{url('/meeting/saveComment',$meeting->id)}}" enctype="multipart/form-data" class="post-form">
                                     {{ csrf_field() }}
                                 <input type="hidden" name="post_id" id="post_id" value="{{$meeting->id }}">
                                 <div class="field-group comment">
-                                    <textarea name="comment_text" placeholder="Leave a comment here"></textarea>
+                                    <textarea name="comment_text" id="comment_text" placeholder="Leave a comment here"></textarea>
                                 </div>
-                                <div class="btn-wrap-div">
-                                    <input type="submit" class="st-btn" value="Submit">
-                                    <div class="upload-btn-wrapper">
-                                        <button class="upload-btn">Upload Files</button>
-                                        <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                <div class="field-group checkbox-btn">
+                                    <div class="pull-left">
+                                        <input value="Submit" name="submit" id="submit" class="st-btn" type="submit">
                                     </div>
                                 </div>
                             </form>
@@ -107,13 +115,13 @@
                                         <div class="img-wrap">
                                             <?php
                                                 $profile_img = '';
-                                                $profile_pic = $comment->commentUser->profile_image;
-                                                if($profile_pic == "")
-                                                    $profile_img = asset('assets/img/default_user.jpg');
+                                                //$profile_pic = $comment->commentUser->profile_image;
+                                                if(empty($comment->commentUser->profile_image))
+                                                    $profile_img = PROFILE_PATH;
                                                 else
-                                                    $profile_img = asset('assets/img/'.$profile_pic);
+                                                    $profile_img = PROFILE_PATH.$comment->commentUser->profile_image;
                                             ?>
-                                            <img alt="post user" src="{{ $profile_img }}">
+                                            <img alt="post user" src="{{ asset($profile_img) }}">
                                         </div>
                                     <?php
                                         $commentUser = $comment->commentUser;
@@ -144,31 +152,65 @@
                                     <div class="col-sm-10 user-rply">
                                         <div class="post-inner-reply">
                                             <div class="pull-left post-user-nam">
-                                                <h3>{{ $comment->commentUser->name }}</h3>
-                                                <p>- on {{ date('d-m-Y',strtotime($comment->created_at)) }}</p>
+                                                <a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}">{{ $comment->commentUser->name }}</a>
+                                                <p>- on {{ date(DATE_FORMAT,strtotime($comment->created_at)) }}</p>
                                             </div>
-                                            @if($comment->commentUser->id == Auth::user()->id)
-                                                <div class="pull-right post-reply-pop">
-                                                    <div class="options">
-                                                        <div class="fmr-10">
+                                            <div class="pull-right post-reply-pop">
+                                                <div class="options">
+                                                    <div class="star-wrap">
+                                                                    <p class="active">Solution</p>
+                                                    </div>
+                                                    <div class="fmr-10">
+                                                          <a class="set-warning" href="">w</a>
+                                                          @if($comment->commentUser->id == Auth::user()->id)
                                                             <a class="set-edit" href="">e</a>
                                                             <a class="set-alarm" href="{{ url('meeting/deleteComment/'.$comment->id) }}">a</a>
-                                                        </div>
+                                                          @endif
                                                     </div>
                                                 </div>
-                                            @endif
+                                            </div>
                                         </div>
                                         <p class="text-12">
                                             {{ $comment->comment_reply }}
                                         </p>
                                         <div class="rply-box">
+                                        <a href="#" class="rply-count like">
+                                            <img src="{{asset('assets/img/like.png')}}" alt="post-like"><p>08</p>
+                                        </a>
+                                        <a href="#" class="rply-count dislike">
+                                            <img src="{{asset('assets/img/like.png')}}" alt="post-like"><p>08</p>
+                                        </a>
+                                        <div class="rply-count">
+                                                <a href="#myModal" data-toggle="modal"><img src="{{asset('assets/img/post-rply.png')}}" alt="post-rply"> </a>
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
+                                                                        <h4 class="modal-title">Report Comment</h4>
+                                                                    </div>
+                                                                    <form method="post" class="common-form">
+                                                                     <div class="form-group">
+                                                                        <label>Message To Author:</label> 
+                                                                         <textarea type="text" placeholder="Type here"></textarea>
+                                                                     </div> 
+                                                                     <div class="form-group">
+                                                                         <div class="btn-wrap-div">
+                                                                              <input class="st-btn" type="submit" value="Submit">
+                                                                              <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                                         </div>     
+                                                                     </div>     
+                                                                    </form>
+                                                                </div><!-- /.modal-content -->
+                                                            </div><!-- /.modal-dialog -->
+                                                         </div>
+                                                <p>4</p>  
+                                            </div>    
+                                    </div>
+                                        <?php /*<div class="rply-box">
                                             <div class="rply-count">
-                                                <a href="#myModal" data-toggle="modal"><img
-                                                            src="assets/img/post-rply.png"
-                                                            alt="post-rply"> </a>
-                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog"
-                                                     tabindex="-1" id="myModal" class="modal fade"
-                                                     style="display: none;">
+                                                <a href="#myModal" data-toggle="modal"><img src="assets/img/post-rply.png" alt="post-rply"> </a>
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -180,8 +222,7 @@
                                                             <form method="post" class="common-form">
                                                                 <div class="form-group">
                                                                     <label>Message To Author:</label>
-                                                                    <textarea type="text"
-                                                                              placeholder="Type here"></textarea>
+                                                                    <textarea type="text" placeholder="Type here"></textarea>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="btn-wrap-div">
@@ -198,13 +239,13 @@
                                                 </div>
                                                 <p>4</p>
                                             </div>
-                                        </div>
+                                        </div>*/?>
                                     </div>
                                 </div>
                                 @endforeach
                             </div>
                         
-                        </div>
+                        <!--</div>-->
                     </div>
                     <div id="post-detail-right" class="col-sm-4">
                         <div class="category">
@@ -214,16 +255,16 @@
                                     <div class="member-wrap">
                                         <div class="member-img">
                                             <?php
-                                            $path = 'assets/img/member1.PNG';
+                                            //$path = 'assets/img/member1.PNG';
                                             $admin_icon = asset('assets/img/member-icon.PNG');
-                                            $profile_picture = (!empty($user->profile_image)) ? asset('public/uploads/profile_pic/') . '/' . $user->profile_image : asset($path); ?>
-                                            <img src="{{ $profile_picture }}" alt="no">
+                                            $profile_picture = (!empty($user->profile_image)) ? PROFILE_PATH. $user->profile_image : DEFAULT_PROFILE_IMAGE; ?>
+                                            <img src="{{ asset($profile_picture) }}" alt="no">
                                             @if($user->is_admin == '1')
                                                 <figure><img src="{{ $admin_icon }}" alt="member-icon"></figure>
                                             @endif
                                         </div>
                                         <div class="member-details">
-                                            <h3 class="text-12">{{ $user->name }}</h3>
+                                            <h3 class="text-12"><a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}">{{ $user->name }}</a></h3>
                                             <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                         </div>
                                     </div>
@@ -232,20 +273,46 @@
                         </div>
                         <div class="category">
                             <h2>Uploaded Files</h2>
-                            <div class="idea-grp post-category">
-                                @foreach($uploadedFiles as $attachment)
-                                    <div class="member-wrap files-upload">
-                                        <div class="member-img">
-                                            <img src="{{ asset('assets/img/uploadfiles2.PNG') }}" alt="no">
-                                        </div>
-                                        <div class="member-details">
-                                            <h3 class="text-12">{{ $attachment->original_file_name }}</h3>
-                                            <p class="text-10">Uploaded By: <a href="#">{{ $attachment->attachmentUser->name }}</a></p>
-                                        </div>
-                                    </div>
-                                @endforeach
+                            <div class="wrap-name-upload">
+                                <div class="select">
+                                    <select id="slct" name="slct">
+                                            <option>Name</option>
+                                            <option>Admin</option>
+                                            <option value="Super User">Super User</option>
+                                            <option value="Employee">Employee</option>
+                                    </select>
+                                </div>
+                                <div class="upload-btn-wrapper">
+                                    <form name="uploadfile" id="uploadfile" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="meetingId" id="meetingId" value="{{$meeting['id']}}">
+                                        <button class="btn" id="uploadBtn">Upload File</button>
+                                        <input name="file_upload" id="file_upload" type="file" onchange="uploadFileMeeting();">
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+                            <div class="idea-grp post-category" id="meetingAttachment">
+                        <?php
+                            //dd($post->postAttachment);
+                            if(!empty($meeting->postAttachment) && count($meeting->postAttachment) > 0) {
+                            foreach($meeting->postAttachment as $attachment) {
+                        ?>
+                        <div class="member-wrap files-upload">
+
+                            <div class="member-img">
+                                <img src="{{asset(DEFAULT_ATTACHMENT_IMAGE)}}" alt="no">
+                            </div>
+                            <div class="member-details">
+                                <h3 class="text-10">{{$attachment->file_name}}</h3>
+                                <p>Uploaded By:<a href="#">{{$attachment->attachmentUser->name}}</a></p>
+                            </div>
+                        </div>    
+                            <?php } }
+                                else {
+                                    echo "<p class='text-12'>No files uploaded.</p>";
+                                }
+                            ?>
+                    </div> 
+                        </div>    
                     </div>
                 </div>
             </div>
