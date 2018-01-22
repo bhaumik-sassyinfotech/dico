@@ -85,10 +85,18 @@
             {
                 if ( Auth::user() )
                 {
-                    $this->validate($request , [
+                    /*$this->validate($request , [
                         'post_type'  => 'required' ,
                         'post_title' => 'required|max:'.POST_TITLE_LIMIT,
+                    ]);*/
+                    $validator = Validator::make( $request->all(),
+                    [
+                            'post_type'  => 'required' ,
+                            'post_title' => 'required|max:'.POST_TITLE_LIMIT,
                     ]);
+                    if ($validator->fails()) {
+                        return Redirect::back()->withErrors($validator)->withInput();
+                    }
                     if ( $request->input('is_anonymous') )
                     {
                         $is_anonymous = 1;
@@ -179,9 +187,7 @@
             //dd("here");
             if ( Auth::user())
             {
-                $query = Post::with(['postUser','postLike','postDisLike','postComment'=> function ($q) {
-                   return $q->take(4);
-                },'postTag.tag', 'postUserLike' => function ($q) {
+                $query = Post::with(['postUser','postLike','postDisLike','postComment','postTag.tag', 'postUserLike' => function ($q) {
                     return $q->where('user_id' , Auth::user()->id);
                 } ,'postUserDisLike' => function ($q) {
                    return $q->where('user_id' , Auth::user()->id);
@@ -365,10 +371,18 @@
             {
                 if ( Auth::user() )
                 {
-                    $this->validate($request , [
+                    /*$this->validate($request , [
+                        'post_type'  => 'required',
+                        'post_title' => 'required',
+                    ]);*/
+                    $validator = Validator::make( $request->all(),
+                    [
                         'post_type'  => 'required',
                         'post_title' => 'required',
                     ]);
+                    if ($validator->fails()) {
+                        return Redirect::back()->withErrors($validator)->withInput();
+                    }
                     $post = new Post;
                     if ( $request->input('is_anonymous') )
                     {
@@ -614,14 +628,10 @@
             
             //print_r($tag_id);
             $similar_post = Post::with(['postTag' => function($q) use ($tag_id,$post) {
-                $q->whereIn('tag_id', $tag_id)->get(); 
+                if(!empty($tag_id)) {
+                    $q->whereIn('tag_id', $tag_id)->get(); 
+                }
             }])->where('id','!=',$post->id)->where('company_id',Auth::user()->company_id)->has('postTag')->orWhere('post_title', 'like', '%'.$post->post_title.'%')->get();
-            /*if(!empty($group_id)) {
-                $similar_query->whereRaw("FIND_IN_SET($group_id,group_id)");
-            }
-            $similar_post = $similar_query->get();*/
-                ////->get();//->whereRaw("FIND_IN_SET($group_id,group_id)")->get();
-               // ->orWhere('post_title', 'like', '%'.$post->post_title.'%')
             //dd(DB::getQueryLog());
             //dd($similar_post);
             if(!empty($post->group_id)) {
@@ -640,13 +650,20 @@
 //            dd($post);
             return view($this->folder.'.post.'.$view_page, compact('post','post_group','currUser','similar_post'));
         }else {
-            return redirect('/index'); 
+            return redirect('/index')->with('err_msg', Config::get('constant.TRY_MESSAGE'));
         }
     }
     
     public function savecomment($id,Request $request) {
         //dd($request);
         try{
+            $validator = Validator::make( $request->all(),
+            [
+                'comment_text'  => 'required',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator)->withInput();
+            }
             if(Auth::user()) {
                 $user_id = Auth::user()->id;
                 $comment_text = $request->input('comment_text');
@@ -682,7 +699,7 @@
                 }
             }
             else {
-               return redirect('/index');  
+               return redirect('/index')->with('err_msg', Config::get('constant.TRY_MESSAGE'));
             }
         }catch (\exception $e) {
             DB::rollback();
@@ -826,35 +843,37 @@
         }
         public function comment_solution(Request $request) {
         try{
-            if(Auth::user()) {
-                $comment_id = $request->input('comment_id');
-                $user_id = $request->input('user_id');
-                $post_id = $request->input('post_id');
-                $check = Comment::where(array('post_id'=>$post_id,'is_correct'=>1))->first();
-                if($check) {
-                    if($check->user_id == $user_id) {
-                        echo json_encode(array('status' => 2,'msg' => "Solution already marked"));
-                    }else {
-                        echo json_encode(array('status' => 0,'msg' => "Solution already marked"));
-                    }
-                }else{
-                    $answer = Comment::where('id',$comment_id)->update(array('is_correct'=>1,'is_correct_by_user'=>$user_id));
-                    if($answer) {
-                        echo json_encode(array('status' => 1, 'msg' => "answer marked successfully"));
-                    }else {
-                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
-                    }
-                } /*else {
-                    $answer = Comment::where('id',$comment_id)->update(array('is_correct'=>0,'is_correct_by_user'=>0));
-                    if($answer) {
-                        echo json_encode(array('status' => 0, 'msg' => "answer marked successfully"));
-                    }else {
-                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
-                    }
-                }*/
-                
-            }else {
-               return redirect('/index'); 
+            $validator = Validator::make( $request->all(),
+            [
+                'comment_id'  => 'required',
+                'user_id'  => 'required',
+                'post_id'  => 'required',
+            ]);
+            if ($validator->fails()) {
+                echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+            } else {
+                if(Auth::user()) {
+                    $comment_id = $request->input('comment_id');
+                    $user_id = $request->input('user_id');
+                    $post_id = $request->input('post_id');
+                    $check = Comment::where(array('post_id'=>$post_id,'is_correct'=>1))->first();
+                    if($check) {
+                        if($check->user_id == $user_id) {
+                            echo json_encode(array('status' => 2,'msg' => "Solution already marked"));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => "Solution already marked"));
+                        }
+                    }else{
+                        $answer = Comment::where('id',$comment_id)->update(array('is_correct'=>1,'is_correct_by_user'=>$user_id));
+                        if($answer) {
+                            echo json_encode(array('status' => 1, 'msg' => "answer marked successfully"));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                    } 
+                }else {
+                   return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); ; 
+                }
             }
         }catch (\exception $e) {
              echo json_encode(array('status' => 0,'msg' => $e->getMessage()));
@@ -862,13 +881,390 @@
     }
     
     
-    public function idea_update($id , Request $request)
+    
+        public function comment_update(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $validator = Validator::make( $request->all(),
+                    [
+                        'comment'  => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                        echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                    } else {
+                        $comment_id = $request->get('id');
+                        $comment_text = $request->get('comment');
+                        $res = Comment::where('id',$comment_id)->update(['comment_text'=>$comment_text]);
+                        if($res) {
+                            echo json_encode(array('status' => 1,'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                    }
+                } else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        
+        public function comment_reply_update(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $validator = Validator::make( $request->all(),
+                    [
+                        'comment'  => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                        echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                    } else {
+                        $comment_id = $request->get('id');
+                        $comment_text = $request->get('comment');
+                        $res = CommentReply::where('id',$comment_id)->update(['comment_reply'=>$comment_text]);
+                        if($res) {
+                            echo json_encode(array('status' => 1,'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                    }
+                } else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function comment_reply(Request $request) {
+            try
+            {
+                $validator = Validator::make( $request->all(),
+                    [
+                        'comment_reply'  => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                        //return Redirect::back()->withErrors($validator)->withInput();
+                        echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                    } else {
+                        if(Auth::user()) {
+                            $post_id = $request->input('post_id');
+                            $user_id = Auth::user()->id;
+                            $comment_reply = $request->input('comment_reply');
+                            $is_anonymous = $request->input('is_anonymous');
+                            $comment_id = $request->input('comment_id');
+                            $srno = $request->input('srno');
+
+                            $postData = array("user_id"=>$user_id,"comment_id"=>$comment_id,"comment_reply"=>$comment_reply,"is_anonymous"=>$is_anonymous,"created_at"=>Carbon\Carbon::now());
+                            $reply_id = CommentReply::insertGetId($postData);
+                            if($reply_id) {
+                                $commentReply = CommentReply::with('commentReplyUser')->where('id',$reply_id)->first()->toArray();
+                                //return view($this->folder . '.post.comment', compact('commentReply','srno'));
+                                echo json_encode(array('status' => 1,'msg' => "Reply successfully"));
+                            }else {
+                                echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                            }
+                        } else {
+                            //$request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
+                            //return redirect('/index'); 
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                    }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function deletecommentReply($id = null) {
+            $deleteCommentReply = CommentReply::where('id', $id)->delete();
+            if($deleteCommentReply) {
+                return Redirect::back()->with('success', 'Comment deleted successfully');
+            }else {
+                return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+            }
+        }
+        public function tags() {
+            $tags = Tag::all();
+            if($tags) {
+               /* $tag_arr = array();
+                foreach($tags as $tag) {
+                    $tag_arr[] = $tag['tag_name'];
+                }*/
+                //$tagArr = implode(",", $tag_arr);
+                //dd($tags);
+                echo json_encode(array('status' => 1,'data' => $tags));
+            } else {
+                echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+            }
+        }
+        public function allComments(Request $request) {
+           try
+            {
+                $validator = Validator::make( $request->all(),
+                [
+                    'post_id'  => 'required',
+                    'offset'  => 'required',
+                ]);
+                if ($validator->fails()) {
+                    //return Redirect::back()->withErrors($validator)->withInput();
+                    echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                }
+                else {
+                    if(Auth::user()) {
+                        $post_id = $request->input('post_id');
+                        $offset = $request->input('offset');
+                        //$comments = Comment::with('commentUser')->where('post_id',$post_id)->take($offset)->get();
+                        $post = Post::with('postUser','postUser.following')->with(['postComment'=> function ($q) {
+                                    $q->orderBy('is_correct','desc');
+                                    $q->withCount('commentLike')->orderBy('comment_like_count','desc');
+                                    //return $q->take(100)->skip(COMMENT_DISPLAY_LIMIT);
+                    },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike','postComment.commentUserDisLike','postTag.tag'])->whereNULL('deleted_at')->where('id',$post_id)->first();
+                        if($post) {
+                            $html = view($this->folder . '.post.allComments', compact('post'));    
+                            echo json_encode(array('status' => 1,'msg'=>'','html' => $html->render()));
+                        } else {
+                           echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'))); 
+                        }
+                    } else {
+                        return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));  
+                    }
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        } 
+        public function deletePost( Request $request )
+        {
+            if($request->ajax())
+            {
+                $post_id = $request->input('post_id');
+            }
+        }
+        public function edit_challenge($id , Request $request) {
+            return view($this->folder . '.post.edit_challenge');
+        }
+        public function post_flagged(Request $request) {
+             DB::beginTransaction();
+            try
+            {
+                $validator = Validator::make( $request->all(),
+                [
+                    'reason' => 'required' ,
+                    'post_id' => 'required' ,
+                    'user_id' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                } else {
+                    if(Auth::user()) {
+                        $post_id = $request->get('post_id');
+                        $user_id = $request->get('user_id');
+                        $reason = $request->get('reason');
+                        $check_flag = PostFlag::where('post_id',$post_id)->get();
+                        if(count($check_flag) >= 2) {
+                            $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
+                            $user = Post::with(['postUser'])->where('id',$post_id)->first();
+                            if($user) {
+                                $userId = $user->postUser->id;
+                                $user_res = User::where('id',$userId)->update(['is_suspended'=>1]);
+                            }
+                            $res1 = Post::where('id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+                        } else {
+                            $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
+                        }
+                        if($res) {
+                            DB::commit();
+                            echo json_encode(array('status' => 1,'msg' => 'Post flagged successfully'));
+                        }else {
+                            DB::rollBack();
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                    } else {
+                        DB::rollBack();
+                        return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                    }
+                }
+            }
+            catch (Exception $ex) {
+                DB::rollBack();
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function comment_flagged(Request $request) {
+            DB::beginTransaction();
+            try
+            {
+                $validator = Validator::make( $request->all(),
+                [
+                    'reason' => 'required' ,
+                    'comment_id' => 'required' ,
+                    'user_id' => 'required',
+                    'flag_by' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                } else {
+                    if(Auth::user()) {
+                        $comment_id = $request->get('comment_id');
+                        $user_id = $request->get('user_id');
+                        $reason = $request->get('reason');
+                        $flag_by = $request->get('flag_by');
+                        $check_flag = CommentFlag::where('comment_id',$comment_id)->get();
+                        /*if(count($check_flag) >= 2) {
+                            $res = Comment::where('id',$comment_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+                        } else {*/
+                            $res = CommentFlag::insert(['comment_id'=>$comment_id,'user_id'=>$user_id,'reason'=>$reason,'flag_by'=>$flag_by]);
+                        //}
+                        if($res) {
+                            DB::commit();
+                            echo json_encode(array('status' => 1,'msg' => 'Comment flagged successfully'));
+                        }else {
+                            DB::rollBack();
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                    } else {
+                        DB::rollBack();
+                        return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                    }
+                }
+            }
+            catch (Exception $ex) {
+                DB::rollBack();
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function uploadFile(Request $request) {
+            
+            try
+            {
+                if(Auth::user()) {
+                    $id = $request->get('post_id');
+                    $file = $request->file('file_upload');
+                    if ($file != "")
+                    {
+                        $postData = array();
+                        //echo "here";die();
+                        $fileName        = $file->getClientOriginalName();
+                        $extension       = $file->getClientOriginalExtension();
+                        $folderName      = '/uploads/';
+                        $destinationPath = public_path() . $folderName;
+                        $safeName        = str_random(10) . '.' . $extension;
+                        $file->move($destinationPath , $safeName);
+                        //$attachment = new Attachment;
+                        $postData[ 'file_name' ] = $safeName;
+                        $postData[ 'type' ]      = 1;
+                        $postData[ 'type_id' ]   = $id;
+                        $postData[ 'user_id' ]   = Auth::user()->id;
+                        $attachment              = Attachment::insert($postData);
+                        if($attachment) {
+                            $post = Post::with(['postAttachment','postAttachment.attachmentUser'])->where('id',$id)->first();
+                            return view($this->folder . '.post.attachmentList',compact('post'));
+                        }
+                    }
+                }else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function getCommentReply(Request $request) {
+            try
+            {
+                $validator = Validator::make( $request->all(),
+                [
+                    'comment_id' => 'required' ,
+                ]);
+                if ($validator->fails()) {
+                    echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                } else {
+                    $comment_id = $request->get('comment_id');
+                    $comment = Comment::with(['commentReply','commentReply.commentReplyUser'])->where('id',$comment_id)->first();
+                    if($comment) {
+                        $html = view($this->folder . '.post.commentReply',compact('comment'));
+                        echo json_encode(array('status' => 1,'msg'=>'','html' => $html->render()));
+                    } else {
+                       echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                    }
+                }
+            }catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function idea_edit($id , Request $request)
+        {
+            
+            $currUser  = Auth::user();
+            $userId    = $currUser->id;
+            $companyId = $currUser->company_id;
+            $groups = Group::where('company_id' , Auth::user()->company_id)->get();
+            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment','postTag.tag' ])->first();
+            if($post == null )
+                return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
+            
+//            dd($post);
+            return view($this->folder . '.post.edit_idea_post' , compact('post','groups'));
+        }
+        public function idea_show($id)
+        {
+            
+            $currUser = Auth::user();
+//            dd($currUser);
+            $postViews = Helpers::postViews($id , $currUser->id);
+            $post = Post::with('postUser','postUser.following')->with('postLike')->with('postDisLike')->with(['postUserLike' => function($q) {
+                $q->where('user_id',  Auth::user()->id)->first();
+            }])->with(['postUserDisLike' => function($q) {
+                $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
+            }])->with('postAttachment')->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+                ->where('post_type','=','idea')->where('id',$id)->first();
+            
+//            dd($post);
+            if($post == null){
+                    $tag_id = array_pluck($post->postTag,'id');
+                    $similar_post = Post::with(['postTag' => function($q) use ($tag_id,$post) {
+                                        $q->whereIn('id', $tag_id)->where('post_id',$post->id)->get(); 
+                                    }])->orWhere('post_title', 'like', '%'.$post->post_title.'%')->where('id','!=',$post->id)->get();
+                return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
+            }
+            return view($this->folder . '.post.view_idea_post' , compact('post','postViews','currUser','similar_post'));
+        }
+        public function change_status(Request $request)
+        {
+            
+            $currUser = Auth::user();
+            if ( $currUser->role_id < 3 )
+            {
+                $status = $request->get('idea_status');
+                $reason = $request->get('idea_reason');
+                $postId = $request->get('post_id');
+                
+                $res = Post::where('id' , $postId)->update([ 'idea_status' => $status , 'idea_reason' => $reason , 'idea_status_updated_by' => $currUser->id ]);
+                if ( $res )
+                    return response()->json([ 'status' => 1 , 'msg' => "Status of this idea has been set successfully." ]);
+                else
+                    return response()->json([ 'status' => 0 , 'msg' => "Failed to set the status of this idea." ]);
+            }
+            
+            return response()->json([ 'status' => 0 , 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. " ]);
+        }
+        public function idea_update($id , Request $request)
     {
 //        dd($request->all());
-        $this->validate($request , [
+        /*$this->validate($request , [
 //            'post_type'  => 'required' ,
             'post_title' => 'required' ,
+        ]);*/
+        $validator = Validator::make( $request->all(),
+        [
+            'post_title' => 'required',
         ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
         
         DB::beginTransaction();
         try
@@ -939,332 +1335,5 @@
             return Redirect::back()->with('err_msg' , $ex->getMessage());
         }
     }
-        
-        public function idea_edit($id , Request $request)
-        {
-            
-            $currUser  = Auth::user();
-            $userId    = $currUser->id;
-            $companyId = $currUser->company_id;
-            $groups = Group::where('company_id' , Auth::user()->company_id)->get();
-            $post = Post::where('id' , $id)->where('user_id' , $userId)->where('company_id' , $companyId)->with([ 'postUser' , 'postAttachment','postTag.tag' ])->first();
-            if($post == null )
-                return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
-            
-//            dd($post);
-            return view($this->folder . '.post.edit_idea_post' , compact('post','groups'));
-        }
-        
-        public function idea_show($id)
-        {
-            
-            $currUser = Auth::user();
-//            dd($currUser);
-            $postViews = Helpers::postViews($id , $currUser->id);
-            $post = Post::with('postUser','postUser.following')->with('postLike')->with('postDisLike')->with(['postUserLike' => function($q) {
-                $q->where('user_id',  Auth::user()->id)->first();
-            }])->with(['postUserDisLike' => function($q) {
-                $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
-            }])->with('postAttachment')->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-                ->where('post_type','=','idea')->where('id',$id)->first();
-            
-//            dd($post);
-            if($post == null){
-                    $tag_id = array_pluck($post->postTag,'id');
-                    $similar_post = Post::with(['postTag' => function($q) use ($tag_id,$post) {
-                                        $q->whereIn('id', $tag_id)->where('post_id',$post->id)->get(); 
-                                    }])->orWhere('post_title', 'like', '%'.$post->post_title.'%')->where('id','!=',$post->id)->get();
-                return redirect()->route('post.index')->with('err_msg',"You don't have permissions to edit this post");
-            }
-            return view($this->folder . '.post.view_idea_post' , compact('post','postViews','currUser','similar_post'));
-        }
-        
-        public function change_status(Request $request)
-        {
-            
-            $currUser = Auth::user();
-            if ( $currUser->role_id < 3 )
-            {
-                $status = $request->get('idea_status');
-                $reason = $request->get('idea_reason');
-                $postId = $request->get('post_id');
-                
-                $res = Post::where('id' , $postId)->update([ 'idea_status' => $status , 'idea_reason' => $reason , 'idea_status_updated_by' => $currUser->id ]);
-                if ( $res )
-                    return response()->json([ 'status' => 1 , 'msg' => "Status of this idea has been set successfully." ]);
-                else
-                    return response()->json([ 'status' => 0 , 'msg' => "Failed to set the status of this idea." ]);
-            }
-            
-            return response()->json([ 'status' => 0 , 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. " ]);
-        }
-        
-        public function comment_update(Request $request) {
-            try
-            {
-                if(Auth::user()) {
-                    $this->validate($request , [
-                        'comment' => 'required' ,
-                    ]);
-                    $comment_id = $request->get('id');
-                    $comment_text = $request->get('comment');
-                    $res = Comment::where('id',$comment_id)->update(['comment_text'=>$comment_text]);
-                    if($res) {
-                        echo json_encode(array('status' => 1,'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
-                    }else {
-                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
-                    }
-                } else {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
-                }
-            }
-            catch (Exception $ex) {
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        }
-        
-        public function comment_reply_update(Request $request) {
-            try
-            {
-                if(Auth::user()) {
-                    $this->validate($request , [
-                        'comment' => 'required' ,
-                    ]);
-                    $comment_id = $request->get('id');
-                    $comment_text = $request->get('comment');
-                    $res = CommentReply::where('id',$comment_id)->update(['comment_reply'=>$comment_text]);
-                    if($res) {
-                        echo json_encode(array('status' => 1,'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
-                    }else {
-                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
-                    }
-                } else {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
-                }
-            }
-            catch (Exception $ex) {
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        }
-        
-        public function comment_reply(Request $request) {
-            try
-            {
-                if(Auth::user()) {
-                    $post_id = $request->input('post_id');
-                    $user_id = Auth::user()->id;
-                    $comment_reply = $request->input('comment_reply');
-                    $is_anonymous = $request->input('is_anonymous');
-                    $comment_id = $request->input('comment_id');
-                    $srno = $request->input('srno');
-                    
-                    $postData = array("user_id"=>$user_id,"comment_id"=>$comment_id,"comment_reply"=>$comment_reply,"is_anonymous"=>$is_anonymous,"created_at"=>Carbon\Carbon::now());
-                    $reply_id = CommentReply::insertGetId($postData);
-                    if($reply_id) {
-                        $commentReply = CommentReply::with('commentReplyUser')->where('id',$reply_id)->first()->toArray();
-                        return view($this->folder . '.post.comment', compact('commentReply','srno'));    
-                    }else {
-                        echo json_encode(array('status' => 1,'msg' => Config::get('constant.TRY_MESSAGE')));
-                    }
-                } else {
-                    return redirect('/index'); 
-                }
-            }
-            catch (Exception $ex) {
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        }
-        
-        public function deletecommentReply($id = null) {
-            $deleteCommentReply = CommentReply::where('id', $id)->delete();
-            if($deleteCommentReply) {
-                return Redirect::back()->with('success', 'Comment deleted successfully');
-            }else {
-                return Redirect::back()->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
-            }
-        }
-        public function tags() {
-            $tags = Tag::all();
-            if($tags) {
-               /* $tag_arr = array();
-                foreach($tags as $tag) {
-                    $tag_arr[] = $tag['tag_name'];
-                }*/
-                //$tagArr = implode(",", $tag_arr);
-                //dd($tags);
-                echo json_encode(array('status' => 1,'data' => $tags));
-            } else {
-                echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
-            }
-        }
-
-       public function allComments(Request $request) {
-           try
-            {
-                if(Auth::user()) {
-                    $post_id = $request->input('post_id');
-                    $offset = $request->input('offset');
-                    //$comments = Comment::with('commentUser')->where('post_id',$post_id)->take($offset)->get();
-                    $post = Post::with('postUser','postUser.following')->with(['postComment'=> function ($q) {
-                                $q->orderBy('is_correct','desc');
-                                $q->withCount('commentLike')->orderBy('comment_like_count','desc');
-                                //return $q->take(100)->skip(COMMENT_DISPLAY_LIMIT);
-                },'postComment.commentUser','postComment.commentAttachment','postComment.commentLike','postComment.commentDisLike','postComment.commentReply','postComment.commentReply.commentReplyUser','postComment.commentUserLike','postComment.commentUserDisLike','postTag.tag'])->whereNULL('deleted_at')->where('id',$post_id)->first();
-                    return view($this->folder . '.post.allComments', compact('post'));    
-                } else {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));  
-                }
-            }
-            catch (Exception $ex) {
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        } 
-
-    
-        public function deletePost( Request $request )
-        {
-            if($request->ajax())
-            {
-                $post_id = $request->input('post_id');
-            }
-        }
-        
-        public function edit_challenge($id , Request $request) {
-            return view($this->folder . '.post.edit_challenge');
-        }
-        
-        public function post_flagged(Request $request) {
-             DB::beginTransaction();
-            try
-            {
-                if(Auth::user()) {
-                    $this->validate($request , [
-                        'reason' => 'required' ,
-                    ]);
-                    $post_id = $request->get('post_id');
-                    $user_id = $request->get('user_id');
-                    $reason = $request->get('reason');
-                    $check_flag = PostFlag::where('post_id',$post_id)->get();
-                    if(count($check_flag) >= 2) {
-                        $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
-                        $user = Post::with(['postUser'])->where('id',$post_id)->first();
-                        if($user) {
-                            $userId = $user->postUser->id;
-                            $user_res = User::where('id',$userId)->update(['is_suspended'=>1]);
-                        }
-                        $res1 = Post::where('id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
-                    } else {
-                        $res = PostFlag::insert(['post_id'=>$post_id,'user_id'=>$user_id,'reason'=>$reason]);
-                    }
-                    if($res) {
-                        DB::commit();
-                        $request->session()->flash('success', 'Post flagged successfully');
-                        echo json_encode(array('status' => 1,'msg' => 'Post flagged successfully'));
-                    }else {
-                        DB::rollBack();
-                        $request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
-                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
-                    }
-                } else {
-                    DB::rollBack();
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
-                }
-            }
-            catch (Exception $ex) {
-                DB::rollBack();
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        }
-        
-        public function comment_flagged(Request $request) {
-            DB::beginTransaction();
-            try
-            {
-                if(Auth::user()) {
-                    $this->validate($request , [
-                        'reason' => 'required' ,
-                    ]);
-                    $comment_id = $request->get('comment_id');
-                    $user_id = $request->get('user_id');
-                    $reason = $request->get('reason');
-                    $flag_by = $request->get('flag_by');
-                    $check_flag = CommentFlag::where('comment_id',$comment_id)->get();
-                    /*if(count($check_flag) >= 2) {
-                        $res = Comment::where('id',$comment_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
-                    } else {*/
-                        $res = CommentFlag::insert(['comment_id'=>$comment_id,'user_id'=>$user_id,'reason'=>$reason,'flag_by'=>$flag_by]);
-                    //}
-                    if($res) {
-                        DB::commit();
-                        $request->session()->flash('success', 'Comment flagged successfully');
-                        echo json_encode(array('status' => 1,'msg' => 'Comment flagged successfully'));
-                    }else {
-                        DB::rollBack();
-                        $request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
-                        echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
-                    }
-                } else {
-                    DB::rollBack();
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
-                }
-            }
-            catch (Exception $ex) {
-                DB::rollBack();
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        }
-        public function uploadFile(Request $request) {
-            
-            try
-            {
-                if(Auth::user()) {
-                    $id = $request->get('post_id');
-                    $file = $request->file('file_upload');
-                    if ($file != "")
-                    {
-                        $postData = array();
-                        //echo "here";die();
-                        $fileName        = $file->getClientOriginalName();
-                        $extension       = $file->getClientOriginalExtension();
-                        $folderName      = '/uploads/';
-                        $destinationPath = public_path() . $folderName;
-                        $safeName        = str_random(10) . '.' . $extension;
-                        $file->move($destinationPath , $safeName);
-                        //$attachment = new Attachment;
-                        $postData[ 'file_name' ] = $safeName;
-                        $postData[ 'type' ]      = 1;
-                        $postData[ 'type_id' ]   = $id;
-                        $postData[ 'user_id' ]   = Auth::user()->id;
-                        $attachment              = Attachment::insert($postData);
-                        if($attachment) {
-                            $post = Post::with(['postAttachment','postAttachment.attachmentUser'])->where('id',$id)->first();
-                            return view($this->folder . '.post.attachmentList',compact('post'));
-                        }
-                    }
-                }else {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
-                }
-            }catch (Exception $ex) {
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        }
-        public function getCommentReply(Request $request) {
-            try
-            {
-                if(!empty($request)) {
-                    $comment_id = $request->get('comment_id');
-                    $comment = Comment::with(['commentReply','commentReply.commentReplyUser'])->where('id',$comment_id)->first();
-                    if($comment) {
-                        return view($this->folder . '.post.commentReply',compact('comment'));
-                    } else {
-                       return back()->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE'));  
-                    }
-                }else {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
-                }
-            }catch (Exception $ex) {
-                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
-            }
-        }
     }
 ?>

@@ -118,12 +118,22 @@ class UserController extends Controller {
 	public function store(Request $request) {
 		try {
 			$now = Carbon\Carbon::now();
-			$this->validate($request, [
+			/*$this->validate($request, [
 				'user_name' => 'required',
 				'user_email' => 'required|email|unique:users,email',
 				'company_id' => 'required',
 				'role_id' => 'required',
-			]);
+			]);*/
+                        $validator = Validator::make( $request->all(),
+                        [
+                            'user_name' => 'required',
+                            'user_email' => 'required|email|unique:users,email',
+                            'company_id' => 'required',
+                            'role_id' => 'required',
+                        ]);
+                        if ($validator->fails()) {
+                            return Redirect::back()->withErrors($validator)->withInput();
+                        }
 			if ($request->input('is_active')) {
 				$is_active = 1;
 			} else {
@@ -248,12 +258,22 @@ class UserController extends Controller {
 
 	public function update(Request $request, $id) {
 		try {
-			$this->validate($request, [
+			/*$this->validate($request, [
 				'user_name' => 'required',
 				'user_email' => 'required|email|unique:users,email,' . $id,
 //                'company_id' => 'required',
 				'role_id' => 'required',
+			]);*/
+                        $validator = Validator::make( $request->all(),
+                        [
+                            'user_name' => 'required',
+				'user_email' => 'required|email|unique:users,email,' . $id,
+//                'company_id' => 'required',
+				'role_id' => 'required',
 			]);
+                        if ($validator->fails()) {
+                            return Redirect::back()->withErrors($validator)->withInput();
+                        }
 			if ($request->input('is_active')) {
 				$is_active = 1;
 			} else {

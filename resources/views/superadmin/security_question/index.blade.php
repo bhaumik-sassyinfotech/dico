@@ -12,31 +12,40 @@
             <h1>Security Question</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                    <div class="btn-group hidden-xs">
-                        <a href="{{ route('security_question.create') }}" class="btn btn-primary">Add New</a>
-                    </div>
+                    <a class="btn btn-default" href="{{ route('security_question.create') }}">
+                        <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
+                        <span class="hidden-xs hidden-sm">Add New</span>
+                    </a>
                 </div>
             </div>
         </div>
 
         <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                   @include('template.notification')
-                    <table class="table table-bordered table-striped" id="security_question_table">
-                        <thead>
-                        <tr>
-                            <th>#ID</th>
-                            <th>Security Question</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="panel-body">
+                            <div class="panel panel-info " style="overflow-x:auto;">
+                            <div class="panel-heading trophy">
+                                <h4 class="icon">Security Question List</h4>
+                            </div>
+                            <div class="panel-body">
+                            <table class="table table-bordered table-striped" id="security_question_table">
+                                <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Security Question</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
 
-                    </table>
-                    <div class="col-lg-6"></div>
-                    <div class="col-lg-6">
-                        <div class="col-lg-6">
+                            </table>
+                            <div class="col-lg-6"></div>
+                            <div class="col-lg-6">
+                                <div class="col-lg-6">
 
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>

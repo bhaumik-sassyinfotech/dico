@@ -268,6 +268,35 @@ function uploadFile() {
     });
 }
 
+function uploadFileMeeting() {
+    var file_data = $('#file_upload').prop('files')[0];
+    var meetingId = $('#meetingId').val();
+    var form_data = new FormData();
+    var _token = CSRF_TOKEN;
+    form_data.append('file_upload', file_data);
+    form_data.append('meeting_id',meetingId);
+    //console.log(form_data);
+    $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': _token
+        }
+    });
+    $.ajax({
+        url: SITE_URL + '/uploadFileMeeting',
+        type:"post",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: form_data,
+        success: function(res) {
+            $('#meetingAttachment').html(res);
+        },
+        error: function(e) {
+            swal("Error", e, "error");
+        }
+    });
+}
+
 $(document).on('click',"#GoGrid",function(){
     // alert("clicked");
     $("div.hide-table").addClass('none');
@@ -277,3 +306,16 @@ $(document).on('click',"#GoList",function(){
     // alert("clicked");
     $("div.hide-table").removeClass('none');
 });
+$('.alert-success').delay(5000).fadeOut('slow');
+$('.alert-danger').delay(5000).fadeOut('slow');
+$('.alert-warning').delay(5000).fadeOut('slow');
+function ajaxResponse(type,msg) {
+    if(type == 'success') {
+        $('#success_msg').html(msg);
+        $('#success_msg').show().delay(5000).fadeOut('slow');
+    }else {
+        $('#error_msg').html(msg);
+        $('#error_msg').show().delay(5000).fadeOut('slow');
+    }
+    $(window).scrollTop(0);
+}

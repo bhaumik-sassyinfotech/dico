@@ -354,7 +354,6 @@
         
         public function saveComment( $id, Request $request )
         {
-            //dd($request);
             try {
                 if ( Auth::check() ) {
                     $user_id      = Auth::user()->id;
@@ -594,4 +593,41 @@
             Post::where('id',$id)->delete();
             Attachment::where('post_id',$id)->delete();
         }
+        
+        //========================== Functions added by Ankita 22/01/2018 ===========================//
+        public function uploadFileMeeting(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $id = $request->get('meeting_id');
+                    $file = $request->file('file_upload');
+                    if ($file != "")
+                    {
+                        $postData = array();
+                        //echo "here";die();
+                        $fileName        = $file->getClientOriginalName();
+                        $extension       = $file->getClientOriginalExtension();
+                        $folderName      = '/uploads/';
+                        $destinationPath = public_path() . $folderName;
+                        $safeName        = str_random(10) . '.' . $extension;
+                        $file->move($destinationPath , $safeName);
+                        //$attachment = new Attachment;
+                        $postData[ 'file_name' ] = $safeName;
+                        $postData[ 'type' ]      = 1;
+                        $postData[ 'type_id' ]   = $id;
+                        $postData[ 'user_id' ]   = Auth::user()->id;
+                        $attachment              = Attachment::insert($postData);
+                        if($attachment) {
+                            $meeting = Meeting::with(['postAttachment','postAttachment.attachmentUser'])->where('id',$id)->first();
+                            return view($this->folder . '.post.attachmentList',compact('post'));
+                        }
+                    }
+                }else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        //===========================================================================================//
     }

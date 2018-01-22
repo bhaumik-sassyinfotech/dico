@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div id="page-content">
+<div id="page-content" class="create-user create-user-popup" style="min-height: 650px;">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
@@ -11,68 +11,51 @@
                 <li><a href="{{ route('company.index') }}">Company</a></li>
                 <li class="active">Update Company</li>
             </ol>
-            <h1>Company</h1>
+            <h1 class="tp-bp-0">Company</h1>
+            <hr class="border-out-hr">
         </div>
         
         <div class="container">
-            <div class="panel panel-default">
+            <div class="row">
                 <!-- <form name="company_form" id="company_form" method="post" action="{{route('company.update',$company->company_id)}}">-->
-                {!! Form::model($company, ['method' => 'PUT', 'route' => ['company.update', $company->id],'enctype'=>'multipart/form-data', 'id' => 'company_form']) !!}
-                    <div class="panel-body">
-                        @if(session()->has('success'))
-                        <div class="alert alert-success">
-                            {{ session()->get('success') }}
-                        </div>
-                        @endif
-                        @if(session()->has('err_msg'))
-                        <div class="alert alert-danger">
-                            {{ session()->get('err_msg') }}
-                        </div>
-                        @endif
-                        @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
-                        <div class="row">
-                            <div class="col-xs-6 form-group">
-                                <label>Company Name<span>*</span></label>
-                                <input type="text" name="company_name" id="company_name" value="{{$company->company_name}}" placeholder="Company Name" class="form-control required">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 form-group">
-                                <label>Company Description</label>
-                                <textarea name="company_description" id="company_description" placeholder="Company Description" class="form-control">{{$company->description}}</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label class="checkbox-inline"><input type="checkbox" name="allow_anonymous" id="allow_anonymous" <?php if($company->allow_anonymous == 1) { echo "checked"; } ?>>Allow Anonymous</label><br/>
-                                <label class="checkbox-inline"><input type="checkbox" name="allow_add_admin" id="allow_add_admin" <?php if($company->allow_add_admin == 1) { echo "checked"; } ?>>Allow Admin</label><br/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                            
-                            </div>
+                <div id="company-from">
+                {!! Form::model($company, ['method' => 'PUT', 'route' => ['company.update', $company->id],'enctype'=>'multipart/form-data', 'id' => 'company_form', 'class' => 'common-form']) !!}
+                    <div class="form-group">
+                        <label class="text-15">Company Name<span>*</span></label>
+                        <input type="text" name="company_name" id="company_name" value="{{$company->company_name}}" placeholder="Company Name" class="form-control required">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-15">Company Description</label>
+                        <textarea name="company_description" id="company_description" placeholder="Company Description" class="form-control">{{$company->description}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="blank">
+                            <label class="check">
+                                <p>Allow Anonymous</p>
+                                <input type="checkbox" name="allow_anonymous" id="allow_anonymous" <?php if($company->allow_anonymous == 1) { echo "checked"; } ?>>
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
                     </div>
-                    <div class="panel-footer">
-                        <div class="options">
-                            <div class="btn-toolbar">
-                                <a href="{{ route('company.index') }}" class="btn btn-default" >Back</a>
-                                <input type="submit" name="save" id="save" class="btn btn-primary">
-                            </div>
+                    <div class="form-group">
+                        <div class="blank">
+                            <label class="check">
+                                <p>Allow Admin</p>
+                                <input type="checkbox" name="allow_add_admin" id="allow_add_admin" <?php if($company->allow_add_admin == 1) { echo "checked"; } ?>>
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
                     </div>
-               <!-- </form>     -->
-               {!! Form::close() !!}
+                    <div class="form-group">
+                        <div class="btn-wrap-div">
+                            <input type="submit" name="save" id="save" class="st-btn" value="Submit" />
+                            <a href="{{ route('company.index') }}" class="st-btn">Back</a>
+                        </div>
+                    </div>
+                {!! Form::close() !!}    
+                </div>
             </div>
+        </div>
         </div>
     </div>
 </div>

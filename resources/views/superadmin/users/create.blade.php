@@ -15,7 +15,6 @@
             </div>
             <div class="container">
                 <div class="row">
-                    @include('template.notification')
                     <div id="create-user-from">
                         <form class="common-form" name="user_form" id="user_form" method="post"
                               action="{{route('user.store')}}">

@@ -3,6 +3,7 @@
 @section('content')
 
 <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -12,11 +13,12 @@
                 <h1 class="tp-bp-0">Users</h1>
                 <div class="options">
                     <div class="btn-toolbar">
-                        <a style="display: none;" class="btn btn-default" href="{{ route('user.create') }}">
+
+                        <a class="btn btn-default" href="{{ route('user.create') }}">
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
                             <span class="hidden-xs hidden-sm">Create User</span>
                         </a>
-                        <a style="display: none;" class="btn btn-default">
+                        <a class="btn btn-default">
                             <i class="fa fa-sort fa-6" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Sort</span>
                         </a>
@@ -38,7 +40,6 @@
             </div>
             <div class="container">
                 <div class="row">
-                    @include('template.notification')
                     <div class="col-lg-12">
                         <div class="panel panel-danger">
                             <div class="panel-body no-gapping">
@@ -57,6 +58,7 @@
                                                                     <span class=""><i class="fa fa-user fa-6 visible-xs"
                                                                     aria-hidden="true"></i>
                                                                     <span class=" hidden-xs">Group Admin</span></a>
+
                                                     </li>
                                                 </ul>
 
@@ -146,6 +148,7 @@
                                                         <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
                                                     </div>
                                                 @endif
+
                                             @endif
                                         </ul>
                                         <input type="hidden" name="role_id" id="role_id" value="3">
@@ -169,6 +172,9 @@
                                                                 <div class="panel-body">
                                                                     <div class="row">
                                                                         <table class="table" id="company-users-table">
+
+                                                                        <!-- <table class="table" id="emp-table"> -->
+
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
@@ -412,6 +418,8 @@
 
             if(tab_id == 2)
                 new_url = '/user/adminGrid';
+            // else if(tab_id == 3)
+            //     new_url = '/user/otherManagersGrid';
 
 
             $.ajax({
@@ -428,7 +436,6 @@
                             // $("#display-grid").empty();
                             $("#display-grid li.userList:last").after(response.html);
                             offSet_selector.attr('value',offset);
-                            alert(response.count);
                             if( $('.userList').length == response.count )
                             {
                                 $('#load_post').hide();
@@ -436,8 +443,6 @@
                             }
                             $(".all_viewmore").not(':last').remove();
                         } else {
-                            $('#load_post').hide();
-                            $(".all_viewmore").hide();
                             //$('#threads .postlist:last').after("No post found.");
                         }
                     }

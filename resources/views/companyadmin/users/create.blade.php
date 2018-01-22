@@ -15,7 +15,6 @@
             </div>
             <div class="container">
                 <div class="row">
-                    @include('template.notification')
                     <div id="create-user-from">
                         <form class="common-form" name="user_form" id="user_form" method="post"
                               action="{{route('user.store')}}">
@@ -43,7 +42,7 @@
                             <div class="form-group">
                                 <label class="text-15">Email Id<span>*</span></label>
                                 <input type="text" name="user_email" id="user_email" placeholder="User Email"
-                                       class="form-control">
+                                                                               class="form-control">
                             </div>
                             <div class="form-group">
                                 <label>Role:</label>
@@ -65,7 +64,6 @@
                                         multiple="multiple" style="width: 71%">
                                     <option value="">Select company first.</option>
                                 </select>
-                            
                             </div>
                             <div class="form-group">
                                 <div class="blank">

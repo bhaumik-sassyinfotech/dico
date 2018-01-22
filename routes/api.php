@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 define('ENC_KEY', 'ZF#48sp(');
 //define('DATE_FORMAT','d/m/Y');
+
 define('DATE_FORMAT', 'jS M Y');
 define('POST_TITLE_LIMIT', 60);
 define('POST_DESCRIPTION_LIMIT', 130);
@@ -29,3 +30,4 @@ define('GROUP_PATH', 'public/uploads/groups/');
 define('DEFAULT_GROUP_IMAGE', 'assets/img/custome-service.png');
 define('DEFAULT_PROFILE_IMAGE', 'assets/img/post-userone.PNG');
 define('DEFAULT_ATTACHMENT_IMAGE', 'assets/img/uploadfiles1.PNG');
+define('DEFAULT_LOADER_IMAGE', 'assets/img/spinner.gif');

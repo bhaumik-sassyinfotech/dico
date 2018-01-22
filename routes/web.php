@@ -92,6 +92,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('getCommentReply', 'PostController@getCommentReply');
 	Route::get('deletecommentReply/{id}', 'PostController@deletecommentReply');
 	Route::post('comment_reply_update', 'PostController@comment_reply_update');
+        Route::post('uploadFileMeeting','MeetingController@uploadFileMeeting');
 });
 
 Route::get('/home', 'DashboardController@index')->name('home');

@@ -1,5 +1,5 @@
 @extends('layouts.login')
-
+<title>DICO - Login</title>    
 @section('content')
     <style type="text/css">
         .error1{
@@ -11,7 +11,7 @@
     <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
         <a data-original-title="Toggle Sidebar" id="leftmenu-trigger" class="tooltips" data-toggle="tooltip" data-placement="right" title=""></a>
         <div class="navbar-header pull-left">
-            <a class="navbar-brand" href="{{ url('/') }}">Avant</a>
+            <a class="navbar-brand" href="{{ url('/') }}">DICO</a>
         </div>
     </header>
     <div class="verticalcenter">

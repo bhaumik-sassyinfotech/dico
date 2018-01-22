@@ -45,7 +45,7 @@ if (!empty($comment['commentReply'])) {
                                     echo "Anonymous";
                                 }
                                 ?></h3>
-                            <p>- on <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
+                            <p>- on <?php echo date(DATE_FORMAT, strtotime($commentReply['created_at'])); ?></p>
                         </div>
                         <div class="pull-right post-reply-pop">
                             <div class="options">

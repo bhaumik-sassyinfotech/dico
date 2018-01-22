@@ -1,8 +1,7 @@
 @extends('template.default')
+<title>DICO - Meeting</title>
 @section('content')
-
-    @include('template.notification')
-    <div id="page-content">
+    <div id="page-content" class="new-meeting-details" style="min-height: 943px;">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -60,9 +59,8 @@
                                 <div class="tab-content">
                                     <div class="tab-pane clearfix active" id="home1">
                                         <div class="main-group-wrap">
-                                            <div class="category-tab">
-                                                <label for="" class="check">Group</label>
-                                                <label style="display:none;" class="check">Group<input type="checkbox">
+                                            <div class="category-tab"> 
+                                                <label class="check">Groups<input type="checkbox">
                                                     <span class="checkmark"></span>
                                                 </label>
                                             </div>

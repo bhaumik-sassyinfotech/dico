@@ -16,7 +16,6 @@
         <div class="container">
             <div class="row">
                 <div id="post-detail-left" class="col-sm-8">
-                   @include('template.notification')
                     <!-- START TITLE -->
                     <div class="group-wrap">
                         <div class="pull-left">
@@ -42,7 +41,8 @@
                                     <?php
 if ($post['user_id'] == Auth::user()->id) {
 	?>
-                                    <a class="set-edit" href="{{url('edit_challenge',Helpers::encode_url($post->id))}}">w</a>
+                                    <?php /*<a class="set-edit" href="{{url('edit',Helpers::encode_url($post->id))}}">w</a>*/?>
+                                    <a class="set-edit" href="{{route('post.edit',Helpers::encode_url($post->id))}}">e</a>
                                     <a class="set-delete" href="javascript:void(0);" onclick="deletepost({{$post->id}})">w</a>
                                     <?php
                                         }
@@ -114,7 +114,7 @@ if (!empty($post['postUserDisLike'])) {
                                     <i class="fa fa-comment-o"></i>
                                 <?php } ?>
                                 </a>
-                                <span><?php echo count($post['postComment']); ?></span>
+                                <span><?php echo $post['post_comment_count']; ?></span>
                             </div>
                         </div>
                     </div>    
@@ -213,7 +213,7 @@ if (!empty($post['postUserDisLike'])) {
                                         <h3 class="text-12"><?php if ($postComment['is_anonymous'] == 0) { ?>
                                             <a href="{{url('view_profile', Helpers::encode_url($commentUser['id']))}}">{{$commentUser['name']}}</a>
                                          <?php } else { echo "<b>Anonymous</b>"; } ?></h3>
-                                        <p>- on <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
+                                        <p>- on <?php echo date(DATE_FORMAT, strtotime($postComment['created_at'])); ?></p>
                                     </div>
                                     <div class="pull-right post-reply-pop">
                                         <div class="options">
@@ -505,54 +505,56 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
 <script type="text/javascript">
     function markSolution(commentid, userid, postid)
     {
-    swal({
-    title: "Are you sure?",
-            text: "This will be consider as answer and publish to post user.",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: true,
-            showLoaderOnConfirm: true
-    }, function () {
-    var _token = CSRF_TOKEN;
-    var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
-    $.ajax({
-    url: SITE_URL + '/comment_solution',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-            var res = JSON.parse(response);
-            var html = "";
-            if (res.status == 1) {
-                if($('#icon_'+commentid).hasClass('fa-star-o')) {
-                    $('#icon_'+commentid).removeClass('fa-star-o');
-                    $('#icon_'+commentid).addClass('fa-star');
-                }
-            //html += '<i class="fa fa-star" aria-hidden="true">';
-            } else if (res.status == 2) {
-            //html += '<i class="fa fa-star" aria-hidden="true">';
-                if($('#icon_'+commentid).hasClass('fa-star-o')) {
-                    $('#icon_'+commentid).removeClass('fa-star-o');
-                    $('#icon_'+commentid).addClass('fa-star');
-                }
-            swal("Error", res.msg, "error");
-            } else {
-            //html += '<i class="fa fa-star-o" aria-hidden="true">';
-                if($('#icon_'+commentid).hasClass('fa-star')) {
-                    $('#icon_'+commentid).removeClass('fa-star');
-                    $('#icon_'+commentid).addClass('fa-star-o');
-                }
-            swal("Error", res.msg, "error");
-            }
-            //$('#solution_' + commentid).before(html);
-            },
-            error: function(e) {
-            swal("Error", e, "error");
-            }
-    });
-    });
+        swal({
+        title: "Are you sure?",
+                text: "This will be consider as answer and publish to post user.",
+                type: "info",
+                showCancelButton: true,
+                closeOnConfirm: true,
+                showLoaderOnConfirm: true
+        }, function () {
+        var _token = CSRF_TOKEN;
+        var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
+        $("#spinner").show();
+            $.ajax({
+            url: SITE_URL + '/comment_solution',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $("#spinner").hide();
+                        var res = JSON.parse(response);
+                        var html = "";
+                        if (res.status == 1) {
+                        if($('#icon_'+commentid).hasClass('fa-star-o')) {
+                            $('#icon_'+commentid).removeClass('fa-star-o');
+                            $('#icon_'+commentid).addClass('fa-star');
+                        }
+                        //html += '<i class="fa fa-star" aria-hidden="true">';
+                        } else if (res.status == 2) {
+                        //html += '<i class="fa fa-star" aria-hidden="true">';
+                            if($('#icon_'+commentid).hasClass('fa-star-o')) {
+                                $('#icon_'+commentid).removeClass('fa-star-o');
+                                $('#icon_'+commentid).addClass('fa-star');
+                            }
+                        ajaxResponse('error',res.msg);
+                        } else {
+                        //html += '<i class="fa fa-star-o" aria-hidden="true">';
+                            if($('#icon_'+commentid).hasClass('fa-star')) {
+                                $('#icon_'+commentid).removeClass('fa-star');
+                                $('#icon_'+commentid).addClass('fa-star-o');
+                            }
+                        ajaxResponse('error',res.msg);
+                        }
+                    //$('#solution_' + commentid).before(html);
+                    },error: function(e) {
+                        swal("Error", e, "error");
+                    }
+            });
+        });
     }
     function comment_reply() {
         //var commentid = $('#modalComment').attr('data-id');
+        //alert($('#comment_replybox_form').valid());
         if($('#reply_form').valid() == 1) {
             var commentid = $('#commentId').val();
             var _token = CSRF_TOKEN;
@@ -560,26 +562,28 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             var comment_reply = $('#comment_reply_text').val();
             var anonymous = 0;
             var srno = $('#commentreply_' + commentid + ' .cmry:first').attr('id');
+            //console.log(commentid, "::::", srno);
             if ($("#is_anonymous_" + commentid).is(':checked')) {
                 anonymous = 1;
             } else {
                 anonymous = 0;
             }
             var formData = {comment_id:commentid, comment_reply:comment_reply, post_id:post_id, is_anonymous:anonymous, srno:srno, _token};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL + '/comment_reply',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    /*res = JSON.parse(response);
+                    $("#spinner").hide();
+                    res = JSON.parse(response);
                      if (res.status == 1) {
-                     location.reload();
+                        ajaxResponse('success',res.msg);
+                        location.reload();
                      } else {
-                     swal("Error", res.msg, "error");
-                     }*/
-                    //console.log(commentid, "::::", srno);
-                    $('#commentreply_' + commentid + ' #' + srno).before(response);
-                    location.reload();
+                        ajaxResponse('error',res.msg);
+                        //swal("Error", res.msg, "error");
+                     }
                 },
                 error: function(e) {
                     swal("Error", e, "error");
@@ -594,17 +598,18 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         $("#comment_disp_"+id).slideUp('fast');
         $('#cancel_comment_'+id).css('display','inline-block');
     }
-
     function updateComment(id,elementid) {
         if($('#commentbox_form').valid() == 1) {
             var comment = $('#comment_text_'+elementid).val();
             var _token = CSRF_TOKEN;
             formData = {id:id,comment:comment,_token};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL + '/comment_update',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $("#spinner").hide();
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         //swal("Success", res.msg, "success");
@@ -612,9 +617,10 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                         $('#comment_text_'+elementid).css('background-color','transparent');
                         $('#update_comment_'+elementid).css('display','none');
                         $('#cancel_comment_'+elementid).css('display','none');
+                        ajaxResponse('success',res.msg);
                         location.reload();
                     } else {
-                        swal("Error", res.msg, "error");
+                        ajaxResponse('error',res.msg);
                     }
                 },
                 error: function(e) {
@@ -630,132 +636,30 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         $("#comment_disp_"+id).slideDown('fast');
         $('#cancel_comment_'+id).css('display','none');
     }
-    function reportPostFlagged() {
-        if($('#post_flagged_form').valid() == 1) {
-            var reason = $('#post_message_autor').val();
-            var post_id = {{$post['id']}};
-            var user_id = {{Auth::user()->id}};
-            var _token = CSRF_TOKEN;
-            formData = {post_id:post_id,user_id:user_id,reason:reason,_token};
-            $.ajax({
-                url: SITE_URL + '/post_flagged',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    res = JSON.parse(response);
-                    if (res.status == 1) {
-                        swal("Success", res.msg, "success");
-                        window.location.href = SITE_URL + '/post';
-                        //location.reload();
-                        //$('#comment_text_'+id).attr('readonly',true);
-                        //$('#update_comment_'+id).css('display','none');
-                    } else {
-                        swal("Error", res.msg, "error");
-                    }
-                },
-                error: function(e) {
-                    swal("Error", e, "error");
-                }
-            });
-        }
-    }
-    function openFlagComment(comment_id,user_id) {
-        $('#comment_message_autor').val('');
-        $('#comment_flagged_id').val(comment_id);
-        $('#comment_user_id').val(user_id);
-        $('#flaggedComment').modal('show');
-    }
-    function reportCommentFlagged() {
-        if($('#comment_flagged_form').valid() == 1) {
-            var comment_id = $('#comment_flagged_id').val();
-            var user_id  = $('#comment_user_id').val();
-            var comment_message_autor = $('#comment_message_autor').val();
-            var flag_by = {{Auth::user()->id}};
-            var _token = CSRF_TOKEN;
-            formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
-            console.log(formData);
-            $.ajax({
-                url: SITE_URL + '/comment_flagged',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    res = JSON.parse(response);
-                    if (res.status == 1) {
-                        swal("Success", res.msg, "success");
-                        $('#flaggedComment').modal('hide');
-                    } else {
-                        swal("Error", res.msg, "error");
-                    }
-                },
-                error: function(e) {
-                    swal("Error", e, "error");
-                }
-            });
-        }
-    }
-    function openCommentReplyBox(commentid) {
-        if(commentid != "") {
-            var _token = CSRF_TOKEN;
-            formData = {comment_id:commentid,_token};
-            $.ajax({
-                url: SITE_URL + '/getCommentReply',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    $('#commentReplyList').html(response);
-                    runProfanity();
-                    /*res = JSON.parse(response);
-                    if (res.status == 1) {
-                        swal("Success", res.msg, "success");
-                        $('#flaggedComment').modal('hide');
-                    } else {
-                        swal("Error", res.msg, "error");
-                    }*/
-                },
-                error: function(e) {
-                    swal("Error", e, "error");
-                }
-            });
-            $('#myModalComment').modal('show');
-            $('#commentId').val(commentid);
-        }else {
-            swal("Error", "comment not found", "error");
-        }
-    }
-    function allComments() {
-        var _token = CSRF_TOKEN;
-        var post_id = $('#post_id').val();
-        formData = {post_id:post_id,offset:0,_token};
-        $.ajax({
-            url: SITE_URL + '/allComments',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                $('#allcomments_box').html(response);
-                runProfanity();
-            },
-            error: function(e) {
-                swal("Error", e, "error");
-            }
-        });
-    }
     function editCommentReply(id) {
         $('#comment_reply_text_' + id).removeProp('readonly').slideDown('fast');
         $('#update_comment_reply_' + id).css('display', 'inline-block');
         $('#comment_reply_text_'+id).css('background-color','white');
         $("#comment_reply_text_disp_"+id).slideUp('fast');
         $('#cancel_comment_reply_'+id).css('display','inline-block');
+        
+        /*$('#comment_reply_text_'+id).removeProp('readonly');
+        $('#comment_reply_text_'+id).css('background-color','white');
+        $('#update_comment_reply_'+id).css('display','inline-block');
+        $('#cancel_comment_reply_'+id).css('display','inline-block');*/
     }
     function updateCommentReply(id) {
         if($('#comment_replybox_form').valid() == 1) {
             var comment = $('#comment_reply_text_'+id).val();
             var _token = CSRF_TOKEN;
             formData = {id:id,comment:comment,_token};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL + '/comment_reply_update',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $("#spinner").hide();
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         //swal("Success", res.msg, "success");
@@ -766,8 +670,12 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                         $("#comment_reply_text_disp_"+id).html($('#comment_reply_text_' + id).val());
                         $('#cancel_comment_reply_'+id).css('display','none');
                         runProfanity();
+                        /*$('#comment_reply_text_'+id).attr('readonly',true);
+                        $('#comment_reply_text_'+id).css('background-color','transparent');
+                        $('#update_comment_reply_'+id).css('display','none');
+                        $('#cancel_comment_reply_'+id).css('display','none');*/
                     } else {
-                        swal("Error", res.msg, "error");
+                        ajaxResponse('error',res.msg);
                     }
                 },
                 error: function(e) {
@@ -785,8 +693,130 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         $('#update_comment_reply_' + id).css('display', 'none');
         $('#comment_reply_text_'+id).css('background-color','transparent');
         $("#comment_reply_text_disp_"+id).slideDown('fast');
-        //$("#comment_reply_text_disp_"+id).html($('#comment_reply_text_' + id).val());
         $('#cancel_comment_reply_'+id).css('display','none');
+    }
+    function reportPostFlagged() {
+        if($('#post_flagged_form').valid() == 1) {
+            var reason = $('#post_message_autor').val();
+            var post_id = {{$post['id']}};
+            var user_id = {{Auth::user()->id}};
+            var _token = CSRF_TOKEN;
+            formData = {post_id:post_id,user_id:user_id,reason:reason,_token};
+            $("#spinner").show();
+            $.ajax({
+                url: SITE_URL + '/post_flagged',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $("#spinner").hide();
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        ajaxResponse('success',res.msg);
+                        window.location.href = SITE_URL + '/post';
+                    } else {
+                        ajaxResponse('error',res.msg);
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function allComments() {
+        var _token = CSRF_TOKEN;
+        var post_id = $('#post_id').val();
+        //formData = {post_id:post_id,offset:3,_token};
+        formData = {post_id:post_id,offset:0,_token};
+        $("#spinner").show();
+        $.ajax({
+            url: SITE_URL + '/allComments',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                res = JSON.parse(response);
+                if(res.status == 1) {
+                    $("#spinner").hide();
+                    $('#allcomments_box').html(res.html);
+                    runProfanity();
+                } else {
+                    ajaxResponse('error',res.msg);
+                }
+            },
+            error: function(e) {
+                swal("Error", e, "error");
+            }
+        });
+    }
+    function openFlagComment(comment_id,user_id) {
+        $('#comment_message_autor').val('');
+        $('#comment_flagged_id').val(comment_id);
+        $('#comment_user_id').val(user_id);
+        $('#flaggedComment').modal('show');
+    }
+    function reportCommentFlagged() {
+        if($('#comment_flagged_form').valid() == 1) {
+            var comment_id = $('#comment_flagged_id').val();
+            var user_id  = $('#comment_user_id').val();
+            var comment_message_autor = $('#comment_message_autor').val();
+            var flag_by = {{Auth::user()->id}};
+            var _token = CSRF_TOKEN;
+            formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
+            $("#spinner").show();
+            $.ajax({
+                url: SITE_URL + '/comment_flagged',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $("#spinner").hide();
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        ajaxResponse('success',res.msg);
+                        $('#flaggedComment').modal('hide');
+                        //window.location.href = SITE_URL + '/post';
+                        //location.reload();
+                        //$('#comment_text_'+id).attr('readonly',true);
+                        //$('#update_comment_'+id).css('display','none');
+                    } else {
+                        ajaxResponse('error',res.msg);
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function openCommentReplyBox(commentid) {
+        if(commentid != "") {
+            var _token = CSRF_TOKEN;
+            formData = {comment_id:commentid,_token};
+            $("#spinner").show();
+            $.ajax({
+                url: SITE_URL + '/getCommentReply',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $("#spinner").hide();
+                    var res = JSON.parse(response);
+                    if(res.status == 1) {
+                        $('#commentReplyList').html(res.html);
+                        runProfanity();
+                    } else {
+                        ajaxResponse('error',res.msg);
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+            $('#reply_form')[0].reset();
+            $('.error').html('');
+            $('#myModalComment').modal('show');
+            $('#commentId').val(commentid);
+        }else {
+            swal("Error", "comment not found", "error");
+        }
     }
 </script>
 @endpush

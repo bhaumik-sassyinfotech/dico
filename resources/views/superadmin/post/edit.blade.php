@@ -1,26 +1,6 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
-
-@if(session()->has('success'))
-<div class="alert alert-success">
-    {{ session()->get('success') }}
-</div>
-@endif
-@if(session()->has('err_msg'))
-<div class="alert alert-danger">
-    {{ session()->get('err_msg') }}
-</div>
-@endif
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
 <div id="page-content" class="post-details create-post">
     <div id='wrap'>
         <div id="page-heading">
@@ -46,7 +26,7 @@
                                     <input type="checkbox" name="post_type" class="post_type" id="post_type_question" onclick="return false;" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                                 <label class="check challenges-check"> Challenge
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenges" onclick="return false;" value="challenges" <?php if($post->post_type == 'challenges') { echo "checked"; } ?>><span class="checked"></span>
+                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenge" onclick="return false;" value="challenge" <?php if($post->post_type == 'challenge') { echo "checked"; } ?>><span class="checked"></span>
                                 </label>
                             </div>
                             <div id="err_post_type"></div>
@@ -97,7 +77,7 @@
                             <span class="checkmark"></span></label>
                             <a href="{{ route('post.index') }}" class="st-btn">Back</a>
                             <input type="submit" name="save" id="save" value="Submit" class="st-btn">
-                            <div class="upload-btn-wrapper">
+                            <?php /*<div class="upload-btn-wrapper">
                                 <button class="upload-btn fileinput-button">Upload Files</button>
                                 <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 <?php
@@ -105,7 +85,7 @@
                                        //echo $post['postAttachment']['file_name']; 
                                     }
                                 ?>
-                            </div>        
+                            </div> */?>       
                         </div>
                             <?php } ?>
                         <?php /* <div class="row">
@@ -164,31 +144,52 @@
                         </div>
                         
                         <?php
-                            if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
+                           // if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
                                //echo $post['postAttachment']['file_name']; 
                         ?>
-                            <div class="category">
-                                <h2>Uploaded Files</h2>
-                                <div class="idea-grp post-category">
-                                    <?php
+                        <div class="category">
+                            <h2>Uploaded Files</h2>
+                            <div class="wrap-name-upload">
+                                <div class="select">
+                                    <select id="slct" name="slct">
+                                            <option>Name</option>
+                                            <option>Admin</option>
+                                            <option value="Super User">Super User</option>
+                                            <option value="Employee">Employee</option>
+                                    </select>
+                                </div>
+                                <div class="upload-btn-wrapper">
+                                    <form name="uploadfile" id="uploadfile" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="postId" id="postId" value="{{$post['id']}}">
+                                        <button class="btn" id="uploadBtn">Upload File</button>
+                                        <input name="file_upload" id="file_upload" type="file" onchange="uploadFile();">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="idea-grp post-category" id="postAttachment">
+                                <?php
                                     //dd($post->postAttachment);
-                                        foreach($post['postAttachment'] as $attachment) {
-                                    ?>
-                                    <div class="member-wrap files-upload">
-                                        <div class="member-img">
-                                            <img src="{{asset(DEFAULT_ATTACHMENT_IMAGE)}}" alt="no">
-                                        </div>
-                                        <div class="member-details">
-                                            <h3>{{$attachment['file_name']}}</h3>
-                                             <p>Uploaded By:<a href="#">{{$attachment['attachmentUser']['name']}}</a></p>
-                                        </div>
+                                    if(!empty($post['postAttachment']) && count($post['postAttachment']) > 0) {
+                                    foreach($post['postAttachment'] as $attachment) {
+                                ?>
+                                <div class="member-wrap files-upload">
+
+                                    <div class="member-img">
+                                        <img src="{{asset(DEFAULT_ATTACHMENT_IMAGE)}}" alt="no">
                                     </div>
-                                    <?php
+                                    <div class="member-details">
+                                        <h3 class="text-10">{{$attachment['file_name']}}</h3>
+                                        <p>Uploaded By:<a href="#">{{$attachment['attachmentUser']['name']}}</a></p>
+                                    </div>
+                                </div>    
+                                    <?php } }
+                                        else {
+                                            echo "<p class='text-12'>No files uploaded.</p>";
                                         }
                                     ?>
-                                </div>        
-                            </div>
-                        <?php } ?>
+                            </div> 
+                        </div>
+                        <?php //} ?>
                     </div>
                {!! Form::close() !!}
             </div>

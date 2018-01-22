@@ -2635,7 +2635,7 @@ form .form-group:last-child {
   width: 30px;
 }
 
-.search-form > input:not([type="button"]) {
+.search-form > input:not([type="button"]):not([type="submit"]) {
   border: 1px solid #949494;
   border-radius: 4px;
   color: #999;
@@ -4409,7 +4409,7 @@ body .modal-dialog.updatesecurity .modal-content,
 nav#page-leftbar {
   background-color: #e6e7e8;
   height: 100%;
-  position: fixed;
+  /*position: fixed;*/
 }
 .bottom-logo {
   margin-top: 5px;
@@ -4427,4 +4427,31 @@ nav#page-leftbar {
   
 .none {
     display: none;
+}
+#spinner {
+    background: #fff;
+    height: 100%;
+    left: 0;
+    opacity: 0.3;
+    filter: alpha(opacity=100);
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 999999999;
+}
+
+.spinner-img {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 35%;
+    width: 100%;
+}
+#spinner {
+    display: none;
+}
+#company-from {
+  padding: 0 10px;
+  width: 60.5%;
 }

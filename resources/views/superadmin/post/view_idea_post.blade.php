@@ -41,7 +41,8 @@
                                         <?php
                                             if ($post['user_id'] == Auth::user()->id) {
                                         ?>
-                                        <a class="set-edit" href="{{route('idea.edit',$post->id)}}">w</a>
+                                        <a class="set-edit" href="{{route('post.edit',Helpers::encode_url($post->id))}}">e</a>
+                                        <?php /*<a class="set-edit" href="{{route('idea.edit',$post->id)}}">w</a>*/?>
                                         <a class="set-delete" href="{{ url('meeting/deleteIdeaPost/'.$post->id) }}">w</a>
                                         <?php
                                             }
@@ -424,20 +425,19 @@
             var user_id = {{Auth::user()->id}};
             var _token = CSRF_TOKEN;
             formData = {post_id:post_id,user_id:user_id,reason:reason,_token};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL + '/post_flagged',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $("#spinner").hide();
                     res = JSON.parse(response);
                     if (res.status == 1) {
-                        swal("Success", res.msg, "success");
+                        ajaxResponse('success',res.msg);
                         window.location.href = SITE_URL + '/post';
-                        //location.reload();
-                        //$('#comment_text_'+id).attr('readonly',true);
-                        //$('#update_comment_'+id).css('display','none');
                     } else {
-                        swal("Error", res.msg, "error");
+                        ajaxResponse('error',res.msg);
                     }
                 },
                 error: function(e) {
@@ -460,18 +460,23 @@
             var flag_by = {{Auth::user()->id}};
             var _token = CSRF_TOKEN;
             formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
-            console.log(formData);
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL + '/comment_flagged',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $("#spinner").hide();
                     res = JSON.parse(response);
                     if (res.status == 1) {
-                        swal("Success", res.msg, "success");
+                        ajaxResponse('success',res.msg);
                         $('#flaggedComment').modal('hide');
+                        //window.location.href = SITE_URL + '/post';
+                        //location.reload();
+                        //$('#comment_text_'+id).attr('readonly',true);
+                        //$('#update_comment_'+id).css('display','none');
                     } else {
-                        swal("Error", res.msg, "error");
+                        ajaxResponse('error',res.msg);
                     }
                 },
                 error: function(e) {
