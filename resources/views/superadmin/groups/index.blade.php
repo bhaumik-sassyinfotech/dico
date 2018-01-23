@@ -102,7 +102,8 @@
                         <img src="{{ $profile_pic }}" alt="super-user">
                     </div>
                     <div class="grid-details">
-                        <h4 class="profanity" > {{ $group['group_name'] }} </h4>
+                        <?php $route = route('group.edit', [Helpers::encode_url($group['id'])]);?>
+                        <h4 class="profanity" > <a onclick='window.open("{{ $route }}","_self")' href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}">{{ $group['group_name'] }}</a> </h4>
                         <h4 class="profanity" > {{ $group['description']}}</h4>
                     </div>
                 </fieldset>

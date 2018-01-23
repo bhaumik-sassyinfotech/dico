@@ -76,6 +76,7 @@ else if ($role_id == 2) {
 else if ($role_id == 3) {
 	?>
         <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
+        <li><a href="{{ route('group.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Group</span></a></li>
         <?php
 }
 //=====start employee menu=====//
@@ -88,6 +89,7 @@ else if ($role_id == 3) {
                 </ul>
             </li>
         @endif
+
     </ul>
     <!-- END SIDEBAR MENU -->
 </nav>

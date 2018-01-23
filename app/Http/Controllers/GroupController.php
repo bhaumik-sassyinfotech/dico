@@ -32,9 +32,9 @@ class GroupController extends Controller {
 		$this->middleware(function ($request, $next) {
 			$url_segments = $request->segments();
 //                dd($url_segments);
-			if (Auth::user()->role_id == 3) {
-				return redirect('/index');
-			}
+			// if (Auth::user()->role_id == 3) {
+			// 	return redirect('/index');
+			// }
 			if (Auth::user()->role_id == 1) {
 				$this->folder = 'superadmin';
 			} else if (Auth::user()->role_id == 2) {
@@ -158,7 +158,7 @@ class GroupController extends Controller {
 	 */
 	public function edit($id, Request $request) {
 		$id = Helpers::decode_url($id);
-//            dd($id);
+		// dd($id);
 		$groupId = $id;
 		$companies = Company::all();
 		$groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $id)->first();
@@ -175,7 +175,8 @@ class GroupController extends Controller {
 
 		$groupUsers = $groupData->groupUsers->pluck('user_id')->toArray();
 		$companyEmployee = User::where('company_id', $groupData->company_id)->where('role_id', '!=', 1)->whereNotIn('id', $groupUsers)->get();
-//            dd($groupData);
+
+		// dd($userPosts);
 		return view($this->folder . '.groups.edit', compact('groupData', 'count', 'companies', 'companyEmployee', 'groupId', 'userPosts', 'currUserIsAdmin'));
 	}
 
@@ -259,7 +260,8 @@ class GroupController extends Controller {
 		// dd($group);
 		return Datatables::of($group)->addColumn('group_name', function ($row) {
 			$id = Helpers::encode_url($row->id);
-			return '<label class="check"><p><a href="' . route('group.edit', [$id]) . '" >' . $row->group_name . '</a></p><input type="checkbox"><span class="checkmark"></span></label>';
+			$raw_id = $row->id;
+			return '<label class="check"><p><a href="' . route('group.edit', [$id]) . '" >' . $row->group_name . '</a></p><input name="group_id[]" class="checkbox" value="' . $raw_id . '" type="checkbox"><span class="checkmark"></span></label>';
 		})->addColumn('description', function ($row) {
 			return '<p class="width">' . $row->description . '</p>';
 		})->addColumn('group_posts_count', function ($row) {
@@ -507,5 +509,70 @@ class GroupController extends Controller {
 		$html = view::make($this->folder . '.groups.ajax_mygroups', compact('groups'));
 		$output = array('html' => $html->render(), 'count' => $group_count);
 		return $output;
+	}
+
+	public function deleteGroup(Request $request) {
+		$groups_ids = $request->input('groups');
+		$groups_ids = explode(',', $groups_ids);
+		$data = ['status' => 0, 'msg' => "Please try again later.", 'data' => []];
+
+		if (count($groups_ids) > 0) {
+			DB::beginTransaction();
+			try {
+				$status = 0;
+				foreach ($groups_ids as $group) {
+
+					GroupUser::where('group_id', $group)->delete();
+
+					$posts_groups = Post::whereRaw("FIND_IN_SET($group,group_id)")->get();
+					$data = ['status' => 0, 'msg' => 'Deletion of group failed.', 'data' => $posts_groups];
+					return response()->json($data);
+					foreach ($posts_groups as $posts) {
+						$post = Post::find($posts->id);
+
+						$old_groups = explode(',', $post->group_id);
+
+						$new_groups = array_diff($old_groups, (array) $group);
+
+						if (empty($new_groups) && count($new_groups) == 0) {
+							$new_groups = 0;
+						} else {
+							$new_groups = implode(',', $new_groups);
+						}
+
+						$post->group_id = $new_groups;
+
+						if ($post->save()) {
+							$status = 0;
+						} else {
+							$status = 1;
+						}
+
+						if ($status == 1) {
+							DB::rollBack();
+							break;
+						}
+
+						Group::where('id', $group)->delete();
+					}
+
+					// return response()->json($posts);
+				}
+
+				if ($status == 0) {
+					DB::commit();
+					$data = ['status' => 1, 'msg' => 'Group has been deleted successfully.', 'data' => []];
+				} else if ($status == 1) {
+					DB::rollBack();
+					$data = ['status' => 0, 'msg' => 'Deletion of group failed.', 'data' => []];
+				}
+				return response()->json($data);
+			} catch (Exception $ex) {
+				DB::rollBack();
+				$data = ['status' => 0, 'msg' => $ex->getMessage(), 'data' => []];
+				return response()->json($data);
+			}
+		}
+
 	}
 }

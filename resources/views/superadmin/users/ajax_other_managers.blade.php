@@ -65,4 +65,13 @@ $profile_pic = asset('assets/img/super-user.PNG');
 </div>
 <?php
 } //if-end
+else {
+	?>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>No Data found</p>
+        </div>
+    </div>
+<?php
+}
 ?>

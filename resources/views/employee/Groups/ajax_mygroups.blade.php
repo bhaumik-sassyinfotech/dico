@@ -1,5 +1,5 @@
-@if(count($users) > 0)
-    @foreach($users as $user)
+@if(count($groups) > 0)
+    @foreach($groups as $group)
     @php
         $class = 'industrial';
         if($loop->index % 3 == 1)
@@ -7,7 +7,7 @@
         else if($loop->index % 3 == 2)
             $class = 'architecture';
     @endphp
-    <li data-name="{{ $user['name'] }}" class="mix {{ $class }} mix_all userList" style="display: inline-block;  opacity: 1;">
+    <li data-name="{{ $group['group_name'] }}" class="mix {{ $class }} mix_all userList" style="display: inline-block;  opacity: 1;">
         <div class="list-block super-user">
             <div class="panel-heading">
                 <div class="pull-right">
@@ -21,43 +21,37 @@
                 <fieldset>
                     <div class="grid-image">
                         @php
-                            $profile_pic = asset('assets/img/super-user.PNG');
-                            if($user['profile_image'] != "")
-                                $profile_pic = asset(PROFILE_PATH.$user['profile_image']);
+                            $profile_pic = asset(DEFAULT_GROUP_IMAGE);
+                            if( $group['group_image'] != "" )
+                                $profile_pic = asset(GROUP_PATH.$group['group_image']);
                         @endphp
                         <img src="{{ $profile_pic }}" alt="super-user">
                     </div>
                     <div class="grid-details">
-                        <h4>{{ $user['name'] }}</h4>
-                        <a href="mailto:{{ $user['email'] }}">{{ $user['email'] }}</a>
-                        <h4>Employee</h4>
+                        <h4><a class="profanity" href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}"> {{ $group['group_name'] }} </a></h4>
+                        <h4 class="profanity"> {{ $group['description'] }} </h4>
                     </div>
-
                 </fieldset>
-                <div class="btn-wrap">
-                    <a href="{{ url('view_profile/'.$user['id']) }}">Follow</a>
-                    <a href="#">Point:246</a>
-
-                </div>
+                <hr>
                 <div class="panel-body-wrap">
                     <div class="follower-text pull-left">
-                        <p>Followers:<span>{{ count($user['followers']) }}</span></p>
+                        <p>Members:<span>{{ $group['group_users_count'] }}</span></p>
                     </div>
                     <div class="follower-text pull-right">
-                        <p>Following:<span>{{ count($user['following']) }}</span></p>
+                        <p>Posts:<span>{{ $group['group_posts_count'] }}</span></p>
                     </div>
                 </div>
             </div>
         </div>
     </li>
     @endforeach
-<div class="all_viewmore col-md-12">
-    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
-</div>
+
+    <div class="all_viewmore col-md-12">
+        <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
+    </div>
+
 @else
-    <div class="row">
-        <div class="col-xs-12">
-            <p>No Data found</p>
-        </div>
+    <div class="col-md-12">
+        <p>No Data found.</p>
     </div>
 @endif

@@ -124,16 +124,16 @@ class UserController extends Controller {
 				'company_id' => 'required',
 				'role_id' => 'required',
 			]);*/
-                        $validator = Validator::make( $request->all(),
-                        [
-                            'user_name' => 'required',
-                            'user_email' => 'required|email|unique:users,email',
-                            'company_id' => 'required',
-                            'role_id' => 'required',
-                        ]);
-                        if ($validator->fails()) {
-                            return Redirect::back()->withErrors($validator)->withInput();
-                        }
+			$validator = Validator::make($request->all(),
+				[
+					'user_name' => 'required',
+					'user_email' => 'required|email|unique:users,email',
+					'company_id' => 'required',
+					'role_id' => 'required',
+				]);
+			if ($validator->fails()) {
+				return Redirect::back()->withErrors($validator)->withInput();
+			}
 			if ($request->input('is_active')) {
 				$is_active = 1;
 			} else {
@@ -259,21 +259,21 @@ class UserController extends Controller {
 	public function update(Request $request, $id) {
 		try {
 			/*$this->validate($request, [
-				'user_name' => 'required',
-				'user_email' => 'required|email|unique:users,email,' . $id,
+								'user_name' => 'required',
+								'user_email' => 'required|email|unique:users,email,' . $id,
+				//                'company_id' => 'required',
+								'role_id' => 'required',
+			*/
+			$validator = Validator::make($request->all(),
+				[
+					'user_name' => 'required',
+					'user_email' => 'required|email|unique:users,email,' . $id,
 //                'company_id' => 'required',
-				'role_id' => 'required',
-			]);*/
-                        $validator = Validator::make( $request->all(),
-                        [
-                            'user_name' => 'required',
-				'user_email' => 'required|email|unique:users,email,' . $id,
-//                'company_id' => 'required',
-				'role_id' => 'required',
-			]);
-                        if ($validator->fails()) {
-                            return Redirect::back()->withErrors($validator)->withInput();
-                        }
+					'role_id' => 'required',
+				]);
+			if ($validator->fails()) {
+				return Redirect::back()->withErrors($validator)->withInput();
+			}
 			if ($request->input('is_active')) {
 				$is_active = 1;
 			} else {
@@ -576,7 +576,11 @@ class UserController extends Controller {
 
 	public function getOtherManagerList(Request $request) {
 		$query = User::with(['followers', 'following'])->where('role_id', 2);
-
+		if ($request->has('search') && !empty($request->has('search'))) {
+			$query = $query->where(function ($q) use ($request) {
+				$q->where('name', 'like', "%{$request->input('search_query')}%")->orWhere('email', 'like', "%{$request->input('search_query')}%");
+			});
+		}
 		$res = $query->orderBy('id', 'desc');
 		return Datatables::of($res)->addColumn('position', function ($row) {
 			return 'Company Manager';
@@ -592,10 +596,6 @@ class UserController extends Controller {
 			return count($row->followers);
 		})->addColumn('role', function ($row) {
 			return 'Company Manager';
-		})->filter(function ($query) use ($request) {
-			if ($request->has('search_query') && !empty(trim($request->get('search_query')))) {
-				$query->where('name', 'like', "%{$request->get('search_query')}%")->orWhere('email', 'like', "%{$request->get('search_query')}%");
-			}
 		})->rawColumns(['name', 'email', 'following_count', 'followers_count', 'points'])->make(true);
 	}
 
@@ -631,7 +631,11 @@ class UserController extends Controller {
 			// return $offset;
 		}
 		$query = User::with(['followers', 'following'])->where('role_id', 2);
-
+		if ($request->has('search') && !empty($request->has('search'))) {
+			$query = $query->where(function ($q) use ($request) {
+				$q->where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
+			});
+		}
 		$users_query = $query->orderBy('id', 'desc');
 		$users_count = count($users_query->get());
 		$users = $users_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();

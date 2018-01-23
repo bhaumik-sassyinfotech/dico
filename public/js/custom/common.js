@@ -3,9 +3,9 @@ $("#save").prop('disabled',true);
 window.onload = function() {
     // console.log(EXTERNAL_SWEARS);
 
-    setTimeout(function () {
-        runProfanity();
-    } , 10);
+    // setTimeout(function () {
+    //     runProfanity();
+    // } , 10);
 };
 
 function runProfanity(){

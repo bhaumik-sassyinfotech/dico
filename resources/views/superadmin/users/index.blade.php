@@ -69,7 +69,7 @@
                                                 <div class="btn-group top-set">
                                                     <form method="post" class="search-form">
                                                         <input id="search_query" type="text" placeholder="Search User"/>
-                                                        <input type="button" value="#" class="search-icon"/>
+                                                        <input type="button" id="search_btn" value="#" class="search-icon"/>
                                                     </form>
                                                     <button id="GoList" class="grid-view">
                                                         <img src="assets/img/icon/group-list.png" alt="group"

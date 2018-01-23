@@ -39,6 +39,7 @@ Route::group(['middleware' => 'admin'], function () {
 	/*Group*/
 	Route::match(['get', 'post'], 'group/mygroups', 'GroupController@myGroupGrid');
 	Route::match(['get', 'post'], 'group/list', 'GroupController@groupListing');
+	Route::match(['get', 'post'], 'group/delete_group', 'GroupController@deleteGroup');
 	Route::match(['get', 'post'], 'group/addUserByEmailAddress', 'GroupController@addUserByEmailAddress');
 	Route::match(['get', 'post'], 'group/uploadGroupPicture', 'GroupController@uploadGroupPicture');
 	Route::match(['get', 'post'], 'group/editUsers', 'GroupController@groupUsersEdit');

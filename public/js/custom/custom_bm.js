@@ -32,14 +32,15 @@ $(".sec_question").on('focus', function () {
 $(document).ready(function () {
 
     $('.checkAll').change(function(){
-        var ischecked= $('.checkAllBox').is(':checked');
+        
+        var ischecked= $('.checkAllBox').is(':checked');    
 
         if(ischecked)
         {//checked
             $('input:checkbox').not('.checkAllBox').prop('checked',true);
         } else 
         {//unchecked
-            alert('uncheckd ' + $(this).val());
+            $('input:checkbox').not('.checkAllBox').prop('checked',false);
         }
     });
     $('#users_listing').select2({
@@ -156,7 +157,7 @@ var groupTable = $('#group_table').DataTable({
     },
     searching: false,
     columns: [
-        {data: 'group_name'},
+        {data: 'group_name',sorting: false, orderable: false},
         {data: 'description'},
         {data: 'group_posts_count'},
         {data: 'group_users_count'},
@@ -710,6 +711,9 @@ $(document).on('click',"#search_btn",function(){
         method:"POST",
         success: function(response)
         {
+            companyuserTable.draw(); // custom.js
+            employeeTable_superadmin.draw(); // for super-user
+            otherManagerTable_superadmin.draw(); // for super-user
             $("#display-grid").empty();
             $("#display-grid").html(response.html);
             setTimeout(function()
@@ -832,3 +836,70 @@ function groupGrid(type)
     });    
 }
 
+// function notice_submit(){
+//     $(document).on('click','.multiple-action',function(){
+//         var id_arr = [];
+
+//         $(".checkbox").each(function() {
+//             id_arr.push($(this).val);
+//         });
+
+//         console.log(id_arr);
+//     });
+// }
+
+$(document).on('click','.multiple-action',function(){
+
+        var id_arr = [];
+        $(".checkbox").each(function() {
+            var that = $(this);
+            var ischecked= that.is(':checked');
+            if(ischecked)
+                id_arr.push(that.val());
+        });
+        
+        if(id_arr.length > 0)
+        {
+            id_arr = id_arr.join(',');
+            swal({
+                title: "Are you sure?",
+                text: "All details related to this group will be deleted!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes",
+                closeOnConfirm: false
+            } , function () {
+                var dataString = {_token:CSRF_TOKEN};
+
+              
+                    dataString.groups = id_arr;
+                    console.log(id_arr);
+                    $.ajax({
+                        url: SITE_URL + '/group/delete_group',
+                        method: 'POST',
+                        data: dataString,
+                        success: function (response) 
+                        {
+                            var status = response.status;
+                            
+                            
+                            if( status == 0) {
+                                swal("Error!", response.msg, "error");
+                            } else if (status == 1) 
+                            {
+                                swal("Success", response.msg, "success");
+                                setTimeout(function(){
+                                    location.reload();
+                                },1000);
+                                //groupEditTable.draw();
+                            } 
+                            // companyUsers();
+                        }
+                    });
+                });
+        } else {
+            swal("Error","Please select atleast one group. ",'error')
+        }
+
+});
