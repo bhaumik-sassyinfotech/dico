@@ -73,9 +73,8 @@ $(document).ready(function () {
                     var email = response.data.email;
                     $("#meeting_users_list")
                         .append($('<div class="member-wrap"></div>')
-                        .append($('<div class="member-img"></div>').append(profile_pic)).append($('<div class="member-details"></div>').append('<h3 class="text-12">'+name+'</h3>').append('<a href="mailto:"'+email+'>'+email+'</a>')));
+                        .append($('<div class="member-img"></div>').append(profile_pic)).append($('<div class="member-details"></div>').append('<h3 class="text-12">'+name+'</h3>').append('<a href="mailto:'+email+'">'+email+'</a>')));
                 }
-
             }
         });
     });
