@@ -42,7 +42,9 @@ $(document).ready(function () {
             alert('uncheckd ' + $(this).val());
         }
     });
-    $('#users_listing').select2();
+    $('#users_listing').select2({
+        placeholder: "Select Company first",
+    });
     $("#company_listing,#company_users,#group_owner").select2();
     $("#user_groups").select2();
     $("#employees_listing,#group_listing").select2();
