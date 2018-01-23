@@ -13,7 +13,7 @@
             <div class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
-                        <a href="{{ route('post.create') }}" style="display: none;" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
+                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
                     </div>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
@@ -31,8 +31,8 @@
                             <h4>
                                 <ul class="nav nav-tabs">
                                        <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Posts</span></a></li>
-                                       <?php /*<li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
-                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>*/?>
+                                       <li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
+                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>
                                 </ul>
                             </h4>
                             <div class="pull-right search-form">
@@ -99,8 +99,8 @@ if (!empty($posts)) {
                                                                  <div class="wrap-social pull-left">
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">
                                                                          <?php
-if (!empty($post['post_user_like'])) {
-			?>
+                                                                            if (!empty($post['post_user_like'])) {
+                                                                                                    ?>
                                                                              <i class="fa fa-thumbs-up"></i>
                                                                          <?php } else {?>
                                                                              <i class="fa fa-thumbs-o-up"></i>
@@ -209,7 +209,6 @@ if (!empty($group_posts)) {
                                                                     <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                                                                 </div>
-=
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>

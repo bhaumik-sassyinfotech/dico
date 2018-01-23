@@ -55,7 +55,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::match(['PUT', 'POST'], '/post/idea_update/{id}', 'PostController@idea_update')->name('idea.update');
 	Route::match(['get', 'POST'], '/post/idea_list', 'PostController@idea_list')->name('idea.list');
 	Route::resource('post', 'PostController');
-	Route::match(['get', 'POST'], '/post/deletePost', 'PostController@deletePost')->name('deletePost');
+	//Route::match(['get', 'POST'], '/post/deletePost', 'PostController@deletePost')->name('deletePost');
 	Route::get('like_post/{id}', 'PostController@like_post');
 	Route::get('dislike_post/{id}', 'PostController@dislike_post');
 	Route::get('get_post', 'PostController@get_post');
@@ -94,6 +94,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('deletecommentReply/{id}', 'PostController@deletecommentReply');
 	Route::post('comment_reply_update', 'PostController@comment_reply_update');
 	Route::post('uploadFileMeeting', 'MeetingController@uploadFileMeeting');
+        Route::post('deletepost','PostController@deletePost');
 });
 
 Route::get('/home', 'DashboardController@index')->name('home');

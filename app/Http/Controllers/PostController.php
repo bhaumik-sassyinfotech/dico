@@ -14,6 +14,7 @@
     use App\CommentReply;
     use App\Tag;
     use App\PostTag;
+    use App\PostView;
     use App\Group;
     use App\User;
     use App\GroupUser;
@@ -474,7 +475,7 @@
         
         public function destroy($id)
         {
-            //
+           // dd($id);
         }
         
         
@@ -1037,12 +1038,37 @@
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
         } 
-        public function deletePost( Request $request )
+        public function deletePost(Request $request)
         {
-            if($request->ajax())
+            $post_id = $request->get('post_id');
+            if(!empty($post_id)) {
+                DB::beginTransaction();
+               $getCommentId = Comment::where('post_id',$post_id)->get();
+               $commentId = array_pluck($getCommentId,'id');
+               CommentReply::whereIn('comment_id',$commentId)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               CommentLike::whereIn('comment_id',$commentId)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               CommentFlag::whereIn('comment_id',$commentId)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               Comment::whereIn('id',$commentId)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               Attachment::where(['type_id'=>$post_id,'type'=>1])->update(['deleted_at'=>Carbon\Carbon::now()]);
+               PostTag::where('post_id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               PostFlag::where('post_id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               PostLike::where('post_id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               PostView::where('post_id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()]);
+               if(Post::where('id',$post_id)->update(['deleted_at'=>Carbon\Carbon::now()])) {
+                   DB::commit();
+                   echo json_encode(array('status' => 1,'msg' => 'Post '.Config::get('constant.DELETE_MESSAGE')));
+               } else {
+                   DB::rollBack();
+                  echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE'))); 
+               }
+            }else {
+                DB::rollBack();
+                echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+            }
+           /* if($request->ajax())
             {
                 $post_id = $request->input('post_id');
-            }
+            }*/
         }
         public function edit_challenge($id , Request $request) {
             return view($this->folder . '.post.edit_challenge');

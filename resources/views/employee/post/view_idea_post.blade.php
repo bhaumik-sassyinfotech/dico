@@ -1,4 +1,3 @@
-
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
@@ -43,7 +42,7 @@
                                         ?>
                                         <a class="set-edit" href="{{route('post.edit',Helpers::encode_url($post->id))}}">e</a>
                                         <?php /*<a class="set-edit" href="{{route('idea.edit',$post->id)}}">w</a>*/?>
-                                        <a class="set-delete" href="{{ url('meeting/deleteIdeaPost/'.$post->id) }}">w</a>
+                                        <a class="set-delete" href="javascript:void(0);" onclick="deletepost({{$post->id}})">w</a>
                                         <?php
                                             }
                                         ?>
@@ -418,6 +417,35 @@
 @stop
 @push('javascripts')
 <script type="text/javascript">
+    function deletepost(id) {
+        swal({
+            title: "Are you sure?",
+            text: "you will not able to recover this post.",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function () {
+            var token = '<?php echo csrf_token() ?>';
+            var formData = {post_id : id, _token : token};
+            $.ajax({
+                url: SITE_URL + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    if (res.status == 1) {
+                        ajaxResponse('success',res.msg);
+                        //location.reload();
+                        window.location.href = SITE_URL + '/post';
+                    }
+                    else {
+                        ajaxResponse('error',res.msg);
+                    }
+                }
+            });
+        });
+    }
     function reportPostFlagged() {
         if($('#post_flagged_form').valid() == 1) {
             var reason = $('#post_message_autor').val();

@@ -19,7 +19,7 @@
                             {{ method_field('POST') }}
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label>Type:</label>
+                                <label>Type</label>
                                 <div class="check-wrap">
                                     <label class="check">Private
                                         <input class="privacy_type" type="checkbox" name="privacy[]" id="private" value="private">
@@ -32,12 +32,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="meeting_title" >Meeting title:*</label>
+                                <label for="meeting_title" >Meeting title*</label>
                                 <input type="text" name="meeting_title" id="meeting_title" class="form-control required"/>
                             </div>
                     
                             <div class="form-group">
-                                <label  for="meeting_description"> Meeting description: </label>
+                                <label  for="meeting_description">Meeting description</label>
                                 <textarea name="meeting_description" id="meeting_description"
                                           class="form-control"></textarea>
                             </div>
@@ -81,7 +81,7 @@
                                                         <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <input type="submit" value="ADD" class="st-btn">
+                                                <input type="submit" name="add_employee" id="add_employee" value="ADD" class="st-btn">
                                             <div class="post-category" id="meeting_users_list">
                                             </div>
                                         </div>

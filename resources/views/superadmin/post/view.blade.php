@@ -553,6 +553,35 @@ if (!empty($post->postAttachment)) {
 @stop
 @push('javascripts')
 <script type="text/javascript">
+    function deletepost(id) {
+        swal({
+            title: "Are you sure?",
+            text: "you will not able to recover this post.",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function () {
+            var token = '<?php echo csrf_token() ?>';
+            var formData = {post_id : id, _token : token};
+            $.ajax({
+                url: SITE_URL + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    if (res.status == 1) {
+                        ajaxResponse('success',res.msg);
+                        //location.reload();
+                        window.location.href = SITE_URL + '/post';
+                    }
+                    else {
+                        ajaxResponse('error',res.msg);
+                    }
+                }
+            });
+        });
+    }
     function markSolution(commentid, userid, postid)
     {
         swal({
@@ -567,38 +596,38 @@ if (!empty($post->postAttachment)) {
         var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
         $("#spinner").show();
             $.ajax({
-            url: SITE_URL + '/comment_solution',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        $("#spinner").hide();
-                        var res = JSON.parse(response);
-                        var html = "";
-                        if (res.status == 1) {
+                url: SITE_URL + '/comment_solution',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $("#spinner").hide();
+                    var res = JSON.parse(response);
+                    var html = "";
+                    if (res.status == 1) {
+                    if($('#icon_'+commentid).hasClass('fa-star-o')) {
+                        $('#icon_'+commentid).removeClass('fa-star-o');
+                        $('#icon_'+commentid).addClass('fa-star');
+                    }
+                    //html += '<i class="fa fa-star" aria-hidden="true">';
+                    } else if (res.status == 2) {
+                    //html += '<i class="fa fa-star" aria-hidden="true">';
                         if($('#icon_'+commentid).hasClass('fa-star-o')) {
                             $('#icon_'+commentid).removeClass('fa-star-o');
                             $('#icon_'+commentid).addClass('fa-star');
                         }
-                        //html += '<i class="fa fa-star" aria-hidden="true">';
-                        } else if (res.status == 2) {
-                        //html += '<i class="fa fa-star" aria-hidden="true">';
-                            if($('#icon_'+commentid).hasClass('fa-star-o')) {
-                                $('#icon_'+commentid).removeClass('fa-star-o');
-                                $('#icon_'+commentid).addClass('fa-star');
-                            }
-                        ajaxResponse('error',res.msg);
-                        } else {
-                        //html += '<i class="fa fa-star-o" aria-hidden="true">';
-                            if($('#icon_'+commentid).hasClass('fa-star')) {
-                                $('#icon_'+commentid).removeClass('fa-star');
-                                $('#icon_'+commentid).addClass('fa-star-o');
-                            }
-                        ajaxResponse('error',res.msg);
+                    ajaxResponse('error',res.msg);
+                    } else {
+                    //html += '<i class="fa fa-star-o" aria-hidden="true">';
+                        if($('#icon_'+commentid).hasClass('fa-star')) {
+                            $('#icon_'+commentid).removeClass('fa-star');
+                            $('#icon_'+commentid).addClass('fa-star-o');
                         }
-                    //$('#solution_' + commentid).before(html);
-                    },error: function(e) {
-                        swal("Error", e, "error");
+                    ajaxResponse('error',res.msg);
                     }
+                //$('#solution_' + commentid).before(html);
+                },error: function(e) {
+                    swal("Error", e, "error");
+                }
             });
         });
     }
@@ -823,6 +852,7 @@ if (!empty($post->postAttachment)) {
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
                         $('#flaggedComment').modal('hide');
+                        location.reload();
                         //window.location.href = SITE_URL + '/post';
                         //location.reload();
                         //$('#comment_text_'+id).attr('readonly',true);

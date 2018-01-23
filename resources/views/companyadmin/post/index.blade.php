@@ -209,7 +209,6 @@ if (!empty($group_posts)) {
                                                                     <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                                                                 </div>
-=
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
@@ -247,8 +246,8 @@ if (!empty($grouppost['post_user_dis_like'])) {
 
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                             <?php
-if (!empty($grouppost['post_comment'])) {
-			?>
+                                                                            if (!empty($grouppost['post_comment'])) {
+                                                                                                    ?>
                                                                                     <i class="fa fa-comments"></i>
                                                                                 <?php } else {?>
                                                                                     <i class="fa fa-comments-o"></i>
@@ -261,8 +260,8 @@ if (!empty($grouppost['post_comment'])) {
                                                                     </div>
                                                                 </div>
                                                                 <?php
-if (!empty($grouppost['post_tag'])) {
-			?>
+                                                                    if (!empty($grouppost['post_tag'])) {
+                                                                ?>
                                                                 <hr>
                                                                 <div class="post-circle">
                                                                     <?php foreach ($grouppost['post_tag'] as $mypost_tag) {?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
@@ -272,17 +271,17 @@ if (!empty($grouppost['post_tag'])) {
                                                        </div>
                                                    </div>
                                     <?php
-}
-} else {
-	echo "No post found.";
-}
-?>
+                                        }
+                                        } else {
+                                                echo "No post found.";
+                                        }
+                                        ?>
                                     <?php
-if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
-	?>
+                                        if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
+                                                ?>
                                     <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">View More</a></div>
                                     <?php
-}?>
+                                        }?>
                                     <input type="hidden" id="count_grouppost" value="{{$count_group_post}}">
                                 </div>
                                 <!-- END GROUP POST -->
@@ -417,34 +416,6 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
 @endsection
 @push('javascripts')
 <script type="text/javascript">
-    function deletepost(id) {
-    swal({
-    title: "Are you sure?",
-            text: "you will not able to recover this post.",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-    }, function () {
-        var token = '<?php echo csrf_token() ?>';
-        var formData = {post_id : id, _token : token};
-        $.ajax({
-        url: "{{ route('post.destroy'," + id + ") }}",
-        type: "POST",
-        data: formData,
-        success: function (response) {
-            var res = JSON.parse(response);
-            if (res.status == 1) {
-                swal("Success", res.msg, "success");
-                location.reload();
-            }
-            else {
-                swal("Error", res.msg, "error");
-            }
-        }
-    });
-    });
-    }
     function loadMorePost() {
     //alert("here");
     //alert($('#search_text').val()); return false;
