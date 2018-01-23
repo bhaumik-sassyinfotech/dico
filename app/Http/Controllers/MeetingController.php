@@ -616,10 +616,10 @@
                         $postData[ 'type' ]      = 1;
                         $postData[ 'type_id' ]   = $id;
                         $postData[ 'user_id' ]   = Auth::user()->id;
-                        $attachment              = Attachment::insert($postData);
+                        $attachment              = MeetingAttachment::insert($postData);
                         if($attachment) {
-                            $meeting = Meeting::with(['postAttachment','postAttachment.attachmentUser'])->where('id',$id)->first();
-                            return view($this->folder . '.post.attachmentList',compact('post'));
+                            $meeting = Meeting::with(['meetingAttachment','meetingAttachment.attachmentUser'])->where('id',$id)->first();
+                            return view($this->folder . '.meeting.attachmentList',compact('meeting'));
                         }
                     }
                 }else {

@@ -51,9 +51,11 @@ $(document).ready(function () {
     $("#employees_listing,#group_listing").select2();
 
     /*show users in box while creating new meeting*/
-    $('#employees_listing').on('select2:select',function (e) {
-        var data = e.params.data;
-        var dataString = {_token:CSRF_TOKEN,user_id: data.id};
+    //$('#employees_listing').on('select2:select',function (e) {
+    $('#add_employee').click(function(e) {
+        //var data = e.params.data;
+        var userId = $('#employees_listing').val();
+        var dataString = {_token:CSRF_TOKEN,user_id: userId};
         e.preventDefault();
         // console.log(SITE_URL+'/getUserProfile');
          console.log(dataString);

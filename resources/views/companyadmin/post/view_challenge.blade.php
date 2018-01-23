@@ -503,6 +503,35 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
 @stop
 @push('javascripts')
 <script type="text/javascript">
+    function deletepost(id) {
+        swal({
+            title: "Are you sure?",
+            text: "you will not able to recover this post.",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function () {
+            var token = '<?php echo csrf_token() ?>';
+            var formData = {post_id : id, _token : token};
+            $.ajax({
+                url: SITE_URL + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    if (res.status == 1) {
+                        ajaxResponse('success',res.msg);
+                        //location.reload();
+                        window.location.href = SITE_URL + '/post';
+                    }
+                    else {
+                        ajaxResponse('error',res.msg);
+                    }
+                }
+            });
+        });
+    }
     function markSolution(commentid, userid, postid)
     {
         swal({
