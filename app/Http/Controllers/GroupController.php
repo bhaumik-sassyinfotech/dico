@@ -63,12 +63,10 @@ class GroupController extends Controller {
 		//
 		$currUser = Auth::user();
 
-		$groups_query = Group::withCount(['groupUsers', 'groupPosts'])->orderBy('id', 'DESC');
+		$groups_query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts'])->orderBy('id', 'DESC');
 
-		if ($currUser->role_id == 2) {
-			$groups_query = Group::with(['groupUsers' => function ($query) use ($currUser) {
-				return $query->where('user_id', $currUser->id);
-			}])->where('company_id', $currUser->company_id)->orderBy('id', 'DESC');
+		if ($currUser->role_id != 1) {
+			$groups_query = $groups_query->where('company_id', $currUser->company_id);
 		}
 		$groups_count = $groups_query->count();
 		$groups = $groups_query->limit(POST_DISPLAY_LIMIT)->get();
@@ -244,16 +242,24 @@ class GroupController extends Controller {
 		// DB::statement(DB::raw('set @rownum=0'));
 		$group_query = '';
 
-		$group_query = Group::withCount(['groupUsers', 'groupPosts'])->orderBy('id', 'DESC');
-
-		if ($request->has('search_text') && !empty($request->input('search_text'))) {
-			$group_query = $group_query->where('group_name', 'like', "%{$request->input('search_text')}%")
-				->orWhere('description', 'like', "%{$request->input('search_text')}%");
+		$group_query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts']);
+		if ($currUser->role_id != '1') {
+			$group_query = $group_query->where('company_id', $currUser->company_id);
 		}
-		$group = $group_query->get();
+		if ($request->has('search_text') && !empty($request->input('search_text'))) {
+			// $group_query = $group_query->where('group_name', 'like', "%{$request->input('search_text')}%")
+			// 	->where('description', 'like', "%{$request->input('search_text')}%");
+			$group_query = $group_query->where(function ($q) use ($currUser, $request) {
+				$q->where('group_name', 'like', "%{$request->input('search_text')}%")
+					->orWhere('description', 'like', "%{$request->input('search_text')}%");
+			});
+		}
+
+		$group = $group_query->orderBy('id', 'DESC')->get();
 		// dd($group);
 		return Datatables::of($group)->addColumn('group_name', function ($row) {
-			return '<label class="check"><p>' . $row->group_name . '</p><input type="checkbox"><span class="checkmark"></span></label>';
+			$id = Helpers::encode_url($row->id);
+			return '<label class="check"><p><a href="' . route('group.edit', [$id]) . '" >' . $row->group_name . '</a></p><input type="checkbox"><span class="checkmark"></span></label>';
 		})->addColumn('description', function ($row) {
 			return '<p class="width">' . $row->description . '</p>';
 		})->addColumn('group_posts_count', function ($row) {
@@ -465,21 +471,38 @@ class GroupController extends Controller {
 		if ($request->has('offset')) {
 			$offset = $request->input('offset');
 		}
-		$query = '';
-		if ($currUser->role_id == 1) {
-			$query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts'])->orderBy('id', 'DESC');
-		} else if ($currUser->role_id == 2) {
-			$query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts'])->with(['groupUsers' => function ($query) use ($currUser) {
-				return $query->where('user_id', $currUser->id);
-			}])->where('company_id', $currUser->company_id)->orderBy('id', 'DESC');
+
+		// $query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts']);
+
+		// if ($request->has('search_text') && !empty($request->input('search_text'))) {
+		// 	// return $request->input('search_text');
+		// 	$query = $query->where('group_name', 'like', "%{$request->input('search_text')}%")
+		// 		->orWhere('description', 'like', "%{$request->input('search_text')}%");
+		// }
+
+		// if ($currUser->role_id != 1) {
+		// 	$query = $query->where('company_id', $currUser->company_id);
+		// }
+
+		$group_query = '';
+
+		$group_query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts']);
+
+		// return $currUser->company_id;
+		if ($currUser->role_id != 1) {
+			$group_query = $group_query->where('company_id', $currUser->company_id);
 		}
 		if ($request->has('search_text') && !empty($request->input('search_text'))) {
-			$query = $query->where('group_name', 'like', "%{$request->input('search_text')}%")
-				->orWhere('description', 'like', "%{$request->input('search_text')}%");
+			// $group_query = $group_query->where('group_name', 'like', "%{$request->input('search_text')}%")
+			// 	->where('description', 'like', "%{$request->input('search_text')}%");
+			$group_query = $group_query->where(function ($q) use ($currUser, $request) {
+				$q->where('group_name', 'like', "%{$request->input('search_text')}%")
+					->orWhere('description', 'like', "%{$request->input('search_text')}%");
+			});
 		}
 
-		$group_count = $query->count();
-		$groups = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+		$group_count = $group_query->count();
+		$groups = $group_query->orderBy('id', 'DESC')->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
 		// return $groups;
 		$html = view::make($this->folder . '.groups.ajax_mygroups', compact('groups'));
 		$output = array('html' => $html->render(), 'count' => $group_count);

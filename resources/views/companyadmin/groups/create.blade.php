@@ -19,25 +19,6 @@
                         {{--<h4>Create Group</h4>--}}
                     {{--</div>--}}
                     <div class="panel-body">
-                        @if(session()->has('success'))
-                            <div class="alert alert-dismissable alert-success">
-                                {{ session()->get('success') }}
-                            </div>
-                        @endif
-                        @if(session()->has('err_msg'))
-                            <div class="alert alert-dismissable alert-danger">
-                                {{ session()->get('err_msg') }}
-                            </div>
-                        @endif
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
@@ -59,7 +40,7 @@
                                     <select name="company_listing" class="form-control required" id="company_listing">
                                         <option value="">Select Company:*</option>
                                         @if(!is_null(old('company_listing')))
-                                            <?php $company_id = old('company_listing'); ?>
+                                            <?php $company_id = old('company_listing');?>
                                             @foreach($companies as $company)
                                                 <option {{ $company_id == $company->id ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->company_name }}</option>
                                             @endforeach

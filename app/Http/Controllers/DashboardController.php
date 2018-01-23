@@ -59,6 +59,32 @@ class DashboardController extends Controller {
 		}
 	}
 
+	public function update_profile_pic(Request $request) {
+		$validator = Validator::make($request->all(), [
+			'profile_image' => 'required|image|mimes:jpg,png,jpeg',
+		]);
+		// dd($request->all());
+		$user_id = Auth::user()->id;
+		$file = $request->file('profile_image');
+		$postData = [];
+		if ($file != "") {
+			//echo "here";die();
+			$fileName = $file->getClientOriginalName();
+			$extension = $file->getClientOriginalExtension() ?: 'png';
+			$folderName = '/uploads/profile_pic/';
+			$destinationPath = public_path() . $folderName;
+			$safeName = str_random(10) . '.' . $extension;
+			$file->move($destinationPath, $safeName);
+			$postData['profile_image'] = $safeName;
+		}
+		if (!empty($postData)) {
+			if (User::Where('id', $user_id)->update($postData)) {
+				return Redirect::back()->with('success', 'Profile ' . Config::get('constant.UPDATE_MESSAGE'));
+			} else {
+				return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+			}
+		}
+	}
 	public function update_profile(Request $request) {
 		try
 		{

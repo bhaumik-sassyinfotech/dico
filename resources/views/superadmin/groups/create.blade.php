@@ -59,7 +59,7 @@
                                     <select name="company_listing" class="form-control required" id="company_listing">
                                         <option value="">Select Company:*</option>
                                         @if(!is_null(old('company_listing')))
-                                            <?php $company_id = old('company_listing'); ?>
+                                            <?php $company_id = old('company_listing');?>
                                             @foreach($companies as $company)
                                                 <option {{ $company_id == $company->id ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->company_name }}</option>
                                             @endforeach
@@ -79,8 +79,8 @@
                                 <div class="col-md-6">
                                     <label for="users_listing">Users:* </label>
                                     <select name="users_listing[]" id="users_listing" class="form-control required"
-                                            multiple="multiple">
-                                        <option value="">Select company first</option>
+                                            multiple="multiple" placeholder="Select company first">
+                                        <!-- <option value=""></option> -->
                                     </select>
                                 </div>
                             </div>

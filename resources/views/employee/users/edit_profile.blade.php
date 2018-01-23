@@ -4,9 +4,8 @@
     <div id="page-content" class="employe-profile">
         <div id='wrap'>
             <div class="container">
-                @include('template.notification')
                 <div class="row">
-                    <form name="general_profile_form" id="upload_form" method="post" action=" {{ url('update_profile') }} " enctype="multipart/form-data">
+                    <form name="general_profile_form" id="upload_form" method="post" action=" {{ url('update_profile_pic') }} " enctype="multipart/form-data">
 {{ csrf_field() }}
                         <div class="follow_box form_box col-sm-12 col-md-2">
                             <input accept="image/x-png,image/gif,image/jpeg" type="file" class="fileinput" name="profile_image" id="image">
@@ -23,7 +22,11 @@ if ($user->profile_image == "") {
 ?>
                                 <img src="{{ $pic }}" id="preview_img">
                             </div>
-
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input type="submit" class="st-btn" name="" style="position: relative; top: 5px; left: 180px; height: 40px;">
+                                </div>
+                            </div>
                         </div>
                         <div class="follow-block col-sm-12 col-md-10">
                             <div class="group-box">

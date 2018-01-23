@@ -27,6 +27,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::match(['get', 'post'], '/getUserProfile', 'UserController@getUserProfile');
 	Route::get('edit_profile', 'DashboardController@edit_profile');
 	Route::post('update_profile', 'DashboardController@update_profile');
+	Route::post('update_profile_pic', 'DashboardController@update_profile_pic');
 	Route::post('security_update_profile', 'UserController@security_update_profile');
 	Route::post('changepassword_update_profile', 'UserController@changepassword_update_profile');
 	Route::post('notification_update_profile', 'UserController@notification_update_profile');
@@ -92,7 +93,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('getCommentReply', 'PostController@getCommentReply');
 	Route::get('deletecommentReply/{id}', 'PostController@deletecommentReply');
 	Route::post('comment_reply_update', 'PostController@comment_reply_update');
-        Route::post('uploadFileMeeting','MeetingController@uploadFileMeeting');
+	Route::post('uploadFileMeeting', 'MeetingController@uploadFileMeeting');
 });
 
 Route::get('/home', 'DashboardController@index')->name('home');
