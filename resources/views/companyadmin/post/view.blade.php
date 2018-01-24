@@ -248,43 +248,6 @@ $comment_id = Helpers::encode_url($commentUser->id);
                                                 <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a><?php } ?>
 
                                             </div>
-                                            <?php /*<div class="star-wrap">
-			<?php if ($post['user_id'] == Auth::user()->id) { ?>
-			<?php
-			if ($postComment['is_correct'] == 1) { ?>
-			<i class="fa fa-star" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
-			} else { ?>
-			<i class="fa fa-star-o" id="icon_{{$postComment['id']}}" aria-hidden="true"></i><?php
-			} ?>
-			<a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">
-			Solution</a>
-			<?php
-			} else {
-			if ($postComment['is_correct'] == 1) {
-			?><i class="fa fa-star" aria-hidden="true"></i>Solution<?php
-			}
-			}
-			?>
-			</div>
-			<div class="btn-toolbar">
-			<div class="btn-group hidden-xs">
-			<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-			<div class="btn-toolbar">
-			<line></line>
-			<line></line>
-			<line></line>
-			</div>
-			</a>
-			<ul class="dropdown-menu">
-			<?php if ($commentUser['id'] == Auth::user()->id) { ?>
-			<li><a href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">Edit Comment</a></li>
-			<?php } ?>
-			<li><a href="#">Report Comment</a></li>
-			<?php if ($commentUser['id'] == Auth::user()->id) { ?>
-			<li><a href="{{url('/deletecomment',$postComment['id'])}}">Delete Comment</a></li><?php } ?>
-			</ul>
-			</div>
-			</div> */?>
                                         </div>
                                     </div>
                                 </div>
@@ -299,8 +262,8 @@ $comment_id = Helpers::encode_url($commentUser->id);
                                         <a href="javascript:void(0)" id="like_comment_{{$postComment['id']}}" onclick="likeComment({{$postComment['id']}},{{$postComment['id']}});">
                                             <?php
                                             //echo "<pre>";print($postComment['commentUserLike']);
-if (!empty($postComment['commentUserLike'])) {
-				?>
+                                                if (!empty($postComment['commentUserLike'])) {
+                                            ?>
                                                 <i class="fa fa-thumbs-up"></i>
                                             <?php } else {?>
                                                 <i class="fa fa-thumbs-o-up"></i>
@@ -311,8 +274,8 @@ if (!empty($postComment['commentUserLike'])) {
                                     <div class="rply-count dislike">
                                         <a href="javascript:void(0)" id="dislike_comment_{{$postComment['id']}}" onclick="dislikeComment({{$postComment['id']}},{{$postComment['id']}});">
                                             <?php
-if (!empty($postComment['commentUserDisLike'])) {
-				?>
+                                                if (!empty($postComment['commentUserDisLike'])) {
+                                            ?>
                                                 <i class="fa fa-thumbs-down"></i>
                                             <?php } else {?>
                                                 <i class="fa fa-thumbs-o-down"></i>
@@ -323,7 +286,7 @@ if (!empty($postComment['commentUserDisLike'])) {
                                     </div>
                                     <div class="rply-count">
                                         <a href="javascript:void(0);" onclick="openCommentReplyBox({{$postComment['id']}})" id="modalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
-                                       <span><?php echo count($postComment['commentReply']); ?></span>
+                                        <span><?php echo count($postComment['commentReply']); ?></span>
                                     </div>
 
                                     <!-- reply box start -->

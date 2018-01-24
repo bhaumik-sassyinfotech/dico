@@ -117,7 +117,7 @@
                                                 $profile_img = '';
                                                 //$profile_pic = $comment->commentUser->profile_image;
                                                 if(empty($comment->commentUser->profile_image))
-                                                    $profile_img = PROFILE_PATH;
+                                                    $profile_img = DEFAULT_PROFILE_IMAGE;
                                                 else
                                                     $profile_img = PROFILE_PATH.$comment->commentUser->profile_image;
                                             ?>
@@ -174,37 +174,55 @@
                                             {{ $comment->comment_reply }}
                                         </p>
                                         <div class="rply-box">
-                                        <a href="#" class="rply-count like">
-                                            <img src="{{asset('assets/img/like.png')}}" alt="post-like"><p>08</p>
-                                        </a>
-                                        <a href="#" class="rply-count dislike">
-                                            <img src="{{asset('assets/img/like.png')}}" alt="post-like"><p>08</p>
-                                        </a>
-                                        <div class="rply-count">
-                                                <a href="#myModal" data-toggle="modal"><img src="{{asset('assets/img/post-rply.png')}}" alt="post-rply"> </a>
+                                            <div class="rply-count like">
+                                                <a href="javascript:void(0)" id="like_comment_{{$comment['id']}}" onclick="likeComment({{$comment['id']}},{{$comment['id']}});">
+                                                <?php
+                                                    if (!empty($comment['commentUserLike'])) {
+                                                ?>
+                                                    <i class="fa fa-thumbs-up"></i>
+                                                <?php } else {?>
+                                                    <i class="fa fa-thumbs-o-up"></i>
+                                                <?php }?>
+                                                </a>
+                                                <span id="comment_like_count_{{$comment['id']}}"><?php echo count($comment['commentLike']); ?></span>
+                                            </div>
+                                            <div class="rply-count dislike">
+                                                <a href="javascript:void(0)" id="dislike_comment_{{$comment['id']}}" onclick="dislikeComment({{$comment['id']}},{{$comment['id']}});">
+                                                <?php
+                                                    if (!empty($comment['commentUserDisLike'])) {
+                                                ?>
+                                                    <i class="fa fa-thumbs-down"></i>
+                                                <?php } else {?>
+                                                    <i class="fa fa-thumbs-o-down"></i>
+                                                <?php }?>
+                                                </a>
+                                                <span id="comment_dislike_count_{{$comment['id']}}"><?php echo count($comment['commentDisLike']); ?></span>
+                                            </div>
+                                            <div class="rply-count">
+                                            <a href="javascript:void(0);" onclick="openCommentReplyBox({{$comment['id']}})" id="modalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
+                                            <span><?php echo count($comment['commentReply']); ?></span>
                                                 <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
-                                                                        <h4 class="modal-title">Report Comment</h4>
-                                                                    </div>
-                                                                    <form method="post" class="common-form">
-                                                                     <div class="form-group">
-                                                                        <label>Message To Author:</label> 
-                                                                         <textarea type="text" placeholder="Type here"></textarea>
-                                                                     </div> 
-                                                                     <div class="form-group">
-                                                                         <div class="btn-wrap-div">
-                                                                              <input class="st-btn" type="submit" value="Submit">
-                                                                              <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
-                                                                         </div>     
-                                                                     </div>     
-                                                                    </form>
-                                                                </div><!-- /.modal-content -->
-                                                            </div><!-- /.modal-dialog -->
-                                                         </div>
-                                                <p>4</p>  
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
+                                                                <h4 class="modal-title">Report Comment</h4>
+                                                            </div>
+                                                            <form method="post" class="common-form">
+                                                             <div class="form-group">
+                                                                <label>Message To Author:</label> 
+                                                                 <textarea type="text" placeholder="Type here"></textarea>
+                                                             </div> 
+                                                             <div class="form-group">
+                                                                 <div class="btn-wrap-div">
+                                                                      <input class="st-btn" type="submit" value="Submit">
+                                                                      <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                                 </div>     
+                                                             </div>     
+                                                            </form>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div>
                                             </div>    
                                     </div>
                                         <?php /*<div class="rply-box">
@@ -293,8 +311,8 @@
                             <div class="idea-grp post-category" id="meetingAttachment">
                         <?php
                             //dd($post->postAttachment);
-                            if(!empty($meeting->postAttachment) && count($meeting->postAttachment) > 0) {
-                            foreach($meeting->postAttachment as $attachment) {
+                            if(!empty($meeting->meetingAttachment) && count($meeting->meetingAttachment) > 0) {
+                            foreach($meeting->meetingAttachment as $attachment) {
                         ?>
                         <div class="member-wrap files-upload">
 
