@@ -205,6 +205,7 @@
                 if( !in_array( Auth::user()->id , $meeting_user_ids ) )
                     return Redirect::route('meeting.index')->with('err_msg' , 'You are not allowed to access a private meeting as you not a part of it.');
             }
+            //dd($meeting);
 //            return $uploadedFiles = MeetingAttachment::with(['attachmentUser'])->whereIn('user_id',$meeting_user_ids)->get();
 //             $comments = Meeting::with()->where('id', $id)->get();
 

@@ -1,8 +1,7 @@
 @extends('template.default')
+<title>DICO - Meeting</title>
 @section('content')
-
-    @include('template.notification')
-    <div id="page-content">
+    <div id="page-content" class="new-meeting-details" style="min-height: 943px;">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -17,11 +16,10 @@
                 <div class="row">
                     <form class="common-form" method="POST" name="createMeeting" action="{{ route('meeting.store') }}" id="createMeeting">
                     <div class="col-sm-8" id="post-detail-left">
-                        @include('template.notification')
                             {{ method_field('POST') }}
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label>Type:</label>
+                                <label>Type</label>
                                 <div class="check-wrap">
                                     <label class="check">Private
                                         <input class="privacy_type" type="checkbox" name="privacy[]" id="private" value="private">
@@ -34,12 +32,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="meeting_title" >Meeting title:*</label>
+                                <label for="meeting_title" >Meeting title*</label>
                                 <input type="text" name="meeting_title" id="meeting_title" class="form-control required"/>
                             </div>
                     
                             <div class="form-group">
-                                <label  for="meeting_description"> Meeting description: </label>
+                                <label  for="meeting_description">Meeting description</label>
                                 <textarea name="meeting_description" id="meeting_description"
                                           class="form-control"></textarea>
                             </div>
@@ -60,9 +58,8 @@
                                 <div class="tab-content">
                                     <div class="tab-pane clearfix active" id="home1">
                                         <div class="main-group-wrap">
-                                            <div class="category-tab">
-                                                <label for="" class="check">Group</label>
-                                                <label style="display:none;" class="check">Group<input type="checkbox">
+                                            <div class="category-tab"> 
+                                                <label class="check">Groups<input type="checkbox">
                                                     <span class="checkmark"></span>
                                                 </label>
                                             </div>
@@ -73,12 +70,10 @@
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 @endforeach
-                                                
                                             </div>
                                         </div>
                                     </div>
                                     <div id="profile1" class="tab-pane">
-                                
                                         <div class="category-tab">
                                                 {{--<input type="text" placeholder="Member Name" />--}}
                                                 <select name="employees[]" id="employees_listing" class="form-control" multiple="multiple" style="width: 84%">
@@ -86,11 +81,10 @@
                                                         <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <a href="javascript:;" class="st-btn ">ADD</a>
+                                                <input type="submit" name="add_employee" id="add_employee" value="ADD" class="st-btn">
                                             <div class="post-category" id="meeting_users_list">
                                             </div>
                                         </div>
-                                        
                                         @php
                                         /*
                                         <div class="post-category" id="meeting_users_list">
