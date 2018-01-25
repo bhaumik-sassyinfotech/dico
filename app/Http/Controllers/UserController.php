@@ -144,6 +144,8 @@ class UserController extends Controller {
 			} else {
 				$is_suspended = 0;
 			}
+			$password = str_random(6);
+			$email = $request->input('user_email');
 
 			$user = new User;
 			$user->name = $request->input('user_name');
@@ -152,9 +154,9 @@ class UserController extends Controller {
 			$user->company_id = $request->input('company_id');
 			$user->is_active = $is_active;
 			$user->is_suspended = $is_suspended;
-			$user->password = Hash::make('123456');
+			$user->password = Hash::make($password);
 			$user->created_at = Carbon\Carbon::now();
-
+			$this->custom_send_mail($email, $password);
 			if ($user->save()) {
 				if (!empty($request->user_groups)) {
 // add user in the groups selected
@@ -174,6 +176,39 @@ class UserController extends Controller {
 		} catch (\exception $e) {
 			return Redirect::back()->with('err_msg', $e->getMessage());
 		}
+	}
+
+	public function custom_send_mail($email, $password) {
+
+		$emailTemplate = Helpers::getEmailTemplateBySlug('NEW_USER');
+//        echo $emailTemplate->email_body;die;
+		if ($emailTemplate != null) {
+			$parse = [
+				'NAME' => 'Bhaumik Mehta',
+				'EMAIL' => $email,
+				'PASSWORD' => $password,
+				'LINK' => route('login'),
+			];
+			$subject = $emailTemplate->subject;
+			$parsedTemplate = Helpers::parse_template($emailTemplate->email_body, $parse, $emailTemplate->allowed_fields);
+			$message = $parsedTemplate['data'];
+
+			$message = html_entity_decode($message);
+			$adminEmail = env('MAIL_FROM_ADDRESS');
+			$mailData = array('to' => $email,
+				'from' => $adminEmail,
+				'from_name' => env('MAIL_FROM_NAME', 'Dico'),
+				'reply_to' => $adminEmail, // reply_to
+				'subject' => $subject,
+				'message' => $message,
+			);
+
+			$res = Helpers::sendMail($mailData);
+
+			return $res;
+		}
+
+		return "template not found";
 	}
 
 	/**
@@ -489,39 +524,6 @@ class UserController extends Controller {
 		}
 
 		return response()->json($data, '200');
-	}
-
-	public function test() {
-
-		$emailTemplate = Helpers::getEmailTemplateBySlug('NEW_USER');
-//        echo $emailTemplate->email_body;die;
-		if ($emailTemplate != null) {
-			$randomString = str_random(10);
-			$parse = [
-				'NAME' => 'Bhaumik Mehta',
-				'PASSWORD' => $randomString,
-//                    'HASH'     => bcrypt($randomString) ,
-			];
-			$subject = $emailTemplate->subject;
-			$parsedTemplate = Helpers::parse_template($emailTemplate->email_body, $parse, $emailTemplate->allowed_fields);
-			$message = $parsedTemplate['data'];
-
-			$message = html_entity_decode($message);
-			$adminEmail = env('MAIL_FROM_ADDRESS');
-			$mailData = array('to' => env('ADMIN_MAIL'),
-				'from' => $adminEmail,
-				'from_name' => env('MAIL_FROM_NAME', 'Dico'),
-				'reply_to' => $adminEmail, // reply_to
-				'subject' => $subject,
-				'message' => $message,
-			);
-
-			$res = Helpers::sendMail($mailData);
-
-			return $res;
-		}
-
-		return "template not found";
 	}
 
 	public function getUserProfile(Request $request) {

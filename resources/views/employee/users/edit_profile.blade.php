@@ -8,10 +8,11 @@
                     <form name="general_profile_form" id="upload_form" method="post" action=" {{ url('update_profile_pic') }} " enctype="multipart/form-data">
 {{ csrf_field() }}
                         <div class="follow_box form_box col-sm-12 col-md-2">
+                            <div class="wrap-btn">
                             <input accept="image/x-png,image/gif,image/jpeg" type="file" class="fileinput" name="profile_image" id="image">
                             <label>Upload Photo</label>
-                            <div class="preview_box">
-                                <?php
+                                <div class="preview_box">
+                                    <?php
 $pic = '';
 if ($user->profile_image == "") {
 	$pic = asset('assets/img/emplye-image.png');
@@ -20,12 +21,11 @@ if ($user->profile_image == "") {
 }
 
 ?>
-                                <img src="{{ $pic }}" id="preview_img">
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <input type="submit" class="st-btn" name="" style="position: relative; top: 5px; left: 180px; height: 40px;">
+                                    <img src="{{ $pic }}" id="preview_img">
                                 </div>
+                            </div>
+                            <div class="bottom-button">
+                                <input type="submit" class="st-btn" name="">
                             </div>
                         </div>
                         <div class="follow-block col-sm-12 col-md-10">
