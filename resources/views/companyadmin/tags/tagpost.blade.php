@@ -34,16 +34,6 @@
                             </div>
                          </div>
                         <div class="panel-body">
-                            @if(session()->has('success'))
-                            <div class="alert alert-success">
-                                {{ session()->get('success') }}
-                            </div>
-                            @endif
-                            @if(session()->has('err_msg'))
-                            <div class="alert alert-danger">
-                                {{ session()->get('err_msg') }}
-                            </div>
-                            @endif
                             <div class="tab-content">
                                 <!-- START ALL POST -->
                                 <div tabindex="5000" class="tab-pane active" id="threads">
@@ -74,7 +64,7 @@
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
-                                                         <div class="panel-body">
+                                                         <div class="panel-body meetings">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">

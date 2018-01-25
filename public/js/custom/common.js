@@ -3,9 +3,9 @@ $("#save").prop('disabled',true);
 window.onload = function() {
     // console.log(EXTERNAL_SWEARS);
 
-    // setTimeout(function () {
-    //     runProfanity();
-    // } , 10);
+     setTimeout(function () {
+         runProfanity();
+     } , 10);
 };
 
 function runProfanity(){
@@ -312,10 +312,10 @@ $('.alert-warning').delay(5000).fadeOut('slow');
 function ajaxResponse(type,msg) {
     if(type == 'success') {
         $('#success_msg').html(msg);
-        $('#success_msg').show().delay(5000).fadeOut('slow');
+        $('#success_msg').show();//.delay(5000).fadeOut('slow');
     }else {
         $('#error_msg').html(msg);
-        $('#error_msg').show().delay(5000).fadeOut('slow');
+        $('#error_msg').show();//.delay(5000).fadeOut('slow');
     }
     $(window).scrollTop(0);
 }

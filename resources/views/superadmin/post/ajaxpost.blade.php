@@ -25,7 +25,7 @@
                                <?php } ?>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body meetings">
                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                             <div class="user-wrap"> 
                                 <div class="user-img"> 

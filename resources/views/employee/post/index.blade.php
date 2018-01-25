@@ -47,17 +47,17 @@
                                 <!-- START ALL POST -->
                                 <div tabindex="5000" class="tab-pane active" id="threads">
                                     <?php
-if (!empty($posts)) {
-	foreach ($posts as $post) {
-		$post_type = $post['post_type'];
-		if ($post_type == "idea") {
-			$post_class = 1;
-		} else if ($post_type == "question") {
-			$post_class = 2;
-		} else if ($post_type == "challenge") {
-			$post_class = 3;
-		}
-		?>
+                                    if (!empty($posts)) {
+                                            foreach ($posts as $post) {
+                                                    $post_type = $post['post_type'];
+                                                    if ($post_type == "idea") {
+                                                            $post_class = 1;
+                                                    } else if ($post_type == "question") {
+                                                            $post_class = 2;
+                                                    } else if ($post_type == "challenge") {
+                                                            $post_class = 3;
+                                                    }
+                                                    ?>
                                                 <div class="col-md-4 postlist">
                                                     <div class="panel-{{$post_class}} panel-primary">
                                                          <div class="panel-heading">
@@ -73,7 +73,7 @@ if (!empty($posts)) {
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
-                                                         <div class="panel-body">
+                                                         <div class="panel-body meetings">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">
