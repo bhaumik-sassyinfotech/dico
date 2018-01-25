@@ -246,8 +246,8 @@ if (!empty($grouppost['post_user_dis_like'])) {
 
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                             <?php
-if (!empty($grouppost['post_comment'])) {
-			?>
+                                                                            if (!empty($grouppost['post_comment'])) {
+                                                                                                    ?>
                                                                                     <i class="fa fa-comments"></i>
                                                                                 <?php } else {?>
                                                                                     <i class="fa fa-comments-o"></i>
@@ -260,8 +260,8 @@ if (!empty($grouppost['post_comment'])) {
                                                                     </div>
                                                                 </div>
                                                                 <?php
-if (!empty($grouppost['post_tag'])) {
-			?>
+                                                                    if (!empty($grouppost['post_tag'])) {
+                                                                ?>
                                                                 <hr>
                                                                 <div class="post-circle">
                                                                     <?php foreach ($grouppost['post_tag'] as $mypost_tag) {?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
@@ -271,17 +271,17 @@ if (!empty($grouppost['post_tag'])) {
                                                        </div>
                                                    </div>
                                     <?php
-}
-} else {
-	echo "No post found.";
-}
-?>
+                                        }
+                                        } else {
+                                                echo "No post found.";
+                                        }
+                                        ?>
                                     <?php
-if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
-	?>
+                                        if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
+                                                ?>
                                     <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">View More</a></div>
                                     <?php
-}?>
+                                        }?>
                                     <input type="hidden" id="count_grouppost" value="{{$count_group_post}}">
                                 </div>
                                 <!-- END GROUP POST -->
@@ -416,34 +416,6 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
 @endsection
 @push('javascripts')
 <script type="text/javascript">
-    function deletepost(id) {
-    swal({
-    title: "Are you sure?",
-            text: "you will not able to recover this post.",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-    }, function () {
-        var token = '<?php echo csrf_token() ?>';
-        var formData = {post_id : id, _token : token};
-        $.ajax({
-        url: "{{ route('post.destroy'," + id + ") }}",
-        type: "POST",
-        data: formData,
-        success: function (response) {
-            var res = JSON.parse(response);
-            if (res.status == 1) {
-                swal("Success", res.msg, "success");
-                location.reload();
-            }
-            else {
-                swal("Error", res.msg, "error");
-            }
-        }
-    });
-    });
-    }
     function loadMorePost() {
     //alert("here");
     //alert($('#search_text').val()); return false;
@@ -452,11 +424,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         //var count_post = $('#count_post').val();
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmorepost",
             type: "POST",
             data: formData,
             success: function (response) {
+                $("#spinner").hide();
                 if(response != "") {
                     if(response.html != "") {
                         $('#threads .postlist:last').after(response.html);
@@ -479,12 +453,14 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmoremypost",
             type: "POST",
             data: formData,
             success: function (response) {
                 //console.log(response);
+                $("#spinner").hide();
                 if(response != '') {
                     if(response.html != "") {
                         $('#users .userpostlist:last').after(response.html);
@@ -507,11 +483,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmoregrouppost",
             type: "POST",
             data: formData,
             success: function (response) {
+                $("#spinner").hide();
                 if(response != '') {
                     if(response.html != "") {
                         $('#groups .grouppostlist:last').after(response.html);
@@ -535,12 +513,14 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmorepost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
                     //console.log(response.html);
+                    $("#spinner").hide();
                     if(response != ""){
                         if(response.html != "") {
                             $('#threads .postlist').remove();
@@ -570,11 +550,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmoremypost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    $("#spinner").hide();
                     if(response != '') {
                         if(response.html != "") {
                             $('#users .userpostlist').remove();
@@ -602,11 +584,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmoregrouppost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    $("#spinner").hide();
                     if(response != '') {
                         if(response.html != "") {
                             $('#groups .grouppostlist').remove();

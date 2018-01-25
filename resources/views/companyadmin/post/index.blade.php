@@ -424,11 +424,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         //var count_post = $('#count_post').val();
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmorepost",
             type: "POST",
             data: formData,
             success: function (response) {
+                $("#spinner").hide();
                 if(response != "") {
                     if(response.html != "") {
                         $('#threads .postlist:last').after(response.html);
@@ -451,12 +453,14 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmoremypost",
             type: "POST",
             data: formData,
             success: function (response) {
                 //console.log(response);
+                $("#spinner").hide();
                 if(response != '') {
                     if(response.html != "") {
                         $('#users .userpostlist:last').after(response.html);
@@ -479,11 +483,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmoregrouppost",
             type: "POST",
             data: formData,
             success: function (response) {
+                $("#spinner").hide();
                 if(response != '') {
                     if(response.html != "") {
                         $('#groups .grouppostlist:last').after(response.html);
@@ -507,12 +513,14 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmorepost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
                     //console.log(response.html);
+                    $("#spinner").hide();
                     if(response != ""){
                         if(response.html != "") {
                             $('#threads .postlist').remove();
@@ -542,11 +550,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmoremypost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    $("#spinner").hide();
                     if(response != '') {
                         if(response.html != "") {
                             $('#users .userpostlist').remove();
@@ -574,11 +584,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmoregrouppost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    $("#spinner").hide();
                     if(response != '') {
                         if(response.html != "") {
                             $('#groups .grouppostlist').remove();

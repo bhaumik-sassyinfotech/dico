@@ -158,7 +158,21 @@
                                             <div class="pull-right post-reply-pop">
                                                 <div class="options">
                                                     <div class="star-wrap">
-                                                                    <p class="active">Solution</p>
+                                                     <?php
+                                                    $active = "";
+                                                    if ($comment['is_correct'] == 0) {
+                                                            $active = "disactive";
+                                                    } else {
+                                                            $active = "active";
+                                                    }
+                                                ?>
+                                                <p id="icon_{{$comment['id']}}" class="<?php echo $active; ?>">
+                                                    <?php if ($meeting['user_id'] == Auth::user()->id || $meeting->meetingUser->role_id > Auth::user()->role_id) { ?>
+                                                        <a id="solution_{{$comment['id']}}" href="javascript:void(0)" onclick="markSolution({{$comment['id']}}, {{$commentUser['id']}}, {{$meeting['id']}})">Correct</a>
+                                                    <?php } else {?>
+                                                        Correct
+                                                    <?php }?>
+                                                </p>
                                                     </div>
                                                     <div class="fmr-10">
                                                           <a class="set-warning" href="">w</a>
@@ -414,5 +428,36 @@
                 form.submit();
             }
         });
+        function openCommentReplyBox(commentid) {
+            if(commentid != "") {
+                var _token = CSRF_TOKEN;
+                formData = {comment_id:commentid,_token};
+                $("#spinner").show();
+                $.ajax({
+                    url: SITE_URL + '/getCommentReply',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $("#spinner").hide();
+                        var res = JSON.parse(response);
+                        if(res.status == 1) {
+                            $('#commentReplyList').html(res.html);
+                            runProfanity();
+                        } else {
+                            ajaxResponse('error',res.msg);
+                        }
+                    },
+                    error: function(e) {
+                        swal("Error", e, "error");
+                    }
+                });
+                $('#reply_form')[0].reset();
+                $('.error').html('');
+                $('#myModalComment').modal('show');
+                $('#commentId').val(commentid);
+            }else {
+                swal("Error", "comment not found", "error");
+            }
+        }
     </script>
 @endpush
