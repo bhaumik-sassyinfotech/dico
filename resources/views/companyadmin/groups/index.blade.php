@@ -174,8 +174,8 @@
                                                                 </select>
                                                             </div>
                                                             <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                    <input type="button" name="" class="st-btn multiple-action" value="Submit">
-                                                                </div>
+                                                                <input type="button" name="" class="st-btn multiple-action" value="Submit">
+                                                            </div>
                                                             </div>
                                                             </div>
                                                         </div>
