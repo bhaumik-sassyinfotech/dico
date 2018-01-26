@@ -25,7 +25,7 @@ if (!empty($user_posts)) {
                         <?php } ?>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body meetings">
                     <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                     <div class="user-wrap"> 
                     <div class="user-img"> 
@@ -40,12 +40,15 @@ if (!empty($user_posts)) {
                         <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                     </div>
                     <fieldset>
-                       <?php /* <p>{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                         <p class="desc-content profanity" id="desc_mycontent_{{$mypost['id']}}">{{ $mypost['post_description'] }}</p>
                     </fieldset>
+                    <?php
+                       if(strlen($mypost['post_description']) > POST_DESCRIPTION_LIMIT) {
+                    ?>
                     <div class="btn-wrap" id="mypostread{{$mypost['id']}}">
                         <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">Read More</a>
-                     </div>
+                    </div>
+                    <?php } ?>
                     <div class="panel-body-wrap">
                         <div class="wrap-social pull-left">
                             <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$mypost['id']}}" onclick="like_post({{$mypost['id']}})">

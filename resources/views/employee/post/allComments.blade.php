@@ -58,7 +58,7 @@ if (!empty($post['postComment'])) {
                                     }
                                     ?> 
                                     <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                        <?php if ($commentUser['id'] == Auth::user()->id || $post['postUser']['role_id'] > Auth::user()->role_id) { ?>
+                                        <?php if ($commentUser['id'] == Auth::user()->id || $commentUser['role_id'] > Auth::user()->role_id) { ?>
                                             <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                         <?php } else { ?>
                                             Correct  
@@ -66,29 +66,16 @@ if (!empty($post['postComment'])) {
                                     </p>
                                 </div>
                                 <div class="fmr-10">
-                                    <a class="set-warning" href="#flaggedComment" data-toggle="modal">w</a>
-                                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="flaggedComment" class="modal fade" style="display: none;">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
-                                                    <h4 class="modal-title">Request flagged in the Post</h4>
-                                                </div>
-                                                <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
-                                                    <div class="form-group">
-                                                        <label>Message To Author:</label> 
-                                                        <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
-                                                    </div> 
-                                                    <div class="form-group">
-                                                        <div class="btn-wrap-div">
-                                                            <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportPostFlagged();">
-                                                            <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
-                                                        </div>     
-                                                    </div>     
-                                                </form>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div>   
+                                    <?php    
+                                        if(!empty($postComment['commentFlagged'])) {
+                                            if($postComment['commentFlagged']['flag_by'] == Auth::user()->id) {
+                                        ?>
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                        <?php } else { ?>
+                                        <a class="set-warning" href="javascript:void(0)" onclick="openFlagComment({{$postComment['id']}}, {{$commentUser['id']}})">w</a>
+                                            <?php } } else { ?>
+                                        <a class="set-warning" href="javascript:void(0)" onclick="openFlagComment({{$postComment['id']}}, {{$commentUser['id']}})">w</a>
+                                        <?php } ?>
                                     <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-edit" href="javascript:void(0)" onclick="editComment('<?= 'popup_'.$postComment['id'] ?>');">e</a>
                                         <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a><?php } ?>
                                 </div>

@@ -1,6 +1,7 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
+
 <div id="page-content" class="group-listing posts">
     <div id='wrap'>
         <div id="page-heading">
@@ -33,16 +34,6 @@
                             </div>
                          </div>
                         <div class="panel-body">
-                            @if(session()->has('success'))
-                            <div class="alert alert-success">
-                                {{ session()->get('success') }}
-                            </div>
-                            @endif
-                            @if(session()->has('err_msg'))
-                            <div class="alert alert-danger">
-                                {{ session()->get('err_msg') }}
-                            </div>
-                            @endif
                             <div class="tab-content">
                                 <!-- START ALL POST -->
                                 <div tabindex="5000" class="tab-pane active" id="threads">
@@ -73,7 +64,7 @@
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
-                                                         <div class="panel-body">
+                                                         <div class="panel-body meetings">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">
@@ -91,9 +82,13 @@
                                                                  <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                              </fieldset>
+                                                             <?php
+                                                                if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                            ?>
                                                              <div class="btn-wrap" id="postread{{$post['id']}}">
                                                                 <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
                                                              </div>
+                                                                <?php } ?>
                                                              <div class="panel-body-wrap">
                                                                  <div class="wrap-social pull-left">
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">

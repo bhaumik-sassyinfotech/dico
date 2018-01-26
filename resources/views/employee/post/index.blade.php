@@ -47,23 +47,23 @@
                                 <!-- START ALL POST -->
                                 <div tabindex="5000" class="tab-pane active" id="threads">
                                     <?php
-if (!empty($posts)) {
-	foreach ($posts as $post) {
-		$post_type = $post['post_type'];
-		if ($post_type == "idea") {
-			$post_class = 1;
-		} else if ($post_type == "question") {
-			$post_class = 2;
-		} else if ($post_type == "challenge") {
-			$post_class = 3;
-		}
-		?>
+                                    if (!empty($posts)) {
+                                            foreach ($posts as $post) {
+                                                    $post_type = $post['post_type'];
+                                                    if ($post_type == "idea") {
+                                                            $post_class = 1;
+                                                    } else if ($post_type == "question") {
+                                                            $post_class = 2;
+                                                    } else if ($post_type == "challenge") {
+                                                            $post_class = 3;
+                                                    }
+                                                    ?>
                                                 <div class="col-md-4 postlist">
                                                     <div class="panel-{{$post_class}} panel-primary">
                                                          <div class="panel-heading">
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                                                              <div class="pull-right i-con-set">
-                                                               <a><img src="assets/img/notification-icon.png"></a>
+                                                               <a><i class="fa fa-bell" aria-hidden="true"></i></a>
                                                                 <?php
                                                                      if(!empty($post['post_flagged'])) {
                                                                 ?>
@@ -73,7 +73,7 @@ if (!empty($posts)) {
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
-                                                         <div class="panel-body">
+                                                         <div class="panel-body meetings">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">
@@ -92,9 +92,15 @@ if (!empty($posts)) {
                                                                  <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                              </fieldset>
-                                                             <div class="btn-wrap" id="postread{{$post['id']}}">
-                                                                <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
-                                                             </div>
+                                                             <?php
+                                                                if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                             ?>
+                                                                <div class="btn-wrap" id="postread{{$post['id']}}">
+                                                                   <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
+                                                                </div>
+                                                             <?php
+                                                                }
+                                                             ?>
                                                              <div class="panel-body-wrap">
                                                                  <div class="wrap-social pull-left">
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">
@@ -168,17 +174,17 @@ if (!empty($post['post_tag'])) {
                                 <!-- START GROUP POST -->
                                 <div tabindex="5002" class="tab-pane" id="groups">
                                     <?php
-if (!empty($group_posts)) {
-	foreach ($group_posts as $grouppost) {
-		$mypost_type = $grouppost['post_type'];
-		if ($mypost_type == "idea") {
-			$mypost_class = 1;
-		} else if ($mypost_type == "question") {
-			$mypost_class = 2;
-		} else if ($mypost_type == "challenge") {
-			$mypost_class = 3;
-		}
-		?>
+                                        if (!empty($group_posts)) {
+                                            foreach ($group_posts as $grouppost) {
+                                                    $mypost_type = $grouppost['post_type'];
+                                                    if ($mypost_type == "idea") {
+                                                            $mypost_class = 1;
+                                                    } else if ($mypost_type == "question") {
+                                                            $mypost_class = 2;
+                                                    } else if ($mypost_type == "challenge") {
+                                                            $mypost_class = 3;
+                                                    }
+                                    ?>
                                                 <div class="col-md-4 grouppostlist">
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
@@ -195,7 +201,7 @@ if (!empty($group_posts)) {
 
                                                                 </div>
                                                             </div>
-                                                            <div class="panel-body">
+                                                            <div class="panel-body meetings">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
@@ -213,9 +219,13 @@ if (!empty($group_posts)) {
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
                                                                 </fieldset>
+                                                                <?php
+                                                                    if(strlen($grouppost['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                                ?>
                                                                 <div class="btn-wrap" id="mypostread{{$grouppost['id']}}">
                                                                    <a href="#" onclick ="mypostReadMore({{$grouppost['id']}})">Read More</a>
                                                                 </div>
+                                                                    <?php } ?>
                                                                 <div class="panel-body-wrap">
                                                                     <div class="wrap-social pull-left">
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$grouppost['id']}}" onclick="like_post({{$grouppost['id']}})">
@@ -288,17 +298,17 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                 <!-- START USER POST -->
                                 <div tabindex="5002" class="tab-pane" id="users">
                                     <?php
-if (!empty($user_posts)) {
-	foreach ($user_posts as $mypost) {
-		$mypost_type = $mypost['post_type'];
-		if ($mypost_type == "idea") {
-			$mypost_class = 1;
-		} else if ($mypost_type == "question") {
-			$mypost_class = 2;
-		} else if ($mypost_type == "challenge") {
-			$mypost_class = 3;
-		}
-		?>
+                                    if (!empty($user_posts)) {
+                                            foreach ($user_posts as $mypost) {
+                                                    $mypost_type = $mypost['post_type'];
+                                                    if ($mypost_type == "idea") {
+                                                            $mypost_class = 1;
+                                                    } else if ($mypost_type == "question") {
+                                                            $mypost_class = 2;
+                                                    } else if ($mypost_type == "challenge") {
+                                                            $mypost_class = 3;
+                                                    }
+                                                    ?>
                                                 <div class="col-md-4 userpostlist">
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
@@ -314,7 +324,7 @@ if (!empty($user_posts)) {
                                                                 <?php } ?>
                                                                 </div>
                                                             </div>
-                                                            <div class="panel-body">
+                                                            <div class="panel-body meetings">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
@@ -333,15 +343,19 @@ if (!empty($user_posts)) {
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
                                                                 </fieldset>
+                                                                <?php
+                                                                    if(strlen($mypost['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                                ?>
                                                                 <div class="btn-wrap" id="mypostread{{$mypost['id']}}">
                                                                    <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">Read More</a>
                                                                 </div>
+                                                                <?php } ?>
                                                                 <div class="panel-body-wrap">
                                                                     <div class="wrap-social pull-left">
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$mypost['id']}}" onclick="like_post({{$mypost['id']}})">
                                                                             <?php
-if (!empty($mypost['post_user_like'])) {
-			?>
+                                                                            if (!empty($mypost['post_user_like'])) {
+                                                                              ?>
                                                                                 <i class="fa fa-thumbs-up"></i>
                                                                             <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-up"></i>
@@ -352,8 +366,8 @@ if (!empty($mypost['post_user_like'])) {
 
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="dislike_post_{{$mypost['id']}}" onclick="dislike_post({{$mypost['id']}})">
                                                                             <?php
-if (!empty($mypost['post_user_dis_like'])) {
-			?>
+                                                                            if (!empty($mypost['post_user_dis_like'])) {
+                                                                                                    ?>
                                                                                 <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                                                                             <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
@@ -366,8 +380,8 @@ if (!empty($mypost['post_user_dis_like'])) {
 
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                             <?php
-if (!empty($mypost['post_comment'])) {
-			?>
+                                                                            if (!empty($mypost['post_comment'])) {
+                                                                                                    ?>
                                                                                     <i class="fa fa-comments"></i>
                                                                                 <?php } else {?>
                                                                                     <i class="fa fa-comments-o"></i>

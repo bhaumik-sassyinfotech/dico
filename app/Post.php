@@ -63,4 +63,7 @@ class Post extends Model {
 	public function postFlagged() {
 		return $this->hasOne('App\PostFlag', 'post_id', 'id');
 	}
+        public function company() {
+		return $this->hasOne('App\Company', 'id', 'company_id');
+	}
 }

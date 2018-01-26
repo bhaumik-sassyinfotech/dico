@@ -1,26 +1,6 @@
 @extends('template.default')
 <title>DICO - Post</title>
 @section('content')
-
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('err_msg'))
-        <div class="alert alert-danger">
-            {{ session()->get('err_msg') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <div id="page-content" class="post-details create-post">
         <div id='wrap'>
             <div id="page-heading">
@@ -41,17 +21,17 @@
                                 <label class="text-15">Post<span>*</span></label>
                                 <div class="check-wrap box-check">
                                     <label class="check idea-check">Idea    
-                                       
-                                    </label> <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check">
-                                        <span class="checked"></span>
+                                       <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check">
+                                       <span class="checked"></span>
+                                    </label> 
                                     <label class="check question-check">Question    
-                                        
-                                    </label><input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type">
+                                        <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type">
                                         <span class="checked"></span>
+                                    </label>
                                     <label class="check challenges-check">Challenge    
-                                        
-                                    </label><input type="checkbox" name="post_type" id="post_type_challenges" value="challenges" class="post_type">
+                                        <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type">
                                         <span class="checked"></span>
+                                    </label>
                                 </div>
                                 <div id="err_post_type"></div>
                             </div>
@@ -77,13 +57,14 @@
                                     <input type="hidden" name="post_tags" id="mySingleField" value="">
                                     <ul id="singleFieldTags"></ul>
                             </div>  
+                            <div class="btn-wrap-div">
                             <?php
                             if(isset($company) && $company->allow_anonymous == 1) {
                             ?>
-                            <div class="btn-wrap-div">
-                                <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous">
-                                    <span class="checkmark"></span>
-                                </label> 
+                            <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous">
+                                <span class="checkmark"></span>
+                            </label> 
+                            <?php } ?>
                                 <a href="{{ route('post.index') }}" class="st-btn btn-default">Back</a>
                                 <input type="submit" name="save" id="save" value="Submit" class="st-btn">
                                 <div class="upload-btn-wrapper">
@@ -91,7 +72,7 @@
                                     <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 </div>
                             </div>
-                            <?php } ?>
+                            
                             
                             <?php /*<div class="form-group">
                                     <label class="control-label" for="user_groups">Group:</label>
@@ -119,27 +100,27 @@
                         </div>
                         <div class="col-sm-4" id="post-detail-right">
                         <div class="category">
-                                     <div class="main-group-wrap">
-                                        <div class="category-tab tp-bp-0"> 
-                                            <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
-                                              <span class="checkmark"></span>
-                                          </label>
-                                        </div>
-                                        <?php
-                                            if(!empty($groups)) {
-                                               foreach($groups as $group) { 
-                                        ?>
-                                        <div class="category-detials">
-                                            <label class="check text-12">{{$group->group_name}}
-                                                <input type="checkbox" name="user_groups[]" id="user_groups_{{$group->id}}" value="{{$group->id}}">
-                                                <span class="checkmark"></span>
-                                             </label>
-                                        </div> 
-                                        <?php } } else { ?>
-                                         <div class="category-detials">No group found.</div>
-                                        <?php } ?>
-                                    </div>
-                                </div>
+                                <div class="main-group-wrap">
+                                   <div class="category-tab tp-bp-0"> 
+                                       <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
+                                         <span class="checkmark"></span>
+                                     </label>
+                                   </div>
+                                   <?php
+                                       if(!empty($groups) && count($groups) > 0) {
+                                          foreach($groups as $group) { 
+                                   ?>
+                                   <div class="category-detials">
+                                       <label class="check text-12">{{$group->group_name}}
+                                           <input type="checkbox" name="user_groups[]" id="user_groups_{{$group->id}}" value="{{$group->id}}">
+                                           <span class="checkmark"></span>
+                                        </label>
+                                   </div> 
+                                   <?php } } else { ?>
+                                    <div class="category-detials">No group found.</div>
+                                   <?php } ?>
+                               </div>
+                           </div>
                         </div>
                     </form>    
                 </div>

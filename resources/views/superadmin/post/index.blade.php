@@ -12,9 +12,9 @@
             <h1 class="tp-bp-0">Post</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                    <div class="btn-group hidden-xs">
+                    <?php /*<div class="btn-group hidden-xs">
                         <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
-                    </div>
+                    </div>*/?>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
 
@@ -31,8 +31,8 @@
                             <h4>
                                 <ul class="nav nav-tabs">
                                        <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Posts</span></a></li>
-                                       <li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
-                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>
+                                       <?php /*<li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
+                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>*/?>
                                 </ul>
                             </h4>
                             <div class="pull-right search-form">
@@ -47,23 +47,23 @@
                                 <!-- START ALL POST -->
                                 <div tabindex="5000" class="tab-pane active" id="threads">
                                     <?php
-if (!empty($posts)) {
-	foreach ($posts as $post) {
-		$post_type = $post['post_type'];
-		if ($post_type == "idea") {
-			$post_class = 1;
-		} else if ($post_type == "question") {
-			$post_class = 2;
-		} else if ($post_type == "challenge") {
-			$post_class = 3;
-		}
-		?>
+                                    if (!empty($posts)) {
+                                            foreach ($posts as $post) {
+                                                    $post_type = $post['post_type'];
+                                                    if ($post_type == "idea") {
+                                                            $post_class = 1;
+                                                    } else if ($post_type == "question") {
+                                                            $post_class = 2;
+                                                    } else if ($post_type == "challenge") {
+                                                            $post_class = 3;
+                                                    }
+                                                    ?>
                                                 <div class="col-md-4 postlist">
                                                     <div class="panel-{{$post_class}} panel-primary">
                                                          <div class="panel-heading">
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                                                              <div class="pull-right i-con-set">
-                                                               <a><img src="assets/img/notification-icon.png"></a>
+                                                               <a><i class="fa fa-bell" aria-hidden="true"></i></a>
                                                                 <?php
                                                                      if(!empty($post['post_flagged'])) {
                                                                 ?>
@@ -73,7 +73,7 @@ if (!empty($posts)) {
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
-                                                         <div class="panel-body">
+                                                         <div class="panel-body meetings">
                                                              <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">
@@ -92,9 +92,15 @@ if (!empty($posts)) {
                                                                  <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                              </fieldset>
-                                                             <div class="btn-wrap" id="postread{{$post['id']}}">
-                                                                <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
-                                                             </div>
+                                                             <?php
+                                                                if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                             ?>
+                                                                <div class="btn-wrap" id="postread{{$post['id']}}">
+                                                                   <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
+                                                                </div>
+                                                             <?php
+                                                                }
+                                                             ?>
                                                              <div class="panel-body-wrap">
                                                                  <div class="wrap-social pull-left">
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">
@@ -168,17 +174,17 @@ if (!empty($post['post_tag'])) {
                                 <!-- START GROUP POST -->
                                 <div tabindex="5002" class="tab-pane" id="groups">
                                     <?php
-if (!empty($group_posts)) {
-	foreach ($group_posts as $grouppost) {
-		$mypost_type = $grouppost['post_type'];
-		if ($mypost_type == "idea") {
-			$mypost_class = 1;
-		} else if ($mypost_type == "question") {
-			$mypost_class = 2;
-		} else if ($mypost_type == "challenge") {
-			$mypost_class = 3;
-		}
-		?>
+                                        if (!empty($group_posts)) {
+                                            foreach ($group_posts as $grouppost) {
+                                                    $mypost_type = $grouppost['post_type'];
+                                                    if ($mypost_type == "idea") {
+                                                            $mypost_class = 1;
+                                                    } else if ($mypost_type == "question") {
+                                                            $mypost_class = 2;
+                                                    } else if ($mypost_type == "challenge") {
+                                                            $mypost_class = 3;
+                                                    }
+                                    ?>
                                                 <div class="col-md-4 grouppostlist">
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
@@ -195,7 +201,7 @@ if (!empty($group_posts)) {
 
                                                                 </div>
                                                             </div>
-                                                            <div class="panel-body">
+                                                            <div class="panel-body meetings">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
@@ -213,9 +219,13 @@ if (!empty($group_posts)) {
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
                                                                 </fieldset>
+                                                                <?php
+                                                                    if(strlen($grouppost['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                                ?>
                                                                 <div class="btn-wrap" id="mypostread{{$grouppost['id']}}">
                                                                    <a href="#" onclick ="mypostReadMore({{$grouppost['id']}})">Read More</a>
                                                                 </div>
+                                                                    <?php } ?>
                                                                 <div class="panel-body-wrap">
                                                                     <div class="wrap-social pull-left">
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$grouppost['id']}}" onclick="like_post({{$grouppost['id']}})">
@@ -246,8 +256,8 @@ if (!empty($grouppost['post_user_dis_like'])) {
 
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                             <?php
-if (!empty($grouppost['post_comment'])) {
-			?>
+                                                                            if (!empty($grouppost['post_comment'])) {
+                                                                                                    ?>
                                                                                     <i class="fa fa-comments"></i>
                                                                                 <?php } else {?>
                                                                                     <i class="fa fa-comments-o"></i>
@@ -260,8 +270,8 @@ if (!empty($grouppost['post_comment'])) {
                                                                     </div>
                                                                 </div>
                                                                 <?php
-if (!empty($grouppost['post_tag'])) {
-			?>
+                                                                    if (!empty($grouppost['post_tag'])) {
+                                                                ?>
                                                                 <hr>
                                                                 <div class="post-circle">
                                                                     <?php foreach ($grouppost['post_tag'] as $mypost_tag) {?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
@@ -271,34 +281,34 @@ if (!empty($grouppost['post_tag'])) {
                                                        </div>
                                                    </div>
                                     <?php
-}
-} else {
-	echo "No post found.";
-}
-?>
+                                        }
+                                        } else {
+                                                echo "No post found.";
+                                        }
+                                        ?>
                                     <?php
-if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
-	?>
+                                        if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
+                                                ?>
                                     <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">View More</a></div>
                                     <?php
-}?>
+                                        }?>
                                     <input type="hidden" id="count_grouppost" value="{{$count_group_post}}">
                                 </div>
                                 <!-- END GROUP POST -->
                                 <!-- START USER POST -->
                                 <div tabindex="5002" class="tab-pane" id="users">
                                     <?php
-if (!empty($user_posts)) {
-	foreach ($user_posts as $mypost) {
-		$mypost_type = $mypost['post_type'];
-		if ($mypost_type == "idea") {
-			$mypost_class = 1;
-		} else if ($mypost_type == "question") {
-			$mypost_class = 2;
-		} else if ($mypost_type == "challenge") {
-			$mypost_class = 3;
-		}
-		?>
+                                    if (!empty($user_posts)) {
+                                            foreach ($user_posts as $mypost) {
+                                                    $mypost_type = $mypost['post_type'];
+                                                    if ($mypost_type == "idea") {
+                                                            $mypost_class = 1;
+                                                    } else if ($mypost_type == "question") {
+                                                            $mypost_class = 2;
+                                                    } else if ($mypost_type == "challenge") {
+                                                            $mypost_class = 3;
+                                                    }
+                                                    ?>
                                                 <div class="col-md-4 userpostlist">
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
@@ -314,7 +324,7 @@ if (!empty($user_posts)) {
                                                                 <?php } ?>
                                                                 </div>
                                                             </div>
-                                                            <div class="panel-body">
+                                                            <div class="panel-body meetings">
                                                                 <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
@@ -333,15 +343,19 @@ if (!empty($user_posts)) {
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                                     <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
                                                                 </fieldset>
+                                                                <?php
+                                                                    if(strlen($mypost['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                                ?>
                                                                 <div class="btn-wrap" id="mypostread{{$mypost['id']}}">
                                                                    <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">Read More</a>
                                                                 </div>
+                                                                <?php } ?>
                                                                 <div class="panel-body-wrap">
                                                                     <div class="wrap-social pull-left">
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$mypost['id']}}" onclick="like_post({{$mypost['id']}})">
                                                                             <?php
-if (!empty($mypost['post_user_like'])) {
-			?>
+                                                                            if (!empty($mypost['post_user_like'])) {
+                                                                              ?>
                                                                                 <i class="fa fa-thumbs-up"></i>
                                                                             <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-up"></i>
@@ -352,8 +366,8 @@ if (!empty($mypost['post_user_like'])) {
 
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0)" id="dislike_post_{{$mypost['id']}}" onclick="dislike_post({{$mypost['id']}})">
                                                                             <?php
-if (!empty($mypost['post_user_dis_like'])) {
-			?>
+                                                                            if (!empty($mypost['post_user_dis_like'])) {
+                                                                                                    ?>
                                                                                 <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                                                                             <?php } else {?>
                                                                                 <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
@@ -366,8 +380,8 @@ if (!empty($mypost['post_user_dis_like'])) {
 
                                                                         <div class="wrap-inner-icon"><a href="javascript:void(0);">
                                                                             <?php
-if (!empty($mypost['post_comment'])) {
-			?>
+                                                                            if (!empty($mypost['post_comment'])) {
+                                                                                                    ?>
                                                                                     <i class="fa fa-comments"></i>
                                                                                 <?php } else {?>
                                                                                     <i class="fa fa-comments-o"></i>
@@ -416,34 +430,6 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
 @endsection
 @push('javascripts')
 <script type="text/javascript">
-    function deletepost(id) {
-    swal({
-    title: "Are you sure?",
-            text: "you will not able to recover this post.",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-    }, function () {
-        var token = '<?php echo csrf_token() ?>';
-        var formData = {post_id : id, _token : token};
-        $.ajax({
-        url: "{{ route('post.destroy'," + id + ") }}",
-        type: "POST",
-        data: formData,
-        success: function (response) {
-            var res = JSON.parse(response);
-            if (res.status == 1) {
-                swal("Success", res.msg, "success");
-                location.reload();
-            }
-            else {
-                swal("Error", res.msg, "error");
-            }
-        }
-    });
-    });
-    }
     function loadMorePost() {
     //alert("here");
     //alert($('#search_text').val()); return false;
@@ -452,11 +438,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         //var count_post = $('#count_post').val();
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmorepost",
             type: "POST",
             data: formData,
             success: function (response) {
+                $("#spinner").hide();
                 if(response != "") {
                     if(response.html != "") {
                         $('#threads .postlist:last').after(response.html);
@@ -479,12 +467,14 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmoremypost",
             type: "POST",
             data: formData,
             success: function (response) {
                 //console.log(response);
+                $("#spinner").hide();
                 if(response != '') {
                     if(response.html != "") {
                         $('#users .userpostlist:last').after(response.html);
@@ -507,11 +497,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
         var searchText = $('#search_text').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+        $("#spinner").show();
         $.ajax({
             url: SITE_URL+"/loadmoregrouppost",
             type: "POST",
             data: formData,
             success: function (response) {
+                $("#spinner").hide();
                 if(response != '') {
                     if(response.html != "") {
                         $('#groups .grouppostlist:last').after(response.html);
@@ -535,12 +527,14 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmorepost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
                     //console.log(response.html);
+                    $("#spinner").hide();
                     if(response != ""){
                         if(response.html != "") {
                             $('#threads .postlist').remove();
@@ -570,11 +564,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmoremypost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    $("#spinner").hide();
                     if(response != '') {
                         if(response.html != "") {
                             $('#users .userpostlist').remove();
@@ -602,11 +598,13 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var offset = 0;
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL+"/loadmoregrouppost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    $("#spinner").hide();
                     if(response != '') {
                         if(response.html != "") {
                             $('#groups .grouppostlist').remove();

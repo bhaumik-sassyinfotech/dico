@@ -40,8 +40,9 @@ class PostController extends Controller {
 
 	public function __construct(Request $request) {
 		$this->middleware(function ($request, $next) {
+
 			if (Auth::user()->role_id == 1) {
-				$this->folder = 'superadmin';
+				return redirect('/index');
 			} else if (Auth::user()->role_id == 2) {
 				$this->folder = 'companyadmin';
 			} else if (Auth::user()->role_id == 3) {
@@ -141,7 +142,6 @@ class PostController extends Controller {
 					}
 				}
 				//=== tagss saving end ===//
-				Helpers::points('CREATE_POST', Auth::user()->id, $post->id); //add points for creating the post
 				DB::commit();
 				if ($post) {
 					return redirect()->route('post.index')->with('success', 'Post ' . Config::get('constant.ADDED_MESSAGE'));
@@ -442,7 +442,6 @@ class PostController extends Controller {
 		try {
 			if (Auth::user()) {
 				$user_id = Auth::user()->id;
-				Helpers::points('LIKE', $comm->user_id, $id);
 				$postlike = PostLike::where(array('user_id' => $user_id, 'post_id' => $id))->first();
 				if ($postlike) {
 					if ($postlike->flag == 1) {
@@ -539,7 +538,7 @@ class PostController extends Controller {
 	                }])->get();
 
 */
-		$post = Post::with(['postUser.following', 'postLike', 'postDisLike', 'postUserLike' => function ($q) {
+		$post = Post::with(['company', 'postUser.following', 'postLike', 'postDisLike', 'postUserLike' => function ($q) {
 			$q->where('user_id', Auth::user()->id)->first();
 		}, 'postUserDisLike' => function ($q) {
 			$q->where('user_id', Auth::user()->id)->first(); // '=' is optional
@@ -615,8 +614,7 @@ class PostController extends Controller {
 					$is_anonymous = 0;
 				}
 				DB::beginTransaction();
-				$postData = array("user_id" => $user_id, "post_id" => $id, "comment_text" => $comment_text, "is_anonymous" => $is_anonymous);
-				// Helpers::points('ADD_COMMENT', $user_id, $parent_id, $view)
+				$postData = array("user_id" => $user_id, "post_id" => $id, "comment_text" => $comment_text, "is_anonymous" => $is_anonymous, "created_at" => Carbon\Carbon::now());
 				$res = Comment::insertGetId($postData);
 				$file = $request->file('file_upload');
 				if ($file != "") {
@@ -638,7 +636,7 @@ class PostController extends Controller {
 				if ($res) {
 					return Redirect::back()->with('success', 'Comment ' . Config::get('constant.ADDED_MESSAGE'));
 				} else {
-					return Redirect::back()->with('err_msg', 'Please try again.');
+					return Redirect::back()->with('err_msg', Config::get('constant.TRY_MESSAGE'));
 				}
 			} else {
 				return redirect('/index')->with('err_msg', Config::get('constant.TRY_MESSAGE'));
@@ -667,8 +665,6 @@ class PostController extends Controller {
 				$f = 0;
 				$user_id = Auth::user()->id;
 				$commentlike = CommentLike::where(array('user_id' => $user_id, 'comment_id' => $id))->first();
-				$comm = Comment::find($id); // fetch comment owner
-				Helpers::points('LIKE', $comm->user_id, $id);
 				if ($commentlike) {
 					if ($commentlike->flag == 1) {
 						$deletelike = $commentlike->forceDelete();
@@ -716,9 +712,6 @@ class PostController extends Controller {
 			if (Auth::user()) {
 				$user_id = Auth::user()->id;
 				$commentdislike = CommentLike::where(array('user_id' => $user_id, 'comment_id' => $id))->first();
-				$comm = Comment::find($id); // fetch comment owner
-				Helpers::points('DISLIKE', $comm->user_id, $id);
-
 				if ($commentdislike) {
 					if ($commentdislike->flag == 2) {
 						$deletedislike = $commentdislike->forceDelete();
@@ -1170,10 +1163,7 @@ class PostController extends Controller {
 			$reason = $request->get('idea_reason');
 			$postId = $request->get('post_id');
 
-			$post_query = Post::where('id', $postId);
-			$post = $post_query->first();
-			Helpers::points('IDEA_APPROVED', $post->user_id, $postId);
-			$res = $post_query->update(['idea_status' => $status, 'idea_reason' => $reason, 'idea_status_updated_by' => $currUser->id]);
+			$res = Post::where('id', $postId)->update(['idea_status' => $status, 'idea_reason' => $reason, 'idea_status_updated_by' => $currUser->id]);
 			if ($res) {
 				return response()->json(['status' => 1, 'msg' => "Status of this idea has been set successfully."]);
 			} else {

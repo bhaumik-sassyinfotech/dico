@@ -25,7 +25,7 @@
                                <?php } ?>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body meetings">
                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                             <div class="user-wrap"> 
                                 <div class="user-img"> 
@@ -46,10 +46,10 @@
                             <?php
                                 if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
                             ?>
-                            <div class="btn-wrap" id="postread{{$post['id']}}">
-                                <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
-                             </div>
-                                <?php } ?>
+                                <div class="btn-wrap" id="postread{{$post['id']}}">
+                                    <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
+                                </div>
+                            <?php } ?>
                             <div class="panel-body-wrap">
                                 <div class="wrap-social pull-left">
                                     <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">

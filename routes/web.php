@@ -96,6 +96,11 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('comment_reply_update', 'PostController@comment_reply_update');
 	Route::post('uploadFileMeeting', 'MeetingController@uploadFileMeeting');
 	Route::post('deletepost', 'PostController@deletePost');
+	Route::post('meeting_comment_update', 'MeetingController@meeting_comment_update');
+	Route::get('like_attachment_comment/{id}', 'MeetingController@like_attachment_comment');
+	Route::get('dislike_attachment_comment/{id}', 'MeetingController@dislike_attachment_comment');
+	Route::get('deleteMeetingComment/{id}', 'MeetingController@deleteMeetingComment');
+
 });
 
 Route::get('/home', 'DashboardController@index')->name('home');

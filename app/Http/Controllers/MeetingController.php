@@ -10,6 +10,7 @@
     use App\MeetingCommentReply;
     use App\MeetingUser;
     use App\MeetingComment;
+    use App\MeetingCommentLikes;
     use App\MeetingAttachment;
     use App\User;
     use Carbon\Carbon;
@@ -195,7 +196,7 @@
         {
             //
             $id      = Helpers::decode_url($id);
-            $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment', 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser' ])->where('id', $id)->first();
+            $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment', 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser','meetingComment.commentLike','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->where('id', $id)->first();
             $type_ids = MeetingComment::where('meeting_id',$meeting->id)->pluck('id')->toArray();
             $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
             $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
@@ -420,7 +421,7 @@
             }
         }
         
-        public function deleteComment( Request $request )
+        public function deleteMeetingComment( Request $request )
         {
             $id = $request->input('comment_id');
             if(!empty($id))
@@ -629,6 +630,156 @@
             }catch (Exception $ex) {
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
             }
+        }
+        public function meeting_comment_update(Request $request) {
+            try
+            {
+                if(Auth::user()) {
+                    $validator = Validator::make( $request->all(),
+                    [
+                        'id' => 'required',
+                        'comment'  => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                        echo json_encode(array('status' => 0,'msg' => $validator->errors()->all()));
+                    } else {
+                        $comment_id = $request->get('id');
+                        $comment_reply = $request->get('comment');
+                        $res = MeetingComment::where('id',$comment_id)->update(['comment_reply'=>$comment_reply]);
+                        if($res) {
+                            echo json_encode(array('status' => 1,'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+                        }else {
+                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                    }
+                } else {
+                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                }
+            }
+            catch (Exception $ex) {
+                echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
+            }
+        }
+        public function like_attachment_comment($id) {
+            try
+            {
+                if ( Auth::user() )
+                {
+                    $f           = 0;
+                    $user_id     = Auth::user()->id;
+                    $commentlike = MeetingCommentLikes::where(array( 'user_id' => $user_id , 'meeting_comment_id' => $id ))->first();
+                    if ( $commentlike )
+                    {
+                        if ( $commentlike->flag == 1 )
+                        {
+                            $deletelike     = $commentlike->forceDelete();
+                            $likecomment    = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $deletelike )
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove comment Liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            } else
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            }
+                        } else
+                        {
+                            $likecomment    = MeetingCommentLikes::where(array( 'user_id' => $user_id , 'meeting_comment_id' => $id ))->update(array( 'flag' => 1 ));
+                            $likecomment    = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $likecomment )
+                            {
+                                echo json_encode(array( 'status' => 1 , 'msg' => "comment liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            } else
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            }
+                        }
+                        
+                    } else
+                    {
+                        $likecomment    = MeetingCommentLikes::insert(array( 'user_id' => $user_id , 'meeting_comment_id' => $id , 'flag' => 1 ));
+                        $likecomment    = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 1 ))->get();
+                        $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
+                        if ( $likecomment )
+                        {
+                            echo json_encode(array( 'status' => 1 , 'msg' => "comment liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                        } else
+                        {
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                        }
+                    }
+                    
+                } else
+                {
+                    return redirect('/index');
+                }
+            }
+            catch ( \exception $e )
+            {
+                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
+                //return Redirect::back()->with('err_msg', $e->getMessage());
+            }
+        }
+        public function dislike_attachment_comment($id)
+        {
+            try
+            {
+                if ( Auth::user() )
+                {
+                    $user_id        = Auth::user()->id;
+                    $commentdislike = MeetingCommentLikes::where(array( 'user_id' => $user_id , 'meeting_comment_id' => $id ))->first();
+                    if ( $commentdislike )
+                    {
+                        if ( $commentdislike->flag == 2 )
+                        {
+                            $deletedislike  = $commentdislike->forceDelete();
+                            $likecomment    = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $deletedislike )
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove comment disiked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            } else
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            }
+                        } else
+                        {
+                            $dislikecomment = MeetingCommentLikes::where(array( 'user_id' => $user_id , 'meeting_comment_id' => $id ))->update(array( 'flag' => 2 ));
+                            $likecomment    = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 1 ))->get();
+                            $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
+                            if ( $dislikecomment )
+                            {
+                                echo json_encode(array( 'status' => 1 , 'msg' => "comment disliked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            } else
+                            {
+                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            }
+                        }
+                        
+                    } else
+                    {
+                        $dislikecomment = MeetingCommentLikes::insert(array( 'user_id' => $user_id , 'meeting_comment_id' => $id , 'flag' => 2 ));
+                        $likecomment    = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 1 ))->get();
+                        $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
+                        if ( $dislikecomment )
+                        {
+                            echo json_encode(array( 'status' => 1 , 'msg' => "comment disliked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                        } else
+                        {
+                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                        }
+                    }
+                } else
+                {
+                    return redirect('/index');
+                }
+            }
+            catch ( \exception $e )
+            {
+                echo json_encode(array( 'status' => 0 , 'msg' => $e->getMessage() ));
+            }
+            
         }
         //===========================================================================================//
     }
