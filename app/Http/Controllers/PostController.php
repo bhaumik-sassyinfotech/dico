@@ -43,9 +43,10 @@
         public function __construct(Request $request)
         {
             $this->middleware(function ($request , $next) {
+                
                 if ( Auth::user()->role_id == 1 )
                 {
-                    $this->folder = 'superadmin';
+                    return redirect('/index');
                 } else if ( Auth::user()->role_id == 2 )
                 {
                     $this->folder = 'companyadmin';
@@ -674,7 +675,7 @@
                     $is_anonymous = 0;
                 }
                 DB::beginTransaction();
-                $postData = array("user_id"=>$user_id,"post_id"=>$id,"comment_text"=>$comment_text,"is_anonymous"=>$is_anonymous);
+                $postData = array("user_id"=>$user_id,"post_id"=>$id,"comment_text"=>$comment_text,"is_anonymous"=>$is_anonymous,"created_at"=>Carbon\Carbon::now());
                 $res = Comment::insertGetId($postData);
                 $file = $request->file('file_upload');
                 if ($file != "") {
@@ -696,7 +697,7 @@
                 if($res) {
                     return Redirect::back()->with('success', 'Comment '.Config::get('constant.ADDED_MESSAGE'));
                 }else {
-                    return Redirect::back()->with('err_msg', 'Please try again.');
+                    return Redirect::back()->with('err_msg', Config::get('constant.TRY_MESSAGE'));
                 }
             }
             else {

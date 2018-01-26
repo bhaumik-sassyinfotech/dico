@@ -149,7 +149,7 @@ if (!empty($post['postUserDisLike'])) {
                     <hr>
                     <!-- Comment Box start -->
                     <div class="container">
-                        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="flaggedComment" class="modal fade" style="display: none;">
+                        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="flaggedComment" class="modal fade warning-flag" style="display: none;">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -232,7 +232,7 @@ $active = "";
 			?>
                                                 <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
                                                     <?php //if ($commentUser['id'] == Auth::user()->id) {?>
-                                                    <?php if ($post['user_id'] == Auth::user()->id || $post->postUser->role_id > Auth::user()->role_id) { ?>
+                                                    <?php if ($commentUser['id'] == Auth::user()->id || $commentUser['role_id'] > Auth::user()->role_id) { ?>
                                                         <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                                     <?php } else {?>
                                                         Correct
@@ -358,9 +358,13 @@ if (!empty($postComment['commentUserDisLike'])) {
                                         <div class="row">
                                             <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
                                         </div>
+                                        <?php
+                                            if(count($post['company']) > 0 && $post['company']->allow_anonymous == 1) {
+                                        ?>
                                         <div class="row">
                                             <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
                                         </div>
+                                        <?php } ?>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" onclick="comment_reply()">Submit</button>
@@ -560,26 +564,25 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                         var res = JSON.parse(response);
                         var html = "";
                         if (res.status == 1) {
-                        if($('#icon_'+commentid).hasClass('fa-star-o')) {
-                            $('#icon_'+commentid).removeClass('fa-star-o');
-                            $('#icon_'+commentid).addClass('fa-star');
-                        }
-                        //html += '<i class="fa fa-star" aria-hidden="true">';
+                            if($('#icon_'+commentid).hasClass('disactive')) {
+                                $('#icon_'+commentid).removeClass('disactive');
+                                $('#icon_'+commentid).addClass('active');
+                                ajaxResponse('success',res.msg);
+                            }
                         } else if (res.status == 2) {
-                        //html += '<i class="fa fa-star" aria-hidden="true">';
-                            if($('#icon_'+commentid).hasClass('fa-star-o')) {
-                                $('#icon_'+commentid).removeClass('fa-star-o');
-                                $('#icon_'+commentid).addClass('fa-star');
+                            if($('#icon_'+commentid).hasClass('disactive')) {
+                                $('#icon_'+commentid).removeClass('disactive');
+                                $('#icon_'+commentid).addClass('active');
                             }
-                        ajaxResponse('error',res.msg);
+                            ajaxResponse('error',res.msg);
                         } else {
-                        //html += '<i class="fa fa-star-o" aria-hidden="true">';
-                            if($('#icon_'+commentid).hasClass('fa-star')) {
-                                $('#icon_'+commentid).removeClass('fa-star');
-                                $('#icon_'+commentid).addClass('fa-star-o');
+                            if($('#icon_'+commentid).hasClass('active')) {
+                                $('#icon_'+commentid).removeClass('active');
+                                $('#icon_'+commentid).addClass('disactive');
                             }
                         ajaxResponse('error',res.msg);
-                        }
+                        location.reload();
+                    }
                     //$('#solution_' + commentid).before(html);
                     },error: function(e) {
                         swal("Error", e, "error");
@@ -807,13 +810,15 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
-                        $('#flaggedComment').modal('hide');
+                        location.reload();
+                        //$('#flaggedComment').modal('hide');
                         //window.location.href = SITE_URL + '/post';
                         //location.reload();
                         //$('#comment_text_'+id).attr('readonly',true);
                         //$('#update_comment_'+id).css('display','none');
                     } else {
                         ajaxResponse('error',res.msg);
+                        location.reload();
                     }
                 },
                 error: function(e) {

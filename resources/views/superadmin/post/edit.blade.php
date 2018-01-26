@@ -323,7 +323,7 @@
                 $("input[name*='user_groups[]']").not(this).prop('checked', this.checked);
             });
             var checkboxes = $( "input[name*='user_groups[]']" );
-            if ( checkboxes.filter( ':checked' ).length == checkboxes.length )
+            if ( checkboxes.filter( ':checked' ).length == checkboxes.length && checkboxes.filter( ':checked' ).length > 0)
             {
                 $("#checkAll").prop( 'checked', true );
             } else {
