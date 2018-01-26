@@ -319,3 +319,45 @@ function ajaxResponse(type,msg) {
     }
     $(window).scrollTop(0);
 }
+function likeAttactmentComment(id,elementid) {
+    $.ajax({
+        url: SITE_URL+'/like_attachment_comment/'+id,
+        type: 'GET',
+        success: function(response) {
+            var res = JSON.parse(response);
+            var html = "";
+            if(res.status == 1) {
+                html += '<i class="fa fa-thumbs-up"></i>';
+            } else {
+                html += '<i class="fa fa-thumbs-o-up"></i>';
+            }
+            $('#comment_like_count_'+elementid).html(res.likecount);
+            $('#comment_dislike_count_'+elementid).html(res.dislikecount);
+            $('#like_comment_'+elementid).html(html);
+            $('#dislike_comment_'+elementid).html('<i class="fa fa-thumbs-o-down"></i>');
+        },
+        error: function() {
+        }
+    });
+}
+function dislikeAttachmentComment(id,elementid) {
+    $.ajax({
+        url: SITE_URL+'/dislike_attachment_comment/'+id,
+        type: 'GET',
+        success: function(response) {
+            var res = JSON.parse(response);
+            var html = "";
+            if(res.status == 1) {
+                html += '<i class="fa fa-thumbs-down"></i>';
+            } else {
+                html += '<i class="fa fa-thumbs-o-down"></i>';
+            }
+            $('#comment_like_count_'+elementid).html(res.likecount);
+            $('#comment_dislike_count_'+elementid).html(res.dislikecount);
+            $('#dislike_comment_'+elementid).html(html);
+            $('#like_comment_'+elementid).html('<i class="fa fa-thumbs-o-up"></i>');
+        },
+        error: function() {
+        }
+    });
+}

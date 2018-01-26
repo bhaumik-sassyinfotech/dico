@@ -82,9 +82,13 @@
                                                                  <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
                                                                  <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
                                                              </fieldset>
+                                                             <?php
+                                                                if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                            ?>
                                                              <div class="btn-wrap" id="postread{{$post['id']}}">
                                                                 <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
                                                              </div>
+                                                                <?php } ?>
                                                              <div class="panel-body-wrap">
                                                                  <div class="wrap-social pull-left">
                                                                      <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">

@@ -69,12 +69,14 @@
                             <input type="hidden" name="post_tags" id="mySingleField" value="{{$tags}}">
                             <ul id="singleFieldTags"></ul>
                         </div> 
+                        <div class="btn-wrap-div">
                         <?php
                             if(isset($company) && $company->allow_anonymous == 1) {
                         ?>
-                        <div class="btn-wrap-div">
+                        
                             <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous" <?php if($post->is_anonymous == 1) { echo "checked"; } ?>>
                             <span class="checkmark"></span></label>
+                        <?php } ?>    
                             <a href="{{ route('post.index') }}" class="st-btn">Back</a>
                             <input type="submit" name="save" id="save" value="Submit" class="st-btn">
                             <?php /*<div class="upload-btn-wrapper">
@@ -87,7 +89,7 @@
                                 ?>
                             </div> */?>       
                         </div>
-                            <?php } ?>
+                            
                         <?php /* <div class="row">
                                 <div class="col-xs-12 form-group">
                                     <label class="control-label" for="user_groups">Group:</label>
@@ -128,7 +130,7 @@
                                     else {
                                         $post_group = array();
                                     }
-                                    if(!empty($groups)) {
+                                    if(!empty($groups) && count($groups) > 0) {
                                        foreach($groups as $group) { 
                                 ?>
                                 <div class="category-detials">

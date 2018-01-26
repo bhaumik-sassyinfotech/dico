@@ -108,14 +108,13 @@
                             
                             <hr class="border-in-hr">
                             <div class="container">
-                                @foreach($meeting->meetingComment as $comment)
-                                <div class="row">
-                                    
+                                <form name="commentbox_form" id="commentbox_form" class="form-horizontal row-border  profile-page">
+                                <?php foreach($meeting->meetingComment as $comment) { ?>
+                                <div class="row" id="commentreply_{{$comment['id']}}">
                                     <div class="col-sm-2 user-image">
                                         <div class="img-wrap">
                                             <?php
                                                 $profile_img = '';
-                                                //$profile_pic = $comment->commentUser->profile_image;
                                                 if(empty($comment->commentUser->profile_image))
                                                     $profile_img = DEFAULT_PROFILE_IMAGE;
                                                 else
@@ -157,39 +156,24 @@
                                             </div>
                                             <div class="pull-right post-reply-pop">
                                                 <div class="options">
-                                                    <div class="star-wrap">
-                                                     <?php
-                                                    $active = "";
-                                                    if ($comment['is_correct'] == 0) {
-                                                            $active = "disactive";
-                                                    } else {
-                                                            $active = "active";
-                                                    }
-                                                ?>
-                                                <p id="icon_{{$comment['id']}}" class="<?php echo $active; ?>">
-                                                    <?php if ($meeting['user_id'] == Auth::user()->id || $meeting->meetingUser->role_id > Auth::user()->role_id) { ?>
-                                                        <a id="solution_{{$comment['id']}}" href="javascript:void(0)" onclick="markSolution({{$comment['id']}}, {{$commentUser['id']}}, {{$meeting['id']}})">Correct</a>
-                                                    <?php } else {?>
-                                                        Correct
-                                                    <?php }?>
-                                                </p>
-                                                    </div>
                                                     <div class="fmr-10">
-                                                          <a class="set-warning" href="">w</a>
                                                           @if($comment->commentUser->id == Auth::user()->id)
-                                                            <a class="set-edit" href="">e</a>
-                                                            <a class="set-alarm" href="{{ url('meeting/deleteComment/'.$comment->id) }}">a</a>
+                                                            <a class="set-edit" href="javascript:void(0)" onclick="editComment(<?=$comment['id']?>);">e</a>
+                                                            <a class="set-alarm" href="{{ url('meeting/deleteMeetingComment/'.$comment->id) }}">a</a>
                                                           @endif
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="text-12">
-                                            {{ $comment->comment_reply }}
-                                        </p>
+                                        <p class="profanity" id="comment_disp_<?=$comment['id']?>"><?php echo $comment->comment_reply; ?></p>
+                                            <textarea name="comment_text" id="comment_text_<?=$comment['id']?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo  $comment->comment_reply; ?></textarea>
+                                            <div class="btn-wrap-div">
+                                                <input type="button" name="update_comment" id="update_comment_<?=$comment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$comment['id']?>,<?=$comment['id']?>)" style="display: none;"/>
+                                                <input type="button" name="cancel_comment" id="cancel_comment_<?=$comment['id']?>" value="Cancel" class="btn btn-secondary btn-st" onClick="this.form.reset();closeComment(<?=$comment['id']?>)" style="display: none;"/>
+                                            </div>    
                                         <div class="rply-box">
                                             <div class="rply-count like">
-                                                <a href="javascript:void(0)" id="like_comment_{{$comment['id']}}" onclick="likeComment({{$comment['id']}},{{$comment['id']}});">
+                                                <a href="javascript:void(0)" id="like_comment_{{$comment['id']}}" onclick="likeAttactmentComment({{$comment['id']}},{{$comment['id']}});">
                                                 <?php
                                                     if (!empty($comment['commentUserLike'])) {
                                                 ?>
@@ -201,7 +185,7 @@
                                                 <span id="comment_like_count_{{$comment['id']}}"><?php echo count($comment['commentLike']); ?></span>
                                             </div>
                                             <div class="rply-count dislike">
-                                                <a href="javascript:void(0)" id="dislike_comment_{{$comment['id']}}" onclick="dislikeComment({{$comment['id']}},{{$comment['id']}});">
+                                                <a href="javascript:void(0)" id="dislike_comment_{{$comment['id']}}" onclick="dislikeAttachmentComment({{$comment['id']}},{{$comment['id']}});">
                                                 <?php
                                                     if (!empty($comment['commentUserDisLike'])) {
                                                 ?>
@@ -215,66 +199,40 @@
                                             <div class="rply-count">
                                             <a href="javascript:void(0);" onclick="openCommentReplyBox({{$comment['id']}})" id="modalComment"><i class="fa fa-reply" aria-hidden="true"></i></a>
                                             <span><?php echo count($comment['commentReply']); ?></span>
-                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
-                                                                <h4 class="modal-title">Report Comment</h4>
-                                                            </div>
-                                                            <form method="post" class="common-form">
-                                                             <div class="form-group">
-                                                                <label>Message To Author:</label> 
-                                                                 <textarea type="text" placeholder="Type here"></textarea>
-                                                             </div> 
-                                                             <div class="form-group">
-                                                                 <div class="btn-wrap-div">
-                                                                      <input class="st-btn" type="submit" value="Submit">
-                                                                      <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
-                                                                 </div>     
-                                                             </div>     
-                                                            </form>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal-dialog -->
-                                                </div>
                                             </div>    
-                                    </div>
-                                        <?php /*<div class="rply-box">
-                                            <div class="rply-count">
-                                                <a href="#myModal" data-toggle="modal"><img src="assets/img/post-rply.png" alt="post-rply"> </a>
-                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button aria-hidden="true" data-dismiss="modal"
-                                                                        class="desktop-close" type="button">×
-                                                                </button>
-                                                                <h4 class="modal-title">Report Comment</h4>
-                                                            </div>
-                                                            <form method="post" class="common-form">
-                                                                <div class="form-group">
-                                                                    <label>Message To Author:</label>
-                                                                    <textarea type="text" placeholder="Type here"></textarea>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <div class="btn-wrap-div">
-                                                                        <input class="st-btn" type="submit"
-                                                                               value="Submit">
-                                                                        <input value="Cancel" class="st-btn"
-                                                                               aria-hidden="true" data-dismiss="modal"
-                                                                               type="reset">
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal-dialog -->
-                                                </div>
-                                                <p>4</p>
-                                            </div>
-                                        </div>*/?>
+                                        </div>
                                     </div>
                                 </div>
-                                @endforeach
+                                <?php } ?>
+                                </form>
+                                <!-- Start comment reply popupbox -->
+                                <div id="myModalComment" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <div id="commentReplyList"></div> 
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Comment Here</h4>
+                                    </div>
+                                    <form name="reply_form" id="reply_form" class="form-horizontal row-border  profile-page">
+                                        <div class="modal-body">
+                                            <input type="hidden" id="commentId" name="commentId">
+                                            <div class="row">
+                                                <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                            </div>
+                                            <div class="row">
+                                                <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" onclick="comment_reply()">Submit</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                    </div>
+                                </div></div>
+                        <!-- End comment reply popupbox -->
                             </div>
                         
                         <!--</div>-->
@@ -324,7 +282,6 @@
                             </div>
                             <div class="idea-grp post-category" id="meetingAttachment">
                         <?php
-                            //dd($post->postAttachment);
                             if(!empty($meeting->meetingAttachment) && count($meeting->meetingAttachment) > 0) {
                             foreach($meeting->meetingAttachment as $attachment) {
                         ?>
@@ -459,5 +416,50 @@
                 swal("Error", "comment not found", "error");
             }
         }
+        function editComment(id) {
+            $('#comment_text_' + id).removeProp('readonly').slideDown('fast');
+            $('#update_comment_' + id).css('display', 'inline-block');
+            $('#comment_text_'+id).css('background-color','white');
+            $("#comment_disp_"+id).slideUp('fast');
+            $('#cancel_comment_'+id).css('display','inline-block');
+        }
+        function closeComment(id) {
+            $('#comment_text_'+id).removeProp('readonly').slideUp('fast');
+            $('#update_comment_' + id).css('display', 'none');
+            $('#comment_text_'+id).css('background-color','transparent');
+            $("#comment_disp_"+id).slideDown('fast');
+            $('#cancel_comment_'+id).css('display','none');
+        }
+        function updateComment(id,elementid) {
+        if($('#commentbox_form').valid() == 1) {
+            var comment = $('#comment_text_'+elementid).val();
+            var _token = CSRF_TOKEN;
+            formData = {id:id,comment:comment,_token};
+            $("#spinner").show();
+            $.ajax({
+                url: SITE_URL + '/meeting_comment_update',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $("#spinner").hide();
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        //swal("Success", res.msg, "success");
+                        $('#comment_text_'+elementid).attr('readonly',true);
+                        $('#comment_text_'+elementid).css('background-color','transparent');
+                        $('#update_comment_'+elementid).css('display','none');
+                        $('#cancel_comment_'+elementid).css('display','none');
+                        ajaxResponse('success',res.msg);
+                        location.reload();
+                    } else {
+                        ajaxResponse('error',res.msg);
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
     </script>
 @endpush

@@ -133,9 +133,13 @@ if (!empty($post['postUserDisLike'])) {
                         </div>*/?>
 
                         <div class="field-group checkbox-btn">
+                            <?php
+                                if(count($post['company']) > 0 && $post['company']->allow_anonymous == 1) {
+                            ?>
                             <div class="pull-left">
                                 <label class="check">Post as Anonymous <input type="checkbox" name="is_anonymous" id="is_anonymous"><span class="checkmark"></span></label>
                             </div>
+                            <?php } ?>
                             <div class="pull-right">
                                 <input type="submit" name="submit" id="submit" value="Submit" class="st-btn">
                             </div>
@@ -514,11 +518,13 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         }, function () {
             var token = '<?php echo csrf_token() ?>';
             var formData = {post_id : id, _token : token};
+            $("#spinner").show();
             $.ajax({
                 url: SITE_URL + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    $("#spinner").hide();
                     var res = JSON.parse(response);
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);

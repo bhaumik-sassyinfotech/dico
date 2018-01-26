@@ -43,9 +43,13 @@ if (!empty($group_posts)) {
         <?php /* <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p> */ ?>
                         <p class="desc-content profanity" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
                     </fieldset>
-                    <div class="btn-wrap" id="mypostread{{$grouppost['id']}}">
-                        <a href="#" onclick ="mypostReadMore({{$grouppost['id']}})">Read More</a>
-                    </div>
+                    <?php
+                       if(strlen($grouppost['post_description']) > POST_DESCRIPTION_LIMIT) {
+                    ?>
+                        <div class="btn-wrap" id="mypostread{{$grouppost['id']}}">
+                            <a href="#" onclick ="mypostReadMore({{$grouppost['id']}})">Read More</a>
+                        </div>
+                    <?php } ?>
                     <div class="panel-body-wrap">
                         <div class="wrap-social pull-left">
                             <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$grouppost['id']}}" onclick="like_post({{$grouppost['id']}})">

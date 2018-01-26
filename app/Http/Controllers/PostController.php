@@ -598,7 +598,7 @@
                 
                 
            dd($post);*/
-        $post = Post::with(['postUser.following','postLike','postDisLike','postUserLike' => function($q) {
+        $post = Post::with(['company','postUser.following','postLike','postDisLike','postUserLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); 
                 },'postUserDisLike' => function($q) {
                     $q->where('user_id',  Auth::user()->id)->first(); // '=' is optional
