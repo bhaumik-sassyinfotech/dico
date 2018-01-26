@@ -12,9 +12,9 @@
             <h1 class="tp-bp-0">Post</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                    <?php /*<div class="btn-group hidden-xs">
+                    <div class="btn-group hidden-xs">
                         <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
-                    </div>*/?>
+                    </div>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
 
@@ -31,8 +31,8 @@
                             <h4>
                                 <ul class="nav nav-tabs">
                                        <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Posts</span></a></li>
-                                       <?php /*<li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
-                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>*/?>
+                                       <li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
+                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>
                                 </ul>
                             </h4>
                             <div class="pull-right search-form">
@@ -62,14 +62,14 @@
                                                     <div class="panel-{{$post_class}} panel-primary">
                                                          <div class="panel-heading">
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
-                                                             <div class="pull-right i-con-set">
-                                                               <a><i class="fa fa-bell" aria-hidden="true"></i></a>
+                                                             <div class="pull-right no-icon">
+                                                                <a><img src="assets/img/notification-icon.png"></a>
                                                                 <?php
                                                                      if(!empty($post['post_flagged'])) {
                                                                 ?>
-                                                                    <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                                    <a class="" href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                                                 <?php } else { ?>
-                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                    <a class="" href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
@@ -189,8 +189,8 @@ if (!empty($post['post_tag'])) {
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($grouppost['post_type'])}}</h4>
-                                                                <div class="pull-right i-con-set">
-                                                                  <a><img src="assets/img/notification-icon.png"></a>  
+                                                                <div class="pull-right no-icon">
+                                                                  <a><img src="assets/img/notification-icon.png"></a>
                                                                   <?php
                                                                      if(!empty($grouppost['post_flagged'])) {
                                                                 ?>
@@ -313,7 +313,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($mypost['post_type'])}}</h4>
-                                                                <div class="pull-right i-con-set">
+                                                                <div class="pull-right no-icon">
                                                                   <a><img src="assets/img/notification-icon.png"></a> 
                                                                   <?php
                                                                      if(!empty($mypost['post_flagged'])) {

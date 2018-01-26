@@ -62,14 +62,14 @@
                                                     <div class="panel-{{$post_class}} panel-primary">
                                                          <div class="panel-heading">
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
-                                                             <div class="pull-right i-con-set">
-                                                               <a><i class="fa fa-bell" aria-hidden="true"></i></a>
+                                                             <div class="pull-right no-icon">
+                                                                <a><img src="assets/img/notification-icon.png"></a>
                                                                 <?php
                                                                      if(!empty($post['post_flagged'])) {
                                                                 ?>
-                                                                    <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                                    <a class="" href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                                                 <?php } else { ?>
-                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                    <a class="" href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
@@ -189,8 +189,8 @@ if (!empty($post['post_tag'])) {
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($grouppost['post_type'])}}</h4>
-                                                                <div class="pull-right i-con-set">
-                                                                  <a><img src="assets/img/notification-icon.png"></a>  
+                                                                <div class="pull-right no-icon">
+                                                                  <a><img src="assets/img/notification-icon.png"></a>
                                                                   <?php
                                                                      if(!empty($grouppost['post_flagged'])) {
                                                                 ?>
@@ -313,7 +313,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                        <div class="panel-{{$mypost_class}} panel-primary">
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($mypost['post_type'])}}</h4>
-                                                                <div class="pull-right i-con-set">
+                                                                <div class="pull-right no-icon">
                                                                   <a><img src="assets/img/notification-icon.png"></a> 
                                                                   <?php
                                                                      if(!empty($mypost['post_flagged'])) {

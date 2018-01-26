@@ -14,7 +14,7 @@ if (!empty($group_posts)) {
             <div class="panel-{{$mypost_class}} panel-primary">
                 <div class="panel-heading">
                     <h4 class="icon">{{ucfirst($grouppost['post_type'])}}</h4>
-                    <div class="pull-right i-con-set">
+                    <div class="pull-right no-icon">
                         <a><img src="assets/img/notification-icon.png"></a>  
                         <?php
                             if(!empty($grouppost['post_flagged'])) {

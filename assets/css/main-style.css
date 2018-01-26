@@ -4612,9 +4612,7 @@ panel-body fieldset p {
 .group-listing .category {
     border-bottom: none;
 }
-.panel-heading .no-icon a:not(:last-child) {
-    margin-right: 6px;
-}
+
 .no-icon .active i {
     display: none;
 }
@@ -4624,4 +4622,5 @@ panel-body fieldset p {
 .no-icon a:not(:last-child) {
     margin-right: 5px;
 }
+.no-icon a { display: inline-flex; }
 /*close 25-01-2018*/

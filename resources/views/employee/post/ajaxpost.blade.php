@@ -14,7 +14,7 @@
                    <div class="panel-{{$post_class}} panel-primary">
                         <div class="panel-heading">
                             <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
-                            <div class="pull-right i-con-set">
+                            <div class="pull-right no-icon">
                               <a><img src="assets/img/notification-icon.png"></a>  
                               <?php
                                     if(!empty($post['post_flagged'])) {
