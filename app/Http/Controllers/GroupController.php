@@ -93,19 +93,17 @@ class GroupController extends Controller {
 		//
 
 		$currUser = Auth::user();
-
-		$groups_query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts'])->orderBy('id', 'DESC');
+		$grp_concat = implode('|', Group::all()->pluck('id')->toArray());
+		$groups_query = Group::select('groups.*', DB::raw('(SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as group_posts_count'))->withCount(['groupUsers'])->orderBy('id', 'DESC');
 
 		if ($currUser->role_id != 1) {
-
 			$groups_query = $groups_query->where('company_id', $currUser->company_id);
-
 		}
 
 		$groups_count = $groups_query->count();
 
 		$groups = $groups_query->limit(POST_DISPLAY_LIMIT)->get();
-
+		// dd($groups);
 		return view($this->folder . '.groups.index', compact('groups', 'groups_count'));
 
 //        return redirect()->route('group.create');
@@ -412,7 +410,7 @@ class GroupController extends Controller {
 
 		$group_query = '';
 
-		$group_query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts']);
+		$group_query = Group::select('*', DB::raw('( SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as group_posts_count'))->withCount(['groupUsers']);
 
 		if ($currUser->role_id != '1') {
 

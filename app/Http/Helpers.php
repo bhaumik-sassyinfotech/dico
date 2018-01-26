@@ -1,8 +1,11 @@
 <?php
 
 use App\EmailTemplate;
+use App\Point;
 use App\PostView;
 use App\User;
+use App\UserActivity;
+use Carbon\Carbon;
 
 //use DB;
 
@@ -244,10 +247,52 @@ class Helpers {
 		return trim($decrypttext);
 	}
 
-	// public static function points($slug)
-	// {
+	public static function points($slug, $user_id, $parent_id, $view = FALSE) {
+		$original_slug = trim(strtoupper($slug));
+		$slug = $slug;
+		$insertRecord = TRUE;
+		if (!empty($slug)) {
 
-	// }
+			$insertData = $points = [];
+			if ($original_slug == 'DISLIKE') {
+				$slug = 'LIKE';
+			}
+
+			$points = Point::where('slug', $slug)->first();
+			if (!empty($points)) {
+				$insertData = ['user_id' => $user_id, 'parent_id' => $parent_id, 'points' => $points->points, 'activity_id' => $points->id];
+				$insertData['updated_at'] = $insertData['created_at'] = Carbon::now();
+
+				$previousActivityQuery = UserActivity::where(['user_id' => $user_id, 'parent_id' => $parent_id, 'activity_id' => $points->id]);
+
+				if ($original_slug == 'LIKE' OR $original_slug == 'DISLIKE') {
+
+					$previousActivity = $previousActivityQuery->first();
+
+					if (!empty($previousActivity)) {
+						//user already liked a post and clicked again. So remove the like points
+						$previousActivity->delete();
+						$insertRecord = FALSE;
+					}
+					if ($original_slug == 'DISLIKE') {
+						$insertRecord = FALSE; //no points deducted for dislike
+					}
+				} else {
+					// create-post , idea-approved ,
+					$previousActivity = $previousActivityQuery->first();
+					if (!empty($previousActivity)) {
+						$insertData = FALSE;
+					}
+
+				}
+
+				if ($insertRecord) {
+					UserActivity::insert($insertData);
+				}
+
+			}
+		}
+	}
 }
 
 ?>

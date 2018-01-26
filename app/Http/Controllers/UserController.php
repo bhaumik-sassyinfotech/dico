@@ -648,10 +648,12 @@ class UserController extends Controller {
 
 	public function getGroupAdminGrid(Request $request) {
 		$groups = GroupUser::where('is_admin', 1)->get();
-		$group_owner = $groups->pluck('group_owner')->toArray();
-		$group_ids = $groups->pluck('id')->toArray();
+		// $group_owner = $groups->pluck('group_owner')->toArray();
+		$group_ids = $groups->pluck('group_id')->toArray();
+		DB::connection()->enableQueryLog();
 		$users = GroupUser::with(['userDetail', 'userDetail.followers', 'userDetail.following'])
 			->where('is_admin', 1)->whereIn('group_id', $group_ids)->get()->toArray();
+
 		$html = view::make($this->folder . '.users.ajax_admin', compact('users'));
 		$output = array('html' => $html->render(), 'count' => count($users));
 		return $output;

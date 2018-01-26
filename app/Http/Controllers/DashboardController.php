@@ -131,19 +131,35 @@ class DashboardController extends Controller {
 	public function view_profile($id = null) {
 		$id = Helpers::decode_url($id);
 		if (Auth::user() && !empty($id)) {
+			$currUser = Auth::user();
 			$user_id = $id;
-			$company_id = User::find($id)->company_id;
+			$view_user = User::find($id);
+			$company_id = $view_user->company_id;
 			$user = User::with(['followers', 'following', 'followers.followUser', 'following.followingUser'])->where('id', $user_id)->first();
-			$group_ids = GroupUser::select('group_id')->where('user_id', $user_id)->pluck('group_id');
+			$group_ids = GroupUser::select('group_id')->where('user_id', $user_id)->pluck('group_id')->toArray();
 			// print_r($group_ids);
 			// DB::enableQueryLog();
 			// $groupDetails = DB::table('group_users')->Join('groups', 'groups.id', '=', 'group_users.group_id')
 			// 	->leftJoin('posts', 'groups.id', '=', 'posts.group_id')
 			// 	->whereIn('group_users.group_id', $group_ids)->select(DB::raw('count(group_users.user_id) as total_members, count(posts.id) as total_posts , groups.* '))->groupBy('group_users.group_id')->orderByDesc('posts.created_at')->get();
 			// dd(DB::getQueryLog());
-			$groupDetails = GroupUser::select(DB::raw('count(distinct(group_users.user_id)) as total_members, count(distinct(posts.id)) as total_posts , groups.* '))->leftJoin('groups', 'groups.id', '=', 'group_users.group_id')
-				->leftJoin('posts', 'groups.id', '=', 'posts.group_id')
-				->whereIn('group_users.group_id', $group_ids)->groupBy('group_users.group_id')->orderByDesc('posts.created_at')->get();
+			$grp_concat = implode("|", $group_ids);
+			// dd($grp_concat);
+
+			// $groupDetails = GroupUser::select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* '))->leftJoin('groups', 'groups.id', '=', 'group_users.group_id')
+			// 	->leftJoin('posts', 'groups.id', '=', 'posts.group_id')
+			// 	->whereIn('group_users.group_id', $group_ids)->groupBy('group_users.group_id')->orderByDesc('posts.created_at')->get();
+
+			$groupDetails_query = DB::table('group_users')
+				->join('groups', 'groups.id', '=', 'group_users.group_id')
+				->where('groups.company_id', $company_id)
+				->select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* , (SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as total_posts'))
+				->groupBy('group_users.group_id');
+			if ($currUser->role_id != 1) {
+				$groupDetails_query = $groupDetails_query->where('groups.company_id', $company_id);
+			}
+			$groupDetails = $groupDetails_query->get();
+			// dd($groupDetails);
 
 			$userPosts = Post::with(['postLike', 'postComment', 'postTag.tag', 'postUser'])
 				->whereIn('group_id', $group_ids)->where('user_id', $user_id)->get();

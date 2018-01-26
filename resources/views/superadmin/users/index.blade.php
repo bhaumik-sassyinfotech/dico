@@ -131,7 +131,7 @@
 
                                                             </fieldset>
                                                             <div class="btn-wrap">
-                                                                <a href="#">Follow</a>
+                                                                <a href="{{ url('view_profile/'.Helpers::encode_url($user->id)) }}">Follow</a>
                                                                 <a href="#">Point:246</a>
 
                                                             </div>

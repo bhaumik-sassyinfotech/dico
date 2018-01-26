@@ -199,7 +199,7 @@ if (!empty($following->followingUser->profile_image)) {
                                                             </p>
                                                             <div class="panel-body-wrap">
                                                                 <div class="follower-text pull-left">
-                                                                    <p>Total Posts:<span>0</span></p>
+                                                                    <p>Total Posts:<span>{{ $group->total_posts }}</span></p>
                                                                 </div>
                                                                 <div class="follower-text pull-right">
                                                                     <p>Total Members:<span>{{ $group->total_members }}</span></p>
