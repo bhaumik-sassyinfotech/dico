@@ -144,6 +144,7 @@ class PostController extends Controller {
 				//=== tagss saving end ===//
 				DB::commit();
 				if ($post) {
+					Helpers::add_points('CREATE_POST', $user_id, $id); // add create post  points
 					return redirect()->route('post.index')->with('success', 'Post ' . Config::get('constant.ADDED_MESSAGE'));
 				} else {
 					return redirect()->route('post.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
@@ -443,6 +444,12 @@ class PostController extends Controller {
 			if (Auth::user()) {
 				$user_id = Auth::user()->id;
 				$postlike = PostLike::where(array('user_id' => $user_id, 'post_id' => $id))->first();
+				$post = Post::find($id);
+
+				if($post->post_type == 'idea')
+				{
+					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id)
+				}
 				if ($postlike) {
 					if ($postlike->flag == 1) {
 						$deleteLike = $postlike->forceDelete();
@@ -488,6 +495,12 @@ class PostController extends Controller {
 			if (Auth::user()) {
 				$user_id = Auth::user()->id;
 				$postdislike = PostLike::where(array('user_id' => $user_id, 'post_id' => $id))->first();
+				$post = Post::find($id);
+
+				if($post->post_type == 'idea')
+				{
+					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id)
+				}
 				if ($postdislike) {
 					if ($postdislike->flag == 2) {
 						$deletedislike = $postdislike->forceDelete();
@@ -615,6 +628,10 @@ class PostController extends Controller {
 				}
 				DB::beginTransaction();
 				$postData = array("user_id" => $user_id, "post_id" => $id, "comment_text" => $comment_text, "is_anonymous" => $is_anonymous, "created_at" => Carbon\Carbon::now());
+
+				$comment = Comment::where('id', $id)->first();
+
+				Helpers::add_points('ADD_COMMENT', $comment->user_id, $comment->id); // add comment points
 				$res = Comment::insertGetId($postData);
 				$file = $request->file('file_upload');
 				if ($file != "") {
@@ -650,8 +667,11 @@ class PostController extends Controller {
 		if (Attachment::where(array('type_id' => $id, 'type' => 2))->exists()) {
 			Attachment::where(array('type_id' => $id, 'type' => 2))->delete();
 		}
-		$deleteComment = Comment::where('id', $id)->delete();
+		$commentQuery = Comment::where('id', $id);
+		$comment = $commentQuery->first();
+		$deleteComment = $commentQuery->delete();
 		if ($deleteComment) {
+			Helpers::add_points('ADD_COMMENT', $comment->user_id, $comment->id); // remove comment points
 			return Redirect::back()->with('success', 'Comment deleted successfully');
 		} else {
 			return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
@@ -665,6 +685,8 @@ class PostController extends Controller {
 				$f = 0;
 				$user_id = Auth::user()->id;
 				$commentlike = CommentLike::where(array('user_id' => $user_id, 'comment_id' => $id))->first();
+
+				Helpers::add_points('LIKE', $user_id, $id); // add like points
 				if ($commentlike) {
 					if ($commentlike->flag == 1) {
 						$deletelike = $commentlike->forceDelete();
@@ -696,7 +718,6 @@ class PostController extends Controller {
 						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 					}
 				}
-
 			} else {
 				return redirect('/index');
 			}
@@ -712,6 +733,7 @@ class PostController extends Controller {
 			if (Auth::user()) {
 				$user_id = Auth::user()->id;
 				$commentdislike = CommentLike::where(array('user_id' => $user_id, 'comment_id' => $id))->first();
+				Helpers::add_points('DISLIKE', $user_id, $id); // add comment points
 				if ($commentdislike) {
 					if ($commentdislike->flag == 2) {
 						$deletedislike = $commentdislike->forceDelete();
@@ -767,6 +789,7 @@ class PostController extends Controller {
 					$user_id = $request->input('user_id');
 					$post_id = $request->input('post_id');
 					$check = Comment::where(array('post_id' => $post_id, 'is_correct' => 1))->first();
+
 					if ($check) {
 						if ($check->user_id == $user_id) {
 							echo json_encode(array('status' => 2, 'msg' => "Solution already marked"));
@@ -776,6 +799,7 @@ class PostController extends Controller {
 					} else {
 						$answer = Comment::where('id', $comment_id)->update(array('is_correct' => 1, 'is_correct_by_user' => $user_id));
 						if ($answer) {
+							Helpers::add_points('CORRECT_SOLUTION', $user_id, $check->id); // add solution points
 							echo json_encode(array('status' => 1, 'msg' => "answer marked successfully"));
 						} else {
 							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
@@ -1215,6 +1239,7 @@ class PostController extends Controller {
 			}
 			if ($post->save()) {
 				$file = $request->file('file_upload');
+				Helpers::add_points('IDEA_APPROVED', $currUser->id, $id);
 				if ($file != "") {
 					$postData = array();
 					//echo "here";die();

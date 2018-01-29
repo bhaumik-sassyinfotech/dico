@@ -51,7 +51,13 @@ class UserController extends Controller {
 	public function index() {
 		if (Auth::user()) {
 			$company_id = Auth::user()->company_id;
-			$usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();
+			$usercompany_query = Company::whereNull('deleted_at');
+			if (Auth::user()->role_id > 1) {
+				$usercompany_query = $usercompany_query->where('id', $company_id);
+			}
+
+			$usercompany = $usercompany_query->first();
+
 			if ($usercompany) {
 				if ($usercompany->allow_add_admin == 1) {
 					$role_id = [2, 3];

@@ -103,10 +103,11 @@ $("#company_listing").change(function () {
                 var userData = response.data;
                 var role = '';
                 $.each(userData, function (key, val) {
-                    if (val.role_id === 2)
+                    if (val.role_id == '2')
                         role = 'Manager';
-                    else if (val.role_id === 3)
+                    else if (val.role_id == '3')
                         role = 'Employee';
+                    console.log("Role: "+role);
                     $("#users_listing,#group_owner").append("<option value='" + val.id + "'>" + val.name + "(" + role + ")" + "</option>");
                 });
             }
@@ -131,9 +132,10 @@ $("#group_owner").change(function () {
             if (status == 1) {
                 var groups = response.data;
                 $.each(groups, function (key, val) {
-                    if (val.role_id === 2)
+                    var role = '';
+                    if (val.role_id == '2')
                         role = 'Manager';
-                    else if (val.role_id === 3)
+                    else if (val.role_id == '3')
                         role = 'Employee';
                     userDropDown.append("<option value='" + val.id + "'>" + val.name + "(" + role + ")" + "</option>");
                     // userDropDown.append($("<option></option>").val(val.id).html(val.group_name));

@@ -247,7 +247,7 @@ class Helpers {
 		return trim($decrypttext);
 	}
 
-	public static function points($slug, $user_id, $parent_id, $view = FALSE) {
+	public static function add_points($slug, $user_id, $parent_id, $view = FALSE) {
 		$original_slug = trim(strtoupper($slug));
 		$slug = $slug;
 		$insertRecord = TRUE;
@@ -265,7 +265,7 @@ class Helpers {
 
 				$previousActivityQuery = UserActivity::where(['user_id' => $user_id, 'parent_id' => $parent_id, 'activity_id' => $points->id]);
 
-				if ($original_slug == 'LIKE' OR $original_slug == 'DISLIKE') {
+				if ($original_slug == 'LIKE' OR $original_slug == 'DISLIKE' OR $original_slug == 'ADD_COMMENT' OR $original_slug == 'IDEA_VOTE' OR $original_slug == 'CORRECT_SOLUTION') {
 
 					$previousActivity = $previousActivityQuery->first();
 
@@ -275,13 +275,13 @@ class Helpers {
 						$insertRecord = FALSE;
 					}
 					if ($original_slug == 'DISLIKE') {
-						$insertRecord = FALSE; //no points deducted for dislike
+						$insertRecord = FALSE; //no points deducted for dislike directly
 					}
-				} else {
+				} else if ($original_slug == 'CREATE_POST' OR $original_slug == 'IDEA_APPROVED') {
 					// create-post , idea-approved ,
 					$previousActivity = $previousActivityQuery->first();
 					if (!empty($previousActivity)) {
-						$insertData = FALSE;
+						$insertRecord = FALSE;
 					}
 
 				}
