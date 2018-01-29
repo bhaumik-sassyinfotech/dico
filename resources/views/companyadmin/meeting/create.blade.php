@@ -14,19 +14,19 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <form class="common-form" method="POST" name="createMeeting" action="{{ route('meeting.store') }}" id="createMeeting">
+                    <form class="common-form" method="POST" name="createMeeting" action="{{ route('meeting.store') }}" id="createMeeting" enctype="multipart/form-data">
                     <div class="col-sm-8" id="post-detail-left">
                             {{ method_field('POST') }}
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label>Type</label>
+                                <label>Type*</label>
                                 <div class="check-wrap">
                                     <label class="check">Private
-                                        <input class="privacy_type" type="checkbox" name="privacy[]" id="private" value="private">
+                                        <input class="privacy_type post_type" type="checkbox" name="privacy" id="private" value="private">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="check">Public
-                                        <input class="privacy_type" type="checkbox" name="privacy[]" id="public" value="public">
+                                        <input class="privacy_type post_type" type="checkbox" name="privacy" id="public" value="public">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -38,12 +38,15 @@
                     
                             <div class="form-group">
                                 <label  for="meeting_description">Meeting description</label>
-                                <textarea name="meeting_description" id="meeting_description"
-                                          class="form-control"></textarea>
+                                <textarea name="meeting_description" id="meeting_description" class="form-control"></textarea>
                             </div>
                             <input type="hidden" name="company_id" value="{{ $company_id }}">
                             <div class="btn-wrap-div">
                                 <input type="submit" class="st-btn" value="Submit">
+                                <div class="upload-btn-wrapper">
+                                    <button class="upload-btn">Upload Files</button>
+                                    <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                </div>
                             </div>
                     </div>
                    
@@ -58,15 +61,15 @@
                                 <div class="tab-content">
                                     <div class="tab-pane clearfix active" id="home1">
                                         <div class="main-group-wrap">
-                                            <div class="category-tab"> 
-                                                <label class="check">Groups<input type="checkbox">
+                                            <div class="category-tab tp-bp-0"> 
+                                                <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
                                                     <span class="checkmark"></span>
                                                 </label>
                                             </div>
                                             <div class="category-detials">
                                                 @foreach($groups as $group)
-                                                    <label class="check">{{ $group->group_name }}
-                                                        <input name="group[]" type="checkbox" value="{{ $group->id }}">
+                                                <label class="check" style="display: block !important;">{{ $group->group_name }}
+                                                        <input name="group[]" type="checkbox" id="group_{{$group->id}}" value="{{ $group->id }}">
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 @endforeach
@@ -111,3 +114,10 @@
         </div>
     </div> <!-- container -->
 @stop
+@push('javascripts')
+<script type="text/javascript">
+$("#checkAll").click(function () {
+    $("input[name*='group[]']").not(this).prop('checked', this.checked);
+});
+</script>
+@endpush        

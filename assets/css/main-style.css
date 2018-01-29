@@ -4622,5 +4622,17 @@ panel-body fieldset p {
 .no-icon a:not(:last-child) {
     margin-right: 5px;
 }
+.no-icon {
+    line-height: 35px;
+}
 .no-icon a { display: inline-flex; }
 /*close 25-01-2018*/
+
+/*26-01-2018*/
+.userlinks ul.dropdown-menu li:not(:last-child) {
+    display: none;
+}
+.create-post .common-form .box-check .check.selected {
+    background-color: gray;
+}
+/*close 26-01-2018*/

@@ -97,21 +97,49 @@
          */
         public function store( Request $request )
         {
-//            dd($request->all());
+            //dd($request->all());
             DB::beginTransaction();
             try {
                 $currUser   = Auth::user();
+                $validator = Validator::make($request->all(),
+                [
+                        'privacy' => 'required',
+                        'meeting_title' => 'required|max:' . POST_TITLE_LIMIT,
+                ]);
+                if ($validator->fails()) {
+                        return Redirect::back()->withErrors($validator)->withInput();
+                }
                 $company_id = $request->company_id;
-                $privacy    = ($request->privacy[ 0 ] == 'public') ? 0 : 1;
+                $privacy    = ($request->privacy == 'public') ? 0 : 1;
                 
                 $meeting                      = new Meeting;
                 $meeting->meeting_title       = $request->meeting_title;
                 $meeting->meeting_description = $request->meeting_description;
                 $meeting->privacy             = $privacy;
                 $meeting->created_by          = $currUser->id;
-//                dd($meeting);
+                //dd($meeting);
                 if ( $meeting->save() ) {
 //                    dd("abc");
+                    $file = $request->file('file_upload');
+                    //dd($file);
+                    if ($file != "") {
+                            $postData = array();
+                            //echo "here";die();
+                            $fileName = $file->getClientOriginalName();
+                            $extension = $file->getClientOriginalExtension();
+                            $folderName = '/uploads/';
+                            $destinationPath = public_path() . $folderName;
+                            $safeName = str_random(10) . '.' . $extension;
+                            $file->move($destinationPath, $safeName);
+                            $attachment = new MeetingAttachment;
+                            $attachment->file_name = $safeName;
+                            $attachment->type = 1;
+                            $attachment->type_id = $meeting->id;
+                            $attachment->user_id = Auth::user()->id;
+                            //dd($attachment);
+                            $attachment->save();
+                            // $attachment = Attachment::insert($postData);
+                    }
                     $group        = $users = [];
                     $meeting_id   = $meeting->id;
                     $meetingUsers = [ ['meeting_id' => $meeting->id , 'user_id' => $currUser->id, 'is_admin' => 1, 'group_id' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now() ] ];
@@ -196,7 +224,9 @@
         {
             //
             $id      = Helpers::decode_url($id);
-            $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment', 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser','meetingComment.commentLike','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->where('id', $id)->first();
+            $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment' => function ($q) {
+                $q->take(COMMENT_DISPLAY_LIMIT);
+            }, 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser','meetingComment.commentLike','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->withCount('meetingComment')->where('id', $id)->first();
             $type_ids = MeetingComment::where('meeting_id',$meeting->id)->pluck('id')->toArray();
             $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
             $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
@@ -253,8 +283,16 @@
 //            dd($request->all());
             $id = Helpers::decode_url($id);
             $meeting = Meeting::find($id);
-            
-            $privacy                      = ($request->privacy[ 0 ] == 'public') ? 0 : 1;
+            $validator = Validator::make($request->all(),
+            [
+                    'privacy' => 'required',
+                    'meeting_title' => 'required|max:' . POST_TITLE_LIMIT,
+            ]);
+            if ($validator->fails()) {
+                    return Redirect::back()->withErrors($validator)->withInput();
+            }
+//            /echo "<pre>";print_r($request->all());die;
+            $privacy                      = ($request->privacy == 'public') ? 0 : 1;
             $meeting->meeting_title       = $request->input('meeting_title');
             $meeting->meeting_description = $request->input('meeting_description');
             $meeting->privacy             = $privacy;
