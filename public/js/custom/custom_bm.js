@@ -516,7 +516,7 @@ $("#createMeeting").validate({
             required: true,
             maxlength: 255
         },
-        'privacy[]': {
+        'privacy': {
             required: true,
             minlength: 1
         }

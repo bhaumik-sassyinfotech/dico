@@ -20,14 +20,14 @@
                     {!! Form::open(['method' => 'PUT', 'route' => ['meeting.update', Helpers::encode_url($meeting->id)],'enctype'=>'multipart/form-data', 'id' => 'meeting_edit_form' , 'class' => 'common-form']) !!}
                     <div class="col-sm-8" id="post-detail-left">    
                         <div class="form-group">
-                            <label>Type</label>
+                            <label>Type*</label>
                             <div class="check-wrap">
                                 <label class="check">Private
-                                    <input class="privacy_type" type="checkbox" {{ ($meeting->privacy == '1') ? 'checked':'' }} name="privacy[]" id="private" value="private">
+                                    <input class="privacy_type post_type" type="checkbox" {{ ($meeting->privacy == '1') ? 'checked':'' }} name="privacy" id="private" value="private">
                                     <span class="checkmark"></span>
                                 </label>
                                 <label class="check">Public
-                                    <input class="privacy_type" type="checkbox" {{ ($meeting->privacy == '0') ? 'checked':'' }} name="privacy[]" id="public" value="public">
+                                    <input class="privacy_type post_type" type="checkbox" {{ ($meeting->privacy == '0') ? 'checked':'' }} name="privacy" id="public" value="public">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
