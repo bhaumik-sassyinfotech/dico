@@ -247,6 +247,10 @@ class Helpers {
 		return trim($decrypttext);
 	}
 
+	public static function user_points($user_id) {
+		return UserActivity::select(DB::raw('IFNULL(sum(points),0) as points'))->where('user_id', $user_id)->first();
+	}
+
 	public static function add_points($slug, $user_id, $parent_id, $view = FALSE) {
 		$original_slug = trim(strtoupper($slug));
 		$slug = $slug;

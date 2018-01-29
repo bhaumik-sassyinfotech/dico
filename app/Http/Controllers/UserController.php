@@ -560,7 +560,8 @@ class UserController extends Controller {
 			return Datatables::of($res)->addColumn('role', function ($row) {
 				return 'Employee';
 			})->addColumn('points', function ($row) {
-				return '<p>420</p>';
+				$points = Helpers::user_points($row->id);
+				return '<p>' . $points['points'] . '</p>';
 			})->addColumn('name', function ($row) {
 				return '<label class="check">' . $row->name . '<input type="checkbox"><span class="checkmark"></span></label>';
 			})->addColumn('email', function ($row) {
@@ -593,7 +594,8 @@ class UserController extends Controller {
 		return Datatables::of($res)->addColumn('position', function ($row) {
 			return 'Company Manager';
 		})->addColumn('points', function ($row) {
-			return '<p>420</p>';
+			$points = Helpers::user_points($row->id);
+			return '<p>' . $points['points'] . '</p>';
 		})->addColumn('name', function ($row) {
 			return '<label class="check">' . $row->name . '<input type="checkbox"><span class="checkmark"></span></label>';
 		})->addColumn('email', function ($row) {

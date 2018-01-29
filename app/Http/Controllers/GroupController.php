@@ -626,9 +626,9 @@ class GroupController extends Controller {
 
 		})->addColumn('points', function ($row) use (&$i) {
 
-			$i += 12;
+			$points = Helpers::user_points($row->userDetail->id);
 
-			return '<p >' . $i . '<span></span></p>';
+			return '<p>' . $points['points'] . '<span></span></p>';
 
 		})->addColumn('action', function ($row) use ($groupDetails) {
 
