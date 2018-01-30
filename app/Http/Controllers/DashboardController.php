@@ -166,7 +166,10 @@ class DashboardController extends Controller {
 
 			//$questions = SecurityQuestion::all();
 			//$userquestions = UserSecurityQuestion::where('user_id', $user_id)->get();
-			return view($this->folder . '.users.view_profile', compact('user', 'groupDetails', 'userPosts'));
+			// dd($user);
+			$points = Helpers::user_points($user_id);
+			$points = $points['points'];
+			return view($this->folder . '.users.view_profile', compact('user', 'groupDetails', 'userPosts', 'points'));
 		} else {
 			return redirect('/index');
 		}

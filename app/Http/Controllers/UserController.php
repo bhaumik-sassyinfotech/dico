@@ -73,7 +73,7 @@ class UserController extends Controller {
 				$users_count = count($user_query->get());
 				$users = $user_query->orderByDesc('created_at')->limit(POST_DISPLAY_LIMIT)->get();
 				$company_admins = User::with(['following', 'followers'])->where('role_id', 2)->get();
-				// dd($users);
+				// return $users;
 				return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
 			}
 		} else {

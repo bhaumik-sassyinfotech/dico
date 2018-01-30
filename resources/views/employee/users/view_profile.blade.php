@@ -137,7 +137,7 @@ if (!empty($following->followingUser->profile_image)) {
                                 <p>Name : <span>{{$user->name}}</span></p>
                                 <p>Email Id : <span>{{$user->email}}</span></p>
                                 <p>Role : <span><a href="#">@if($user->role_id == '2') {{ "Company Admin" }} @elseif($user->role_id == '3') {{ "Employee" }} @else {{ "Super Admin" }} @endif</a></span></p>
-                                <p>Points : <span>2365</span></p>
+                                <p>Points : <span><p>Points : <span>{{ $points }}</span></p></span></p>
                             </div>
                             <div class="group-item two">
                                 <h2>{{ isset($user->followers) ? count($user->followers) : 0}}</h2>

@@ -35,8 +35,10 @@
 
                 </fieldset>
                 <div class="btn-wrap">
-                    <a href="{{ url('view_profile/'.$user['id']) }}">Follow</a>
-                    <a href="#">Point:246</a>
+                    <?php $uid = $user['id'];?>
+                    <a href="{{ url('view_profile/'.Helpers::encode_url($uid)) }}">Follow</a>
+                    <?php $pts = Helpers::user_points($uid);?>
+                    <a href="#">Point:{{ $pts['points'] }}</a>
 
                 </div>
                 <div class="panel-body-wrap">

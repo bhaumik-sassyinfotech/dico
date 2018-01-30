@@ -446,9 +446,8 @@ class PostController extends Controller {
 				$postlike = PostLike::where(array('user_id' => $user_id, 'post_id' => $id))->first();
 				$post = Post::find($id);
 
-				if($post->post_type == 'idea')
-				{
-					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id)
+				if ($post->post_type == 'idea') {
+					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id);
 				}
 				if ($postlike) {
 					if ($postlike->flag == 1) {
@@ -497,9 +496,8 @@ class PostController extends Controller {
 				$postdislike = PostLike::where(array('user_id' => $user_id, 'post_id' => $id))->first();
 				$post = Post::find($id);
 
-				if($post->post_type == 'idea')
-				{
-					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id)
+				if ($post->post_type == 'idea') {
+					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id);
 				}
 				if ($postdislike) {
 					if ($postdislike->flag == 2) {
@@ -789,7 +787,7 @@ class PostController extends Controller {
 					$user_id = $request->input('user_id');
 					$post_id = $request->input('post_id');
 					$check = Comment::where(array('post_id' => $post_id, 'is_correct' => 1))->first();
-
+					$comm = Comment::find($comment_id);
 					if ($check) {
 						if ($check->user_id == $user_id) {
 							echo json_encode(array('status' => 2, 'msg' => "Solution already marked"));
@@ -798,8 +796,14 @@ class PostController extends Controller {
 						}
 					} else {
 						$answer = Comment::where('id', $comment_id)->update(array('is_correct' => 1, 'is_correct_by_user' => $user_id));
+
 						if ($answer) {
-							Helpers::add_points('CORRECT_SOLUTION', $user_id, $check->id); // add solution points
+							$str = 'CORRECT_SOLUTION';
+							if ($user_id == 1) {
+								$str = 'MARK_ANSWER_CORRECT';
+							}
+							Helpers::add_points($str, $comm->user_id, $comm->id);
+
 							echo json_encode(array('status' => 1, 'msg' => "answer marked successfully"));
 						} else {
 							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));

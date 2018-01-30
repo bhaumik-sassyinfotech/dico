@@ -31,3 +31,4 @@ define('DEFAULT_GROUP_IMAGE', 'assets/img/custome-service.png');
 define('DEFAULT_PROFILE_IMAGE', 'assets/img/post-userone.PNG');
 define('DEFAULT_ATTACHMENT_IMAGE', 'assets/img/uploadfiles1.PNG');
 define('DEFAULT_LOADER_IMAGE', 'assets/img/spinner.gif');
+define('IMAGE_PATH', 'assets/img');
