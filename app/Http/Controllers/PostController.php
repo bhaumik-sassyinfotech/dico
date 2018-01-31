@@ -174,11 +174,7 @@ class PostController extends Controller {
 				return $q->where('user_id', Auth::user()->id);
 			}, 'postAttachment', 'postFlagged' => function ($q) {
 				return $q->where('user_id', Auth::user()->id);
-			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at');
-                        if(Auth::user()->role_id > 1) {
-                            $query->where('company_id', Auth::user()->company_id);
-                        }
-			$query->orderBy('post_like_count', 'desc');
+			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id', Auth::user()->company_id)->orderBy('post_like_count', 'desc');
 			$count_post = count($query->get());
 			$posts = $query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
 
@@ -188,11 +184,7 @@ class PostController extends Controller {
 				return $q->where('user_id', Auth::user()->id);
 			}, 'postAttachment', 'postFlagged' => function ($q) {
 				return $q->where('user_id', Auth::user()->id);
-			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id]);
-                        if(Auth::user()->role_id > 1) {
-                            $query->where('company_id', Auth::user()->company_id);
-                        }
-				$query->orderBy('post_like_count', 'desc');
+			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id])->where('company_id', Auth::user()->company_id)->orderBy('post_like_count', 'desc');
 			$count_user_post = count($user_query->get());
 			$user_posts = $user_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
 
@@ -203,19 +195,17 @@ class PostController extends Controller {
 				if (count($groupusers['groupUserDetails']) > 0) {
 					$group_id = $groupusers['groupUserDetails']['group_id'];
 					//dd($group_id);
+                                        // DB::connection()->enableQueryLog();
 					$group_query = Post::with(['postUser', 'postLike', 'postDisLike', 'postComment', 'postTag.tag', 'postUserLike' => function ($q) {
 						return $q->where('user_id', Auth::user()->id);
 					}, 'postUserDisLike' => function ($q) {
 						return $q->where('user_id', Auth::user()->id);
 					}, 'postAttachment', 'postFlagged' => function ($q) {
 						return $q->where('user_id', Auth::user()->id);
-					}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
-					if(Auth::user()->role_id > 1) {
-                                            $query->where('company_id', Auth::user()->company_id);
-                                        }	
-                                                $query->orderBy('post_like_count', 'desc');
+					}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id'=>Auth::user()->company_id])->whereRaw("FIND_IN_SET($group_id,group_id)")->orderBy('post_like_count', 'desc');
 					$count_group_post = count($group_query->get());
 					$group_posts = $group_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                                        //dd(DB::getQueryLog());
 				} else {
 					$count_group_post = 0;
 					$group_posts = array();
@@ -239,14 +229,15 @@ class PostController extends Controller {
 					return $q->where('user_id', Auth::user()->id);
 				}, 'postAttachment', 'postFlagged' => function ($q) {
 					return $q->where('user_id', Auth::user()->id);
-				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at');//->where('company_id', Auth::user()->company_id);
-                                if(Auth::user()->role_id > 1) {
-                                    $query->where('company_id', Auth::user()->company_id);
-                                }
+				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id', Auth::user()->company_id);
 				if (!empty($request->get('search_text'))) {
 					$search_text = $request->get('search_text');
-					$query->where('post_title', 'like', '%' . $search_text . '%');
-					$query->orWhere('post_description', 'like', '%' . $search_text . '%');
+                                        $query->whereNested(function($q) use ($search_text) {
+                                            $q->where('post_title', 'like', '%' . $search_text . '%');
+                                            $q->orWhere('post_description', 'like', '%' . $search_text . '%');
+                                        });
+					//$query->where('post_title', 'like', '%' . $search_text . '%');
+					//$query->orWhere('post_description', 'like', '%' . $search_text . '%');
 				}
 				$query->orderBy('post_like_count', 'desc');
 				$count_post = count($query->get());
@@ -276,15 +267,15 @@ class PostController extends Controller {
 					return $q->where('user_id', Auth::user()->id);
 				}, 'postAttachment', 'postFlagged' => function ($q) {
 					return $q->where('user_id', Auth::user()->id);
-				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id]);
-                                if(Auth::user()->role_id > 1) {
-                                    $query->where('company_id', Auth::user()->company_id);
-                                }
-                                //->where(['company_id' => Auth::user()->company_id, 'user_id' => Auth::user()->id]);
+				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id' => Auth::user()->company_id, 'user_id' => Auth::user()->id]);
 				if (!empty($request->get('search_text'))) {
 					$search_text = $request->get('search_text');
-					$user_query->where('post_title', 'like', '%' . $search_text . '%');
-					$user_query->orWhere('post_description', 'like', '%' . $search_text . '%');
+                                        $user_query->whereNested(function($q) use ($search_text) {
+                                            $q->where('post_title', 'like', '%' . $search_text . '%');
+                                            $q->orWhere('post_description', 'like', '%' . $search_text . '%');
+                                        });
+					//$user_query->where('post_title', 'like', '%' . $search_text . '%');
+					//$user_query->orWhere('post_description', 'like', '%' . $search_text . '%');
 				}
 				$user_query->orderBy('post_like_count', 'desc');
 				$count_user_post = count($user_query->get());
@@ -313,6 +304,7 @@ class PostController extends Controller {
 				}])->where('id', Auth::user()->id)->first();
 				if ($groupusers) {
 					if (count($groupusers['groupUserDetails']) > 0) {
+                                                //DB::connection()->enableQueryLog();
 						$group_id = $groupusers['groupUserDetails']['group_id'];
 						$group_query = Post::with(['postUser', 'postLike', 'postDisLike', 'postComment', 'postTag.tag', 'postUserLike' => function ($q) {
 							return $q->where('user_id', Auth::user()->id);
@@ -320,18 +312,20 @@ class PostController extends Controller {
 							return $q->where('user_id', Auth::user()->id);
 						}, 'postAttachment', 'postFlagged' => function ($q) {
 							return $q->where('user_id', Auth::user()->id);
-						}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
-						if(Auth::user()->role_id > 1) {
-                                                    $query->where('company_id', Auth::user()->company_id);
-                                                }
+						}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id' => Auth::user()->company_id])->whereRaw("FIND_IN_SET($group_id,group_id)");
                                                 if (!empty($request->get('search_text'))) {
 							$search_text = $request->get('search_text');
-							$group_query->where('post_title', 'like', '%' . $search_text . '%');
-							$group_query->orWhere('post_description', 'like', '%' . $search_text . '%');
+                                                        $group_query->whereNested(function($q) use ($search_text) {
+                                                            $q->where('post_title', 'like', '%' . $search_text . '%');
+                                                            $q->orWhere('post_description', 'like', '%' . $search_text . '%');
+                                                        });
+							/*$group_query->where('post_title', 'like', '%' . $search_text . '%');
+							$group_query->orWhere('post_description', 'like', '%' . $search_text . '%');*/
 						}
 						$group_query->orderBy('post_like_count', 'desc');
 						$count_group_post = count($group_query->get());
 						$group_posts = $group_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                                                //dd(DB::getQueryLog());
 					}
 				}
 

@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>DICO - Tags</title>
 @section('content')
 
 <div id="page-content" class="group-listing posts">
@@ -147,12 +147,13 @@
                                             } 
                                         } 
                                     ?>
+                                    <input type="hidden" id="count_post" value="{{$count_post}}">
                                     <?php if(!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
                                     ?>
                                     <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a></div>
                                     <?php
                                             } ?>
-                                    <input type="hidden" id="count_post" value="{{$count_post}}">
+                                    
                                 </div>
                                 <!-- END ALL POST -->
                             </div>
@@ -238,7 +239,7 @@
                         if(response.html != "") {
                             $('#threads .postlist').remove();
                             //$('#count_post').remove();
-                            $('#threads .all_viewmore').before(response.html);
+                            $('#threads #count_post').before(response.html);
                             runProfanity();
                             $('#load_post').attr('data-id',offset);
                             if(response.count < {{POST_DISPLAY_LIMIT}}) {

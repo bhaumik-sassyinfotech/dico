@@ -979,12 +979,12 @@ body .text-12 {
   text-align: center;
   width: 100%;
 }
-.post-user-nam .user-a {
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 100%;
-  margin-bottom: 5px;
-  color: #000;    
+.user-a {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 100% !important;
+  margin-bottom: 5px !important;
+  color: #000!important;    
 }
 .user-rply > p {
   font-weight: 100;
@@ -992,6 +992,9 @@ body .text-12 {
   text-align: justify;
 }
 
+.post-user-nam .user-a{
+    font-weight: 400 !important; 
+}
 
 .post-user-nam > p {
   color: #969696;
@@ -1109,10 +1112,10 @@ body .text-12 {
   width: 100%;
 }
 .post-links > a:hover,
-.post-user-nam .user-a:hover,
+.user-a:hover,
 .member-details > a:hover{
-  color: #4f8edc;
-  text-decoration: none;
+  color: #4f8edc !important;
+  text-decoration: none !important;
 }
 .post-links > a:last-child {
   border: none;
@@ -1947,7 +1950,7 @@ body.modal-open .modal-backdrop.in {
   vertical-align: top;
 }
 .create-post .common-form .box-check .check {
-  background-color: #ecedef;
+  background-color: #d3d3d3;
   border-radius: 32px;
   color: #626262;
   font-family: Open Sans;
@@ -1956,10 +1959,16 @@ body.modal-open .modal-backdrop.in {
   padding: 10px 20px 10px 50px;
   position: relative;
 }
+.create-post .common-form .check .checked.question-checked:before {
+    background-position: -40px 0px;
+}
+.create-post .common-form .check .checked.challenges-checked:before {
+    background-position: -91px 0px;
+}
 
 .create-post .common-form .check .checked:before {
     background-image: url(../img/sprite.png);
-    background-position: 0 -30px;
+    background-position: 0 0;
     background-repeat: no-repeat;
     content: "";
     height: 25px;
@@ -1969,7 +1978,9 @@ body.modal-open .modal-backdrop.in {
     top: 4px;
     width: 30px;
 }
-
+.create-post .common-form .check.idea-check .checked:before {
+    background-position: 0 -30px;
+}
 .group-listing.posts .group-tabs > .panel-heading {
   padding-right: 0;
 }
@@ -2014,13 +2025,13 @@ body.modal-open .modal-backdrop.in {
   color: #fff; 
 }
 .create-post .common-form .box-check .check.question-check {
-  background-color: #3795e7;
-  /*background-color: #d3d3d3;*/
+  /*background-color: #3795e7;*/
+  background-color: #d3d3d3;
   color: #fff;
 }
 .create-post .common-form .box-check .check.challenges-check {
-  background-color: #F93341;
-  /*background-color: #d3d3d3;*/
+  /*background-color: #F93341;*/
+  background-color: #d3d3d3;
   color: #fff;
 }
 .meeting-details .member-details > a {
@@ -2517,15 +2528,16 @@ form .form-group:last-child {
   width: 100%;
 }
 
-.gallery .grid-details h4 {
-  color: #34495e;
-  display: block;
-  font-size: 15px;
-  left: 0;
-  line-height: 150%;
-  margin: 0;
-  position: relative;
-  text-align: left;
+.gallery .grid-details h4 { 
+    color: #34495e; 
+    display: block; 
+    font-size: 15px; 
+    left: 0; 
+    line-height: 150%; 
+    margin: 0; 
+    position: relative; 
+    text-align: left; 
+    word-wrap: break-word; 
 }
 
 .list-block .grid-image > img {
@@ -4677,5 +4689,37 @@ ul.tagit {
 /*start 30-01-2018*/
 .fmr-10 > a.set-warning.no-fontawesome:before{ display:none; }
 
+.new-meeting-details .create-post .common-form .check .checked:before{
+    display: none;
+}
+.new-meeting-details .create-post .common-form .box-check .check {
+    padding: 10px 0px 10px 30px;
+    text-align: center;
+}
+.navbar-brand:before {
+    background: url(../img/icon-logo.png) no-repeat center;
+    position: absolute;
+    content: "";
+    height: 45px;
+    width: 35px;
+    left: 0;
+    top: 0;
+    background-size: 80% auto;
+}
+.navbar-brand {
+    height: 100%;
+    width: 100%;
+    background: none;
+    color: #fff !important;
+    font-size: 24px !important;
+    line-height: 110% !important;
+    display: inline-block;
+    padding-left: 40px;
+    text-transform: uppercase;
+    position: relative;
+}
+.bottom-logo span img {
+    max-width: 75px;
+}
 /*close 30-01-2018*/
 

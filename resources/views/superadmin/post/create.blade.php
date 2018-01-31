@@ -20,7 +20,7 @@
                             <div class="form-group">
                                 <label class="text-15">Post<span>*</span></label>
                                 <div class="check-wrap box-check">
-                                    <label class="check idea-check">Idea    
+                                    <?php /*<label class="check idea-check">Idea    
                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check">
                                        <span class="checked"></span>
                                     </label> 
@@ -32,6 +32,28 @@
                                         <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type">
                                         <span class="checked"></span>
                                     </label>
+                                    <?php /*<div class="custom-cr-btn">
+                                    <input id="checkbox1" type="checkbox" name="post_type" value="">
+                                       <label for="checkbox1"><span></span></label>
+                                   </div>*/?>
+                                    <div class="check ">Idea    
+                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check error">
+                                         <label for="post_type_idea"> 
+                                             <span class="checked"></span>
+                                          </label>    
+                                    </div>
+                                    <div class="check ">Question    
+                                        <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type check question-check error">
+                                         <label for="post_type_question"> 
+                                             <span class="checked"></span>
+                                          </label>    
+                                    </div>
+                                    <div class="check ">Challenge    
+                                        <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type check challenges-check error">
+                                         <label for="post_type_challenge"> 
+                                             <span class="checked"></span>
+                                          </label>    
+                                    </div>
                                 </div>
                                 <div id="err_post_type"></div>
                             </div>
@@ -253,5 +275,19 @@
         $("#checkAll").click(function () {
             $("input[name*='user_groups[]']").not(this).prop('checked', this.checked);
         });
+        /*$('.post_type').click(function() {
+            var posttype = $(this).val();
+            if(posttype == 'idea') {
+                $(this).parent().removeClass('idea-check');
+                $(this).parent().addClass('idea-check');
+            } else if(posttype == 'question') {
+                $(this).parent().removeClass('question-check');
+                $(this).parent().addClass('question-check');
+            } else if(posttype == 'challenge') {
+                $(this).parent().removeClass('challenges-check');
+                $(this).parent().addClass('challenges-check');
+            } 
+        });*/
+        
     </script>
     @endpush

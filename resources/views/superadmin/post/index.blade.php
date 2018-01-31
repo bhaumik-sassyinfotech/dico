@@ -159,6 +159,7 @@ if (!empty($post['post_tag'])) {
 	echo "No post found.";
 }
 ?>
+                                    <input type="hidden" id="count_post" value="{{$count_post}}">
                                     <?php if (!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
 	?>
                                     <div class="all_viewmore col-md-12">
@@ -166,7 +167,7 @@ if (!empty($post['post_tag'])) {
                                     </div>
                                     <?php
 }?>
-                                    <input type="hidden" id="count_post" value="{{$count_post}}">
+                                    
                                 </div>
                                 <!-- END ALL POST -->
                                 <!-- START GROUP POST -->
@@ -200,7 +201,7 @@ if (!empty($post['post_tag'])) {
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body meetings">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
                                                                     @if(empty($grouppost['post_user']['profile_image']) || $grouppost['is_anonymous'] == 1)
@@ -284,13 +285,14 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                 echo "No post found.";
                                         }
                                         ?>
+                                    <input type="hidden" id="count_grouppost" value="{{$count_group_post}}">
                                     <?php
                                         if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
                                                 ?>
                                     <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">View More</a></div>
                                     <?php
                                         }?>
-                                    <input type="hidden" id="count_grouppost" value="{{$count_group_post}}">
+                                    
                                 </div>
                                 <!-- END GROUP POST -->
                                 <!-- START USER POST -->
@@ -408,13 +410,14 @@ if (!empty($mypost['post_tag'])) {
 	echo "No post found.";
 }
 ?>
+                                    <input type="hidden" id="count_mypost" value="{{$count_user_post}}">
                                     <?php
 if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
 	?>
                                     <div class="user_viewmore col-md-12"><a href="javascript:void(0)" id="load_mypost" onclick="loadMoreMyPost();" data-id="0">View More</a></div>
                                     <?php
 }?>
-                                    <input type="hidden" id="count_mypost" value="{{$count_user_post}}">
+                                    
                                 </div>
                                 <!-- END USER POST -->
                             </div>
@@ -537,7 +540,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                         if(response.html != "") {
                             $('#threads .postlist').remove();
                             //$('#count_post').remove();
-                            $('#threads .all_viewmore').before(response.html);
+                            $('#threads #count_post').before(response.html);
                             runProfanity();
                             $('#load_post').attr('data-id',offset);
                             //console.log(response.count+":::"+{{POST_DISPLAY_LIMIT}});
@@ -572,7 +575,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                     if(response != '') {
                         if(response.html != "") {
                             $('#users .userpostlist').remove();
-                            $('#users .user_viewmore').before(response.html);
+                            $('#users #count_mypost').before(response.html);
                             runProfanity();
                             $('#load_mypost').attr('data-id',offset);
                             if(response.count <= {{POST_DISPLAY_LIMIT}}) {
@@ -606,7 +609,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                     if(response != '') {
                         if(response.html != "") {
                             $('#groups .grouppostlist').remove();
-                            $('#groups .group_viewmore').before(response.html);
+                            $('#groups #count_grouppost').before(response.html);
                             runProfanity();
                             $('#load_grouppost').attr('data-id',offset);
                             if(response.count <= {{POST_DISPLAY_LIMIT}}) {

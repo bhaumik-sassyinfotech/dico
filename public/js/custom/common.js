@@ -93,6 +93,23 @@ $(document).ready(function ()
     /*Allow only one type of post to be checked*/
     $('.post_type').on('change', function() {
         $('.post_type').not(this).prop('checked', false);
+        var posttype = $(this).val();
+            if(posttype == 'idea') {
+                $('#post_type_question').parent().removeClass('question-check');
+                $('#post_type_challenge').parent().removeClass('challenges-check');
+                $(this).parent().removeClass('idea-check');
+                $(this).parent().addClass('idea-check');
+            } else if(posttype == 'question') {
+                $('#post_type_idea').parent().removeClass('idea-check');
+                $('#post_type_challenge').parent().removeClass('challenges-check');
+                $(this).parent().removeClass('question-check');
+                $(this).parent().addClass('question-check');
+            } else if(posttype == 'challenge') {
+                $('#post_type_idea').parent().removeClass('idea-check');
+                $('#post_type_question').parent().removeClass('question-check');
+                $(this).parent().removeClass('challenges-check');
+                $(this).parent().addClass('challenges-check');
+            } 
     });
     $('.privacy_type').on('change', function() {
         $('.privacy_type').not(this).prop('checked', false);
