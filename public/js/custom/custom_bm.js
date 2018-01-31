@@ -163,8 +163,8 @@ var groupTable = $('#group_table').DataTable({
     columns: [
         {data: 'group_name',sorting: false, orderable: false},
         {data: 'description'},
-        {data: 'groupst_posts_count'},
         {data: 'group_users_count'},
+        {data: 'group_posts_count'},
         {data: 'actions', sorting: false, orderable: false}
     ]
 });
@@ -662,6 +662,7 @@ function superUserGrid(type)
     // console.log(url);
     new_url = SITE_URL+url;
     var dataString = { _token : CSRF_TOKEN , search : search_text };
+    $("#display-grid").empty();
     $.ajax({
         url:new_url,
         data: dataString, 
@@ -670,7 +671,8 @@ function superUserGrid(type)
         success: function(response)
         {
             
-            $("#display-grid").empty();
+            // $("#display-grid").empty();
+            // alert("succ");
             $("#display-grid").html(response.html);
             setTimeout(function()
             {
@@ -709,6 +711,7 @@ $(document).on('click',"#search_btn",function(){
     // console.log(url);
     new_url = SITE_URL+url;
     var dataString = { _token : CSRF_TOKEN , search : search_text,offset:0 };
+    $("#display-grid").empty();
     $.ajax({
         url:new_url,
         data: dataString, 
@@ -718,7 +721,6 @@ $(document).on('click',"#search_btn",function(){
             companyuserTable.draw(); // custom.js
             employeeTable_superadmin.draw(); // for super-user
             otherManagerTable_superadmin.draw(); // for super-user
-            $("#display-grid").empty();
             $("#display-grid").html(response.html);
             setTimeout(function()
             {
