@@ -2014,13 +2014,13 @@ body.modal-open .modal-backdrop.in {
   color: #fff; 
 }
 .create-post .common-form .box-check .check.question-check {
-  /*background-color: #3795e7;*/
-  background-color: #d3d3d3;
+  background-color: #3795e7;
+  /*background-color: #d3d3d3;*/
   color: #fff;
 }
 .create-post .common-form .box-check .check.challenges-check {
-  /*background-color: #F93341;*/
-  background-color: #d3d3d3;
+  background-color: #F93341;
+  /*background-color: #d3d3d3;*/
   color: #fff;
 }
 .meeting-details .member-details > a {
