@@ -49,7 +49,7 @@ if ($post['user_id'] == Auth::user()->id) {
                                         if(!empty($post['postFlagged'])) {
                                             if($post['postFlagged']['user_id'] == Auth::user()->id) {
                                     ?>
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    <a class="set-warning no-fontawesome"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                     <?php } else { ?>
 
                                     <a class="set-warning" href="#flagged" data-toggle="modal">w</a>
@@ -105,7 +105,7 @@ if (!empty($post['postUserDisLike'])) {
                                     <?php }?>
                                 </a><p id="post_dislike_count"><?php echo count($post['postDisLike']); ?></p></div>
                         
-                            <div class="comment like-wrap"><a href="javascript:void(0)">
+                            <?php /*<div class="comment like-wrap"><a href="javascript:void(0)">
                                 <?php
                                 if (!empty($post['postComment'])) {
                                     ?>
@@ -115,7 +115,7 @@ if (!empty($post['postUserDisLike'])) {
                                 <?php } ?>
                                 </a>
                                 <span><?php echo $post['post_comment_count']; ?></span>
-                            </div>
+                            </div>*/?>
                         </div>
                     </div>    
                     <hr class="border-in-hr">
@@ -260,7 +260,7 @@ $active = "";
                                                 if(!empty($postComment['commentFlagged'])) {
                                                     if($postComment['commentFlagged']['flag_by'] == Auth::user()->id) {
                                                 ?>
-                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                <a class="set-warning no-fontawesome"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                                 <?php } else { ?>
                                                 <a class="set-warning" href="javascript:void(0)" onclick="openFlagComment({{$postComment['id']}}, {{$commentUser['id']}})">w</a>
                                                     <?php } } else { ?>

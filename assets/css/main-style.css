@@ -743,13 +743,12 @@ p.user-icon {
 .comment.like-wrap p{
   margin-top: 4px;
 }
-
-body .text-12{
-  font-size: 14px;
-  font-weight: 100;
-  line-height: 125%;
-  text-align: justify;
-  word-wrap: break-word;
+body .text-12 {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 130%;
+    text-align: justify;
+    word-wrap: break-word;
 }
 .comment.like-wrap,
 .comment.like-wrap a{
@@ -1421,10 +1420,7 @@ background-image: url("../img/group-icon.png");
   max-height: 370px;
   overflow-x: hidden;
 }
-.meetings .panel-body fieldset p {
-    height: 110px;
-    overflow-x: hidden;
-}
+
 .box-check .check .checked {
     height: 0.1px;
     opacity: 1;
@@ -1539,18 +1535,20 @@ form .form-group {
 
 .form-group > textarea, 
 .form-group > input:not([type="submit"]):not([type="reset"]) {
-  border: 1px solid #aaaaaa;
-  color: #323232;
-  display: inline-block;
-  float: left;
-  font-family: Open Sans;
-  font-size: 14px;
-  font-weight: 100;
-  height: 45px;
-  line-height: 100%;
-  padding: 0 15px;
-  resize: none;
-  width: 71%;
+    border: 1px solid #aaaaaa;
+    color: #323232;
+    display: inline-block;
+    float: left;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-weight: 100;
+    height: 45px;
+    line-height: 100%;
+    padding: 0 15px;
+    position: relative;
+    resize: none;
+    width: 71%;
+    z-index: 2;
 }
 
 .create-post .form-group > textarea, 
@@ -1901,10 +1899,7 @@ body .post-details #page-heading h1.icon-mark{
   margin-right: 0;
 }
 
-.post-reply-pop .fmr-10 i {
-  font-size: 18px;
-  line-height: 150%;
-}
+.post-reply-pop .fmr-10 i { font-size: 16px; line-height: 120%; }
 
 .post-reply-pop .fmr-10 {
   display: inline-block;
@@ -2019,11 +2014,13 @@ body.modal-open .modal-backdrop.in {
   color: #fff; 
 }
 .create-post .common-form .box-check .check.question-check {
-  background-color: #3795e7;
+  /*background-color: #3795e7;*/
+  background-color: #d3d3d3;
   color: #fff;
 }
 .create-post .common-form .box-check .check.challenges-check {
-  background-color: #F93341;
+  /*background-color: #F93341;*/
+  background-color: #d3d3d3;
   color: #fff;
 }
 .meeting-details .member-details > a {
@@ -2083,12 +2080,11 @@ body .challenges.idea-page #page-heading h1.icon-mark {
 }
 
 .upload-btn-wrapper input[type="file"] {
-  cursor: pointer;
-  font-size: 100px;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  top: 0;
+    cursor: pointer;
+    font-size: 100px;
+    left: 0;
+    position: absolute;
+    display: inline-block;
 }
 
 .create-post .category {
@@ -3065,7 +3061,7 @@ select::-ms-expand {
 .upload-btn-wrapper form {
     margin-bottom: 0;
 }
-.profile-page .modal-header > button::after {
+.close-button::after {
   color: #000000;
   content: "x";
   font-size: 20px;
@@ -3081,8 +3077,8 @@ select::-ms-expand {
   -o-transform: translateY(-35%);
   transform: translateY(-35%);
 }
-.profile-page .modal-header > button:hover:after {
-    color: #000;
+.close-button:hover:after {
+    color: #fff;
 }
 .status {
   margin-top: 2px;
@@ -3333,6 +3329,7 @@ body .idea-page #page-heading h1.icon-mark {
   color: #333;
   font-size: 14px;
   margin-left: 2px;
+  line-height: 125%;
 }
 .employ-box .ul-emp-detail li a:hover span i{
  color:#0088D8;    
@@ -3448,7 +3445,7 @@ body .idea-page #page-heading h1.icon-mark {
   color: #fff;
   text-decoration: none;
 }
-.profile-page .modal-header > button {
+.close-button {
     border: 1px solid transparent;
     border-radius: 50%;
     color: #000000;
@@ -3463,11 +3460,12 @@ body .idea-page #page-heading h1.icon-mark {
     margin: 0 15px 0 0px;
     opacity: 1;
     top: 10px;
-}
-.profile-page .modal-header > button:hover {
     background-color: #ccc;
+}
+
+.close-button:hover {
+    background-color: #666;
     border-color: #999;
-    color: #fff;
     line-height: 50%;
 }
 .followers-list .followers-details {
@@ -3774,11 +3772,6 @@ body .modal-content {
   float: left;
   line-height: 140%;
   margin-left: 0;
-}
-.form-group::after {
-  clear: both;
-  content: "";
-  display: block;
 }
 
 body .modal-dialog .modal-content {
@@ -4219,13 +4212,11 @@ body a:hover, body a:focus {
 /* 05-01-2017*/
 
 .bottom-sidebar {
-  background-color: #e6e7e8;
-  bottom: 0;
-  padding: 15px 15px 40px;
-  position: fixed;
-  width: 230px;
+    background-color: #e6e7e8;
+    bottom: 0;
+    padding: 15px 15px 40px;
+    width: 230px;
 }
-
 .bottom-sidebar a {
   color: #3f444c;
   display: inline-block;
@@ -4460,9 +4451,8 @@ body .modal-dialog.updatesecurity .modal-content,
 }
 
 nav#page-leftbar {
-  background-color: #e6e7e8;
-  height: 100%;
-  position: fixed;
+    background-color: #e6e7e8;
+    height: auto;
 }
 .bottom-logo {
   margin-top: 5px;
@@ -4540,9 +4530,9 @@ body .select2-container--default .select2-selection--multiple .select2-selection
     color: #ffffff;
 }
 .user-rply textarea {
-    margin-bottom: 0px;
-    padding: 10px 15px;
-    height: 110px;
+    margin-bottom: 10px;
+    padding: 10px;
+    height: 100px;
 }
 .question .post-category .member-wrap,
 .idea-details .post-category .member-wrap.files-upload,
@@ -4551,15 +4541,16 @@ body .select2-container--default .select2-selection--multiple .select2-selection
     border-right: none;
 }
 .question .post-category .member-wrap:last-child,
-.idea-details .post-category .member-wrap.files-upload:last-child,
-.challenges .post-category .member-wrap{
+.idea-details .post-category .member-wrap.files-upload:last-child{
     border-bottom: none;
 }
 panel-body fieldset p {
     height: 120px;
     overflow-y: scroll;
 }
-
+.dropdown-menu.userinfo .userlinks ul i.pull-right {
+    display: none;
+}
 
 /*close 24-01-2018*/
 
@@ -4629,10 +4620,62 @@ panel-body fieldset p {
 /*close 25-01-2018*/
 
 /*26-01-2018*/
-.userlinks ul.dropdown-menu li:not(:last-child) {
-    display: none;
-}
 .create-post .common-form .box-check .check.selected {
     background-color: gray;
 }
+body .group-tabs[class*="panel-"] .panel-primary .panel-body {
+    max-height: 300px;
+    overflow-x: hidden;
+    width: 100%;
+}
+.create-select-user .modal .common-form .btn-wrap-div {
+    margin-left: 0;
+}
+.dropdown-menu.userinfo li.username .pull-right small {
+    word-wrap: break-word;
+    white-space: normal;
+}
+.dropdown-menu.userinfo li.username .pull-right {
+    width: 0;
+}
+.dropdown-menu.userinfo .userlinks ul {
+    margin: 0;
+}
+.dropdown-menu.userinfo .userlinks ul li.divider {
+    display: none;
+}
+.dropdown-menu.userinfo .userlinks ul li a.text-right {
+    display: block;
+    position: relative;
+    text-align: left;
+}
+.dropdown-menu.userinfo .userlinks ul li a.text-right::after {
+    content: "\f08b";
+    display: inline-block;
+    font-family: FontAwesome;
+}
+.wrap-btn {
+    position: relative;
+    display: block;
+    margin-bottom: 10px;
+}
+.bottom-button {
+    text-align: center;
+}
+.check input.error {
+    display: inline-block !important;
+    visibility: visible;
+    opacity: 1;
+    position: relative;
+    height: initial;
+}
+ul.tagit {
+    background-color: #fff;
+}
 /*close 26-01-2018*/
+
+/*start 30-01-2018*/
+.fmr-10 > a.set-warning.no-fontawesome:before{ display:none; }
+
+/*close 30-01-2018*/
+

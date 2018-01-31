@@ -43,6 +43,7 @@ class PostController extends Controller {
 
 			if (Auth::user()->role_id == 1) {
 				return redirect('/index');
+                                //$this->folder = 'superadmin';
 			} else if (Auth::user()->role_id == 2) {
 				$this->folder = 'companyadmin';
 			} else if (Auth::user()->role_id == 3) {
@@ -173,8 +174,11 @@ class PostController extends Controller {
 				return $q->where('user_id', Auth::user()->id);
 			}, 'postAttachment', 'postFlagged' => function ($q) {
 				return $q->where('user_id', Auth::user()->id);
-			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id', Auth::user()->company_id)
-				->orderBy('post_like_count', 'desc');
+			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at');
+                        if(Auth::user()->role_id > 1) {
+                            $query->where('company_id', Auth::user()->company_id);
+                        }
+			$query->orderBy('post_like_count', 'desc');
 			$count_post = count($query->get());
 			$posts = $query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
 
@@ -184,8 +188,11 @@ class PostController extends Controller {
 				return $q->where('user_id', Auth::user()->id);
 			}, 'postAttachment', 'postFlagged' => function ($q) {
 				return $q->where('user_id', Auth::user()->id);
-			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id' => Auth::user()->company_id, 'user_id' => Auth::user()->id])
-				->orderBy('post_like_count', 'desc');
+			}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id]);
+                        if(Auth::user()->role_id > 1) {
+                            $query->where('company_id', Auth::user()->company_id);
+                        }
+				$query->orderBy('post_like_count', 'desc');
 			$count_user_post = count($user_query->get());
 			$user_posts = $user_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
 
@@ -202,8 +209,11 @@ class PostController extends Controller {
 						return $q->where('user_id', Auth::user()->id);
 					}, 'postAttachment', 'postFlagged' => function ($q) {
 						return $q->where('user_id', Auth::user()->id);
-					}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id' => Auth::user()->company_id, 'user_id' => Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)")
-						->orderBy('post_like_count', 'desc');
+					}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
+					if(Auth::user()->role_id > 1) {
+                                            $query->where('company_id', Auth::user()->company_id);
+                                        }	
+                                                $query->orderBy('post_like_count', 'desc');
 					$count_group_post = count($group_query->get());
 					$group_posts = $group_query->limit(POST_DISPLAY_LIMIT)->get()->toArray();
 				} else {
@@ -229,7 +239,10 @@ class PostController extends Controller {
 					return $q->where('user_id', Auth::user()->id);
 				}, 'postAttachment', 'postFlagged' => function ($q) {
 					return $q->where('user_id', Auth::user()->id);
-				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id', Auth::user()->company_id);
+				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at');//->where('company_id', Auth::user()->company_id);
+                                if(Auth::user()->role_id > 1) {
+                                    $query->where('company_id', Auth::user()->company_id);
+                                }
 				if (!empty($request->get('search_text'))) {
 					$search_text = $request->get('search_text');
 					$query->where('post_title', 'like', '%' . $search_text . '%');
@@ -263,7 +276,11 @@ class PostController extends Controller {
 					return $q->where('user_id', Auth::user()->id);
 				}, 'postAttachment', 'postFlagged' => function ($q) {
 					return $q->where('user_id', Auth::user()->id);
-				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id' => Auth::user()->company_id, 'user_id' => Auth::user()->id]);
+				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id]);
+                                if(Auth::user()->role_id > 1) {
+                                    $query->where('company_id', Auth::user()->company_id);
+                                }
+                                //->where(['company_id' => Auth::user()->company_id, 'user_id' => Auth::user()->id]);
 				if (!empty($request->get('search_text'))) {
 					$search_text = $request->get('search_text');
 					$user_query->where('post_title', 'like', '%' . $search_text . '%');
@@ -303,8 +320,11 @@ class PostController extends Controller {
 							return $q->where('user_id', Auth::user()->id);
 						}, 'postAttachment', 'postFlagged' => function ($q) {
 							return $q->where('user_id', Auth::user()->id);
-						}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['company_id' => Auth::user()->company_id, 'user_id' => Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
-						if (!empty($request->get('search_text'))) {
+						}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where(['user_id' => Auth::user()->id])->whereRaw("FIND_IN_SET($group_id,group_id)");
+						if(Auth::user()->role_id > 1) {
+                                                    $query->where('company_id', Auth::user()->company_id);
+                                                }
+                                                if (!empty($request->get('search_text'))) {
 							$search_text = $request->get('search_text');
 							$group_query->where('post_title', 'like', '%' . $search_text . '%');
 							$group_query->orWhere('post_description', 'like', '%' . $search_text . '%');
@@ -448,7 +468,7 @@ class PostController extends Controller {
 
 				if($post->post_type == 'idea')
 				{
-					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id)
+					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id);
 				}
 				if ($postlike) {
 					if ($postlike->flag == 1) {
@@ -499,7 +519,7 @@ class PostController extends Controller {
 
 				if($post->post_type == 'idea')
 				{
-					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id)
+					Helpers::add_points('IDEA_VOTE', $user_id, $postlike->id);
 				}
 				if ($postdislike) {
 					if ($postdislike->flag == 2) {
@@ -581,11 +601,16 @@ class PostController extends Controller {
 			*/
 
 			//print_r($tag_id);
-			$similar_post = Post::with(['postTag' => function ($q) use ($tag_id, $post) {
+			$similar_query = Post::with(['postTag' => function ($q) use ($tag_id, $post) {
 				if (!empty($tag_id)) {
 					$q->whereIn('tag_id', $tag_id)->get();
 				}
-			}])->where('id', '!=', $post->id)->where('company_id', Auth::user()->company_id)->has('postTag')->orWhere('post_title', 'like', '%' . $post->post_title . '%')->get();
+			}])->where('id', '!=', $post->id);
+                        if(Auth::user()->role_id > 1) {
+                            $similar_query->where('company_id', Auth::user()->company_id);
+                        }
+                        $similar_query->has('postTag')->orWhere('post_title', 'like', '%' . $post->post_title . '%');
+                        $similar_post = $similar_query->get();
 			//dd(DB::getQueryLog());
 			//dd($similar_post);
 			if (!empty($post->group_id)) {

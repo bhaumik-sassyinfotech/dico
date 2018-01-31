@@ -12,9 +12,7 @@
             <h1 class="tp-bp-0">Post</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                    <div class="btn-group hidden-xs">
                         <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
-                    </div>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
 

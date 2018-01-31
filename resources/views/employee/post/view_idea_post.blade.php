@@ -50,7 +50,7 @@
                                             if(!empty($post['postFlagged'])) {
                                                 if($post['postFlagged']['user_id'] == Auth::user()->id) {
                                         ?>
-                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                        <a class="set-warning no-fontawesome"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                         <?php } else { ?>
                                         <a class="set-warning" href="#flagged" data-toggle="modal">w</a>
                                         <?php } } else { ?>
@@ -123,7 +123,7 @@
                                     <a href="javascript:void(0)" class="ideaStatus" data-post-status="deny">Denied</a>
                                 </div>
                                 <div class="post-btn ammend">
-                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="amend">Amend</a>
+                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="amend">Modify</a>
                                 </div>
                             </div>
                             @else
@@ -140,7 +140,7 @@
                                         else if($post->idea_status === 'deny')
                                             $ideaStatus = 'Denied';
                                         else if($post->idea_status === 'amend')
-                                            $ideaStatus = 'Amended';
+                                            $ideaStatus = 'Modified';
                                     @endphp
                                     <div class="approved">
                                         <p>{{ $ideaStatus }} By:<span>{{ $post->ideaUser->name }}</span></p>

@@ -20,7 +20,7 @@
                             <div class="form-group">
                                 <label class="text-15">Post<span>*</span></label>
                                 <div class="check-wrap box-check">
-                                    <label class="check idea-check">Idea    
+                                    <?php /*<label class="check idea-check">Idea    
                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check">
                                        <span class="checked"></span>
                                     </label> 
@@ -31,7 +31,11 @@
                                     <label class="check challenges-check">Challenge    
                                         <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type">
                                         <span class="checked"></span>
-                                    </label>
+                                    </label>*/?>
+                                    <div class="custom-cr-btn">
+                                    <input id="checkbox1" type="checkbox" name="post_type" value="">
+                                       <label for="checkbox1"><span></span></label>
+                                   </div>
                                 </div>
                                 <div id="err_post_type"></div>
                             </div>
