@@ -171,16 +171,18 @@ class PointsController extends Controller {
 			foreach ($pointsData as $point) {
 
 				$id = $point['user_detail']['id'];
-
-				if (isset($points_listing[$id])) {
-					$points_listing[$id]['activity'][$point['activity_id']] = array('user_id' => $point['user_id'],
-						'activity_id' => $point['activity_id'],
-						'points' => $point['pts']);
-				} else {
-					$points_listing[$id] = array('user_detail' => $point['user_detail']);
-					$points_listing[$id]['activity'][$point['activity_id']] = array('user_id' => $point['user_id'],
-						'activity_id' => $point['activity_id'],
-						'points' => $point['pts']);
+				$role_id = $point['user_detail']['role_id'];
+				if ($role_id > 1) {
+					if (isset($points_listing[$id])) {
+						$points_listing[$id]['activity'][$point['activity_id']] = array('user_id' => $point['user_id'],
+							'activity_id' => $point['activity_id'],
+							'points' => $point['pts']);
+					} else {
+						$points_listing[$id] = array('user_detail' => $point['user_detail']);
+						$points_listing[$id]['activity'][$point['activity_id']] = array('user_id' => $point['user_id'],
+							'activity_id' => $point['activity_id'],
+							'points' => $point['pts']);
+					}
 				}
 			}
 		}

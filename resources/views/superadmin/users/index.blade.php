@@ -131,7 +131,17 @@
 
                                                             </fieldset>
                                                             <div class="btn-wrap">
-                                                                <a href="{{ url('view_profile/'.Helpers::encode_url($user->id)) }}">Follow</a>
+                                                                @php
+                                                                    $text = "";
+                                                                    if(count($user->following) > 0 && !empty($user->following))
+                                                                    {
+                                                                        $text = "Following";
+                                                                    } else {
+                                                                        $text = "Follow";
+                                                                    }
+                                                                    $url = url('view_profile/'.Helpers::encode_url($user->id));
+                                                                @endphp
+                                                                <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ url('view_profile/'.Helpers::encode_url($user->id)) }}">{{ $text }}</a>
                                                                 <?php $pts = Helpers::user_points($user->id);?>
                                                                 <a href="#">Point:{{ $pts['points'] }}</a>
 

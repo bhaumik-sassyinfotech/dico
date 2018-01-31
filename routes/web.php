@@ -105,6 +105,9 @@ Route::group(['middleware' => 'admin'], function () {
 
 });
 
-Route::get('/home', 'DashboardController@index')->name('home');
-
+// Route::get('/home', 'DashboardController@index')->name('home');
+Route::get('/home', function () {
+	// return redirect('/index');
+	dd('dsdsdsd');
+});
 ?>

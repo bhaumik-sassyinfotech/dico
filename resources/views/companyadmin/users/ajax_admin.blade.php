@@ -42,7 +42,21 @@ $profile_pic = asset('assets/img/super-user.PNG');
 
                     </fieldset>
                     <div class="btn-wrap">
-                        <?php $uid = $user['user_detail']['id'];?>
+                    @php
+                        $uid = $user['user_detail']['id'];
+                        $text = "";
+                        if(count($user['user_detail']['following']) > 0 && !empty($user['user_detail']['following']))
+                        {
+                            $text = "Following";
+                        } else {
+                            $text = "Follow";
+                        }
+                        $url = url('view_profile/'.Helpers::encode_url($uid));
+                    @endphp
+
+                    <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
+
+
                         <a href="{{ url('view_profile/'.Helpers::encode_url($uid)) }}">Follow</a>
                         <?php $pts = Helpers::user_points($uid);?>
                         <a href="#">Point:{{ $pts['points'] }}</a>
