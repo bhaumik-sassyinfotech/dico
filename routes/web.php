@@ -46,6 +46,8 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('group/companyUsers', 'GroupController@companyUsers');
 	Route::resource('group', 'GroupController');
 	/*Points*/
+	Route::match(['get', 'post'], 'points/viewList', 'PointsController@pointsIndex')->name('points.viewList');
+	Route::match(['get', 'post'], 'points/listing', 'PointsController@pointsListing')->name('points.listing');
 	Route::resource('points', 'PointsController');
 	Route::get('get_points', 'PointsController@get_points');
 	/*Post*/

@@ -163,7 +163,7 @@ var groupTable = $('#group_table').DataTable({
     columns: [
         {data: 'group_name',sorting: false, orderable: false},
         {data: 'description'},
-        {data: 'group_posts_count'},
+        {data: 'groupst_posts_count'},
         {data: 'group_users_count'},
         {data: 'actions', sorting: false, orderable: false}
     ]
@@ -906,4 +906,53 @@ $(document).on('click','.multiple-action',function(){
             swal("Error","Please select atleast one group. ",'error')
         }
 
+});
+
+var pointsListing = $("#points-listing").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL + '/points/listing',
+        data: function (d) {
+            // d.role_id      = $("#role_id").val();
+            // d.search_query = $("#search_query").val();
+        }
+    },
+    searching: false,
+    columns: [
+        {data: 'name'},
+        {data: 'post'},
+        {data: 'vote'},
+        {data: 'approved'},
+        {data: 'answers'},
+        {data: 'solutions'},
+        {data: 'comments'},
+        {data: 'likes'},
+        {data: 'total'},
+        // {data: 'admin', sorting: false, orderable: false}
+    ] 
+});
+
+var editProfile = $("#editProfile").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL + '/points/listing',
+        data: function (d) {
+            d.user_id      = $.trim($("#user_id").val());
+            // d.search_query = $("#search_query").val();
+        }
+    },
+    searching: false,
+    columns: [
+        {data: 'post'},
+        {data: 'vote'},
+        {data: 'approved'},
+        {data: 'answers'},
+        {data: 'solutions'},
+        {data: 'comments'},
+        {data: 'likes'},
+        {data: 'total'},
+        // {data: 'admin', sorting: false, orderable: false}
+    ] 
 });

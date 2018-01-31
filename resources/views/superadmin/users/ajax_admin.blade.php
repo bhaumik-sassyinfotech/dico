@@ -42,9 +42,9 @@ $profile_pic = asset('assets/img/super-user.PNG');
 
                     </fieldset>
                     <div class="btn-wrap">
-                        <a href="<?php echo url('view_profile/' . $user['user_detail']['id']); ?>">Follow</a>
-                        <a href="#">Point:246</a>
-
+                        <a href="<?php echo url('view_profile/' . Helpers::encode_url($user['user_detail']['id'])); ?>">Follow</a>
+                        <?php $pts = Helpers::user_points($user['user_detail']['id']);?>
+                        <a href="#">Point:{{ $pts['points'] }}</a>
                     </div>
                     <div class="panel-body-wrap">
                         <div class="follower-text pull-left">

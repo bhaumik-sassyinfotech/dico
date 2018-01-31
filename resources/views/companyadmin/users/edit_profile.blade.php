@@ -38,7 +38,7 @@ if ($user->profile_image == "") {
 
                                     if($user->role_id == '2')
                                         $role = 'Company Manager';
-                                    else
+                                    else if($user->role_id == '3')
                                         $role = 'Employee';
                                     @endphp
                                     <p>Role : <span><a href="#">{{ $role }}</a></span></p>
@@ -73,7 +73,7 @@ if ($user->profile_image == "") {
 
                                             <form name="general_profile_form" class="common-form"  id="general_profile_form" method="post" action="{{ url('update_profile') }}" enctype="multipart/form-data">
                                                 {{ csrf_field() }}
-                                                <div class="form-group">
+                                                <div class="form-group" style="display: none;">
                                                     <input type="text" name="name" id="name" placeholder="Name" value="{{$user->name}}" class=" required">
                                                 </div>
                                                 <div class="form-group">
@@ -323,7 +323,8 @@ if (@$userquestions[2]->question_id == $question->id) {
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <table class="table">
+                                    <input type="hidden" id="user_id" value="2" name="uid">
+                                    <table class="table" id="editProfile">
                                         <thead>
                                         <tr>
                                             <th>Idea</th>
@@ -337,16 +338,6 @@ if (@$userquestions[2]->question_id == $question->id) {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>234</td>
-                                            <td>150</td>
-                                            <td>68</td>
-                                            <td>148</td>
-                                            <td>258</td>
-                                            <td>48</td>
-                                            <td>25</td>
-                                            <td>685</td>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>

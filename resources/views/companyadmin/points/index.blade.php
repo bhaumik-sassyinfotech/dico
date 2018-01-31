@@ -13,22 +13,11 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
 
         <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-body">
-    
-                        @if(session()->has('success'))
-                        <div class="alert alert-success">
-                            {{ session()->get('success') }}
-                        </div>
-                        @endif
-                        @if(session()->has('err_msg'))
-                        <div class="alert alert-danger">
-                            {{ session()->get('err_msg') }}
-                        </div>
-                        @endif
                         <form method="POST" id="points-search-form" class="form-inline" role="form">
                             <div class="form-group">
                                 <label for="name">Activity</label>
@@ -53,10 +42,10 @@
                             <div class="col-lg-6">
 
                             </div>
-                        </div>            
+                        </div>
                     </div>
                 </div>
-            </div>    
+            </div>
         </div>
 
     </div>
@@ -64,6 +53,6 @@
 
     @section('javascript')
     <script type="text/javascript">
-        
+
     </script>
     @endsection
