@@ -65,18 +65,31 @@ $(document).ready(function () {
             data:dataString,
             type:"POST",
             success: function (response) {
-                console.log(response);
+                //console.log(response);
                 if(response.status == '0')
                 {
-                    swal("Error","Some Error occured. Please try again later.","error");
+                    swal("Error","Member already added.","error");
+                    //swal("Error","Some Error occured. Please try again later.","error");
                 } else if(response.status == '1')
                 {
                     var profile_pic = '';
+                    if(response.data.profile_image != "") {
+                        profile_pic = ASSETS_PATH+PROFILE_PATH + response.data.profile_image;
+                    } else {
+                        profile_pic = ASSETS_PATH+DEFAULT_PROFILE_IMAGE;
+                    }
+                    var userid = response.data.id;
                     var name = response.data.name;
                     var email = response.data.email;
-                    $("#meeting_users_list")
-                        .append($('<div class="member-wrap"></div>')
-                        .append($('<div class="member-img"></div>').append(profile_pic)).append($('<div class="member-details"></div>').append('<h3 class="text-12">'+name+'</h3>').append('<a href="mailto:'+email+'">'+email+'</a>')));
+                    var html = '';
+                    html += '<div class="member-wrap" id="user_'+userid+'">';
+                    html += '<div class="member-img">';
+                    html += '<img src="'+profile_pic+'"/></div>';
+                    html += '<div class="member-details">';
+                    html += '<h3 class="text-12">'+name+'</h3>';
+                    html += '<a href="mailto:'+email+'">'+email+'</a></div></div>';
+                    $("#meeting_users_list").append(html);
+                    $('#employees_listing option[value="'+userid+'"]').attr("disabled", true);
                 }
             }
         });
@@ -107,7 +120,6 @@ $("#company_listing").change(function () {
                         role = 'Manager';
                     else if (val.role_id == '3')
                         role = 'Employee';
-                    console.log("Role: "+role);
                     $("#users_listing,#group_owner").append("<option value='" + val.id + "'>" + val.name + "(" + role + ")" + "</option>");
                 });
             }

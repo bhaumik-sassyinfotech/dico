@@ -9,6 +9,8 @@
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery-1.10.2.min.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jqueryui-1.10.3.min.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/bootstrap.min.js')}}"></script>
+<script type='text/javascript' src="{{asset('public/js/moment.js')}}"></script>
+<script type='text/javascript' src="{{asset('public/js/bootstrap-datetimepicker.min.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/enquire.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery.cookie.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery.nicescroll.min.js')}}"></script>
@@ -28,7 +30,6 @@
 <script type='text/javascript' src="{{asset('assets/js/application.js')}}"></script>
 <script type='text/javascript' src="{{asset('assets/demo/demo.js')}}"></script> -->
 <script type='text/javascript' src="{{asset('public/assets/js/jquery.validate.min.js')}}"></script>
-
 <link href="{{ asset('public/assets/fonts/glyphicons/css/glyphicons.css') }}" rel="stylesheet">
 <?php /*
 <link href="https://datatables.yajrabox.com/css/datatables.bootstrap.css" rel="stylesheet">

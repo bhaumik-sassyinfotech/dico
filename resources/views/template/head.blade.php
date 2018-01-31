@@ -23,6 +23,7 @@
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/fullcalendar/fullcalendar.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/form-markdown/css/bootstrap-markdown.min.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset('public/css/sweetalert.css')}}" />
+<link rel='stylesheet' type='text/css' href="{{asset('public/css/bootstrap-datetimepicker.min.css')}}" />
 <link href="{{asset('public/css/select2.css')}}" rel="stylesheet" />
 <link href="{{asset(ASSETS_URL.'css/jquery.tagit.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset(ASSETS_URL.'css/tagit.ui-zendesk.css')}}" rel="stylesheet" type="text/css">
@@ -33,6 +34,9 @@
     var CSRF_TOKEN = "{{ csrf_token() }}";
     var EXTERNAL_SWEARS = "{{ asset('public/profanity/swearWords.json') }}";
     var POST_TITLE_LIMIT = "{{POST_TITLE_LIMIT}}";
+    var DEFAULT_PROFILE_IMAGE = "{{DEFAULT_PROFILE_IMAGE}}";
+    var PROFILE_PATH = "{{PROFILE_PATH}}";
+    var ASSETS_PATH = "{{asset('')}}";
 </script>
 <style type="text/css">
 	.error {
