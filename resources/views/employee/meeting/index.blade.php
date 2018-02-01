@@ -26,8 +26,8 @@
                             <div class="panel-heading">
                                 <h4>
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a href="#users" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Meetings</span></a></li>
-                                        <li class=""><a  href="#threads" data-toggle="tab"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Meetings</span></a></li>
+                                        <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Meetings</span></a></li>
+                                        <li class=""><a  href="#users" data-toggle="tab"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Meetings</span></a></li>
                                     </ul>
                                 </h4>
                                 <div class="pull-right">
@@ -40,7 +40,7 @@
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <div tabindex="5000" class="tab-pane active" id="threads">
-                                        @foreach($myMeetings as $meeting)
+                                        @foreach($allMeetings as $meeting)
                                             <?php
                                             $class = '';
                                             $type = '';
@@ -93,15 +93,20 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                        <?php
+                                        if (!empty($count_allMeetings) && $count_allMeetings > POST_DISPLAY_LIMIT) {
+                                        ?>
+                                            <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_allmeeting" onclick="loadAllMeeting();" data-id="0">View More</a></div>
+                                        <?php } ?>
                                     </div>
                             
-                                    <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane" id="users">
-                                        @foreach($allMeetings as $meeting)
+                                    <div tabindex="5002" class="tab-pane" id="users">
+                                        @foreach($myMeetings as $meeting)
                                             <?php
                                             $class = '';
                                             $type = '';
                                             if ( $meeting->privacy == '1' ) { //private
-                                                $class = 'meeting-2';
+                                                $class = 'meetings-2';
                                                 $type = 'Private';
                                             } else {
                                                 $class = 'meetings-1';
@@ -152,6 +157,11 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                        <?php
+                                        if (!empty($count_myMeetings) && $count_myMeetings > POST_DISPLAY_LIMIT) {
+                                        ?>
+                                            <div class="my_viewmore col-md-12"><a href="javascript:void(0)" id="load_mymeeting" onclick="loadMyMeeting();" data-id="0">View More</a></div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -162,3 +172,11 @@
         </div>
     </div>
 @stop
+<script type="text/javascript">
+    function loadAllMeeting() {
+        
+    }
+    function loadMyMeeting() {
+        
+    }
+</script>    

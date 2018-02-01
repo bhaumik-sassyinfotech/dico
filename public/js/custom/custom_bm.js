@@ -87,7 +87,8 @@ $(document).ready(function () {
                     html += '<img src="'+profile_pic+'"/></div>';
                     html += '<div class="member-details">';
                     html += '<h3 class="text-12">'+name+'</h3>';
-                    html += '<a href="mailto:'+email+'">'+email+'</a></div></div>';
+                    html += '<a href="mailto:'+email+'">'+email+'</a></div>';
+                    html += '<a href="javascript:void(0)" onclick="removeMember('+userid+')" class="close-button-small"></a></div>';
                     $("#meeting_users_list").append(html);
                     $('#employees_listing option[value="'+userid+'"]').attr("disabled", true);
                 }
@@ -535,6 +536,13 @@ $("#createMeeting").validate({
             minlength: 1
         }
     },
+    errorPlacement: function (error, element) {
+        if (element.attr("name") == "privacy") {
+            error.appendTo("#error_privacy");
+        } else {
+            error.insertAfter(element);
+        }
+    },
     submitHandler: function (form) {
         $("#save").prop('disabled', true);
         form.submit();
@@ -968,3 +976,7 @@ var editProfile = $("#editProfile").DataTable({
         // {data: 'admin', sorting: false, orderable: false}
     ] 
 });
+function removeMember(userid) {
+    $('#user_'+userid).remove();
+    $('#employees_listing option[value="'+userid+'"]').attr("disabled", false);
+}

@@ -744,11 +744,13 @@ p.user-icon {
   margin-top: 4px;
 }
 body .text-12 {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 100;
-    line-height: 130%;
+    line-height: 160%;
     text-align: justify;
+    font-weight: 300;
     word-wrap: break-word;
+    color: #646464;
 }
 .comment.like-wrap,
 .comment.like-wrap a{
@@ -865,12 +867,12 @@ body .text-12 {
 }
 
 .check input {
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  visibility: hidden;
-  width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden; 
+    position: absolute;
+    visibility: hidden;
+     width: 0.1px; 
 }
 
 .btn-wrap-div .checkmark {
@@ -897,6 +899,7 @@ body .text-12 {
   position: absolute;
   top: 0;
   width: 12px;
+  cursor: pointer;    
 }
 
 .category-tab .check .checkmark {
@@ -1788,7 +1791,7 @@ body .new-meeting-details .new-meeting-tab li.active > a {
 .upload-btn-wrapper:hover button {
   background-color: #4f8edc;
   border: 1px solid #0066af;
-  color: #fff;
+  color: #fff !important;
 }
 
 .new-meeting-details .category .post-category:last-child {
@@ -1958,6 +1961,7 @@ body.modal-open .modal-backdrop.in {
   font-weight: 500;
   padding: 10px 20px 10px 50px;
   position: relative;
+  cursor: default;    
 }
 .create-post .common-form .check .checked.question-checked:before {
     background-position: -40px 0px;
@@ -1977,6 +1981,7 @@ body.modal-open .modal-backdrop.in {
     position: absolute;
     top: 4px;
     width: 30px;
+    cursor: pointer;
 }
 .create-post .common-form .check.idea-check .checked:before {
     background-position: 0 -30px;
@@ -2025,13 +2030,13 @@ body.modal-open .modal-backdrop.in {
   color: #fff; 
 }
 .create-post .common-form .box-check .check.question-check {
-  /*background-color: #3795e7;*/
-  background-color: #d3d3d3;
+  background-color: #3795e7;
+  /*background-color: #d3d3d3;*/
   color: #fff;
 }
 .create-post .common-form .box-check .check.challenges-check {
-  /*background-color: #F93341;*/
-  background-color: #d3d3d3;
+  background-color: #F93341;
+ /* background-color: #d3d3d3;*/
   color: #fff;
 }
 .meeting-details .member-details > a {
@@ -2096,8 +2101,9 @@ body .challenges.idea-page #page-heading h1.icon-mark {
     left: 0;
     position: absolute;
     display: inline-block;
+    opacity: 0;
+    top: 0;
 }
-
 .create-post .category {
   border: none;
 }
@@ -2504,8 +2510,9 @@ form .form-group:last-child {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-top: medium none !important;
-  padding-top: 0 !important    
+  padding-top: 0 !important ;   
 }
+.list-block fieldset { display: block; width: 100%; min-height: 120px; }
 
 .list-block .grid-details {
   float: right;
@@ -2670,7 +2677,7 @@ form .form-group:last-child {
   top: 0;
   width: 30px;
 }
-
+/*
 .search-form > input:not([type="button"]) {
   border: 1px solid #949494;
   border-radius: 4px;
@@ -2680,6 +2687,7 @@ form .form-group:last-child {
   padding: 5px 10px 5px 30px;
   width: 172px;
 }
+*/
 
 .search-form {
   display: block;
@@ -3073,7 +3081,8 @@ select::-ms-expand {
 .upload-btn-wrapper form {
     margin-bottom: 0;
 }
-.close-button::after {
+.close-button::after,
+.close-button-small::after{
   color: #000000;
   content: "x";
   font-size: 20px;
@@ -3091,6 +3100,14 @@ select::-ms-expand {
 }
 .close-button:hover:after {
     color: #fff;
+}
+.close-button-small:after {
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+}
+.bootstrap-datepicker-widget.dropdown-menu{
+   z-index: 9999999999999;    
 }
 .status {
   margin-top: 2px;
@@ -3424,6 +3441,7 @@ body .idea-page #page-heading h1.icon-mark {
   background-color: transparent;
 }
 
+
 .employe-profile .panel-info .panel-body {
   padding: 2px 10px;
 }
@@ -3457,7 +3475,8 @@ body .idea-page #page-heading h1.icon-mark {
   color: #fff;
   text-decoration: none;
 }
-.close-button {
+.close-button,
+.close-button-small{
     border: 1px solid transparent;
     border-radius: 50%;
     color: #000000;
@@ -3475,11 +3494,18 @@ body .idea-page #page-heading h1.icon-mark {
     background-color: #ccc;
 }
 
-.close-button:hover {
+.close-button:hover,
+.close-button-small:hover{
     background-color: #666;
     border-color: #999;
     line-height: 50%;
 }
+.close-button-small{   
+    height: 20px;
+    width: 20px;
+    line-height: 100%;
+}
+
 .followers-list .followers-details {
   border-bottom: 1px solid #ababab;
   display: block;
@@ -3957,7 +3983,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 
 .all-group-list .trophy .pull-right a {
     position: relative;
-    margin: 10px 15px;
+    margin: 0px 15px;
     display: block;
 }
 .point-page.user-profile .table tr td {
@@ -3967,6 +3993,9 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
     position: relative;
     margin: 0px 15px;
     display: block;
+}
+.list-block .panel-body {
+    min-height: 210px;
 }
 .point-page.all-group-list .table p {
   color: #646464;
@@ -4717,9 +4746,36 @@ ul.tagit {
     padding-left: 40px;
     text-transform: uppercase;
     position: relative;
+    font-family: 'Open Sans', sans-serif !important;
 }
 .bottom-logo span img {
     max-width: 75px;
+}
+.all-group-list.point-page.super-user-employee tr td:nth-child(5) { width: 10%; }
+.none{display:none;}
+.group-listing tbody tr td:last-child p { margin-right: 25px; padding: 18px 10px; line-height: 120%; }
+#page-content {
+    min-height: 100% !important;
+}
+/**  STYLE 11 */
+#style-11::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0,0,0,0.1);
+  border: 1px solid #ccc;
+}
+
+#style-11::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(left, #fff, #e4e4e4);
+  border: 1px solid #aaa;
+}
+
+#style-11::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+#style-11::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(left, #22ADD4, #1E98BA);
 }
 /*close 30-01-2018*/
 

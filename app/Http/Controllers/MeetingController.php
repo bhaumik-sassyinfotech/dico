@@ -32,6 +32,7 @@
         
         public function __construct()
         {
+//            echo "meeting controller cunsructor call";
             $this->middleware(function ( $request, $next ) {
                 if ( Auth::user()->role_id == 1 ) {
                     return Redirect::to(url('/'));
@@ -53,7 +54,6 @@
          */
         public function index()
         {
-            //
             $currUser = Auth::user();
             $user_id  = $currUser->id;
             
@@ -65,10 +65,14 @@
              * So select meeting's id user is currently in and then check against the primary_key in `meetings` table
              *
              * */
-            $allMeetings = Meeting::withCount('meetingUsers')->where('privacy',0)->orderByDesc('id')->get();
-            $myMeetings = Meeting::with('meetingCreator')->withCount('meetingUsers')->where('privacy', 0)->orWhereIn('id', $user_meetings)->orderByDesc('id')->get();
+            $allMeetingsQuery = Meeting::withCount('meetingUsers')->orderByDesc('id');
+            $count_allMeetings = count($allMeetingsQuery->get());
+            $allMeetings = $allMeetingsQuery->limit(POST_DISPLAY_LIMIT)->get();
+            $myMeetingsQuery = Meeting::withCount('meetingUsers')->whereIn('id', $user_meetings)->orderByDesc('id');
+            $count_myMeetings = count($myMeetingsQuery->get());
+            $myMeetings = $myMeetingsQuery->limit(POST_DISPLAY_LIMIT)->get();
 //    dd($meetings);
-            return view($this->folder . '.meeting.index' , compact('myMeetings','allMeetings'));
+            return view($this->folder . '.meeting.index' , compact('myMeetings','allMeetings','count_allMeetings','count_myMeetings'));
         }
         
         
@@ -97,7 +101,7 @@
          */
         public function store( Request $request )
         {
-            dd($request->all());
+            //echo "<pre>";print_r($_POST);die;
             DB::beginTransaction();
             try {
                 $currUser   = Auth::user();
@@ -115,6 +119,7 @@
                 $meeting                      = new Meeting;
                 $meeting->meeting_title       = $request->meeting_title;
                 $meeting->meeting_description = $request->meeting_description;
+                $meeting->date_of_meeting        = date("Y-m-d H:i",strtotime($request->date_of_meet));
                 $meeting->privacy             = $privacy;
                 $meeting->created_by          = $currUser->id;
                 //dd($meeting);
@@ -143,9 +148,10 @@
                     $group        = $users = [];
                     $meeting_id   = $meeting->id;
                     $meetingUsers = [ ['meeting_id' => $meeting->id , 'user_id' => $currUser->id, 'is_admin' => 1, 'group_id' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now() ] ];
-                    if ( !empty($request->employees) )
+                    $selected_members = explode(",",$request->selected_members);
+                    if ( !empty($selected_members) )
                     {
-                        foreach ( $request->employees as $emp )
+                        foreach ( $selected_members as $emp )
                         {
                             $users[] = $emp;
                         }
@@ -187,25 +193,26 @@
                             }
                         }
                     }
-//                    dd($meetingUsers);
+                    //return $meetingUsers;
                     
                     if ( MeetingUser::insert($meetingUsers) ) {
                         DB::commit();
-                        return redirect()->route('meeting.index')->with('success', 'Meeting has been created successfully.');
+                        echo json_encode(array('status' => 1, 'msg' => 'Meeting has been created successfully.'));
+                        //return redirect()->route('meeting.index')->with('success', 'Meeting has been created successfully.');
                     } else {
                         DB::rollBack();
                     }
                 } else {
                     DB::rollBack();
-                    
-                    return redirect()->back()->with('err_msg', 'Some error occurred.')->withInput();
+                    echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                    //return redirect()->back()->with('err_msg', 'Some error occurred.')->withInput();
                 }
             }
             catch ( Exception $ex ) {
                 
                 DB::rollBack();
-                
-                return redirect()->back()->with('err_msg', $ex->getMessage())->withInput();
+                echo json_encode(array('status' => 0, 'msg' => $ex->getMessage()));
+                //return redirect()->back()->with('err_msg', $ex->getMessage())->withInput();
             }
             
             DB::rollBack();
@@ -224,25 +231,35 @@
         {
             //
             $id      = Helpers::decode_url($id);
+            if(is_numeric($id)) {
             $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment' => function ($q) {
                 $q->take(COMMENT_DISPLAY_LIMIT);
             }, 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser','meetingComment.commentLike','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->withCount('meetingComment')->where('id', $id)->first();
-            $type_ids = MeetingComment::where('meeting_id',$meeting->id)->pluck('id')->toArray();
-            $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
-            $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
-            $meeting_users    = User::whereIn('id', $meeting_user_ids)->get();
-            if($meeting->privacy == '1')
-            {
-                if( !in_array( Auth::user()->id , $meeting_user_ids ) )
-                    return Redirect::route('meeting.index')->with('err_msg' , 'You are not allowed to access a private meeting as you not a part of it.');
-            }
-            //dd($meeting);
-//            return $uploadedFiles = MeetingAttachment::with(['attachmentUser'])->whereIn('user_id',$meeting_user_ids)->get();
-//             $comments = Meeting::with()->where('id', $id)->get();
+            if($meeting) {
+                $type_ids = MeetingComment::where('meeting_id',$meeting->id)->pluck('id')->toArray();
+                $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
+                $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
+                $meeting_users    = User::whereIn('id', $meeting_user_ids)->get();
+            
+                if($meeting->privacy == '1')
+                {
+                    if( !in_array( Auth::user()->id , $meeting_user_ids ) )
+                        return Redirect::route('meeting.index')->with('err_msg' , 'You are not allowed to access a private meeting as you not a part of it.');
+                }
+                //dd($meeting);
+    //            return $uploadedFiles = MeetingAttachment::with(['attachmentUser'])->whereIn('user_id',$meeting_user_ids)->get();
+    //             $comments = Meeting::with()->where('id', $id)->get();
 
-//                ->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
-//            dd($meeting);
-            return view($this->folder . '.meeting.detail', compact('meeting', 'meeting_users', 'meeting_user_ids' , 'comments','uploadedFiles'));
+    //                ->select('*',DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+    //            dd($meeting);
+                return view($this->folder . '.meeting.detail', compact('meeting', 'meeting_users', 'meeting_user_ids' , 'comments','uploadedFiles'));
+            }
+            else {
+                return redirect()->back()->with('err_msg', Config::get('constant.TRY_MESSAGE'))->withInput();
+            }
+            }else {
+                return redirect()->back()->with('err_msg', Config::get('constant.TRY_MESSAGE'))->withInput();
+            }
         }
         
         /**

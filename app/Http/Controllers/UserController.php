@@ -75,7 +75,19 @@ class UserController extends Controller {
 				$company_admins = User::with(['following', 'followers'])->where('role_id', 2)->get();
 				// return $users;
 				return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
-			}
+			} else {
+                            $role_id = [3];
+                            $roles = Role::whereIn('id', $role_id)->get();
+                            $companies = Company::whereNull('deleted_at')->get();
+                            $user_query = User::with(['following', 'followers'])->where('role_id', 3);
+                            if (Auth::user()->role_id == 2) {
+                                    $user_query = $user_query->where('company_id', $company_id);
+                            }
+                            $users_count = count($user_query->get());
+                            $users = $user_query->orderByDesc('created_at')->limit(POST_DISPLAY_LIMIT)->get();
+                            $company_admins = User::with(['following', 'followers'])->where('role_id', 2)->get();
+                            return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
+                        }
 		} else {
 			return redirect('/index');
 		}
@@ -108,7 +120,12 @@ class UserController extends Controller {
 				}
 
 				return view($this->folder . '.users.create', compact('roles', 'companies'));
-			}
+			}else {
+                            $companies = Company::all();
+                            $role_id = [2, 3];
+                            $roles = Role::whereIn('id', $role_id)->get();
+                            return view($this->folder . '.users.create', compact('roles', 'companies'));
+                        }
 		} else {
 			return redirect('/index')->with('error_msg', "You don't have rights to create a user.");
 		}

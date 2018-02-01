@@ -1,293 +1,136 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>DICO - Meeting</title>
 @section('content')
-    <div id="page-content" class="post-details create-post">
+    <div id="page-content" class="new-meeting-details" style="min-height: 931px;">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
                     <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li><a href="{{ route('post.index') }}">Post</a></li>
-                    <li class="active">Create Post</li>
+                    <li><a href="{{ route('meeting.index') }}">Meeting</a></li>
+                    <li class="active">New Meeting</li>
                 </ol>
-                <h1 class="tp-bp-0">Create Post</h1>
+                <h1 class="tp-bp-0">New Meeting</h1>
                 <hr class="border-out-hr">
             </div>
             <div class="container">
                 <div class="row">
-                    <form name="post_form" id="post_form" method="post" class="common-form" action="{{route('post.store')}}" enctype="multipart/form-data">
-                        <div class="col-sm-8" id="post-detail-left">
+                    <form class="common-form" method="POST" name="createMeeting" action="{{ route('meeting.store') }}" id="createMeeting" enctype="multipart/form-data">
+                    <div class="col-sm-8" id="post-detail-left">
+                            {{ method_field('POST') }}
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label class="text-15">Post<span>*</span></label>
-                                <div class="check-wrap box-check">
-                                    <?php /*<label class="check idea-check">Idea    
-                                       <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check">
-                                       <span class="checked"></span>
-                                    </label> 
-                                    <label class="check question-check">Question    
-                                        <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type">
-                                        <span class="checked"></span>
-                                    </label>
-                                    <label class="check challenges-check">Challenge    
-                                        <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type">
-                                        <span class="checked"></span>
-                                    </label>
-                                    <?php /*<div class="custom-cr-btn">
-                                    <input id="checkbox1" type="checkbox" name="post_type" value="">
-                                       <label for="checkbox1"><span></span></label>
-                                   </div>*/?>
-                                    <div class="check ">Idea    
-                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check error">
-                                         <label for="post_type_idea"> 
-                                             <span class="checked"></span>
-                                          </label>    
+                                <label>Type*</label>
+                                <div class="check-wrap">
+                                    <div class="check">Private
+                                        <input type="checkbox" name="privacy" id="private" value="private" class="privacy_type check post_type error">
+                                        <label for="private" class="checkmark"></label>      
                                     </div>
-                                    <div class="check ">Question    
-                                        <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type check question-check error">
-                                         <label for="post_type_question"> 
-                                             <span class="checked"></span>
-                                          </label>    
-                                    </div>
-                                    <div class="check ">Challenge    
-                                        <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type check challenges-check error">
-                                         <label for="post_type_challenge"> 
-                                             <span class="checked"></span>
-                                          </label>    
+                                    <div class="check">Public
+                                        <input type="checkbox" name="privacy" id="public" value="public" class="privacy_type check post_type error">
+                                        <label for="public" class="checkmark"></label>
                                     </div>
                                 </div>
-                                <div id="err_post_type"></div>
-                            </div>
-                            <div class="form-group m-b-20">
-                                    <label class="text-15">Post Title<span>*</span></label>
-                                    <input type="text" name="post_title" id="post_title" placeholder="Post Title" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
                             </div>
                             <div class="form-group">
-                                    <label class="text-15">Post Description</label>
-                                    <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control"></textarea>
+                                <label for="meeting_title" >Meeting title*</label>
+                                <input type="text" name="meeting_title" id="meeting_title" class="form-control required" placeholder="Meeting title"/>
                             </div>
-                            <?php /*<div class="form-group">
-                                <div class="col-xs-12 form-group">
-                                <span class="btn btn-primary fileinput-button">
-                                    <i class="fa fa-upload"></i>
-                                    <span>upload</span>
-                                    <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
-                                </span>
+                    
+                            <div class="form-group">
+                                <label  for="meeting_description">Meeting description</label>
+                                <textarea name="meeting_description" id="meeting_description" class="form-control" placeholder="Meeting description"></textarea>
+                            </div>
+                            
+                            <div class="form-group calendar">
+                                <label>Date Of Meet:</label>  
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input type="text" name="date_of_meet" id="date_of_meet" placeholder="12-09-2017 | (9:30)" class="form-control">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
-                            </div>*/?>
-                            <div class="form-group">
-                                    <label>Tags</label>
-                                    <input type="hidden" name="post_tags" id="mySingleField" value="">
-                                    <ul id="singleFieldTags"></ul>
-                            </div>  
+                            </div>
+                            <input type="hidden" name="company_id" value="{{ $company_id }}">
                             <div class="btn-wrap-div">
-                            <?php
-                            if(isset($company) && $company->allow_anonymous == 1) {
-                            ?>
-                            <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous">
-                                <span class="checkmark"></span>
-                            </label> 
-                            <?php } ?>
-                                <a href="{{ route('post.index') }}" class="st-btn btn-default">Back</a>
-                                <input type="submit" name="save" id="save" value="Submit" class="st-btn">
+                                <input type="submit" class="st-btn" value="Submit">
                                 <div class="upload-btn-wrapper">
                                     <button class="upload-btn">Upload Files</button>
                                     <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 </div>
                             </div>
-                            
-                            
-                            <?php /*<div class="form-group">
-                                    <label class="control-label" for="user_groups">Group:</label>
-                                    <select name="user_groups[]" id="user_groups" class="form-control" multiple="multiple">
-                                        <?php
-                                            if(!empty($groups)) {
-                                                foreach($groups as $group) {
-                                                ?>    
-                                        <option value="{{$group->id}}">{{$group->group_name}}</option>
-                                                <?php    
-                                                }
-                                            }
-                                        ?>
-                                    </select>
-                            </div><?php */?>
-                            <?php /*<div class="panel-footer">
-                                <div class="row col-xs-12">
-                                <div class="btn-toolbar">
-                                    <a href="{{ route('post.index') }}" class="btn btn-default">Back</a>
-                                    <input type="submit" name="save" id="save" value="Submit" class="btn btn-primary">
+                    </div>
+                   
+                    <div class="col-sm-4" id="post-detail-right">
+                        <h3 class="heading-title">INVITE BY:</h3>
+                        <div class="category-meeting">
+                            <div class="tab-container tab-success new-meeting-tab">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#home1">Groups </a></li>
+                                    <li class=""><a data-toggle="tab" href="#profile1">Members</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane clearfix active" id="home1">
+                                        <div class="main-group-wrap">
+                                            <div class="category-tab tp-bp-0"> 
+                                                <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                            <div class="category-detials">
+                                                @foreach($groups as $group)
+                                                <label class="check" style="display: block !important;">{{ $group->group_name }}
+                                                        <input name="group[]" type="checkbox" id="group_{{$group->id}}" value="{{ $group->id }}">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="profile1" class="tab-pane">
+                                        <div class="category-tab">
+                                            {{--<input type="text" placeholder="Member Name" />--}}
+                                            <select name="employees[]" id="employees_listing" class="form-control" style="width: 84%">
+                                                <option value="-1">---Select---</option>
+                                                @foreach($employees as $employee)
+                                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <input type="submit" name="add_employee" id="add_employee" value="ADD" class="st-btn">
+                                        </div>    
+                                        <div class="post-category" id="meeting_users_list">
+                                        </div>
+                                        
+                                        @php
+                                        /*
+                                        <div class="post-category" id="meeting_users_list">
+                                            <div class="member-wrap">
+                                                <div class="member-img">
+                                                    <img alt="no" src="assets/img/member1.PNG">
+                                                </div>
+                                                <div class="member-details">
+                                                    <h3 class="text-12">Richardo Ranchet</h3>
+                                                    <a href="mailto:ricardo_ranchet@gmail.com">ricardo_ranchet@gmail.com</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        */
+                                        @endphp
+                                    </div>
                                 </div>
-                                <div style="clear: both;"></div>
                             </div>
-                            </div>*/?>
                         </div>
-                        <div class="col-sm-4" id="post-detail-right">
-                        <div class="category">
-                                <div class="main-group-wrap">
-                                   <div class="category-tab tp-bp-0"> 
-                                       <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
-                                         <span class="checkmark"></span>
-                                     </label>
-                                   </div>
-                                   <?php
-                                       if(!empty($groups) && count($groups) > 0) {
-                                          foreach($groups as $group) { 
-                                   ?>
-                                   <div class="category-detials">
-                                       <label class="check text-12">{{$group->group_name}}
-                                           <input type="checkbox" name="user_groups[]" id="user_groups_{{$group->id}}" value="{{$group->id}}">
-                                           <span class="checkmark"></span>
-                                        </label>
-                                   </div> 
-                                   <?php } } else { ?>
-                                    <div class="category-detials">No group found.</div>
-                                   <?php } ?>
-                               </div>
-                           </div>
-                        </div>
-                    </form>    
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
+    </div> <!-- container -->
 @stop
 @push('javascripts')
 <script type="text/javascript">
-       // $(function(){
-            var sampleTags = [];
-           // $(document).ready(function() {
-                //var _token = CSRF_TOKEN;
-                $.ajax({
-                    url: SITE_URL + '/tags',
-                    type: 'GET',
-                    //data: {_token},
-                    success: function(response) {
-                        var res = JSON.parse(response);
-                        if(res.status == 1) {
-                            var data = res.data;
-                            $.each(data, function( index, value ) {
-                                sampleTags.push(value.tag_name);
-                            });
-                        }
-                        else {
-                            sampleTags = [];
-                        }
-                    }
-                });
-            //});
-            //var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
-
-            //-------------------------------
-            // Minimal
-            //-------------------------------
-            $('#myTags').tagit();
-
-            //-------------------------------
-            // Single field
-            //-------------------------------
-            $('#singleFieldTags').tagit({
-                availableTags: sampleTags,
-                // This will make Tag-it submit a single form value, as a comma-delimited field.
-                singleField: true,
-                singleFieldNode: $('#mySingleField')
-            });
-
-            // singleFieldTags2 is an INPUT element, rather than a UL as in the other 
-            // examples, so it automatically defaults to singleField.
-            $('#singleFieldTags2').tagit({
-                availableTags: sampleTags
-            });
-
-            //-------------------------------
-            // Preloading data in markup
-            //-------------------------------
-            $('#myULTags').tagit({
-                availableTags: sampleTags, // this param is of course optional. it's for autocomplete.
-                // configure the name of the input field (will be submitted with form), default: item[tags]
-                itemName: 'item',
-                fieldName: 'tags'
-            });
-
-            //-------------------------------
-            // Tag events
-            //-------------------------------
-            var eventTags = $('#eventTags');
-
-            var addEvent = function(text) {
-                $('#events_container').append(text + '<br>');
-            };
-
-            eventTags.tagit({
-                availableTags: sampleTags,
-                beforeTagAdded: function(evt, ui) {
-                    if (!ui.duringInitialization) {
-                        addEvent('beforeTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
-                    }
-                },
-                afterTagAdded: function(evt, ui) {
-                    if (!ui.duringInitialization) {
-                        addEvent('afterTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
-                    }
-                },
-                beforeTagRemoved: function(evt, ui) {
-                    addEvent('beforeTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
-                },
-                afterTagRemoved: function(evt, ui) {
-                    addEvent('afterTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
-                },
-                onTagClicked: function(evt, ui) {
-                    addEvent('onTagClicked: ' + eventTags.tagit('tagLabel', ui.tag));
-                },
-                onTagExists: function(evt, ui) {
-                    addEvent('onTagExists: ' + eventTags.tagit('tagLabel', ui.existingTag));
-                }
-            });
-
-            //-------------------------------
-            // Read-only
-            //-------------------------------
-            $('#readOnlyTags').tagit({
-                readOnly: true
-            });
-
-            //-------------------------------
-            // Tag-it methods
-            //-------------------------------
-            $('#methodTags').tagit({
-                availableTags: sampleTags
-            });
-
-            //-------------------------------
-            // Allow spaces without quotes.
-            //-------------------------------
-            $('#allowSpacesTags').tagit({
-                availableTags: sampleTags,
-                allowSpaces: true
-            });
-
-            //-------------------------------
-            // Remove confirmation
-            //-------------------------------
-            $('#removeConfirmationTags').tagit({
-                availableTags: sampleTags,
-                removeConfirmation: true
-            });
-       // });
-        $("#checkAll").click(function () {
-            $("input[name*='user_groups[]']").not(this).prop('checked', this.checked);
-        });
-        /*$('.post_type').click(function() {
-            var posttype = $(this).val();
-            if(posttype == 'idea') {
-                $(this).parent().removeClass('idea-check');
-                $(this).parent().addClass('idea-check');
-            } else if(posttype == 'question') {
-                $(this).parent().removeClass('question-check');
-                $(this).parent().addClass('question-check');
-            } else if(posttype == 'challenge') {
-                $(this).parent().removeClass('challenges-check');
-                $(this).parent().addClass('challenges-check');
-            } 
-        });*/
-        
-    </script>
-    @endpush
+$('#datetimepicker1').datetimepicker();    
+$("#checkAll").click(function () {
+    $("input[name*='group[]']").not(this).prop('checked', this.checked);
+});
+</script>
+@endpush        

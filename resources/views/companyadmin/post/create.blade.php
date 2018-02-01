@@ -39,19 +39,19 @@
                                     <div class="check ">Idea    
                                         <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check error">
                                          <label for="post_type_idea"> 
-                                             <span class="checked"></span>
+                                             <span class="checked idea-checked"></span>
                                           </label>    
                                     </div>
                                     <div class="check ">Question    
                                         <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type check question-check error">
                                          <label for="post_type_question"> 
-                                             <span class="checked"></span>
+                                             <span class="checked question-checked"></span>
                                           </label>    
                                     </div>
                                     <div class="check ">Challenge    
                                         <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type check challenges-check error">
                                          <label for="post_type_challenge"> 
-                                             <span class="checked"></span>
+                                             <span class="checked challenges-checked"></span>
                                           </label>    
                                     </div>
                                 </div>
