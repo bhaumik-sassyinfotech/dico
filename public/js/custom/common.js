@@ -18,6 +18,8 @@ function runProfanity(){
 /*Yajratables default parameters*/
 $.extend(true, jQuery.fn.dataTable.defaults, {
     "stateSave": true,
+    "bLengthChange": false,
+    "bInfo": false,
     // "searchDelay": 2000,
 });
 /*validations*/

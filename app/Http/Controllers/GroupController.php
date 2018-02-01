@@ -601,9 +601,7 @@ class GroupController extends Controller {
 				} else {
 
 //                        $admin = ' <a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a></p>';
-
-					$admin = ' <p><a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
-
+					$admin = ' <p><a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10 removeUser" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
 				}
 
 			}

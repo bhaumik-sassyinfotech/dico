@@ -10,6 +10,7 @@ Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@fi
 Route::group(['middleware' => 'admin'], function () {
 	Route::resource('company', 'CompanyController');
 	Route::resource('security_question', 'SecurityQuestionController');
+	Route::match(['get', 'post'], '/user/alterStatus', 'UserController@alterStatus'); // user-alter-status
 	Route::match(['get', 'post'], '/user/employeeList', 'UserController@getEmployeeListing'); // employee-datatable
 	Route::match(['get', 'post'], '/user/employeeGrid', 'UserController@getEmployeeGrid'); // employee-grid view
 	Route::match(['get', 'post'], '/user/adminGrid', 'UserController@getGroupAdminGrid'); // admin-grid view
@@ -105,6 +106,9 @@ Route::group(['middleware' => 'admin'], function () {
 
 });
 
-Route::get('/home', 'DashboardController@index')->name('home');
-
+// Route::get('/home', 'DashboardController@index')->name('home');
+Route::get('/home', function () {
+	// return redirect('/index');
+	dd('dsdsdsd');
+});
 ?>

@@ -278,24 +278,9 @@ if (@$userquestions[2]->question_id == $question->id) {
                     <div class="employ-box col-sm-12 col-md-6">
                         <h2>Notification</h2>
                         <ul class="ul-checkbox">
-
                             <li>
                                 <label class="check">
-                                    <p>In Mail </p>
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="check">
-                                    <p>Instant Mail</p>
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="check">
-                                    <p>Every 15 Mins</p>
+                                    <p>New post in group </p>
                                     <input type="checkbox">
                                     <span class="checkmark"></span>
                                 </label>
@@ -303,7 +288,143 @@ if (@$userquestions[2]->question_id == $question->id) {
 
                             <li>
                                 <label class="check">
-                                    <p>Once Per Day</p>
+                                    <p>Votes on my idea</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Decision on my idea </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Decision on idea I voted </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Like on my post </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Like on my comment </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Reply on my comment </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Report on my post </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Report on my comment </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>New follower </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Comment marked as correct answer </p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Comment is marked correct on a post I participated</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Post is edited or deleted</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Comment is edited or deleted</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Meeting Invite</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>My meeting is finalized</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>New comment in a meeting</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>File added to a meeting</p>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="check">
+                                    <p>Member is removed / leaves from the meeting</p>
                                     <input type="checkbox">
                                     <span class="checkmark"></span>
                                 </label>

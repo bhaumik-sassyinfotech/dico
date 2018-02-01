@@ -11,7 +11,7 @@
                 </ol>
                 <h1 class="tp-bp-0">Create User</h1>
                 <hr class="border-out-hr">
-            
+
             </div>
             <div class="container">
                 <div class="row">
@@ -32,13 +32,13 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="text-15">Full Name<span>*</span></label>
                                 <input type="text" name="user_name" id="user_name" placeholder="Full Name"
                                        class="form-control required">
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="text-15">Email Id<span>*</span></label>
                                 <input type="text" name="user_email" id="user_email" placeholder="User Email"
@@ -49,7 +49,7 @@
                                 <div class="select">
                                     <select id="role_id" name="role_id" class="form-control">
                                         <option value="">------ Select ------</option>
-                                        
+
                                         @if(!empty($roles))
                                             @foreach($roles as $role)
                                                 <option value="{{$role->id}}">{{$role->role_name}}</option>
@@ -86,7 +86,7 @@
                             <div class="form-group">
                                 <div class="btn-wrap-div">
                                     <input type="submit" class="st-btn" value="Submit" />
-                                    
+
                                     <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1"
                                          id="myModal" class="modal fade" style="display: none;">
                                         <div class="modal-dialog">
@@ -114,24 +114,24 @@
                                                                 <p>Employee</p>
                                                             </a>
                                                         </div>
-                                                    
+
                                                     </div>
                                                 </div>
-                                            
+
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
                                     </div>
                                     <a href="{{ url()->previous() }}" class="st-btn">Cancel</a>
                                 </div>
                             </div>
-                        
+
                         </form>
-                    
-                    
+
+
                     </div>
                 </div>
             </div>
-        
+
         </div>
     </div> <!-- container -->
 @stop

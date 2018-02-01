@@ -269,7 +269,7 @@ class Helpers {
 
 				$previousActivityQuery = UserActivity::where(['user_id' => $user_id, 'parent_id' => $parent_id, 'activity_id' => $points->id]);
 
-				if ($original_slug == 'LIKE' OR $original_slug == 'DISLIKE' OR $original_slug == 'ADD_COMMENT' OR $original_slug == 'IDEA_VOTE' OR $original_slug == 'CORRECT_SOLUTION') {
+				if ($original_slug == 'LIKE' OR $original_slug == 'DISLIKE' OR $original_slug == 'ADD_COMMENT' OR $original_slug == 'IDEA_VOTE' OR $original_slug == 'CORRECT_SOLUTION' OR $original_slug == 'CORRECT_SOLUTION') {
 
 					$previousActivity = $previousActivityQuery->first();
 

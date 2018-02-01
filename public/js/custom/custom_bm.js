@@ -176,7 +176,7 @@ var groupTable = $('#group_table').DataTable({
     columns: [
         {data: 'group_name',sorting: false, orderable: false},
         {data: 'description'},
-        {data: 'groupst_posts_count'},
+        {data: 'group_posts_count'},
         {data: 'group_users_count'},
         {data: 'actions', sorting: false, orderable: false}
     ]
@@ -682,6 +682,7 @@ function superUserGrid(type)
     // console.log(url);
     new_url = SITE_URL+url;
     var dataString = { _token : CSRF_TOKEN , search : search_text };
+    $("#display-grid").empty();
     $.ajax({
         url:new_url,
         data: dataString, 
@@ -690,7 +691,8 @@ function superUserGrid(type)
         success: function(response)
         {
             
-            $("#display-grid").empty();
+            // $("#display-grid").empty();
+            // alert("succ");
             $("#display-grid").html(response.html);
             setTimeout(function()
             {
@@ -709,7 +711,6 @@ function superUserGrid(type)
 
 $(document).on('click',"#search_btn",function(){
     var search_text = $.trim($("#search_query").val());
-    
     $("#offset").val(0);
     var type = $("#offset").attr('data-tab');
     var url = new_url = '';
@@ -726,9 +727,11 @@ $(document).on('click',"#search_btn",function(){
         url = '/user/otherManagersGrid';
     }
     var search_text = $.trim($("#search_query").val());
-    // console.log(url);
+    
     new_url = SITE_URL+url;
     var dataString = { _token : CSRF_TOKEN , search : search_text,offset:0 };
+    console.log(dataString);
+    $("#display-grid").empty();
     $.ajax({
         url:new_url,
         data: dataString, 
@@ -738,7 +741,8 @@ $(document).on('click',"#search_btn",function(){
             companyuserTable.draw(); // custom.js
             employeeTable_superadmin.draw(); // for super-user
             otherManagerTable_superadmin.draw(); // for super-user
-            $("#display-grid").empty();
+            companyManagerTable_superadmin.draw(); // for super-user
+
             $("#display-grid").html(response.html);
             setTimeout(function()
             {
@@ -769,7 +773,7 @@ var employeeTable_superadmin = $("#emp-table").DataTable({
     },
     searching: false,
     columns: [
-        {data: 'name'},
+        {data: 'name', sorting: false, orderable: false},
         {data: 'email'},
         {data: 'role'},
         {data: 'followers_count'},
@@ -791,10 +795,31 @@ var otherManagerTable_superadmin = $("#other-managers-table").DataTable({
     },
     searching: false,
     columns: [
-        {data: 'name'},
+        {data: 'name', sorting: false, orderable: false},
         {data: 'email'},
         {data: 'role'},
         {data: 'position'},
+        {data: 'following_count'},
+        {data: 'followers_count'},
+        {data: 'points'},
+        // {data: 'admin', sorting: false, orderable: false}
+    ]
+});
+var companyManagerTable_superadmin = $("#company-manager-table").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL + '/user/adminList',
+        data: function (d) {
+            // d.role_id      = $("#role_id").val();
+            d.search_query = $.trim($("#search_query").val());
+        }
+    },
+    searching: false,
+    columns: [
+        {data: 'name', sorting: false, orderable: false},
+        {data: 'role'},
+        {data: 'group_admins'},
         {data: 'following_count'},
         {data: 'followers_count'},
         {data: 'points'},
@@ -836,6 +861,7 @@ function groupGrid(type)
     // console.log(url);
     new_url = SITE_URL+url;
     var dataString = { _token : CSRF_TOKEN , offset: offset_val , search : search_text };
+    $("#display-grid").empty();
     $.ajax({
         url:new_url,
         data: dataString, 
@@ -843,7 +869,6 @@ function groupGrid(type)
         async: true,
         success: function(response)
         {
-            $("#display-grid").empty();
             $("#display-grid").html(response.html);
             setTimeout(function()
             {
@@ -881,26 +906,37 @@ $(document).on('click','.multiple-action',function(){
             if(ischecked)
                 id_arr.push(that.val());
         });
-        
+        var page_name = $.trim($("#page_name").val());
+        // console.log(page_name);
         if(id_arr.length > 0)
         {
             id_arr = id_arr.join(',');
             swal({
                 title: "Are you sure?",
-                text: "All details related to this group will be deleted!",
+                text: "All details related to it will be deleted!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn-danger",
                 confirmButtonText: "Yes",
                 closeOnConfirm: false
             } , function () {
+                // console.log("herer");
                 var dataString = {_token:CSRF_TOKEN};
-
-              
+                // dataString.groups = '';
+                var temp_url = '/group/delete_group';    
+                var action = '';
+                if(page_name == 'superadmin_user_listing')
+                {
+                    var temp_url = '/user/alterStatus';
+                    var action = $.trim($('.action option:selected').val());
+                    dataString.action = action;
+                    dataString.users = id_arr;
+                } else {
                     dataString.groups = id_arr;
-                    console.log(id_arr);
+                }
+
                     $.ajax({
-                        url: SITE_URL + '/group/delete_group',
+                        url: SITE_URL + temp_url,
                         method: 'POST',
                         data: dataString,
                         success: function (response) 
@@ -923,7 +959,7 @@ $(document).on('click','.multiple-action',function(){
                     });
                 });
         } else {
-            swal("Error","Please select atleast one group. ",'error')
+            swal("Error","Please select atleast one option. ",'error')
         }
 
 });
