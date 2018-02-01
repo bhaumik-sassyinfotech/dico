@@ -5,27 +5,27 @@
             <a class="navbar-brand" href="{{url('/')}}">Dico</a>
         </div>
         <?php
-            if(!empty(Auth::user()->profile_image)) {
-                $profile_pic = PROFILE_PATH.Auth::user()->profile_image;
-            }else {
-                //$profile_pic = 'public/assets/demo/avatar/dangerfield.png';
-                $profile_pic = DEFAULT_PROFILE_IMAGE;
-            }
-        ?>
+if (!empty(Auth::user()->profile_image)) {
+	$profile_pic = PROFILE_PATH . Auth::user()->profile_image;
+} else {
+	//$profile_pic = 'public/assets/demo/avatar/dangerfield.png';
+	$profile_pic = DEFAULT_PROFILE_IMAGE;
+}
+?>
 
         <ul class="nav navbar-nav pull-right toolbar">
         	<li class="dropdown">
-        		<a href="#" class="dropdown-toggle username" data-toggle="dropdown"><span class="hidden-xs"><?php echo Auth::user()->name;?> <i class="fa fa-caret-down"></i></span><img src="{{asset($profile_pic)}}" alt="" /></a>
+        		<a href="#" class="dropdown-toggle username" data-toggle="dropdown"><span class="hidden-xs"><?php echo Auth::user()->name; ?> <i class="fa fa-caret-down"></i></span><img src="{{asset($profile_pic)}}" alt="" /></a>
         		<ul class="dropdown-menu userinfo arrow">
         			<li class="username">
                         <a href="#">
         				    <div class="pull-left"><img src="{{asset($profile_pic)}}" alt=""/></div>
-        				    <div class="pull-right"><h5><?php echo Auth::user()->name;?></h5><small>Logged in as <span><?php echo Auth::user()->name;?></span></small></div>
+        				    <div class="pull-right"><h5><?php echo Auth::user()->name; ?></h5><small>Logged in as <span><?php echo Auth::user()->name; ?></span></small></div>
                         </a>
         			</li>
         			<li class="userlinks">
         				<ul class="dropdown-menu">
-        					<li><a href="{{url('edit_profile')}}">Edit Profile <i class="pull-right fa fa-pencil"></i></a></li>
+        					<li style="display: none;"><a href="{{url('edit_profile')}}">Edit Profile <i class="pull-right fa fa-pencil"></i></a></li>
                                                 <li style="display: none;"><a href="#">Account <i class="pull-right fa fa-cog"></i></a></li>
         					<li style="display: none;"><a href="#">Help <i class="pull-right fa fa-question-circle"></i></a></li>
         					<li class="divider"></li>
@@ -38,7 +38,7 @@
         			</li>
         		</ul>
         	</li>
-        	
+
         	<li class="dropdown">
         		<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><i class="fa fa-bell"></i><span class="badge"></span></a>
         		<ul class="dropdown-menu notifications arrow">

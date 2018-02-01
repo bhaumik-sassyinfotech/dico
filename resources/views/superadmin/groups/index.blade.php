@@ -141,7 +141,7 @@
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info">
                                                                 <div class="panel-heading trophy">
-                                                                    <h4 class="icon">Users List</h4>
+                                                                    <h4 class="icon">Groups Listing</h4>
                                                                     <div class="pull-right">
                                                                         <a href="settings.php"><img
                                                                                     src="assets/img/settings-icon.png"

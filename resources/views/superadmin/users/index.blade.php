@@ -16,11 +16,11 @@
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
                             <span class="hidden-xs hidden-sm">Create User</span>
                         </a>
-                        <a class="btn btn-default">
+                        <a style="display: none;" class="btn btn-default">
                             <i class="fa fa-sort fa-6" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Sort</span>
                         </a>
-                        <div class="btn-group">
+                        <div style="display: none;" class="btn-group">
                             <div class="btn-group color-changes">
                                 <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i
                                             aria-hidden="true" class="fa fa-filter fa-6"></i><span
@@ -167,6 +167,7 @@
                                             @endif
                                         </ul>
                                         <input type="hidden" name="role_id" id="role_id" value="3">
+                                        <input type="hidden" name="superadmin_user_listing" id="page_name" value="superadmin_user_listing">
                                         <!-- Employee GRID END -->
                                         <div class="hide-table none">
                                             <div tabindex="5000"
@@ -190,8 +191,8 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
-                                                                                        <label class="check">User Name<input
-                                                                                                    type="checkbox">
+                                                                                        <label class="check checkAll">User Name<input
+                                                                                                    type="checkbox" class="checkAllBox">
                                                                                             <span class="checkmark"></span>
                                                                                         </label>
                                                                                     </th>
@@ -209,15 +210,14 @@
                                                                             <div class="action notice-left"><p>
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
-                                                                                <select name="slct" id="slct">
-                                                                                    <option>Edit</option>
-                                                                                    <option value="Super User">Super
-                                                                                        User
-                                                                                    </option>
-                                                                                    <option value="Employee">Employee
-                                                                                    </option>
-                                                                                    <option value="Admin">Admin</option>
+                                                                                <select name="slct" id="slct" class="action">
+                                                                                    <option value="active">Active</option>
+                                                                                    <option value="inactive">Inactive</option>
+                                                                                    <option value="suspend">Suspend</option>
                                                                                 </select>
+                                                                            </div>
+                                                                            <div class="action notice-left" style="padding: 0px 10px; ">
+                                                                               <input type="button" name="" class="st-btn multiple-action" value="Submit">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -245,17 +245,16 @@
                                                                 </div>
                                                                 <div class="panel-body">
                                                                     <div class="row">
-                                                                        <table class="table" id="company-manager">
+                                                                        <table class="table" id="company-manager-table">
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>
-                                                                                    <label class="check">Group Manager
-                                                                                        Details<input type="checkbox">
+                                                                                    <label class="check checkAll">Group Manager
+                                                                                        Details<input type="checkbox" class="checkAllBox">
                                                                                         <span class="checkmark"></span>
                                                                                     </label>
                                                                                 </th>
                                                                                 <th><label>Role</label></th>
-                                                                                <th><label>Manager Of</label></th>
                                                                                 <th><label>Groups</label></th>
                                                                                 <th><label>Following</label></th>
                                                                                 <th><label>Followers</label></th>
@@ -263,78 +262,21 @@
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Jason
-                                                                                        Durelo<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>Business Development Manager</p>
-                                                                                </td>
-                                                                                <td><p>Design &amp; Tech, Marketing,
-                                                                                        Business Development</p></td>
-                                                                                <td><p>Maekting, Customer Service, Lead
-                                                                                        Generation</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>6854</p></td>
+                                                                            </tbody>
 
-                                                                            </tr>
-                                                                            </tbody>
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Melllisa
-                                                                                        McCarty<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>Business Development Manager</p>
-                                                                                </td>
-                                                                                <td><p>Design &amp; Tech, Marketing,
-                                                                                        Business Development</p></td>
-                                                                                <td><p>Maekting, Customer Service, Lead
-                                                                                        Generation</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>6854</p></td>
-
-                                                                            </tr>
-                                                                            </tbody>
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label class="check">Vennesa
-                                                                                        Jay<input type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
-                                                                                </td>
-                                                                                <td><p>Business Development Manager</p>
-                                                                                </td>
-                                                                                <td><p>Design &amp; Tech, Marketing,
-                                                                                        Business Development</p></td>
-                                                                                <td><p>Maekting, Customer Service, Lead
-                                                                                        Generation</p></td>
-                                                                                <td><p>235</p></td>
-                                                                                <td><p>34</p></td>
-                                                                                <td><p>6854</p></td>
-                                                                            </tr>
-                                                                            </tbody>
                                                                         </table>
                                                                         <div class="notice">
                                                                             <div class="action notice-left"><p>
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
-                                                                                <select name="slct" id="slct">
-                                                                                    <option>Edit</option>
-                                                                                    <option value="Super User">Super
-                                                                                        User
-                                                                                    </option>
-                                                                                    <option value="Employee">Employee
-                                                                                    </option>
-                                                                                    <option value="Admin">Admin</option>
+                                                                                <select name="slct" id="slct" class="action">
+                                                                                    <option value="active">Active</option>
+                                                                                    <option value="inactive">Inactive</option>
+                                                                                    <option value="suspend">Suspend</option>
                                                                                 </select>
+                                                                            </div>
+                                                                            <div class="action notice-left" style="padding: 0px 10px; ">
+                                                                               <input type="button" name="" class="st-btn multiple-action" value="Submit">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -386,15 +328,14 @@
                                                                             <div class="action notice-left"><p>
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
-                                                                                <select name="slct" id="slct">
-                                                                                    <option>Edit</option>
-                                                                                    <option value="Super User">Super
-                                                                                        User
-                                                                                    </option>
-                                                                                    <option value="Employee">Employee
-                                                                                    </option>
-                                                                                    <option value="Admin">Admin</option>
+                                                                                <select name="slct" id="slct" class="action">
+                                                                                    <option value="active">Active</option>
+                                                                                    <option value="inactive">Inactive</option>
+                                                                                    <option value="suspend">Suspend</option>
                                                                                 </select>
+                                                                            </div>
+                                                                            <div class="action notice-left" style="padding: 0px 10px; ">
+                                                                               <input type="button" name="" class="st-btn multiple-action" value="Submit">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -402,7 +343,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>

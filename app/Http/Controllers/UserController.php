@@ -563,7 +563,7 @@ class UserController extends Controller {
 				$points = Helpers::user_points($row->id);
 				return '<p>' . $points['points'] . '</p>';
 			})->addColumn('name', function ($row) {
-				return '<label class="check">' . $row->name . '<input type="checkbox"><span class="checkmark"></span></label>';
+				return '<label class="check">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span></label>';
 			})->addColumn('email', function ($row) {
 				return '<p>' . $row->email . '</p>';
 			})->addColumn('following_count', function ($row) {
@@ -597,7 +597,7 @@ class UserController extends Controller {
 			$points = Helpers::user_points($row->id);
 			return '<p>' . $points['points'] . '</p>';
 		})->addColumn('name', function ($row) {
-			return '<label class="check">' . $row->name . '<input type="checkbox"><span class="checkmark"></span></label>';
+			return '<label class="check">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
 		})->addColumn('email', function ($row) {
 			return '<p>' . $row->email . '</p>';
 		})->addColumn('following_count', function ($row) {
@@ -659,8 +659,15 @@ class UserController extends Controller {
 		// $group_owner = $groups->pluck('group_owner')->toArray();
 		$group_ids = $groups->pluck('group_id')->toArray();
 		DB::connection()->enableQueryLog();
-		$users = GroupUser::with(['userDetail', 'userDetail.followers', 'userDetail.following'])
-			->where('is_admin', 1)->whereIn('group_id', $group_ids)->get()->toArray();
+		$users_query = GroupUser::with(['userDetail', 'userDetail.followers', 'userDetail.following']);
+
+		if ($request->has('search') && !empty($request->input('search'))) {
+			$users_query = $users_query->where(function ($q) use ($request) {
+				$q->where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
+			});
+		}
+
+		$users = $users_query->where('is_admin', 1)->whereIn('group_id', $group_ids)->get()->toArray();
 
 		$html = view::make($this->folder . '.users.ajax_admin', compact('users'));
 		$output = array('html' => $html->render(), 'count' => count($users));
@@ -668,17 +675,80 @@ class UserController extends Controller {
 	}
 
 	public function getGroupAdminList(Request $request) {
-		$temp = [];
-		$groups = GroupUser::select('user_id', DB::raw("group_concat(group_id) as groups"))->where('is_admin', 1)->groupBy('user_id')->get();
-		foreach ($groups as $group) {
-			$group_ids = (strpos($group->groups, ',') !== false) ? explode(',', $group->groups) : (array) $group->groups;
-			$users = GroupUser::with(['userDetail', 'userDetail.followers', 'userDetail.following'])
-				->where('is_admin', 1)->whereIn('group_id', $group_ids)->get()->toArray();
-			$names = Group::select(DB::raw("group_concat(group_name) as gp_name"))->whereIn('id', $group_ids)->first()->toArray();
-			$users[0]['names'] = $names['gp_name'];
-			$temp[] = $users;
+
+		$group_admins_query = User::with(['following', 'followers'])->select(DB::raw('users.name, users.id, roles.role_name ,GROUP_CONCAT(groups.group_name) as group_admins'));
+
+		if ($request->has('search_query') && !empty($request->input('search_query'))) {
+			$group_admins_query = $group_admins_query->where(function ($q) use ($request) {
+				$q->where('name', 'like', "%{$request->input('search_query')}%")->orWhere('email', 'like', "%{$request->input('search_query')}%");
+			});
 		}
-		dd($temp);
-		$group_ids = $groups->pluck('id')->toArray();
+
+		$group_admins = $group_admins_query->leftJoin('group_users', 'group_users.user_id', '=', 'users.id')->leftJoin('groups', 'groups.id', '=', 'group_users.group_id')->leftJoin('roles', 'roles.id', '=', 'users.role_id')->where('group_users.is_admin', '1')->groupBy('users.id')->get();
+
+		return Datatables::of($group_admins)->addColumn('role', function ($row) {
+			return '<p>' . $row->role_name . '</p>';
+		})->addColumn('points', function ($row) {
+			$points = Helpers::user_points($row->id);
+			return '<p>' . $points['points'] . '</p>';
+		})->addColumn('name', function ($row) {
+			return '<label class="check">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
+		})->addColumn('email', function ($row) {
+			return '<p>' . $row->email . '</p>';
+		})->addColumn('following_count', function ($row) {
+			return count($row->following);
+		})->addColumn('followers_count', function ($row) {
+			return count($row->followers);
+		})->addColumn('group_admins', function ($row) {
+			return '<p>' . $row->group_admins . '</p>';
+		})->rawColumns(['role', 'points', 'name', 'email', 'following_count', 'followers_count', 'group_admins'])->make(true);
+	}
+
+	public function alterStatus(Request $request) {
+		return $request->all();
+
+		$users_ids = $request->input('users');
+		$users_ids = explode(',', $users_ids);
+		$data = ['status' => 0, 'msg' => "Please try again later.", 'data' => []];
+
+		if (count($users_ids) > 0) {
+			DB::beginTransaction();
+			try {
+				$currUser = Auth::user();
+				$status = 0;
+				$str = '';
+				$updateData = ['is_active' => 0, 'is_suspended' => 0];
+				if ($request->input('action') == 'active') {
+					$str = 'activated';
+					$updateData = ['is_active' => 1, 'is_suspended' => 0];
+				} else if ($request->input('action') == 'inaactive') {
+					$str = 'inactivated';
+					$updateData = ['is_active' => 0, 'is_suspended' => 0];
+				} else if ($request->input('action') == 'suspend') {
+					$str = 'suspended';
+					$updateData = ['is_active' => 0, 'is_suspended' => 1];
+				}
+				foreach ($users_ids as $user) {
+
+					User::where('id', $user)->update($updateData);
+					// return response()->json($posts);
+				}
+
+				if ($status == 0) {
+					DB::commit();
+
+					$data = ['status' => 1, 'msg' => 'Users has been ' . $str . ' successfully.', 'data' => []];
+				} else if ($status == 1) {
+					DB::rollBack();
+					$data = ['status' => 0, 'msg' => 'Please try again later..', 'data' => []];
+				}
+				return response()->json($data);
+			} catch (Exception $ex) {
+				DB::rollBack();
+				$data = ['status' => 0, 'msg' => $ex->getMessage(), 'data' => []];
+				return response()->json($data);
+			}
+		}
+		return response()->json($data);
 	}
 }

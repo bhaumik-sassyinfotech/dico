@@ -24,9 +24,9 @@ class PointsController extends Controller {
 	public $folder;
 	public function __construct(Request $request) {
 		$this->middleware(function ($request, $next) {
-			if (Auth::user()->role_id == 3) {
-				return redirect('/index');
-			}
+			// if (Auth::user()->role_id == 3) {
+			// 	return redirect('/index');
+			// }
 			if (Auth::user()->role_id == 1) {
 				$this->folder = 'superadmin';
 			} else if (Auth::user()->role_id == 2) {
