@@ -827,21 +827,37 @@ var companyManagerTable_superadmin = $("#company-manager-table").DataTable({
     ]
 });
 
-
-
+// user-groups search on view profile page
 $(document).on('click',"#search_group_btn",function(){
     var search_text = $.trim($("#search_group_text").val());
-    if(search_text != "")
-    {
-        $.ajax({
-            url: SITE_URL+"",
-            data: dataString,
-            method:"POST",
-            success: function(response){
+    var uid = $("#user_id").val();
+    dataString = {_token: CSRF_TOKEN,user_id: uid ,search:search_text};
+    $("#view_user_groups").empty();
+    $.ajax({
+        url: SITE_URL+"/group/search",
+        data: dataString,
+        method:"POST",
+        success: function(response){
+            $("#view_user_groups").append(response.html).owlCarousel('destroy').owlCarousel();
+            // var owl = $('.owl-carousel');
+        }
+    });
+});
 
-            }
-        });
-    }   
+$(document).on('click',"#search_post_btn",function(){
+    var search_text = $.trim($("#search_post_text").val());
+    var uid = $("#user_id").val();
+    dataString = {_token: CSRF_TOKEN,user_id: uid ,search:search_text};
+    $("#view_posts").empty();
+    $.ajax({
+        url: SITE_URL+"/searchPost",
+        data: dataString,
+        method:"POST",
+        success: function(response){
+            $("#view_posts").append(response.html).owlCarousel('destroy').owlCarousel();
+            // var owl = $('.owl-carousel');
+        }
+    });
 });
 
 
@@ -913,7 +929,7 @@ $(document).on('click','.multiple-action',function(){
             id_arr = id_arr.join(',');
             swal({
                 title: "Are you sure?",
-                text: "All details related to it will be deleted!",
+                text: "All details related to it will be affected!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn-danger",

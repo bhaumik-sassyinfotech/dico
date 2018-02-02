@@ -6,13 +6,11 @@
     <div id="wrap">
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="#">Project title</a></li>
-                <li><a href="#">Dashboard</a></li>
-                <li class="active">Level4</li>
-                <li>Level3</li>
+                <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                <li class="active">Points</li>
             </ol>
             <h1 class="tp-bp-0">Points</h1>
-            <div class="options">
+            <div style="display: none;" class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
                                        <div class="btn-group color-changes">

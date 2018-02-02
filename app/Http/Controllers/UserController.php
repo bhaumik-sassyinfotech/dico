@@ -76,18 +76,18 @@ class UserController extends Controller {
 				// return $users;
 				return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
 			} else {
-                            $role_id = [3];
-                            $roles = Role::whereIn('id', $role_id)->get();
-                            $companies = Company::whereNull('deleted_at')->get();
-                            $user_query = User::with(['following', 'followers'])->where('role_id', 3);
-                            if (Auth::user()->role_id == 2) {
-                                    $user_query = $user_query->where('company_id', $company_id);
-                            }
-                            $users_count = count($user_query->get());
-                            $users = $user_query->orderByDesc('created_at')->limit(POST_DISPLAY_LIMIT)->get();
-                            $company_admins = User::with(['following', 'followers'])->where('role_id', 2)->get();
-                            return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
-                        }
+				$role_id = [3];
+				$roles = Role::whereIn('id', $role_id)->get();
+				$companies = Company::whereNull('deleted_at')->get();
+				$user_query = User::with(['following', 'followers'])->where('role_id', 3);
+				if (Auth::user()->role_id == 2) {
+					$user_query = $user_query->where('company_id', $company_id);
+				}
+				$users_count = count($user_query->get());
+				$users = $user_query->orderByDesc('created_at')->limit(POST_DISPLAY_LIMIT)->get();
+				$company_admins = User::with(['following', 'followers'])->where('role_id', 2)->get();
+				return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
+			}
 		} else {
 			return redirect('/index');
 		}
@@ -120,12 +120,12 @@ class UserController extends Controller {
 				}
 
 				return view($this->folder . '.users.create', compact('roles', 'companies'));
-			}else {
-                            $companies = Company::all();
-                            $role_id = [2, 3];
-                            $roles = Role::whereIn('id', $role_id)->get();
-                            return view($this->folder . '.users.create', compact('roles', 'companies'));
-                        }
+			} else {
+				$companies = Company::all();
+				$role_id = [2, 3];
+				$roles = Role::whereIn('id', $role_id)->get();
+				return view($this->folder . '.users.create', compact('roles', 'companies'));
+			}
 		} else {
 			return redirect('/index')->with('error_msg', "You don't have rights to create a user.");
 		}
@@ -571,7 +571,12 @@ class UserController extends Controller {
 
 			$roleId = 3; // role ID of employee
 
-			$query = User::select('users.*')->with(['followers', 'following'])->where('role_id', $roleId)->where('id', '!=', Auth::user()->id);
+			$query = User::select('users.*')->with(['followers', 'following'])->where('role_id', $roleId);
+			if ($currUser->role_id == 1) {
+				$query = $query->where('id', '!=', Auth::user()->id);
+			} else if ($currUser->role_id > 1) {
+				$query = $query->where('company_id', $currUser->company_id);
+			}
 
 			$res = $query->orderBy('id', 'desc');
 			return Datatables::of($res)->addColumn('role', function ($row) {
@@ -693,7 +698,7 @@ class UserController extends Controller {
 
 	public function getGroupAdminList(Request $request) {
 
-		$group_admins_query = User::with(['following', 'followers'])->select(DB::raw('users.name, users.id, roles.role_name ,GROUP_CONCAT(groups.group_name) as group_admins'));
+		$group_admins_query = User::with(['following', 'followers'])->select(DB::raw('users.name, users.id, roles.role_name ,GROUP_CONCAT(groups.group_name SEPARATOR ", ") as group_admins'));
 
 		if ($request->has('search_query') && !empty($request->input('search_query'))) {
 			$group_admins_query = $group_admins_query->where(function ($q) use ($request) {

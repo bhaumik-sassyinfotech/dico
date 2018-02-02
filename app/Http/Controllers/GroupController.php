@@ -961,4 +961,33 @@ class GroupController extends Controller {
 
 	}
 
+	public function searchGroup(Request $request) {
+
+		if (Auth::check()) {
+			$id = $request->input('user_id');
+
+			$currUser = Auth::user();
+			$view_user = User::find($id);
+			$company_id = $view_user->company_id;
+
+			$groupDetails_query = DB::table('group_users')
+				->join('groups', 'groups.id', '=', 'group_users.group_id')
+				->where('groups.company_id', $company_id);
+
+			if ($request->has('search') && !empty($request->input('search'))) {
+				$groupDetails_query = $groupDetails_query->where(function ($q) use ($request) {
+					$q->where('groups.group_name', 'like', "%{$request->input('search')}%")->orWhere('groups.description', 'like', "%{$request->input('search')}%");
+				});
+			}
+
+			$groupDetails = $groupDetails_query->select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* , (SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as total_posts'))
+				->groupBy('group_users.group_id')->get();
+
+			$html = view::make($this->folder . '.users.view_profile_ajax', compact('groupDetails'));
+
+			$output = array('html' => $html->render());
+			return $output;
+		}
+	}
+
 }

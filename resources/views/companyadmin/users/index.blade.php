@@ -14,20 +14,20 @@
                 <div class="options">
                     <div class="btn-toolbar">
 
-                        <a class="btn btn-default" href="{{ route('user.create') }}">
+                        <a style="display: none;" class="btn btn-default" href="{{ route('user.create') }}">
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
                             <span class="hidden-xs hidden-sm">Create User</span>
                         </a>
-                        <a class="btn btn-default">
+                        <a style="display: none;" class="btn btn-default">
                             <i class="fa fa-sort fa-6" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Sort</span>
                         </a>
                         <div class="btn-group">
                             <div class="btn-group color-changes">
-                                <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i
+                                <a style="display: none;" data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i
                                             aria-hidden="true" class="fa fa-filter fa-6"></i><span
                                             class="hidden-xs hidden-sm">Filter</span> </a>
-                                <ul class="dropdown-menu">
+                                <ul style="display: none;" class="dropdown-menu">
                                     <li><a href="#">Notification off</a></li>
                                     <li><a href="#">Edit Post</a></li>
                                     <li><a href="#">Delete Post</a></li>

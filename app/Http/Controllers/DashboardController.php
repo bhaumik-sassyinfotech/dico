@@ -15,6 +15,7 @@ use Helpers;
 use Illuminate\Http\Request;
 use Redirect;
 use Validator;
+use View;
 
 class DashboardController extends Controller {
 
@@ -155,9 +156,9 @@ class DashboardController extends Controller {
 				->where('groups.company_id', $company_id)
 				->select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* , (SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as total_posts'))
 				->groupBy('group_users.group_id');
-			if ($currUser->role_id != 1) {
-				$groupDetails_query = $groupDetails_query->where('groups.company_id', $company_id);
-			}
+			// if ($currUser->role_id != 1) {
+			// 	$groupDetails_query = $groupDetails_query->where('groups.company_id', $company_id);
+			// }
 			$groupDetails = $groupDetails_query->get();
 			// dd($groupDetails);
 
@@ -169,7 +170,7 @@ class DashboardController extends Controller {
 			// dd($user);
 			$points = Helpers::user_points($user_id);
 			$points = $points['points'];
-			return view($this->folder . '.users.view_profile', compact('user', 'groupDetails', 'userPosts', 'points'));
+			return view($this->folder . '.users.view_profile', compact('user', 'groupDetails', 'userPosts', 'points', 'user_id'));
 		} else {
 			return redirect('/index');
 		}
@@ -225,6 +226,28 @@ class DashboardController extends Controller {
 		} catch (\exception $e) {
 			//$e->getMessage();
 			return Redirect::back()->with('err_msg', $e->getMessage());
+		}
+	}
+
+	public function searchPost(Request $request) {
+
+		$user_id = $request->input('user_id');
+
+		$group_ids = GroupUser::select('group_id')->where('user_id', $user_id)->pluck('group_id')->toArray();
+		if (!empty($group_ids)) {
+			$userPosts_query = Post::with(['postLike', 'postComment', 'postTag.tag', 'postUser'])
+				->whereIn('group_id', $group_ids)->where('user_id', $user_id);
+			if ($request->has('search') && !empty($request->input('search'))) {
+				$userPosts_query = $userPosts_query->where(function ($q) use ($request) {
+					$q->where('posts.post_title', 'like', "%{$request->input('search')}%")->orWhere('posts.post_description', 'like', "%{$request->input('search')}%");
+				});
+			}
+			$userPosts = $userPosts_query->get();
+
+			$html = view::make($this->folder . '.users.view_posts_ajax', compact('userPosts'));
+
+			$output = array('html' => $html->render());
+			return $output;
 		}
 	}
 
