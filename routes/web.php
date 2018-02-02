@@ -106,7 +106,8 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('like_attachment_comment/{id}', 'MeetingController@like_attachment_comment');
 	Route::get('dislike_attachment_comment/{id}', 'MeetingController@dislike_attachment_comment');
 	Route::get('deleteMeetingComment/{id}', 'MeetingController@deleteMeetingComment');
-
+        Route::post('loadmoreallmeeting', 'MeetingController@loadmoreallmeeting');
+        Route::post('loadmoremymeeting', 'MeetingController@loadmoremymeeting');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');

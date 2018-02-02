@@ -25,6 +25,7 @@
     use Symfony\Component\VarDumper\Cloner\Data;
     use Validator;
     use Yajra\DataTables\DataTables;
+    use View;
     
     class MeetingController extends Controller
     {
@@ -65,10 +66,10 @@
              * So select meeting's id user is currently in and then check against the primary_key in `meetings` table
              *
              * */
-            $allMeetingsQuery = Meeting::withCount('meetingUsers')->orderByDesc('id');
+            $allMeetingsQuery = Meeting::withCount('meetingUsers')->has('meetingUsers.UserDetail')->orderByDesc('id');
             $count_allMeetings = count($allMeetingsQuery->get());
             $allMeetings = $allMeetingsQuery->limit(POST_DISPLAY_LIMIT)->get();
-            $myMeetingsQuery = Meeting::withCount('meetingUsers')->whereIn('id', $user_meetings)->orderByDesc('id');
+            $myMeetingsQuery = Meeting::withCount('meetingUsers')->whereIn('id', $user_meetings)->has('meetingUsers.UserDetail')->orderByDesc('id');
             $count_myMeetings = count($myMeetingsQuery->get());
             $myMeetings = $myMeetingsQuery->limit(POST_DISPLAY_LIMIT)->get();
 //    dd($meetings);
@@ -837,4 +838,63 @@
             
         }
         //===========================================================================================//
+        public function loadmoreallmeeting(Request $request) {
+            try
+		{
+                    if ($request) {
+                            $offset = $request->get('offset');
+                            $query = Meeting::withCount('meetingUsers')->has('meetingUsers.UserDetail')->orderByDesc('id');
+                            if (!empty($request->get('search_text'))) {
+                                    $search_text = $request->get('search_text');
+                                    $query->whereNested(function($q) use ($search_text) {
+                                        $q->where('meeting_title', 'like', '%' . $search_text . '%');
+                                        $q->orWhere('meeting_description', 'like', '%' . $search_text . '%');
+                                    });
+                                    //$query->where('post_title', 'like', '%' . $search_text . '%');
+                                    //$query->orWhere('post_description', 'like', '%' . $search_text . '%');
+                            }
+                            $count_allMeetings = count($query->get());
+                            $allMeetings = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get();
+                            //echo "<pre>";print_r($posts);die();
+                            $html = view::make($this->folder . '.meeting.ajaxallmeeting', compact('allMeetings', 'count_allMeetings'));
+                            $output = array('html' => $html->render(), 'count' => $count_allMeetings);
+                            return $output;
+                    } else {
+                            return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                    }
+            } catch (\exception $e) {
+                    DB::rollback();
+
+                    return Redirect::back()->with('err_msg', $e->getMessage());
+            }
+        }
+        public function loadmoremymeeting(Request $request) {
+            try
+		{
+                    if ($request) {
+                            $offset = $request->get('offset');
+                            $user_id     = Auth::user()->id;
+                            $user_meetings = MeetingUser::where('user_id', $user_id)->pluck('meeting_id')->toArray();
+                            $query = Meeting::withCount('meetingUsers')->whereIn('id', $user_meetings)->has('meetingUsers.UserDetail')->orderByDesc('id');
+                            if (!empty($request->get('search_text'))) {
+                                    $search_text = $request->get('search_text');
+                                    $query->whereNested(function($q) use ($search_text) {
+                                        $q->where('meeting_title', 'like', '%' . $search_text . '%');
+                                        $q->orWhere('meeting_description', 'like', '%' . $search_text . '%');
+                                    });
+                            }
+                            $count_myMeetings = count($query->get());
+                            $myMeetings = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get();
+                            $html = view::make($this->folder . '.meeting.ajaxmymeeting', compact('myMeetings', 'count_myMeetings'));
+                            $output = array('html' => $html->render(), 'count' => $count_myMeetings);
+                            return $output;
+                    } else {
+                            return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                    }
+            } catch (\exception $e) {
+                    DB::rollback();
+
+                    return Redirect::back()->with('err_msg', $e->getMessage());
+            }
+        }
     }

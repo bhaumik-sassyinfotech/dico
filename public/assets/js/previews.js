@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    
+ 
+    
 			$("#image").change(function(){
 		        readImageData(this);
 		    });
@@ -46,8 +49,37 @@ $('.profile-slider').owlCarousel({
 
 });
 
+$(function(){
+    $('.get-nicer').slimScroll({
+        height: '350px'
+    });
+    
+    $('.get-textarea').slimScroll({
+        height: '80px'
+    });
+    $('.textarea-width').slimScroll({
+        height: '110px'
+    });
+   
+    
+    $('.grid-details').slimScroll({
+        height: '80px'
+    });
+    
+    
+});
+
 $(document).ready(function(){
 
+/*    $(".get-nicer").niceScroll({
+        cursorcolor: "#fff",
+        cursoropacitymin: 0.3,
+        background: "#969696",
+        cursorborder: "0",
+        autohidemode: false,
+        cursorminheight: 30
+    }); */
+    
 $('.post-slider').owlCarousel({
     loop:true,
     margin:40,
@@ -74,14 +106,12 @@ $('.post-slider').owlCarousel({
     }
 })
 
-});
-
-
-
-
   /*
 	upload images with title
     */ document.getElementById("uploadBtn").onchange = function () {
                 document.getElementById("uploadFile").value = this.value;
             };
+});
+
+
 

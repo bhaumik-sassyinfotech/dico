@@ -380,3 +380,7 @@ function dislikeAttachmentComment(id,elementid) {
         }
     });
 }
+function ReadMore(id,hideid) {
+    $('#'+id).css('height','auto');
+    $('#'+hideid).hide();
+}

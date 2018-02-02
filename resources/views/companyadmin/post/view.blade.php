@@ -248,7 +248,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <p class="profanity" id="comment_disp_<?=$postComment['id']?>"><?php echo $postComment['comment_text']; ?></p>
+                                                <p class="profanity textarea-width" id="comment_disp_<?=$postComment['id']?>"><?php echo $postComment['comment_text']; ?></p>
                                                 <textarea name="comment_text" id="comment_text_<?=$postComment['id']?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $postComment['comment_text']; ?></textarea>
                                                 <div class="btn-wrap-div">
                                                     <input type="button" name="update_comment" id="update_comment_<?=$postComment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$postComment['id']?>,<?=$postComment['id']?>)" style="display: none;"/>
