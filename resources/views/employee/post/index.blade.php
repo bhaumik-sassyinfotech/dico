@@ -12,7 +12,7 @@
             <h1 class="tp-bp-0">Post</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
+                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">New Post</span></a>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
 
@@ -216,7 +216,7 @@ if (!empty($post['post_tag'])) {
                                                                 </div>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
-                                                                    <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
+                                                                    <p class="desc-content profanity" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
                                                                 </fieldset>
                                                                 <?php
                                                                     if(strlen($grouppost['post_description']) > POST_DESCRIPTION_LIMIT) {
@@ -340,7 +340,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
 
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
-                                                                    <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
+                                                                    <p class="desc-content profanity" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
                                                                 </fieldset>
                                                                 <?php
                                                                     if(strlen($mypost['post_description']) > POST_DESCRIPTION_LIMIT) {

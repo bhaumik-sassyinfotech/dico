@@ -14,6 +14,7 @@
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/enquire.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery.cookie.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery.nicescroll.min.js')}}"></script>
+<script type='text/javascript' src="{{asset('assets/js/jquery.slimscroll.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'plugins/codeprettifier/prettify.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'plugins/easypiechart/jquery.easypiechart.min.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'plugins/sparklines/jquery.sparklines.min.js')}}"></script>

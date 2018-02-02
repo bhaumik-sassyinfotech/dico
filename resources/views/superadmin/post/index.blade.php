@@ -216,7 +216,7 @@ if (!empty($post['post_tag'])) {
                                                                 </div>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
-                                                                    <p class="desc-content" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
+                                                                    <p class="desc-content profanity" id="desc_mycontent_{{$grouppost['id']}}">{{ $grouppost['post_description'] }}</p>
                                                                 </fieldset>
                                                                 <?php
                                                                     if(strlen($grouppost['post_description']) > POST_DESCRIPTION_LIMIT) {
@@ -341,7 +341,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
 
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
-                                                                    <p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
+                                                                    <p class="desc-content profanity" id="desc_mycontent_{{$post['id']}}">{{ $mypost['post_description'] }}</p>
                                                                 </fieldset>
                                                                 <?php
                                                                     if(strlen($mypost['post_description']) > POST_DESCRIPTION_LIMIT) {

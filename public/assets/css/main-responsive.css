@@ -1,16 +1,30 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
+
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  */  /* Safari and Chrome, if Chrome rule needed */
+  /*  .create-post .common-form .check .checked:before {
+    margin:  4px 16px;
+    }
+*/
+    /* Safari 5+ ONLY */
+  /*  ::i-block-chrome, .create-post .common-form .check .checked:before {
+    margin:  4px 16px;
+    }
+}
+
+*/
+
+
 @media screen and (max-width:1258px){
- 
-.member-details > h3 {
-  font-size: 14px;
+ .group-left-list .panel-body > p {
+  font-size: 11px;
 }
-.member-details > a,
-.member-details > p{
-  font-size: 12px;
+.list-block .btn-wrap > a {
+    padding: 7px 35px;
 }
-   
 .common-form .form-group {
   margin-bottom: 20px;
 }    
@@ -18,18 +32,34 @@
   margin-top: 15px;
 }
 .common-form .form-group > label {
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 5px;
 }
-.common-form .select {
-  width: 100%;
-}    
+  
 .st-btn {
   padding: 5px 28px;
 }
 .profile-slider .grid-details > h4 {
     font-size: 11px;
 }   
+.super-user-employee tr label {
+  font-size: 10px;
+  line-height: 160%;
+}   
+body .modal-dialog.updatesecurity .modal-content, 
+.modal-dialog.updatesecurity {
+  width: 90%;
+}  
+.point-page .mr-10 {
+    margin: -4px 5px 0 0;
+    display: inline-block;
+}
+.point-page .table > thead > tr > th {
+    padding: 16px 10px;
+    font-size: 12px;
+    vertical-align: middle;
+}    
+    
     
 }
 
@@ -65,10 +95,9 @@
 .profile-post-tabs .btn-wrap > a{
     font-size: 7px;
 }
-.profile-post-tabs .post-circle > a{
-    padding: 3px 5px;
+.profile-post-tabs .post-circle > a {
+  padding: 8px 15px;
 }
-
 .profile-page .group-tabs .panel-body-wrap .wrap-social span {
     line-height: 160%;
 }
@@ -80,7 +109,6 @@
     font-size: 10px;
 }
 .profile-post-tabs .panel-body fieldset p {
-    font-size: 7px;
     margin: 10px 0 0;
     padding: 0;
 }    
@@ -110,9 +138,9 @@
   padding: 4px;
 }
 .post-category .member-img {
-  float: none;
-  margin-bottom: 5px;    
-} 
+  margin-bottom: 5px;
+}
+    
 .category-detials .check {
   font-size: 10px;
   line-height: 130%;
@@ -120,7 +148,21 @@
 .create-post .common-form .box-check .check {
   padding: 10px 10px 10px 40px;
   font-size: 13px;    
-}   
+}  
+body .modal-dialog.updatesecurity .modal-content, 
+.modal-dialog.updatesecurity {
+  width: 85%;
+}    
+.point-page .table > thead > tr > th {
+    text-align: center;
+    font-size: 10px;
+}    
+.point-page .mr-10 {
+    display: block;
+    text-align: center;
+    min-height: 20px;
+    margin: 0 auto;
+}    
     
 }
 /*Mobile view*/
@@ -147,13 +189,87 @@
 /*------------------------------------------------------*/
     
 }
+
+
+
 @media screen and (max-width:1024px){
+
+#page-content {
+    min-height: auto !important;
+}    
+.group-listing tbody tr:last-child td p {
+  border: medium none;
+  line-height: 127%;    
+}    
+
+.all-group-list.main-user-profile .nav.nav-tabs li a {
+  font-size: 12px;
+  padding: 5px 18px;
+}
+    
+.all-group-list.main-user-profile .btn-group.top-set {
+  padding: 20px 0 0;
+}    
+.point-page.super-user-employee .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li a {
+  font-size: 12px;
+  padding: 0 12px;
+}    
+.group-images-left {
+  margin-bottom: 20px;
+  width: 100%;
+}
+.point-page.all-group-list.super-user-employee .table > thead > tr > th {
+  padding: 10px;
+}
+.point-page.super-user-employee .group-tabs .tab-pane .panel-info table {
+  display: inline-block;
+  margin: 0;
+  max-height: 160px;
+  overflow: scroll;
+}
+.point-page.all-group-list .table p,
+.point-page.super-user-employee .table a,
+.super-user-employee table tbody tr label{
+  font-size: 10px;
+}    
+.point-page.all-group-list.super-user-employee .table > thead > tr > th {
+  font-size: 10px;
+}   
+.point-page.all-group-list.super-user-employee #users .table > thead > tr > th {
+  padding: 10px 12px;
+}    
+.point-page.all-group-list .table a.left-10 {
+  margin-left: 5px;
+}    
+.group-listing .profile-page .modal-dialog {
+  top: 50%;
+  -webkit-transform: translateY(-50%) translate(0px, 0px) !important;
+  -moz-transform: translateY(-50%) translate(0px, 0px) !important;
+  -ms-transform: translateY(-50%) translate(0px, 0px) !important;
+  -o-transform: translateY(-50%) translate(0px, 0px) !important;
+  transform: translateY(-50%) translate(0px, 0px) !important;
+}
+.form_box.grp-left {
+  margin-bottom: 20px;
+  padding-right: 0;
+  width: 100%;
+}
+.all-group-list.super-user-employee tr td {
+  width: auto !important;
+}
+.select.notice-left {
+  width: 25%;
+} 
+.group-listing .group-left-list {
+  margin-bottom: 20px;
+}    
+.group-listing.posts .profile-page  .group-tabs > .panel-heading {
+  padding-right: 10px !important;
+}
 .category-detials .check {
   font-size: 12px;
 }
-.create-post .common-form .check .checked:before {
-  top: -10px;
-}    
+  
 .post-category .member-img {
   float: left;
   margin-right: 5%;
@@ -220,8 +336,8 @@
   width: 79%;
 }
 #post-detail-left .user-image {
-  width: 20%;
-}    
+  width: 100%;
+}
     
 .post-details .group-wrap h3 {
   font-size: 16px;
@@ -232,10 +348,6 @@
 .post-details-like > div i {
   font-size: 24px;
 }    
-.post-details-like > div p {
-  font-size: 18px;
-  margin: 0 5px;
-}
 .post-details .user-rply {
   width: 80%;
 }    
@@ -269,7 +381,7 @@
   padding: 5px;
 }    
     
-.search-form > input:not([type="submit"]) {
+.search-form > input:not([type="button"]) {
   font-size: 10px;
   line-height: 160%;
   padding: 5px 10px 5px 30px;
@@ -281,12 +393,20 @@
     
 #create-user-from {
   width: 100%;
+}
+.add-group {
+  margin-top: 5px;
+  padding: 10px 20px 10px 35px;
+  position: relative;
+}  
+.add-grp-wrap {
+  position: relative;
+  right: 0;
 }    
-
-.common-form .select {
-  width: 100%;
+.add-group::before {
+    margin: -4px 0;
 }    
-.common-form .btn-wrap-div {
+.common-form .btn-wrap-div{
   margin-left: 0;
 }
 .common-form .form-group {
@@ -296,8 +416,8 @@
     width: 100%;
 }
 .follow_box {
-    width: 100%;
-    margin-bottom: 10px;
+  margin-bottom: 10px;
+  width: 30%;
 }
 .follow_box .preview-box {
     height: 134px;
@@ -363,16 +483,178 @@ body .employe-profile .employ-box {
   -o-transform: translateY(-30%) translate(0px, 0px) !important;
   transform: translateY(-30%) translate(0px, 0px) !important;
 }
+.upload-btn {
+  padding: 5px 28px;
+}    
+.create-post .common-form .check .checked::before {
+  left: 15px;
+}    
+.collapse-leftbar .bottom-sidebar {
+    width: 39px;
+    padding: 15px;
+}
+.collapse-leftbar .bottom-sidebar span {
+    display: none;
+}    
+.collapse-leftbar .bottom-sidebar a i {
+  display: block;
+}    
+.bottom-logo {
+    margin-top: 0;
+}
+.bottom-logo a > i > img {
+    width: 15px;
+}
+.bottom-sidebar {
+    width: 229px;
+}
+body.collapse-leftbar #page-leftbar {
+    display: none;
+} 
+body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialog {
+  width: 455px;
+}
+.main-user-profile div#page-heading {
+    padding-bottom: 30px;
+}
     
+.all-group-list.main-user-profile .btn-group.top-set {
+    padding: 0;
+    top: -40px;
+}  
+.main-user-profile .table {
+    display: inline-block;
+    max-width: 100%;
+    overflow-x: scroll;
+}    
+.list-unstyled .mix {
+    float: none;
+    width: 100%;
+}    
+.point-page .table > thead > tr > th {
+    font-size: 9px;
+}    
+.point-page .mr-10 {
+    min-height: 15px;
+    margin: 0 auto 5px;
+}    
+    
+    
+}
+
+@media (min-width:768px) and (max-width:1024px){
+    
+.search-form {
+    display: block;
+    line-height: 140%;
+    position: absolute;
+    top: -24px;
+    right: -10px;
+}
+.idea-details #post-detail-left .user-rply {
+    width: 100%;
+    padding: 20px 15px;
+}    
+    
+}
+
+
+@media screen and (max-width:925px){
+
+    
+.active-admin, .deactive-admin {
+  font-size: 10px;
+  padding: 7px;
+}
+.group-listing tbody tr td:last-child p {
+  padding: 16px 0;
+}    
+.group-listing tbody tr td p {
+  font-size: 12px;
+  padding: 23px 0;
+}
+.group-listing tbody tr td:first-child p {
+  margin-left: 0;
+}
+.group-listing tbody tr td:last-child p {
+  margin-right: 0;
+}  
+.group-listing .table thead tr:first-child th:first-child {
+  padding-left: 10px;
+}
+.group-listing .table thead tr th {
+  padding: 15px 2px;
+}    
 
 }
 
 
+
 @media screen and (max-width:767px){
- 
+.new-meeting-details .create-post .common-form .box-check .check {
+    padding: 10px 10px 10px 20px;
+}    
+    
+
+body .padding-box hr {
+    border-color: #ccc;
+    margin: 10px 0;
+}  
+.group-listing .form-group:last-child {
+  margin: 0;
+}    
+.group-left-list .panel-body > p {
+  padding: 0 0 10px;
+} 
+.color-changes .dropdown-menu {
+    margin: 12px 0 0;
+}   
+.group-listing .dropdown-menu{
+  margin: 10px -20px 0;
+}
+.bottom-sidebar {
+  display: none;
+}
+.show-leftbar .bottom-sidebar {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    z-index: 99;
+}
+.main-user-profile .nav-tabs {
+  padding-top: 20px;
+}  
+.create-post .common-form .btn-wrap-div {
+  margin-left: 0;
+}    
+.point-page .btn-group {
+  display: block !important;
+}
+.profile-page {
+  padding-bottom: 20px;
+}
+.post-details-like {
+  margin-bottom: 10px;
+}
+.post-rectangle > a {
+  padding: 5px 12px;
+}    
 /*------------------------------------------------------*/
 /*group list Page */
 /*------------------------------------------------------*/
+.post-slider .panel-body-wrap .wrap-inner-icon i {
+  font-size: 10px;
+}    
+.create-user .form-group .btn-wrap-div .modal-dialog {
+  margin: 0 auto;
+  max-width: 310px;
+}
+.common-form .btn-wrap-div .modal-header {
+  padding: 0;
+}    
+body #wrap .border-in-hr {
+  margin: 18px 0;
+}    
 .group-listing .form_box {
       display: block;
       width: 100%;
@@ -385,10 +667,6 @@ body .employe-profile .employ-box {
   width: 100%;
 }
 
-.group-listing .table-responsive {
-  display: inline-block;
-  overflow: scroll;
-}
 .group-listing .table thead tr:first-child th:first-child, .group-listing .table thead tr th {
   font-size: 12px;
   padding: 5px;
@@ -480,13 +758,13 @@ body .employe-profile .employ-box {
     
 #post-detail-left .user-rply {
   margin-top: 20px;
-  padding: 0 15px;
+  padding: 0;
   width: 100%;
 }
-#post-detail-left .user-image {
-  margin-right: 0%;
+#post-detail-left .group-wrap .pull-left {
+  padding-right: 15px;
   width: 100%;
-}    
+}
 #post-detail-left .group-wrap .pull-left {
   width: 100%;
 }    
@@ -497,9 +775,12 @@ body .employe-profile .employ-box {
 .post-wrap-details p {
   margin-left: 0;
 }    
-.post-details #page-heading hr {
-  margin: 0;
-}   
+body #wrap .border-out-hr {
+  margin: 10px 20px 0;
+}
+#wrap > .container {
+  padding: 10px 20px;
+}    
 #page-heading h1 {
   font-size: 24px;
   padding: 15px 20px 5px;
@@ -521,7 +802,7 @@ body .employe-profile .employ-box {
   height: 140px;
 }
 .user-image > a {
-  font-size: 20px;
+  font-size: 14px;
   padding: 10px;
 }
 .post-btn-wrap .post-btn > a {
@@ -540,6 +821,9 @@ body .employe-profile .employ-box {
   text-align: center;
 }
     
+.idea-page .post-wrap-details .post-btn-wrap {
+  text-align: left;
+}    
 /*------------------------------------------------------*/
 /*close post details */
 /*------------------------------------------------------*/    
@@ -564,27 +848,31 @@ body .employe-profile .employ-box {
   margin-bottom: 5px;
 }    
 .common-form .form-group > textarea {
-  display: block;
   float: none;
-  font-size: 14px;
-  height: 90px;
+  height: 100px;
   padding: 10px;
-  text-align: justify;
   width: 100%;
+}
+.new-meeting-details #post-detail-right{
+  margin-bottom: 20px;
+}   
+.common-form .calendar {
+  margin-top: 10px;
 }
 .common-form .form-group > label {
   margin-bottom: 0;
   width: 100%;
+  padding:5px 0;     
 }
+.new-meeting-details form .form-group:first-child {
+  margin-bottom: 0;
+}    
 .common-form .form-group .st-btn {
   margin-top: 10px;
 }
 .common-form .form-group > input:not([type="submit"]) {
   float: none;
-  font-size: 14px;
-  height: 40px;
-  padding: 5px 10px;
-  width: 100%;
+  width: 100% !important;
 }
 .newmeeting-form .form-group:first-child {
   margin-bottom: 0;
@@ -598,8 +886,9 @@ body .employe-profile .employ-box {
   margin-left: 0px;
 }  
 .group-wrap h3 {
-  font-size: 18px;
-}    
+  font-size: 16px;
+  line-height: 140%;
+}  
 .circle-exclm .fa-exclamation {
   font-size: 14px;
   height: 30px;
@@ -637,10 +926,6 @@ body .employe-profile .employ-box {
 .common-form .btn-wrap-div .check {
   margin: 0 0 15px;
 }
-    
-form .form-group:last-child {
-  margin-bottom: 10px;
-}   
 
 .login-page .verticalcenter {
   top: 45%;
@@ -717,11 +1002,9 @@ form .form-group:last-child {
 }
 .follow-block .group-item p,
 .profile-slider .grid-details > h4,
-.profile-page .group-tabs .panel-body > h4{
-    font-size: 12px;
-}
+.profile-page .group-tabs .panel-body > h4,
 .group-tabs .profile-slider .panel-body > p, .profile-page .group-tabs .panel-body-wrap span, .profile-page .group-tabs .panel-body-wrap p, .profile-post-tabs .post-circle > a, .profile-post-tabs .btn-wrap > a {
-    font-size: 10px;
+    font-size: 12px;
 }
 .post-slider .panel-body-wrap .wrap-inner-icon i {
     line-height: 180%;
@@ -730,8 +1013,9 @@ form .form-group:last-child {
     line-height: 200%;
 }
 .profile-page .group-tabs .panel-body > p.user-icon {
-    font-size: 10px;
-    line-height: 200%;
+  font-size: 10px;
+  line-height: 200%;
+  margin: 0;
 }
 .profile-page .group-tabs .panel-primary {
     margin-bottom: 0;
@@ -739,6 +1023,7 @@ form .form-group:last-child {
 .ul-checkbox > li {
   float: none;
   line-height: 100%;
+  padding: 5px 0;
   width: 100%;
 }
 .employe-profile table {
@@ -861,24 +1146,233 @@ p.user-icon {
 .profile-slider.owl-carousel, .post-slider.owl-carousel {
   width: 100%;
 }    
-.group-listing tbody tr td p {
-  padding: 5px 20px;
-}    
+ 
 .common-form .check {
   margin-right: 5px;
  }    
-.create-post .common-form .check .checked::before {
-  left: -40px;
-  top: -13px;    
-}    
+    
+    
 .create-post .common-form .box-check .check {
   font-size: 11px;
-  padding: 12px 10px 10px 35px;
+  padding: 12px 14px 12px 43px;
 }  
+.idea-details hr {
+  margin: 0;
+}
+.idea-details hr {
+  border-color: transparent;
+}    
+.emp.login-page .form-group > textarea, .emp.login-page .form-group > input:not([type="submit"]):not([type="reset"]), .emp.login-page .form-group .select {
+  margin-left: 0;
+  width: 100%;
+}    
+.common-form .btn-wrap-div,
+.emp.login-page .common-form .btn-wrap-div{
+  margin-left: 0;
+}  
+.meetings #threads, 
+.meetings #comments,
+.meetings #users {
+  max-height: 100% !important;
+  overflow: scroll !important;
+}    
+.post-details .options .btn-group {
+  margin: 10px 0 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}    
+.point-page .table th {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}    
+.create-post .common-form .btn-wrap-div, .new-meeting-details .common-form .btn-wrap-div {
+  margin-left: 0;
+}
+.create-post .common-form .form-group > label, .new-meeting-details .common-form .form-group > label {
+  width: 100%;
+}    
+.padding-box.group-listing .modal-dialog .modal-content {
+  padding: 20px;
+  width: 300px;
+}     
+ .point-page.super-user-employee .btn-group {
+  display: inline-block !important;
+}  
+ .point-page.super-user-employee .btn-group.top-set,
+ .point-page.all-group-list .btn-group.top-set{
+  top: -20px;
+}
+ .point-page.super-user-employee  group-tabs > .panel-heading,
+ .point-page.all-group-list  group-tabs > .panel-heading {
+  padding-top: 10px !important;
+}    
+.point-page.super-user-employee .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li:last-child {
+  border-left: medium none;
+}
+.point-page .panel[class*="panel-"] .panel-heading .nav.nav-tabs > li a {
+  padding: 0 15px;
+}    
+.posts #page-heading .options {
+  right: 30px;
+}    
+#post-detail-left .group-wrap .pull-left, .new-meeting-details .form-group > textarea, .new-meeting-details .form-group > input:not([type="submit"]):not([type="reset"]) {
+    width: 100%;
+}   
+.form-group > textarea, 
+.form-group > input:not([type="submit"]):not([type="reset"]) {
+  height: 40px;
+}    
+.updatesecurity .form-group select {
+  font-size: 12px;
+  height: 40px;
+  padding: 0 4px;
+  vertical-align: top;    
+}
+.updatesecurity .common-form .form-group > input:not([type="submit"]) {
+  font-size: 12px;
+}    
+.profile-page .panel .panel-heading .nav.nav-tabs > li.active {
+  border-right: 1px solid #d0d1d3 !important;
+}    
+.btn-toolbar > .btn-default {
+  margin-right: 5px;
+}    
+.group-listing tbody tr:last-child td p {
+  border-bottom: medium none;
+}    
+body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialog {
+  width: 85%;
+}    
+footer {
+    overflow: visible;
+}
+#sidebar ul li a {
+    z-index: 999;
+    position: relative;
+}
+nav#page-leftbar {
+    background-color: #e6e7e8;
+    height: 100%;
+    padding-bottom: 0;
+}    
+    
+    
+}
 
+
+@media screen and (max-width:480px){
     
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  font-size: 9px;
+  line-height: 143%;
+  padding: 0 4px;
+}
+.padding-box .modal-title {
+  font-size: 18px;
+}
+.profile-page .modal-header > button:after {
+  line-height: 12px;
+}    
     
+.group-listing .profile-page .modal-dialog {
+  top: 60%;
+  -webkit-transform: translateY(-60%) translate(0px, 0px) !important;
+  -moz-transform: translateY(-60%) translate(0px, 0px) !important;
+  -ms-transform: translateY(-60%) translate(0px, 0px) !important;
+  -o-transform: translateY(-60%) translate(0px, 0px) !important;
+  transform: translateY(-60%) translate(0px, 0px) !important;
+}
+
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  display: block;
+  font-size: 8px;
+  line-height: 117%;
+  padding: 9px 16px;
+}
+body .group-listing tbody tr td p.blue {
+  line-height: 146%;
+  padding: 17px 9px;
+}   
+.group-listing .table-responsive {
+  display: inline-block;
+  min-height: 100%;
+  overflow: scroll;
+}
+.group-listing tbody tr td:last-child p {
+  line-height: 160%;
+  padding: 12px 0;
+  text-align: center;
+}   
+.company-wrap .btn-wrap {
+    width: 100%;
+}    
     
+}
+
+@media screen and (max-width:450px){
+
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  display: block;
+  font-size: 8px;
+  line-height: 121%;
+  padding: 4px 15px;
+}
+
+
+}
+
+@media screen and (max-width:400px){
+
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  display: block;
+  font-size: 8px;
+  line-height: 114%;
+  padding: 0 12px;
+}
+
+}
+
+@media screen and (max-width:360px){
     
+.active-admin, .deactive-admin {
+  border-radius: 0;
+  font-size: 8px;
+  line-height: 100%;
+  padding: 2px 8px;
+}
     
+.main-user-profile .nav-tabs {
+  padding-top: 30px;
+}
+.common-form .col-xs-8,
+.common-form .col-xs-4{
+  width: 100%;
 } 
+.st-btn, .upload-btn {
+    font-size: 12px;
+    padding: 5px 20px;
+}    
+.employe-profile .updatesecurity .common-form .btn-wrap-div {
+    padding: 0;
+    text-align: center;
+}    
+.employe-profile h4.modal-title {
+    font-size: 15px;
+}
+.employe-profile .btn-wrap-div .st-btn:not(:last-child) {
+    margin-right: 5px;
+}
+.updatesecurity .col-xs-8 > label {
+    margin-bottom: 5px;
+}    
+.common-form .form-group {
+    margin-bottom: 10px;
+}    
+    
+}
