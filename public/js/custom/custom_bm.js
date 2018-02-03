@@ -1057,3 +1057,21 @@ var my_group_points = $("#my-group-points").DataTable({
     ] 
 });
  
+
+$("#create_group_modal").validate({
+    submitHandler: function(form){
+        var name = $.trim($("#grp_name").val());
+        var desc = $.trim($("#grp_desc").val());
+        var company = $("#company_id option:selected").val();
+        var dataString = {_token: CSRF_TOKEN , name:name, desc:desc,company: company};
+
+        $.ajax({
+            url: SITE_URL+"/group/addGroup",
+            method: "POST",
+            data: dataString,
+            success: function(response){
+                console.log(response);
+            }
+        });
+    }
+});

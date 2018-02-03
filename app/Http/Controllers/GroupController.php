@@ -989,5 +989,7 @@ class GroupController extends Controller {
 			return $output;
 		}
 	}
-
+	public function addGroup(Request $request) {
+		return $request->all();
+	}
 }

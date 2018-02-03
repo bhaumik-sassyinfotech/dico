@@ -43,6 +43,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('view_profile/{id}', 'DashboardController@view_profile');
 	/*Group*/
 
+	Route::match(['get', 'post'], 'group/addGroup', 'GroupController@addGroup'); // add group via ajax on add user page (super admin)
 	Route::match(['get', 'post'], 'group/mygroups', 'GroupController@myGroupGrid');
 	Route::match(['get', 'post'], 'group/search', 'GroupController@searchGroup');
 	Route::match(['get', 'post'], 'group/list', 'GroupController@groupListing');
