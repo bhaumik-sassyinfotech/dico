@@ -45,7 +45,7 @@
                             <div class="form-group calendar">
                                 <label>Date Of Meet:</label>  
                                 <div class='input-group date' id='datetimepicker1'>
-                                    <input type="text" name="date_of_meet" id="date_of_meet" placeholder="12-09-2017 | (9:30)" class="form-control">
+                                    <input type="text" name="date_of_meet" id="date_of_meet" placeholder="" style="pointer-events: none;" class="form-control">
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -82,7 +82,7 @@
                                                 <label class="check" style="display: block !important;">{{ $group->group_name }}
                                                         <input name="group[]" type="checkbox" id="group_{{$group->id}}" value="{{ $group->id }}">
                                                         <span class="checkmark"></span>
-                                                    </label>
+                                                </label>
                                                 @endforeach
                                             </div>
                                         </div>
