@@ -167,7 +167,8 @@ class UserController extends Controller {
 			} else {
 				$is_suspended = 0;
 			}
-			$password = str_random(6);
+			// $password = str_random(6);
+			$password = "123456";
 			$email = $request->input('user_email');
 
 			$user = new User;
@@ -179,7 +180,7 @@ class UserController extends Controller {
 			$user->is_suspended = $is_suspended;
 			$user->password = Hash::make($password);
 			$user->created_at = Carbon\Carbon::now();
-			$this->custom_send_mail($email, $password);
+			// $this->custom_send_mail($email, $password, $request->input('user_name'));
 			if ($user->save()) {
 				if (!empty($request->user_groups)) {
 // add user in the groups selected
@@ -201,13 +202,13 @@ class UserController extends Controller {
 		}
 	}
 
-	public function custom_send_mail($email, $password) {
+	public function custom_send_mail($email, $password, $user_name) {
 
 		$emailTemplate = Helpers::getEmailTemplateBySlug('NEW_USER');
 //        echo $emailTemplate->email_body;die;
 		if ($emailTemplate != null) {
 			$parse = [
-				'NAME' => 'Bhaumik Mehta',
+				'NAME' => $user_name,
 				'EMAIL' => $email,
 				'PASSWORD' => $password,
 				'LINK' => route('login'),
@@ -217,8 +218,9 @@ class UserController extends Controller {
 			$message = $parsedTemplate['data'];
 
 			$message = html_entity_decode($message);
-			$adminEmail = env('MAIL_FROM_ADDRESS');
-			$mailData = array('to' => $email,
+			$adminEmail = env('MAIL_FROM_ADDRESS', 'testacc2016@gmail.com');
+			$mailData = array(
+				'to' => $email,
 				'from' => $adminEmail,
 				'from_name' => env('MAIL_FROM_NAME', 'Dico'),
 				'reply_to' => $adminEmail, // reply_to
@@ -727,7 +729,7 @@ class UserController extends Controller {
 	}
 
 	public function alterStatus(Request $request) {
-		return $request->all();
+		// return $request->all();
 
 		$users_ids = $request->input('users');
 		$users_ids = explode(',', $users_ids);

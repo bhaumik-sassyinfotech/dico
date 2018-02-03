@@ -35,7 +35,7 @@
                               <h4>
                                 <ul class="nav nav-tabs">
                                   <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Users</span></a></li>
-                                  <li class=""><a href="#users" data-toggle="tab"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Users</span></a></li>
+                                  <li style="display: none;" class=""><a href="#users" data-toggle="tab"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Users</span></a></li>
                                 </ul>
                               </h4>
                        </div>

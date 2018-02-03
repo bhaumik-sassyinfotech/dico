@@ -175,7 +175,7 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">Users List</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="settings.php"><img
+                                                                        <a href="{{ url('setting') }}"><img
                                                                                     src="assets/img/settings-icon.png"
                                                                                     alt="settings"></a>
                                                                     </div>
@@ -237,7 +237,7 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">Users List</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="settings.php"><img
+                                                                        <a href="{{ url('setting') }}"><img
                                                                                     src="assets/img/settings-icon.png"
                                                                                     alt="settings"></a>
                                                                     </div>
@@ -353,7 +353,7 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">Users List</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="settings.php"><img
+                                                                        <a href="{{ url('setting') }}"><img
                                                                                     src="assets/img/settings-icon.png"
                                                                                     alt="settings"></a>
                                                                     </div>

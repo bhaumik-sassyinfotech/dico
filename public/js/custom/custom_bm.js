@@ -1032,3 +1032,27 @@ function removeMember(userid) {
     $('#user_'+userid).remove();
     $('#employees_listing option[value="'+userid+'"]').attr("disabled", false);
 }
+
+
+var my_group_points = $("#my-group-points").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL + '/points/my_group_users',
+        data: function (d) {
+            // d.user_id      = $.trim($("#user_id").val());
+        }
+    },
+    searching: false,
+    columns: [
+        {data: 'name'},
+        {data: 'post'},
+        {data: 'vote'},
+        {data: 'approved'},
+        {data: 'answers'},
+        {data: 'solutions'},
+        {data: 'comments'},
+        {data: 'likes'},
+        {data: 'total'},
+    ] 
+});

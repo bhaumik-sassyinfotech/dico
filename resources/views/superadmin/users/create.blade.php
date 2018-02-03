@@ -61,9 +61,8 @@
                             <div class="form-group">
                                 <label>Groups:</label>
                                 <div class="select">
-                                    <select name="user_groups[]" id="user_groups" class="form-control"
-                                        multiple="multiple" style="width: 71%">
-                                    <option value="">Select company first.</option>
+                                    <select name="user_groups[]" id="user_groups" class="form-control" multiple="multiple" style="width: 71%">
+                                    <option disabled="disabled" value="">Select company first.</option>
                                 </select>
                                 </div>
                             </div>

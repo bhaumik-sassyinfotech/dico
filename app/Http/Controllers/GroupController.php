@@ -282,7 +282,7 @@ class GroupController extends Controller {
 
 		$admin = GroupUser::where('is_admin', '1')->where('user_id', Auth::user()->id)->where('group_id', $groupId)->first();
 
-		if (is_null($admin)) {
+		if (is_null($admin) && Auth::user()->id != $groupData->group_owner) {
 
 			$currUserIsAdmin = 0;
 

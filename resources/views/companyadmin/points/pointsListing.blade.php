@@ -6,23 +6,21 @@
     <div id="wrap">
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="#">Project title</a></li>
-                <li><a href="#">Dashboard</a></li>
-                <li class="active">Level4</li>
-                <li>Level3</li>
+                <li><a href="{{ url('/home') }}">Dashboard</a></li>
+                <li class="active">Points</li>
             </ol>
             <h1 class="tp-bp-0">Points</h1>
-            <div class="options">
+            <div style="display: none;" class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
-                                       <div class="btn-group color-changes">
-                                           <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm">Filter</span> </a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">Notification off</a></li>
-                                                    <li><a href="#">Edit Post</a></li>
-                                                    <li><a href="#">Delete Post</a></li>
-                                                </ul>
-                                        </div>
+                        <div class="btn-group color-changes">
+                           <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm">Filter</span> </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Notification off</a></li>
+                                    <li><a href="#">Edit Post</a></li>
+                                    <li><a href="#">Delete Post</a></li>
+                                </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -90,7 +88,7 @@
                                                 </div>
                                                 <div class="panel-body">
                                                     <div class="row">
-                                                    <table class="table">
+                                                    <table class="table" id="my-group-points">
                                                                 <thead>
                                                                    <tr>
                                                                         <th class="p-font p-user"><img src="assets/img/p-icon.png" class="mr-10">User Name</th>
@@ -105,43 +103,6 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr>
-                                                                        <td><a>Jason Durelo</a></td>
-                                                                        <td><p>234</p></td>
-                                                                        <td><p>150</p></td>
-                                                                        <td><p>68</p></td>
-                                                                        <td><p>148</p></td>
-                                                                        <td><p>258</p></td>
-                                                                        <td><p>48</p></td>
-                                                                        <td><p>25</p></td>
-                                                                        <td><p>685</p></td>
-                                                                    </tr>
-                                                                </tbody>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td><a>Mary Jane</a></td>
-                                                                        <td><p>234</p></td>
-                                                                        <td><p>150</p></td>
-                                                                        <td><p>68</p></td>
-                                                                        <td><p>148</p></td>
-                                                                        <td><p>258</p></td>
-                                                                        <td><p>48</p></td>
-                                                                        <td><p>25</p></td>
-                                                                        <td><p>685</p></td>
-                                                                    </tr>
-                                                                </tbody>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td><a>Mike Tyson</a></td>
-                                                                        <td><p>234</p></td>
-                                                                        <td><p>150</p></td>
-                                                                        <td><p>68</p></td>
-                                                                        <td><p>148</p></td>
-                                                                        <td><p>258</p></td>
-                                                                        <td><p>48</p></td>
-                                                                        <td><p>25</p></td>
-                                                                        <td><p>685</p></td>
-                                                                    </tr>
                                                                 </tbody>
                                                             </table>
                                                     </div>
