@@ -36,9 +36,12 @@ Route::group(['middleware' => 'admin'], function () {
 	//Route::get('unfollow/{id}' , 'UserController@unfollow');
 	Route::get('follow/{id}', 'DashboardController@follow');
 	Route::get('unfollow/{id}', 'DashboardController@unfollow');
+	Route::match(['get', 'post'], '/searchPost', 'DashboardController@searchPost'); // search post on view profile page
 	Route::get('view_profile/{id}', 'DashboardController@view_profile');
 	/*Group*/
+
 	Route::match(['get', 'post'], 'group/mygroups', 'GroupController@myGroupGrid');
+	Route::match(['get', 'post'], 'group/search', 'GroupController@searchGroup');
 	Route::match(['get', 'post'], 'group/list', 'GroupController@groupListing');
 	Route::match(['get', 'post'], 'group/delete_group', 'GroupController@deleteGroup');
 	Route::match(['get', 'post'], 'group/addUserByEmailAddress', 'GroupController@addUserByEmailAddress');

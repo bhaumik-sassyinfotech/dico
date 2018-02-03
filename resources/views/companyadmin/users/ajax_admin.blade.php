@@ -55,12 +55,8 @@ $profile_pic = asset('assets/img/super-user.PNG');
                     @endphp
 
                     <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
-
-
-                        <a href="{{ url('view_profile/'.Helpers::encode_url($uid)) }}">Follow</a>
-                        <?php $pts = Helpers::user_points($uid);?>
-                        <a href="#">Point:{{ $pts['points'] }}</a>
-
+                    <?php $pts = Helpers::user_points($uid);?>
+                    <a href="#">Point:{{ $pts['points'] }}</a>
                     </div>
                     <div class="panel-body-wrap">
                         <div class="follower-text pull-left">
