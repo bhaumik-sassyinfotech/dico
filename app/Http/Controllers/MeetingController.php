@@ -116,13 +116,18 @@
                 }
                 $company_id = $request->company_id;
                 $privacy    = ($request->privacy == 'public') ? 0 : 1;
-                
+                if(!empty($request->group)) {
+                    $meeting_group = implode(",", $request->group);
+                } else {
+                    $meeting_group = NULL;
+                }
                 $meeting                      = new Meeting;
                 $meeting->meeting_title       = $request->meeting_title;
                 $meeting->meeting_description = $request->meeting_description;
-                $meeting->date_of_meeting        = date("Y-m-d H:i",strtotime($request->date_of_meet));
+                $meeting->date_of_meeting     = date("Y-m-d H:i",strtotime($request->date_of_meet));
                 $meeting->privacy             = $privacy;
                 $meeting->created_by          = $currUser->id;
+                $meeting->group_id            = $meeting_group;
                 //dd($meeting);
                 if ( $meeting->save() ) {
 //                    dd("abc");
@@ -190,10 +195,14 @@
                             $is_admin = 0;
                             if ( $val != $currUser->id )
                             {
-                                $meetingUsers[] = [ 'meeting_id' => $meeting->id , 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
+                                if(!in_array($val,array_pluck($meetingUsers,'user_id'))) {
+                                    $meetingUsers[] = [ 'meeting_id' => $meeting->id , 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
+                                }
                             }
                         }
                     }
+                    //echo "<pre>";print_r($meetingUsers);die;
+                    //dd($meetingUsers);
                     //return $meetingUsers;
                     
                     if ( MeetingUser::insert($meetingUsers) ) {
@@ -274,15 +283,17 @@
         {
             $id = Helpers::decode_url($id);
             $currUser = Auth::user();
-            $meeting = Meeting::with(['meetingUser','meetingAttachment'])->where('id',$id)->first();
+            $meeting = Meeting::with(['meetingUser','meetingUsers.UserDetail','meetingAttachment'])->where('id',$id)->first();
+            $company_id = $currUser->company_id;
+            $employees  = User::where('company_id', $company_id)->where('role_id', '!=', 1)->where('id', '!=', $currUser->id)->orderByDesc('id')->get();
+            $groups     = Group::where('company_id', $company_id)->orderByDesc('id')->get();
             if($currUser->id != $meeting->created_by)
             {
                 return back();
             }
-//            dd($meeting);
             if(!empty($meeting))
             {
-                return view($this->folder.'.meeting.edit' , compact('meeting'));
+                return view($this->folder.'.meeting.edit' , compact('meeting','employees', 'groups', 'company_id'));
             }
             
             return back();
@@ -299,6 +310,7 @@
         public function update( Request $request, $id )
         {
 //            dd($request->all());
+            $currUser   = Auth::user();
             $id = Helpers::decode_url($id);
             $meeting = Meeting::find($id);
             $validator = Validator::make($request->all(),
@@ -310,10 +322,25 @@
                     return Redirect::back()->withErrors($validator)->withInput();
             }
 //            /echo "<pre>";print_r($request->all());die;
+            $selected_members = explode(",",$request->selected_members);
+            if ( !empty($selected_members) )
+            {
+                foreach ( $selected_members as $emp )
+                {
+                    $users[] = $emp;
+                }
+            }
+            if(!empty($request->group)) {
+                $meeting_group = implode(",", $request->group);
+            } else {
+                $meeting_group = NULL;
+            }
+            $company_id = $request->company_id;
             $privacy                      = ($request->privacy == 'public') ? 0 : 1;
             $meeting->meeting_title       = $request->input('meeting_title');
             $meeting->meeting_description = $request->input('meeting_description');
             $meeting->privacy             = $privacy;
+            $meeting->group_id            = $meeting_group;
             
             DB::beginTransaction();
             if ( $meeting->save() )
@@ -348,8 +375,67 @@
                         MeetingAttachment::insert($postData);
                     }
                 }
-                DB::commit();
-                return Redirect::route('meeting.index')->with('success','Meeting details has been saved successfully.');
+                $meeting_user_remove = MeetingUser::where('meeting_id', $meeting->id)->forceDelete();
+                $group        = $users = [];
+                $meeting_id   = $meeting->id;
+                $meetingUsers = [ ['meeting_id' => $meeting->id , 'user_id' => $currUser->id, 'is_admin' => 1, 'group_id' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now() ] ];
+                $selected_members = explode(",",$request->selected_members);
+                if ( !empty($selected_members) )
+                {
+                    foreach ( $selected_members as $emp )
+                    {
+                        $users[] = $emp;
+                    }
+                }
+                if ( !empty($request->group) ) {
+                    foreach ( $request->group as $grp ) {
+                        $group[] = $grp;
+                    }
+                }
+//                    dd([$users , $group]);
+                if ( !empty($group) )
+                {
+                    foreach ( $group as $key => $val )
+                    {
+                        $now         = Carbon::now();
+                        $group_id    = $val;
+                        $group_users = GroupUser::where('group_id', $group_id)->where('company_id', $company_id)->pluck('user_id')->toArray();
+
+                        foreach ( $group_users as $k => $v )
+                        {
+                            $is_admin = 0;
+                            if ( $v != $currUser->id )
+                            {
+                                $meetingUsers[] = [ 'meeting_id' => $meeting->id ,'user_id' => $v, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
+                            }
+                        }
+                    }
+                }
+                if ( !empty($users) )
+                {
+                    $now = Carbon::now();
+                    foreach ( $users as $key => $val )
+                    {
+                        $is_admin = 0;
+                        if ( $val != $currUser->id )
+                        {
+                            if(!in_array($val,array_pluck($meetingUsers,'user_id'))) {
+                                $meetingUsers[] = [ 'meeting_id' => $meeting->id , 'user_id' => $val, 'is_admin' => $is_admin, 'group_id' => $group_id, 'created_at' => $now, 'updated_at' => $now ];
+                            }
+                        }
+                    }
+                }
+                    //echo "<pre>";print_r($meetingUsers);die;
+                    //dd($meetingUsers);
+                    //return $meetingUsers;
+                    
+                if ( MeetingUser::insert($meetingUsers) ) {
+                    DB::commit();
+                    return Redirect::route('meeting.index')->with('success','Meeting details has been saved successfully.');
+                        //return redirect()->route('meeting.index')->with('success', 'Meeting has been created successfully.');
+                    } else {
+                        DB::rollBack();
+                    }
             } else
             {
                 DB::rollBack();

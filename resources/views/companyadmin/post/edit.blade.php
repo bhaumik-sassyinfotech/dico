@@ -19,15 +19,24 @@
                         <div class="form-group">
                             <label class="text-15">Post<span>*</span></label>
                             <div class="check-wrap box-check">
-                                <label class="check idea-check"> Idea 
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_idea" onclick="return false;" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>><span class="checked"></span>
-                                </label>
-                                <label class="check question-check"> Question
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_question" onclick="return false;" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>><span class="checked"></span>
-                                </label>
-                                <label class="check challenges-check"> Challenge
-                                    <input type="checkbox" name="post_type" class="post_type" id="post_type_challenge" onclick="return false;" value="challenge" <?php if($post->post_type == 'challenge') { echo "checked"; } ?>><span class="checked"></span>
-                                </label>
+                                <div class="check <?php if($post->post_type == 'idea') { echo "idea-check";}?>">Idea    
+                                    <input type="checkbox" name="post_type" class="post_type check idea-check" id="post_type_idea" onclick="return false;" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>>
+                                     <label for="post_type_idea"> 
+                                         <span class="checked idea-checked"></span>
+                                      </label>    
+                                </div>
+                                <div class="check <?php if($post->post_type == 'question') { echo "question-check";}?>">Question    
+                                    <input type="checkbox" name="post_type" class="post_type check question-check" id="post_type_question" onclick="return false;" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>>
+                                     <label for="post_type_question"> 
+                                         <span class="checked question-checked"></span>
+                                      </label>    
+                                </div>
+                                <div class="check <?php if($post->post_type == 'challenge') { echo "challenges-check";}?>">Challenge    
+                                    <input type="checkbox" name="post_type" class="post_type check challenge-check" id="post_type_challenge" onclick="return false;" value="challenge" <?php if($post->post_type == 'challenge') { echo "checked"; } ?>>
+                                     <label for="post_type_challenge"> 
+                                         <span class="checked challenges-checked"></span>
+                                      </label>    
+                                </div>
                             </div>
                             <div id="err_post_type"></div>
                         </div>

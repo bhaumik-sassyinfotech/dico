@@ -48,7 +48,7 @@ $(document).ready(function () {
     });
     $("#company_listing,#company_users,#group_owner").select2();
     $("#user_groups").select2();
-    $("#employees_listing,#group_listing").select2();
+    $("#group_listing").select2();
 
     /*show users in box while creating new meeting*/
     //$('#employees_listing').on('select2:select',function (e) {
@@ -1056,3 +1056,4 @@ var my_group_points = $("#my-group-points").DataTable({
         {data: 'total'},
     ] 
 });
+ 

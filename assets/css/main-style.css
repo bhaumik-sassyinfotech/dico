@@ -4452,10 +4452,17 @@ body .modal-dialog.updatesecurity .modal-content,
     position: absolute;
     top: auto;
     width: 70%;
+<<<<<<< HEAD
 }
 .wrap-social .wrap-inner-icon:hover {
     opacity: 0.5;
 }
+=======
+}
+.wrap-social .wrap-inner-icon:hover {
+    opacity: 0.5;
+}
+>>>>>>> a7d79f3eb88ab9f02d920a1811286eaea03e16f4
 
 
 
@@ -4760,6 +4767,8 @@ ul.tagit {
 body .member-wrap .member-details .text-12:hover {
     color: #4f8edc !important;
 }
+<<<<<<< HEAD
+
 .profile-page .modal-header {
     padding: 0;
 }
@@ -4789,9 +4798,8 @@ body .idea-details.all-group-list .modal-dialog {
 .idea-details.group-listing .form-group > textarea {
     margin-bottom: 20px;
 }
+
 /*close 01-02-2018*/
-
-
 
 /* 03-02-2018*/
 
@@ -4809,5 +4817,3 @@ body .idea-details.all-group-list .modal-dialog {
 .create-user .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 140%;
 }
-
-/*close 03-02-2018*/

@@ -20,6 +20,7 @@ class CreateMeetingsTable extends Migration
             $table->dateTime('date_of_meeting')->nullable();
             $table->tinyInteger('privacy')->comment('0 = public , 1 = private')->default(0);
             $table->integer('created_by')->default(0);
+            $table->string('group_id','255')->nullable()->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->index();
             $table->timestamps();
             $table->softDeletes();
         });
