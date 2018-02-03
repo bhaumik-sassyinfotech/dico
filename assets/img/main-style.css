@@ -12,9 +12,7 @@
 }
 
 /*ankita changes */
-body {
- background-color: #e6e7e8;    
-}
+
 body p, body span, body a, body h1, body h2, body h3, body h4, body h5, body h6, body label {
   font-family: Open Sans;
   font-weight: normal;
@@ -746,13 +744,11 @@ p.user-icon {
   margin-top: 4px;
 }
 body .text-12 {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 100;
-    line-height: 160%;
+    line-height: 130%;
     text-align: justify;
-    font-weight: 300;
     word-wrap: break-word;
-    color: #646464;
 }
 .comment.like-wrap,
 .comment.like-wrap a{
@@ -995,7 +991,6 @@ body .text-12 {
   font-weight: 100;
   margin-left: 0;
   text-align: justify;
-  overflow: scroll;
 }
 
 .post-user-nam .user-a{
@@ -1494,9 +1489,8 @@ body #wrap .tp-bp-0 {
   color: #323232;
   float: left;
   line-height: 140%;
-  padding:10px 0;
+  padding: 12px 0;
   width: 29%;
-  font-weight: 600;    
 }
 
 .create-post .common-form .btn-wrap-div,
@@ -1965,7 +1959,6 @@ body.modal-open .modal-backdrop.in {
   font-weight: 500;
   padding: 10px 20px 10px 50px;
   position: relative;
-  cursor: default;    
 }
 .create-post .common-form .check .checked.question-checked:before {
     background-position: -40px 0px;
@@ -1985,7 +1978,6 @@ body.modal-open .modal-backdrop.in {
     position: absolute;
     top: 4px;
     width: 30px;
-    cursor: pointer;
 }
 .create-post .common-form .check.idea-check .checked:before {
     background-position: 0 -30px;
@@ -2105,9 +2097,8 @@ body .challenges.idea-page #page-heading h1.icon-mark {
     left: 0;
     position: absolute;
     display: inline-block;
-    opacity: 0;
-    top: 0;
 }
+
 .create-post .category {
   border: none;
 }
@@ -2371,11 +2362,11 @@ form .form-group:last-child {
   background-color: #50535A;
   margin-left: 32px;
 }
+
 .toggle-text > p {
-    color: #333;
-    font-size: 14px;
-    line-height: 200%;
-    font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  line-height: 200%;
 }
 
 .slider-toggle:checked + .slider-viewport{
@@ -2383,11 +2374,7 @@ form .form-group:last-child {
     border: 2px solid #50535A;
     
 }
-.close-button-small {
-    background-size: 96% auto;
-    top: 0;
-    margin-top: 10px;
-}
+
 /* setting pages*/
 
 /* user profile */
@@ -2520,7 +2507,12 @@ form .form-group:last-child {
   border-top: medium none !important;
   padding-top: 0 !important ;   
 }
-.list-block fieldset { display: block; width: 100%;}
+.list-block fieldset { display: block; width: 100%; min-height: 120px; }
+
+.list-block .grid-details {
+  float: right;
+  width: 57%;
+}
 
 .list-block .grid-image {
   background-color: #cccccc;
@@ -2561,7 +2553,6 @@ form .form-group:last-child {
   font-size: 12px;
   margin-bottom: 10px;
   text-align: left;
-  word-wrap: break-word;    
 }
 
 .list-block .btn-wrap > a {
@@ -2681,7 +2672,7 @@ form .form-group:last-child {
   top: 0;
   width: 30px;
 }
-/*
+
 .search-form > input:not([type="button"]) {
   border: 1px solid #949494;
   border-radius: 4px;
@@ -2691,7 +2682,6 @@ form .form-group:last-child {
   padding: 5px 10px 5px 30px;
   width: 172px;
 }
-*/
 
 .search-form {
   display: block;
@@ -2811,6 +2801,9 @@ form .form-group:last-child {
 .emp.login-page .common-form .btn-wrap-div {
   margin-left: 32%;
 }
+.emp form .form-group {
+  margin-bottom: 10px;
+}
 *{
     outline: none!important;
 }
@@ -2928,11 +2921,8 @@ select::-ms-expand {
 .follow-block .group-item span {
   color: #323232;
   display: inline-block;
-  font-weight: 600;
+  font-weight: normal;
   vertical-align: top;
-}
-.employe-profile .table > tbody > tr > td:last-child {
-    font-weight: 800;
 }
 .follow-block .group-item:last-child {
   border:none;
@@ -3085,13 +3075,34 @@ select::-ms-expand {
 .upload-btn-wrapper form {
     margin-bottom: 0;
 }
-
+.close-button::after,
+.close-button-small::after{
+  color: #000000;
+  content: "x";
+  font-size: 20px;
+  left: 0;
+  line-height: 14px;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  top: 35%;
+  -webkit-transform: translateY(-35%);
+  -moz-transform: translateY(-35%);
+  -ms-transform: translateY(-35%);
+  -o-transform: translateY(-35%);
+  transform: translateY(-35%);
+}
+.close-button:hover:after {
+    color: #fff;
+}
 .close-button-small:after {
     font-size: 18px;
     color: #fff;
     text-align: center;
 }
-
+.bootstrap-datepicker-widget.dropdown-menu{
+   z-index: 9999999999999;    
+}
 .status {
   margin-top: 2px;
 }
@@ -3458,26 +3469,30 @@ body .idea-page #page-heading h1.icon-mark {
   color: #fff;
   text-decoration: none;
 }
-.close-button, .close-button-small {
+.close-button,
+.close-button-small{
+    border: 1px solid transparent;
+    border-radius: 50%;
     color: #000000;
-    height: 26px;
+    font-size: 25px;
+    height: 25px;
+    line-height: 23px;
+    margin-right: 15px;
     position: absolute;
     right: 0;
-    width: 26px;
+    width: 25px;
     z-index: 99;
-    margin: 20px;
+    margin: 0 15px 0 0px;
     opacity: 1;
-    top: 0;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-image: url(../img/close.png);
-    background-color: transparent;
-    border: none;
+    top: 10px;
+    background-color: #ccc;
 }
 
 .close-button:hover,
 .close-button-small:hover{
-    opacity: 0.5;
+    background-color: #666;
+    border-color: #999;
+    line-height: 50%;
 }
 .close-button-small{   
     height: 20px;
@@ -3508,9 +3523,8 @@ body .idea-page #page-heading h1.icon-mark {
   background-color: #ccc;    
 }
 .followers-list {
-    max-height: 370px;
-    overflow-x: hidden;
-    padding: 0 10px;
+  max-height: 370px;
+  overflow-x: hidden;
 }
 .followers-details::after {
   clear: both;
@@ -3541,9 +3555,9 @@ body .idea-page #page-heading h1.icon-mark {
 .jobs-title.adm {
   color: #A9B8C7;
 }   
-.jobs-title.su {
-    color: #5b6b7b;
-}
+.jobs-title.su{
+  color: #333;
+}   
 .follow-name > a:hover{
   color: #333;
   text-decoration: none;    
@@ -3552,17 +3566,18 @@ body .idea-page #page-heading h1.icon-mark {
   margin-top: 30px;
 }
 .jobs-title {
-    bottom: 0;
-    display: block;
-    font-family: open sans;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    position: absolute;
-    right: 0;
-    text-align: right;
-    vertical-align: bottom;
+  bottom: 0;
+  display: block;
+  font-family: open sans;
+  font-size: 15px;
+  font-weight: normal;
+  margin-bottom: 20px;
+  position: absolute;
+  right: 0;
+  text-align: right;
+  vertical-align: bottom;
 }
+
 .profile-page .modal-dialog h3,
 .idea-details .modal-dialog h3
 {
@@ -3834,11 +3849,11 @@ body .modal-dialog .modal-content {
   margin-bottom: 0;
 }
 .point-page .table td:last-child p {
-  font-weight: 600;
+  font-weight: 500;
 }
 .new-meeting-details form .form-group,
 .challenges #page-heading h1{
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .new-meeting-details #page-heading h1 {
   margin-bottom: 8px;
@@ -3970,10 +3985,12 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 }
 .all-group-list .trophy.setting-icon .pull-right a {
     position: relative;
-    margin: 10px 15px;
+    margin: 0px 15px;
     display: block;
 }
-
+.list-block .panel-body {
+    min-height: 210px;
+}
 .point-page.all-group-list .table p {
   color: #646464;
   font-size: 12px;
@@ -3982,10 +3999,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
   margin: 0 10px;
   width: 80%;
 }
-.pagination li a, .pagination li.active a {
-    line-height: 130%;
-    padding: 10px 15px;
-}
+.pagination li.active a { line-height: 130%; padding: 10px 15px; }
 .wrap-button { position: relative; }
 .all-group-list form .form-group:first-child {
   margin-bottom: 20px;
@@ -4237,20 +4251,13 @@ body a:hover, body a:focus {
     bottom: 0;
     padding: 15px 15px 40px;
     width: 230px;
-    position: absolute;
 }
 .bottom-sidebar a {
   color: #3f444c;
   display: inline-block;
   line-height: 200%;
 }
-#sidebar {
-    white-space: normal;
-    margin: 10px 0 0 0;
-    padding-left: 0 !important;
-    height: 100%;
-    overflow-x: hidden;
-}
+
 .bottom-sidebar a:hover {
   color: #00BDDE;
 }
@@ -4447,38 +4454,30 @@ body .modal-dialog.updatesecurity .modal-content,
   border: 1px solid #999;    
 }
 .company-wrap .btn-wrap {
-    bottom: 0;
-    left: 40%;
-    position: absolute;
-    top: auto;
-    width: 70%;
+  bottom: 0;
+  left: 30%;
+  position: absolute;
+  top: auto;
 }
-.wrap-social .wrap-inner-icon:hover {
-    opacity: 0.5;
-}
-
-
-
-
 .company-wrap .img-wrap {
     display: block;
     float: left;
-    height: 166px;
+    height: 120px;
     margin-right: 5%;
     position: relative;
-    width: 36%;
+    width: 25%;
 }
 .company-wrap .img-wrap img {
-    bottom: 0;
-    height: 167px;
-    left: 0;
-    margin: auto;
-    max-height: 100%;
-    max-width: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 167px;
+  bottom: 0;
+  height: auto;
+  left: 0;
+  margin: auto;
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
 }
 
 .btn-wrap .text-10 {
@@ -4488,10 +4487,8 @@ body .modal-dialog.updatesecurity .modal-content,
 
 nav#page-leftbar {
     background-color: #e6e7e8;
-    height: 619px;
-    padding-bottom: 150px;
+    height: auto;
 }
-
 .bottom-logo {
   margin-top: 5px;
 }
@@ -4569,9 +4566,8 @@ body .select2-container--default .select2-selection--multiple .select2-selection
 }
 .user-rply textarea {
     margin-bottom: 10px;
-    padding: 0px;
+    padding: 10px;
     height: 100px;
-    width: 100% !important;
 }
 .question .post-category .member-wrap,
 .idea-details .post-category .member-wrap.files-upload,
@@ -4650,10 +4646,10 @@ panel-body fieldset p {
     display: inline-block;
 }
 .no-icon a:not(:last-child) {
-    margin-right: 2px;
+    margin-right: 5px;
 }
 .no-icon {
-    line-height: 42px;
+    line-height: 35px;
 }
 .no-icon a { display: inline-flex; }
 /*close 25-01-2018*/
@@ -4662,7 +4658,11 @@ panel-body fieldset p {
 .create-post .common-form .box-check .check.selected {
     background-color: gray;
 }
-
+body .group-tabs[class*="panel-"] .panel-primary .panel-body {
+    max-height: 300px;
+    overflow-x: hidden;
+    width: 100%;
+}
 .create-select-user .modal .common-form .btn-wrap-div {
     margin-left: 0;
 }
@@ -4740,7 +4740,6 @@ ul.tagit {
     padding-left: 40px;
     text-transform: uppercase;
     position: relative;
-    font-family: 'Open Sans', sans-serif !important;
 }
 .bottom-logo span img {
     max-width: 75px;
@@ -4751,63 +4750,6 @@ ul.tagit {
 #page-content {
     min-height: 100% !important;
 }
-.member-wrap .member-details .text-12 {
-    color: #323232 !important;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 0;
-}
-body .member-wrap .member-details .text-12:hover {
-    color: #4f8edc !important;
-}
-.profile-page .modal-header {
-    padding: 0;
-}
-.profile-page .list-block fieldset {
-    min-height: 80px;
-}
-.slimScrollBar {
-    height: 35px !important;
-    background-color: #969696 !important;
-    width: 6px !important;
-}
-.profile-page .modal-dialog h3 {
-    padding: 0 10px;
-}
-.idea-page .post-category .member-wrap,
-.meeting-details .post-category .member-wrap{
-    border-left: none;
-    border-right: none;
-}
-.tooltip.in {
-    display: none !important;
-}
-body .idea-details.all-group-list .modal-dialog .modal-content, 
-body .idea-details.all-group-list .modal-dialog {
-    width: 420px;
-}
-.idea-details.group-listing .form-group > textarea {
-    margin-bottom: 20px;
-}
-/*close 01-02-2018*/
 
+/*close 30-01-2018*/
 
-
-/* 03-02-2018*/
-
-.pagination-sm > li > a span {
-    padding: 0;
-    line-height: 130%;
-}
-
-.create-user .select2-container--default .select2-selection--single {
-    border: none;
-}
-.create-user .select2-container--default .select2-selection--single .select2-selection__arrow {
-    display: none;
-}
-.create-user .select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 140%;
-}
-
-/*close 03-02-2018*/
