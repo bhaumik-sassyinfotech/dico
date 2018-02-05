@@ -113,6 +113,7 @@ $("#company_listing").change(function () {
             data: dataString,
             method: "POST",
             success: function (response) {
+                $("#company-warn").css('display','none');
                 $("#users_listing,#group_owner").empty().append($("<option></option>").val("").html("Select user"));
                 var userData = response.data;
                 var role = '';
@@ -303,6 +304,7 @@ $(document).on('click', '.removeUser', function (event) {
         },
         function () {
             var group_user_id = that.data('groupUserId');
+            // console.log(group_user_id);
             var groupId = $("#group_id").val();
             var companyId = $("#company_id").val();
             var dataString = {
@@ -1030,5 +1032,60 @@ var editProfile = $("#editProfile").DataTable({
 });
 function removeMember(userid) {
     $('#user_'+userid).remove();
-    $('#employees_listing option[value="'+userid+'"]').removeAttr("disabled");
+    $('#employees_listing option[value="'+userid+'"]').attr("disabled", false);
 }
+
+
+var my_group_points = $("#my-group-points").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: SITE_URL + '/points/my_group_users',
+        data: function (d) {
+            // d.user_id      = $.trim($("#user_id").val());
+        }
+    },
+    searching: false,
+    columns: [
+        {data: 'name'},
+        {data: 'post'},
+        {data: 'vote'},
+        {data: 'approved'},
+        {data: 'answers'},
+        {data: 'solutions'},
+        {data: 'comments'},
+        {data: 'likes'},
+        {data: 'total'},
+    ] 
+});
+ 
+
+$("#create_group_modal").validate({
+    submitHandler: function(form){
+        var name = $.trim($("#grp_name").val());
+        var desc = $.trim($("#grp_desc").val());
+        var company = $("#company_id option:selected").val();
+        console.log(company);
+        var dataString = {_token: CSRF_TOKEN , name:name, desc:desc,company: company};
+        if(company > 0)
+        {
+
+        } else
+        {
+            $("#company-warn").css('display','block');
+            return false;
+        }
+
+        $.ajax({
+            url: SITE_URL+"/group/addGroup",
+            method: "POST",
+            data: dataString,
+            success: function(response){
+                if(response.status == '1')
+                {
+                    $("#company_id").trigger('change');
+                }
+            }
+        });
+    }
+});

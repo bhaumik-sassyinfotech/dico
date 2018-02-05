@@ -261,7 +261,10 @@ class Helpers {
 			if ($original_slug == 'DISLIKE') {
 				$slug = 'LIKE';
 			}
-
+            if($original_slug == 'REMOVE_COMMENT')
+            {
+                $slug='ADD_COMMENT';
+            }
 			$points = Point::where('slug', $slug)->first();
 			if (!empty($points)) {
 				$insertData = ['user_id' => $user_id, 'parent_id' => $parent_id, 'points' => $points->points, 'activity_id' => $points->id];
@@ -269,7 +272,7 @@ class Helpers {
 
 				$previousActivityQuery = UserActivity::where(['user_id' => $user_id, 'parent_id' => $parent_id, 'activity_id' => $points->id]);
 
-				if ($original_slug == 'LIKE' OR $original_slug == 'DISLIKE' OR $original_slug == 'ADD_COMMENT' OR $original_slug == 'IDEA_VOTE' OR $original_slug == 'CORRECT_SOLUTION' OR $original_slug == 'CORRECT_SOLUTION') {
+				if ($original_slug == 'LIKE' OR $original_slug == 'DISLIKE' OR $original_slug == 'REMOVE_COMMENT' OR $original_slug == 'ADD_COMMENT' OR $original_slug == 'IDEA_VOTE' OR $original_slug == 'CORRECT_SOLUTION' OR $original_slug == 'CORRECT_SOLUTION') {
 
 					$previousActivity = $previousActivityQuery->first();
 
@@ -278,7 +281,7 @@ class Helpers {
 						$previousActivity->delete();
 						$insertRecord = FALSE;
 					}
-					if ($original_slug == 'DISLIKE') {
+					if ($original_slug == 'DISLIKE' OR $original_slug=='REMOVE_COMMENT') {
 						$insertRecord = FALSE; //no points deducted for dislike directly
 					}
 				} else if ($original_slug == 'CREATE_POST' OR $original_slug == 'IDEA_APPROVED') {

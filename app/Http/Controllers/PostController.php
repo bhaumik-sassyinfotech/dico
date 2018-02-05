@@ -647,10 +647,10 @@ class PostController extends Controller {
 				DB::beginTransaction();
 				$postData = array("user_id" => $user_id, "post_id" => $id, "comment_text" => $comment_text, "is_anonymous" => $is_anonymous, "created_at" => Carbon\Carbon::now());
 
-				$comment = Comment::where('id', $id)->first();
-
-				Helpers::add_points('ADD_COMMENT', $comment->user_id, $comment->id); // add comment points
+				$comment = Comment::where('post_id', $id)->where("user_id" , $user_id)->first();
+				
 				$res = Comment::insertGetId($postData);
+                Helpers::add_points('ADD_COMMENT', $user_id, $res); // add comment points
 				$file = $request->file('file_upload');
 				if ($file != "") {
 					$fileName = $file->getClientOriginalName();
@@ -687,9 +687,10 @@ class PostController extends Controller {
 		}
 		$commentQuery = Comment::where('id', $id);
 		$comment = $commentQuery->first();
+        $comment_id = $comment->id;
 		$deleteComment = $commentQuery->delete();
 		if ($deleteComment) {
-			Helpers::add_points('ADD_COMMENT', $comment->user_id, $comment->id); // remove comment points
+			Helpers::add_points('REMOVE_COMMENT', Auth::user()->id, $comment_id); // remove comment points
 			return Redirect::back()->with('success', 'Comment deleted successfully');
 		} else {
 			return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));

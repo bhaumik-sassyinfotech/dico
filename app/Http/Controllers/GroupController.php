@@ -282,7 +282,7 @@ class GroupController extends Controller {
 
 		$admin = GroupUser::where('is_admin', '1')->where('user_id', Auth::user()->id)->where('group_id', $groupId)->first();
 
-		if (is_null($admin)) {
+		if (is_null($admin) && Auth::user()->id != $groupData->group_owner) {
 
 			$currUserIsAdmin = 0;
 
@@ -573,14 +573,12 @@ class GroupController extends Controller {
 		return DataTables::of($groupUsers)->addColumn('admin', function ($row) use ($groupDetails, $company) {
 
 			$btn = '';
-
+            $admin = '';
 			if ($row->user_id == $groupDetails->group_owner) {
 
 				return "<p><a class='deactive-admin'>Group Owner</a></p>";
 
 			} else {
-
-				$admin = '';
 
 				if ($company->allow_add_admin == '1') {
 
@@ -588,20 +586,20 @@ class GroupController extends Controller {
 
 						$admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class="active-admin demoteToUser">Promote to admin</a>';
 
-						$admin .= ' <a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
+						$admin .= ' <a data-group-user-id="' . $row->id . '" style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
 
 					} else {
 
 						$admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class=" promoteToAdmin deactive-admin">Promote to admin</a>';
 
-						$admin .= ' <a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
+						$admin .= ' <a data-group-user-id="' . $row->id . '" style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class=" removeUser left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
 
 					}
 
 				} else {
 
 //                        $admin = ' <a href="#" data-group-user-id="' . $row->id . '" class="btn btn-danger removeUser"><i class="fa fa-trash-o"></i></a></p>';
-					$admin = ' <p><a style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10 removeUser" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
+					$admin = ' <p><a data-group-user-id="' . $row->id . '" style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10 removeUser" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
 				}
 
 			}
@@ -989,5 +987,29 @@ class GroupController extends Controller {
 			return $output;
 		}
 	}
-
+	public function addGroup(Request $request) {
+//		return $request->all();
+		$company_id = $request->input('company');
+		$group_name = $request->input('name');
+		$group_desc = $request->input('desc');
+		$data = ['status' => 0 , 'data' => [] , 'msg' => "Please try again later."];
+		if(!empty($company_id) && !empty($group_name))
+        {
+            
+            $group = new Group;
+            $group->group_name  = $group_name;
+            $group->description = $group_desc;
+            $group->company_id = $company_id;
+            if($group->save())
+            {
+//                $grp_user = new GroupUser;
+//                $grp_user->user_id =
+                $data['status'] = 1;
+                $data['msg'] = 'Group created successfully.';
+            } else {
+                $data['msg'] = 'Creation of group failed.';
+            }
+        }
+        return Response::json($data);
+	}
 }

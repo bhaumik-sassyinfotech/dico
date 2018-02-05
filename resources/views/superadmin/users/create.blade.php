@@ -61,12 +61,15 @@
                             <div class="form-group">
                                 <label>Groups:</label>
                                 <div class="select">
-                                    <select name="user_groups[]" id="user_groups" class="form-control"
-                                        multiple="multiple" style="width: 71%">
-                                    <option value="">Select company first.</option>
-                                </select>
+                                    <select name="user_groups[]" id="user_groups" class="form-control" multiple="multiple" style="width: 71%">
+                                        <option disabled="disabled" value="">Select company first.</option>
+                                    </select>
+                                </div>
+                                <div class="add-grp-wrap btn-wrap-div">
+                                   <a type="submit" class="add-group" href="#myModal" data-toggle="modal">Create New Group</a>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <div class="blank">
                                     <label class="check">
@@ -89,53 +92,53 @@
                                 <div class="btn-wrap-div">
                                     <input type="submit" class="st-btn" value="Submit" />
 
-                                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1"
-                                         id="myModal" class="modal fade" style="display: none;">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button aria-hidden="true" data-dismiss="modal"
-                                                            class="desktop-close" type="button">×
-                                                    </button>
-                                                    <div class="create-user-wrap">
-                                                        <div class="create-box S-letter">
-                                                            <a href="super-user.php">
-                                                                <h1>S</h1>
-                                                                <p>Super User</p>
-                                                            </a>
-                                                        </div>
-                                                        <div class="create-box A-letter">
-                                                            <a href="admin-user.php">
-                                                                <h1>A</h1>
-                                                                <p>Admin</p>
-                                                            </a>
-                                                        </div>
-                                                        <div class="create-box E-letter">
-                                                            <a href="employee-user.php">
-                                                                <h1>E</h1>
-                                                                <p>Employee</p>
-                                                            </a>
-                                                        </div>
 
-                                                    </div>
-                                                </div>
-
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div>
                                     <a href="{{ url()->previous() }}" class="st-btn">Cancel</a>
                                 </div>
                             </div>
 
                         </form>
-
-
                     </div>
                 </div>
             </div>
 
         </div>
     </div> <!-- container -->
+
+    <!-- Modal -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button">×</button>
+                                                <h4 class="modal-title">Create New Group</h4>
+                                            </div>
+                                            <div class="common-form">
+                                                <form id="create_group_modal" method="POST">
+                                                <div class="form-group">
+                                                    <label class="text-15">Group Name:*</label>
+                                                    <input class="required" type="text" name="grp_name" id="grp_name" placeholder="Management">
+                                                </div>
+                                                <div class="form-group">
+                                                    <p class="error" id="company-warn" style="display: none;">Please select the company to which this group belongs.</p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="text-15">Description:</label>
+                                                    <textarea name="grp_desc" id="grp_desc" type="text" placeholder="Lorem ipsum is a dummy text in the all typesetting industry"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                   <div class="btn-wrap-div">
+                                                      <input class="st-btn" type="submit" value="Create">
+                                                      <input type="reset" value="Cancel" class="st-btn" data-dismiss="modal">
+                                                  </div>
+                                              </div>
+                                              </form>
+                                          </div>
+                                      </div><!-- /.modal-content -->
+                                  </div><!-- /.modal-dialog -->
+                              </div>
+
+    <!-- Modal End -->
 @stop
 @section('javascript')
     <script type="text/javascript">

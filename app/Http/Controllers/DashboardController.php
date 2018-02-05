@@ -131,7 +131,8 @@ class DashboardController extends Controller {
 	}
 	public function view_profile($id = null) {
 		$id = Helpers::decode_url($id);
-		if (Auth::user() && !empty($id)) {
+		if (Auth::user() && !empty($id))
+		{
 			$currUser = Auth::user();
 			$user_id = $id;
 			$view_user = User::find($id);
@@ -154,11 +155,12 @@ class DashboardController extends Controller {
 			$groupDetails_query = DB::table('group_users')
 				->join('groups', 'groups.id', '=', 'group_users.group_id')
 				->where('groups.company_id', $company_id)
+				->where('group_users.user_id', $user_id)
 				->select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* , (SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as total_posts'))
 				->groupBy('group_users.group_id');
-			// if ($currUser->role_id != 1) {
-			// 	$groupDetails_query = $groupDetails_query->where('groups.company_id', $company_id);
-			// }
+//			 if ($currUser->role_id != 1) {
+//			 	$groupDetails_query = $groupDetails_query->where('groups.company_id', $company_id);
+//			 }
 			$groupDetails = $groupDetails_query->get();
 			// dd($groupDetails);
 
