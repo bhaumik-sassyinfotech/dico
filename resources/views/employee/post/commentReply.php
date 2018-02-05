@@ -62,7 +62,7 @@ if (!empty($comment['commentReply'])) {
                     <textarea name="comment_reply_text" id="comment_reply_text_<?= $commentReply['id'] ?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $commentReply['comment_reply']; ?></textarea>
                     <div class="btn-wrap-div">
                         <input type="button" name="update_comment_reply" id="update_comment_reply_<?=$commentReply['id'] ?>" value="Save" class="st-btn" onclick="updateCommentReply(<?= $commentReply['id'] ?>)" style="display: none;"/>
-                        <input type="button" name="cancel_comment_reply" id="cancel_comment_reply_<?=$commentReply['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeCommentReply(<?=$commentReply['id']?>)" style="display: none;"/>
+                        <input type="button" name="cancel_comment_reply" id="cancel_comment_reply_<?=$commentReply['id']?>" value="Cancel" class="btn btn-secondary btn-st" onClick=" this.form.reset();closeCommentReply(<?=$commentReply['id']?>)" style="display: none;"/>
                     </div>
                 </div>
             </div>

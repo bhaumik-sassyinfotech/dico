@@ -113,6 +113,11 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('deleteMeetingComment/{id}', 'MeetingController@deleteMeetingComment');
 	Route::post('loadmoreallmeeting', 'MeetingController@loadmoreallmeeting');
 	Route::post('loadmoremymeeting', 'MeetingController@loadmoremymeeting');
+        Route::post('allMeetingComments','MeetingController@allMeetingComments');
+        Route::post('meeting_comment_reply','MeetingController@meeting_comment_reply');
+        Route::post('getMeetingCommentReply','MeetingController@getMeetingCommentReply');
+        Route::post('meeting_comment_reply_update','MeetingController@meeting_comment_reply_update');
+        Route::get('deleteMeetingCommentReply/{id}','MeetingController@deleteMeetingCommentReply');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');

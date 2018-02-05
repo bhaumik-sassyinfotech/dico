@@ -3065,11 +3065,10 @@ select::-ms-expand {
   margin-bottom: 10px;
   padding: 18px 0 20px;
 }
-
 .profile-page .group-tabs .panel-body > p.user-icon {
-  color: #000;
-  font-size: 8.5px;
-  line-height: 240%;
+    color: #000;
+    font-size: 12px;
+    line-height: 200%;
 }
 .profile-page .group-tabs .panel-body > h4,
 .profile-page .group-tabs .panel-body .post-title{
@@ -3458,6 +3457,9 @@ body .idea-page #page-heading h1.icon-mark {
   color: #fff;
   text-decoration: none;
 }
+.nav > li > a > img {
+    margin: 2px;
+}
 .close-button, .close-button-small {
     color: #000000;
     height: 26px;
@@ -3479,10 +3481,12 @@ body .idea-page #page-heading h1.icon-mark {
 .close-button-small:hover{
     opacity: 0.5;
 }
-.close-button-small{   
+.close-button-small {
     height: 20px;
     width: 20px;
     line-height: 100%;
+    top: 0;
+    margin: 5px;
 }
 
 .followers-list .followers-details {
@@ -3744,9 +3748,9 @@ body .point-page .group-tabs > .panel-body {
   line-height: 100%;
   padding: 0 0 10px;
 }
-.padding-box .modal-title {
+.modal-title {
   color: #323232;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 100%;
   text-align: left;
 }
@@ -3777,7 +3781,6 @@ body .modal-content {
 .padding-box .modal-dialog .modal-header {
   border: medium none;
   margin-bottom: 5px;
-  min-height: 100%;
   padding: 0;
 }
 .idea-details .form-group > textarea {
@@ -3834,7 +3837,8 @@ body .modal-dialog .modal-content {
   margin-bottom: 0;
 }
 .point-page .table td:last-child p {
-  font-weight: 600;
+    font-weight: 600;
+    margin: 0;
 }
 .new-meeting-details form .form-group,
 .challenges #page-heading h1{
@@ -3962,18 +3966,15 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 
 .all-group-list .trophy .pull-right a {
     position: relative;
-    margin: 0px 15px;
+    margin: 0 15px;
     display: block;
-}
-.point-page.user-profile .table tr td {
-    padding: 15px 8px;
 }
 .all-group-list .trophy.setting-icon .pull-right a {
-    position: relative;
     margin: 10px 15px;
-    display: block;
 }
-
+.point-page.user-profile .table tr td {
+    padding: 15px 0;
+}
 .point-page.all-group-list .table p {
   color: #646464;
   font-size: 12px;
@@ -4162,13 +4163,12 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
   display: block;
 }
 
-
 .main-user-profile .table {
-  display: block;
-  margin-bottom: 20px;
-  max-width: 100%;
-  padding: 0 20px;
-  width: 100%;
+    display: block;
+    margin: 0 0 20px !important;
+    max-width: 100% !important;
+    padding: 0 20px !important;
+    width: 100% !important;
 }
 
 .all-group-list.user-profile .nav.nav-tabs li a {
@@ -4235,7 +4235,7 @@ body a:hover, body a:focus {
 .bottom-sidebar {
     background-color: #e6e7e8;
     bottom: 0;
-    padding: 15px 15px 40px;
+    padding: 15px 15px 10px;
     width: 230px;
     position: absolute;
 }
@@ -4420,7 +4420,7 @@ body .modal-dialog.updatesecurity .modal-content,
   font-weight: 600;
 }
 .point-page.all-group-list .table > thead > tr:first-child > th {
-  padding-left: 10px;
+  padding-left: 0px;
 }
 .toggle-wrap:last-child .toggle-text {
   float: none;
@@ -4452,17 +4452,10 @@ body .modal-dialog.updatesecurity .modal-content,
     position: absolute;
     top: auto;
     width: 70%;
-<<<<<<< HEAD
 }
 .wrap-social .wrap-inner-icon:hover {
     opacity: 0.5;
 }
-=======
-}
-.wrap-social .wrap-inner-icon:hover {
-    opacity: 0.5;
-}
->>>>>>> a7d79f3eb88ab9f02d920a1811286eaea03e16f4
 
 
 
@@ -4541,10 +4534,6 @@ body .alert {
 }
 body .select2-container--default .select2-selection--multiple {
     border: none !important;
-}
-body .select2-container {
-    border-bottom: 1px solid #ccc;
-    width: 75% !important;
 }
 
 body .select2-container--default .select2-selection--multiple .select2-selection__rendered {
@@ -4767,8 +4756,6 @@ ul.tagit {
 body .member-wrap .member-details .text-12:hover {
     color: #4f8edc !important;
 }
-<<<<<<< HEAD
-
 .profile-page .modal-header {
     padding: 0;
 }
@@ -4798,14 +4785,15 @@ body .idea-details.all-group-list .modal-dialog {
 .idea-details.group-listing .form-group > textarea {
     margin-bottom: 20px;
 }
-
 /*close 01-02-2018*/
+
+
 
 /* 03-02-2018*/
 
 .pagination-sm > li > a span {
-    padding: 0;
-    line-height: 130%;
+    padding: 0 !important;
+    line-height: 99%;
 }
 
 .create-user .select2-container--default .select2-selection--single {
@@ -4817,3 +4805,46 @@ body .idea-details.all-group-list .modal-dialog {
 .create-user .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 140%;
 }
+.list-block .grid-details {
+    height: 90px;
+    overflow-x: hidden;
+}
+body table.dataTable > thead > tr > th {
+    border: none !important;
+}
+#threads, #comments, #users {
+    overflow-x: visible !important;
+}
+.st-btn.multiple-action {
+    padding: 5px 15px;
+    font-size: 12px;
+}
+
+
+
+
+.new-meeting-details .category-tab select#employees_listing {
+    padding: 0 10px 0;
+    border-bottom: 1px solid #ccc !important;
+    height: 22px;
+    box-shadow: none;
+}
+body .user-a-post {
+    font-size: 12px !important;
+    color: #000;
+}
+body .user-a-post:hover{
+    color:#4f8edc;
+}
+.rply-count form .form-group {
+    margin-bottom: 10px;
+}
+
+.user-rply .modal-dialog textarea {
+    padding: 10px;
+}
+
+.tag-button:hover {
+    background-color: #4fa7e7;
+}
+/*close 03-02-2018*/

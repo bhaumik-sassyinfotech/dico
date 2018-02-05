@@ -44,6 +44,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <div class="upload-btn-wrapper">
+                                        <button class="upload-btn">Upload Files</button>
+                                        <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
+                                    </div>
+                                </div>    
+                                <div class="form-group">
                                     <div class="btn-wrap-div">
                                         <input type="submit" name="save" id="save" class="st-btn" value="Submit" />
                                         <a href="{{ route('company.index') }}" class="st-btn">Back</a>

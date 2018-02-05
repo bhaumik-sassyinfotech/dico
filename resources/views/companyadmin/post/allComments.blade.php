@@ -86,7 +86,7 @@ if (!empty($post['postComment'])) {
                     <textarea name="comment_text" id="comment_text_popup_<?= $postComment['id'] ?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $postComment['comment_text']; ?></textarea>
                     <div class="btn-wrap-div">
                         <input type="button" name="update_comment" id="update_comment_popup_<?= $postComment['id'] ?>" value="Save" onclick="updateComment(<?= $postComment['id'] ?>,'<?= 'popup_'.$postComment['id'] ?>')" class="st-btn" style="display: none;"/>
-                        <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment('<?= 'popup_'.$postComment['id']?>')" style="display: none;"/>
+                        <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary btn-st" onClick=" this.form.reset();closeComment('<?= 'popup_'.$postComment['id']?>')" style="display: none;"/>
                     </div>
                     <div class="rply-box">
                         <div class="rply-count like">

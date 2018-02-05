@@ -52,7 +52,7 @@ if (!empty($comment['commentReply'])) {
                                 <div class="fmr-10">
                                     <?php if ($commentUser['id'] == Auth::user()->id) { ?>
                                     <a class="set-edit" href="javascript:void(0)" onclick="editCommentReply(<?=$commentReply['id']?>);">e</a>
-                                    <a class="set-alarm" href="<?php echo url('/deletecommentReply',$commentReply['id']);?>">a</a>
+                                    <a class="set-alarm" href="<?php echo url('/deleteMeetingCommentReply',$commentReply['id']);?>">a</a>
                                     <?php } ?>
                                 </div>
                             </div>    

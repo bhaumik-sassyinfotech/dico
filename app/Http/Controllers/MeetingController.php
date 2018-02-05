@@ -13,7 +13,7 @@
     use App\MeetingCommentLikes;
     use App\MeetingAttachment;
     use App\User;
-    use Carbon\Carbon;
+    use Carbon;
     use Config;
     use DB;
     use Exception;
@@ -242,9 +242,13 @@
             //
             $id      = Helpers::decode_url($id);
             if(is_numeric($id)) {
+                //DB::connection()->enableQueryLog();
             $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment' => function ($q) {
                 $q->take(COMMENT_DISPLAY_LIMIT);
-            }, 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser','meetingComment.commentLike','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->withCount('meetingComment')->where('id', $id)->first();
+                $q->withCount('commentLike')->orderBy('comment_like_count', 'desc');
+            }, 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply','meetingComment.commentLike','meetingComment.commentReply.commentReplyUser','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->withCount('meetingComment')->where('id', $id)->first();
+             //dd(DB::getQueryLog());
+            //dd($meeting);
             if($meeting) {
                 $type_ids = MeetingComment::where('meeting_id',$meeting->id)->pluck('id')->toArray();
                 $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
@@ -981,6 +985,130 @@
                     DB::rollback();
 
                     return Redirect::back()->with('err_msg', $e->getMessage());
+            }
+        }
+        public function allMeetingComments(Request $request) {
+            try
+		{
+                    $validator = Validator::make($request->all(),
+                    [
+                            'meeting_id' => 'required',
+                            'offset' => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                            //return Redirect::back()->withErrors($validator)->withInput();
+                            echo json_encode(array('status' => 0, 'msg' => $validator->errors()->all()));
+                    } else {
+                            if (Auth::user()) {
+                                    $meeting_id = $request->input('meeting_id');
+                                    $offset = $request->input('offset');
+                                    //$comments = Comment::with('commentUser')->where('post_id',$post_id)->take($offset)->get();
+                                    $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingComment', 'meetingComment.commentUser', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser','meetingComment.commentLike','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->where('id', $meeting_id)->first();
+                                    if ($meeting) {
+                                            $html = view($this->folder . '.meeting.allComments', compact('meeting'));
+                                            echo json_encode(array('status' => 1, 'msg' => '', 'html' => $html->render()));
+                                    } else {
+                                            echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                                    }
+                            } else {
+                                    return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                            }
+                    }
+            } catch (Exception $ex) {
+                    echo json_encode(array('status' => 2, 'msg' => $ex->getMessage()));
+            }
+        }
+        public function meeting_comment_reply(Request $request) {
+		try
+		{
+                    $validator = Validator::make($request->all(),
+                    [
+                            'comment_reply' => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                        echo json_encode(array('status' => 0, 'msg' => $validator->errors()->all()));
+                    } else {
+                            if (Auth::user()) {
+                                    $meeting_id = $request->input('meeting_id');
+                                    $user_id = Auth::user()->id;
+                                    $comment_reply = $request->input('comment_reply');
+                                    $comment_id = $request->input('comment_id');
+
+                                    $meetingData = array("user_id" => $user_id, "comment_id" => $comment_id, "comment_reply" => $comment_reply, "created_at" => Carbon\Carbon::now());
+                                    $reply_id = MeetingCommentReply::insertGetId($meetingData);
+                                    if ($reply_id) {
+                                            $commentReply = MeetingCommentReply::with('commentReplyUser')->where('id', $reply_id)->first()->toArray();
+                                            //return view($this->folder . '.post.comment', compact('commentReply','srno'));
+                                            echo json_encode(array('status' => 1, 'msg' => "Reply successfully"));
+                                    } else {
+                                            echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                                    }
+                            } else {
+                                    //$request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
+                                    //return redirect('/index');
+                                    echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                            }
+                    }
+		} catch (Exception $ex) {
+			echo json_encode(array('status' => 2, 'msg' => $ex->getMessage()));
+		}
+	}
+        public function getMeetingCommentReply(Request $request) {
+            try
+            {
+                $validator = Validator::make($request->all(),
+                        [
+                                'comment_id' => 'required',
+                        ]);
+                if ($validator->fails()) {
+                        echo json_encode(array('status' => 0, 'msg' => $validator->errors()->all()));
+                } else {
+                        $comment_id = $request->get('comment_id');
+                        $comment = MeetingComment::with(['commentReply', 'commentReply.commentReplyUser'])->where('id', $comment_id)->first();
+                        if ($comment) {
+                                $html = view($this->folder . '.meeting.commentReply', compact('comment'));
+                                echo json_encode(array('status' => 1, 'msg' => '', 'html' => $html->render()));
+                        } else {
+                                echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                        }
+                }
+            } catch (Exception $ex) {
+                echo json_encode(array('status' => 2, 'msg' => $ex->getMessage()));
+            }
+        }
+        public function meeting_comment_reply_update(Request $request) {
+            try
+		{
+                    if (Auth::user()) {
+                        $validator = Validator::make($request->all(),
+                        [
+                            'comment' => 'required',
+                        ]);
+                        if ($validator->fails()) {
+                                echo json_encode(array('status' => 0, 'msg' => $validator->errors()->all()));
+                        } else {
+                                $comment_id = $request->get('id');
+                                $comment_text = $request->get('comment');
+                                $res = MeetingCommentReply::where('id', $comment_id)->update(['comment_reply' => $comment_text]);
+                                if ($res) {
+                                        echo json_encode(array('status' => 1, 'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+                                } else {
+                                        echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                                }
+                        }
+                    } else {
+                            return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                    }
+            } catch (Exception $ex) {
+                    echo json_encode(array('status' => 2, 'msg' => $ex->getMessage()));
+            }
+        }
+        public function deleteMeetingCommentReply($id = null) {
+            $deleteCommentReply = MeetingCommentReply::where('id', $id)->delete();
+            if ($deleteCommentReply) {
+                    return Redirect::back()->with('success', 'Comment deleted successfully');
+            } else {
+                    return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
             }
         }
     }

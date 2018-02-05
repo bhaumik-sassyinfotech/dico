@@ -68,7 +68,7 @@
                                                  <div class="form-group">
                                                      <div class="btn-wrap-div">
                                                          <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportPostFlagged();">
-                                                          <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                          <input value="Cancel" class="btn btn-secondary btn-st" aria-hidden="true" data-dismiss="modal" type="reset">
                                                      </div>
                                                  </div>
                                                 </form>
@@ -158,7 +158,7 @@
                                      <div class="form-group">
                                          <div class="btn-wrap-div">
                                              <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportCommentFlagged();">
-                                              <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                              <input value="Cancel" class="btn btn-secondary btn-st" aria-hidden="true" data-dismiss="modal" type="reset">
                                          </div>
                                      </div>
                                     </form>
@@ -334,8 +334,8 @@
                                   <div class="modal-content">
                                     <div class="modal-header">
                                       <h5 class="modal-title" id="exampleModalLabel">View all comments</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                      <button type="button" class="close-button-small" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true"></span>
                                       </button>
                                     </div>
                                       <div class="modal-body" id="allcomments_box" style="height: 280px;overflow: auto;">
@@ -355,7 +355,7 @@
                             <!-- Modal content-->
                             <div class="modal-content">
                                 
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <button type="button" class="close-button-small" data-dismiss="modal"></button>
                                     <div id="commentReplyList"></div> 
                                     <div class="modal-header">
                                         <h4 class="modal-title">Comment Here</h4>
@@ -636,13 +636,6 @@ if (!empty($post->postAttachment)) {
             });
         }
     }
-    function editComment(id) {
-        $('#comment_text_' + id).removeProp('readonly').slideDown('fast');
-        $('#update_comment_' + id).css('display', 'inline-block');
-        $('#comment_text_'+id).css('background-color','white');
-        $("#comment_disp_"+id).slideUp('fast');
-        $('#cancel_comment_'+id).css('display','inline-block');
-    }
     function updateComment(id,elementid) {
         if($('#commentbox_form').valid() == 1) {
             var comment = $('#comment_text_'+elementid).val();
@@ -673,25 +666,6 @@ if (!empty($post->postAttachment)) {
                 }
             });
         }
-    }
-    function closeComment(id) {
-        $('#comment_text_'+id).removeProp('readonly').slideUp('fast');
-        $('#update_comment_' + id).css('display', 'none');
-        $('#comment_text_'+id).css('background-color','transparent');
-        $("#comment_disp_"+id).slideDown('fast');
-        $('#cancel_comment_'+id).css('display','none');
-    }
-    function editCommentReply(id) {
-        $('#comment_reply_text_' + id).removeProp('readonly').slideDown('fast');
-        $('#update_comment_reply_' + id).css('display', 'inline-block');
-        $('#comment_reply_text_'+id).css('background-color','white');
-        $("#comment_reply_text_disp_"+id).slideUp('fast');
-        $('#cancel_comment_reply_'+id).css('display','inline-block');
-        
-        /*$('#comment_reply_text_'+id).removeProp('readonly');
-        $('#comment_reply_text_'+id).css('background-color','white');
-        $('#update_comment_reply_'+id).css('display','inline-block');
-        $('#cancel_comment_reply_'+id).css('display','inline-block');*/
     }
     function updateCommentReply(id) {
         if($('#comment_replybox_form').valid() == 1) {
@@ -728,17 +702,6 @@ if (!empty($post->postAttachment)) {
                 }
             });
         }
-    }
-    function closeCommentReply(id) {
-        /*$('#comment_reply_text_'+id).attr('readonly',true);
-        $('#comment_reply_text_'+id).css('background-color','transparent');
-        $('#update_comment_reply_'+id).css('display','none');
-        $('#cancel_comment_reply_'+id).css('display','none');*/
-        $('#comment_reply_text_' + id).removeProp('readonly').slideUp('fast');
-        $('#update_comment_reply_' + id).css('display', 'none');
-        $('#comment_reply_text_'+id).css('background-color','transparent');
-        $("#comment_reply_text_disp_"+id).slideDown('fast');
-        $('#cancel_comment_reply_'+id).css('display','none');
     }
     function reportPostFlagged() {
         if($('#post_flagged_form').valid() == 1) {

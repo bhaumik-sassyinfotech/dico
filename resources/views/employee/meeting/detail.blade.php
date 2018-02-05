@@ -63,13 +63,13 @@
                                     <!-- Modal content-->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <button type="button" class="close-button-small" data-dismiss="modal"></button>
                                             <h4 class="modal-title">Finalize meeting</h4>
                                         </div>
                                         <div class="modal-body">
                                             <form action="{{ route('finalizeMeeting') }}" method="POST" id="finalize_meeting_form">
                                                 {{ csrf_field() }}
-                                                <input type="hidden" value="{{ $meeting->id }}" name="meeting_id">
+                                                <input type="hidden" value="{{ $meeting->id }}" name="meeting_id" id="meeting_id">
                                                 <div class="row">
                                                     <div class="col-xs-12">
                                                         <label for="">Comment</label>
@@ -109,7 +109,10 @@
                             <hr class="border-in-hr">
                             <div class="container">
                                 <form name="commentbox_form" id="commentbox_form" class="form-horizontal row-border  profile-page">
-                                <?php foreach($meeting->meetingComment as $comment) { ?>
+                                <?php 
+                                if(!empty($meeting->meetingComment)) {
+                                foreach($meeting->meetingComment as $comment) { 
+                                ?>
                                 <div class="row" id="commentreply_{{$comment['id']}}">
                                     <div class="col-sm-2 user-image">
                                         <div class="img-wrap">
@@ -203,14 +206,38 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?php } ?>
+                                <?php }
+                                if($meeting->meeting_comment_count > COMMENT_DISPLAY_LIMIT) {
+                                ?>
+                                <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allMeetingComments();">View all comments</a></div>
+                                <?php  }
+                                 } ?>
+                                
+                                <div class="modal fade" id="LoadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">View all comments</h5>
+                                          <button type="button" class="close-button-small" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"></span>
+                                          </button>
+                                        </div>
+                                          <div class="modal-body" id="allcomments_box" style="height: 280px;overflow: auto;">
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                          <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
                                 </form>
                                 <!-- Start comment reply popupbox -->
                                 <div id="myModalComment" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <button type="button" class="close-button-small" data-dismiss="modal"></button>
                                     <div id="commentReplyList"></div> 
                                     <div class="modal-header">
                                         <h4 class="modal-title">Comment Here</h4>
@@ -220,9 +247,6 @@
                                             <input type="hidden" id="commentId" name="commentId">
                                             <div class="row">
                                                 <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
-                                            </div>
-                                            <div class="row">
-                                                <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -391,7 +415,7 @@
                 formData = {comment_id:commentid,_token};
                 $("#spinner").show();
                 $.ajax({
-                    url: SITE_URL + '/getCommentReply',
+                    url: SITE_URL + '/getMeetingCommentReply',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -416,20 +440,7 @@
                 swal("Error", "comment not found", "error");
             }
         }
-        function editComment(id) {
-            $('#comment_text_' + id).removeProp('readonly').slideDown('fast');
-            $('#update_comment_' + id).css('display', 'inline-block');
-            $('#comment_text_'+id).css('background-color','white');
-            $("#comment_disp_"+id).slideUp('fast');
-            $('#cancel_comment_'+id).css('display','inline-block');
-        }
-        function closeComment(id) {
-            $('#comment_text_'+id).removeProp('readonly').slideUp('fast');
-            $('#update_comment_' + id).css('display', 'none');
-            $('#comment_text_'+id).css('background-color','transparent');
-            $("#comment_disp_"+id).slideDown('fast');
-            $('#cancel_comment_'+id).css('display','none');
-        }
+        
         function updateComment(id,elementid) {
         if($('#commentbox_form').valid() == 1) {
             var comment = $('#comment_text_'+elementid).val();
@@ -451,6 +462,97 @@
                         $('#cancel_comment_'+elementid).css('display','none');
                         ajaxResponse('success',res.msg);
                         location.reload();
+                    } else {
+                        ajaxResponse('error',res.msg);
+                    }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function allMeetingComments() {
+        var _token = CSRF_TOKEN;
+        var meeting_id = $('#meeting_id').val();
+        formData = {meeting_id:meeting_id,offset:0,_token};
+        $("#spinner").show();
+        $.ajax({
+            url: SITE_URL + '/allMeetingComments',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                res = JSON.parse(response);
+                if(res.status == 1) {
+                    $("#spinner").hide();
+                    $('#allcomments_box').html(res.html);
+                    runProfanity();
+                } else {
+                    ajaxResponse('error',res.msg);
+                }
+            },
+            error: function(e) {
+                swal("Error", e, "error");
+            }
+        });
+    }
+    function comment_reply() {
+        //var commentid = $('#modalComment').attr('data-id');
+        //alert($('#comment_replybox_form').valid());
+        if($('#reply_form').valid() == 1) {
+            var commentid = $('#commentId').val();
+            var _token = CSRF_TOKEN;
+            var meeting_id = $('#meeting_id').val();
+            var comment_reply = $('#comment_reply_text').val();
+            var formData = {comment_id:commentid, comment_reply:comment_reply, meeting_id:meeting_id,_token};
+            $("#spinner").show();
+            $.ajax({
+                url: SITE_URL + '/meeting_comment_reply',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $("#spinner").hide();
+                    res = JSON.parse(response);
+                     if (res.status == 1) {
+                        ajaxResponse('success',res.msg);
+                        location.reload();
+                     } else {
+                        ajaxResponse('error',res.msg);
+                        //swal("Error", res.msg, "error");
+                     }
+                },
+                error: function(e) {
+                    swal("Error", e, "error");
+                }
+            });
+        }
+    }
+    function updateCommentReply(id) {
+        if($('#comment_replybox_form').valid() == 1) {
+            var comment = $('#comment_reply_text_'+id).val();
+            var _token = CSRF_TOKEN;
+            formData = {id:id,comment:comment,_token};
+            $("#spinner").show();
+            $.ajax({
+                url: SITE_URL + '/meeting_comment_reply_update',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $("#spinner").hide();
+                    res = JSON.parse(response);
+                    if (res.status == 1) {
+                        //swal("Success", res.msg, "success");
+                        $('#comment_reply_text_' + id).removeProp('readonly').slideUp('fast');
+                        $('#update_comment_reply_' + id).css('display', 'none');
+                        $('#comment_reply_text_'+id).css('background-color','transparent');
+                        $("#comment_reply_text_disp_"+id).slideDown('fast');
+                        $("#comment_reply_text_disp_"+id).html($('#comment_reply_text_' + id).val());
+                        $('#cancel_comment_reply_'+id).css('display','none');
+                        runProfanity();
+                        /*$('#comment_reply_text_'+id).attr('readonly',true);
+                        $('#comment_reply_text_'+id).css('background-color','transparent');
+                        $('#update_comment_reply_'+id).css('display','none');
+                        $('#cancel_comment_reply_'+id).css('display','none');*/
                     } else {
                         ajaxResponse('error',res.msg);
                     }
