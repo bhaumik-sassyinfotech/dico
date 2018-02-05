@@ -122,6 +122,7 @@
                                                 <div class="form-group">
                                                     <p class="error" id="company-warn" style="display: none;">Please select the company to which this group belongs.</p>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label class="text-15">Description:</label>
                                                     <textarea name="grp_desc" id="grp_desc" type="text" placeholder="Lorem ipsum is a dummy text in the all typesetting industry"></textarea>

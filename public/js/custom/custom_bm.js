@@ -1076,6 +1076,7 @@ $("#create_group_modal").validate({
             return false;
         }
 
+
         $.ajax({
             url: SITE_URL+"/group/addGroup",
             method: "POST",
@@ -1089,3 +1090,4 @@ $("#create_group_modal").validate({
         });
     }
 });
+

@@ -8,6 +8,9 @@ Route::get('index', 'HomeController@index');
 Auth::routes();
 Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@firstLogin')->name('security.firstLogin');
 Route::group(['middleware' => 'admin'], function () {
+	Route::get('/setting', function () {
+		return view('settings');
+	})->name('setting');
 	Route::resource('company', 'CompanyController');
 	Route::resource('security_question', 'SecurityQuestionController');
 	Route::match(['get', 'post'], '/user/alterStatus', 'UserController@alterStatus'); // user-alter-status
@@ -40,6 +43,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('view_profile/{id}', 'DashboardController@view_profile');
 	/*Group*/
 
+	Route::match(['get', 'post'], 'group/addGroup', 'GroupController@addGroup'); // add group via ajax on add user page (super admin)
 	Route::match(['get', 'post'], 'group/mygroups', 'GroupController@myGroupGrid');
 	Route::match(['get', 'post'], 'group/search', 'GroupController@searchGroup');
 	Route::match(['get', 'post'], 'group/list', 'GroupController@groupListing');
@@ -50,6 +54,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('group/companyUsers', 'GroupController@companyUsers');
 	Route::resource('group', 'GroupController');
 	/*Points*/
+	Route::match(['get', 'post'], 'points/my_group_users', 'PointsController@myGroupUsers');
 	Route::match(['get', 'post'], 'points/viewList', 'PointsController@pointsIndex')->name('points.viewList');
 	Route::match(['get', 'post'], 'points/listing', 'PointsController@pointsListing')->name('points.listing');
 	Route::resource('points', 'PointsController');
@@ -106,13 +111,10 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('like_attachment_comment/{id}', 'MeetingController@like_attachment_comment');
 	Route::get('dislike_attachment_comment/{id}', 'MeetingController@dislike_attachment_comment');
 	Route::get('deleteMeetingComment/{id}', 'MeetingController@deleteMeetingComment');
-        Route::post('loadmoreallmeeting', 'MeetingController@loadmoreallmeeting');
-        Route::post('loadmoremymeeting', 'MeetingController@loadmoremymeeting');
+	Route::post('loadmoreallmeeting', 'MeetingController@loadmoreallmeeting');
+	Route::post('loadmoremymeeting', 'MeetingController@loadmoremymeeting');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');
-Route::get('/home', function () {
-	// return redirect('/index');
-	dd('dsdsdsd');
-});
+Route::get('/home', 'HomeController@index')->name('home');
 ?>

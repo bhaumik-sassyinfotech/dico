@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\CompanyPoint;
+use App\GroupUser;
 use App\Point;
 use App\UserActivity;
 use Auth;
@@ -164,6 +165,129 @@ class PointsController extends Controller {
 		if ($request->has('user_id')) {
 			$pointsDataQuery = $pointsDataQuery->where('user_id', $request->input('user_id'));
 		}
+		$pointsData = $pointsDataQuery->with('user_detail')->groupBy('activity_id', 'user_id')->get()->toArray();
+		$points_listing = [];
+
+		if (count($pointsData) && !empty($pointsData)) {
+			foreach ($pointsData as $point) {
+
+				$id = $point['user_detail']['id'];
+				$role_id = $point['user_detail']['role_id'];
+				if ($role_id > 1) {
+					if (isset($points_listing[$id])) {
+						$points_listing[$id]['activity'][$point['activity_id']] = array('user_id' => $point['user_id'],
+							'activity_id' => $point['activity_id'],
+							'points' => $point['pts']);
+					} else {
+						$points_listing[$id] = array('user_detail' => $point['user_detail']);
+						$points_listing[$id]['activity'][$point['activity_id']] = array('user_id' => $point['user_id'],
+							'activity_id' => $point['activity_id'],
+							'points' => $point['pts']);
+					}
+				}
+			}
+		}
+		// return $points_listing;
+		$sum = 0;
+		return Datatables::of($points_listing)->addColumn('name', function ($row) use (&$sum) {
+			$sum = 0;
+			return '<a href="' . url('view_profile/' . Helpers::encode_url($row['user_detail']['id'])) . '">' . $row['user_detail']['name'] . '</a>';
+		})->addColumn('post', function ($row) use (&$sum) {
+			$idea_points = 0;
+
+			$idea_id = 1;
+
+			if (isset($row['activity'][$idea_id])) {
+				$idea_points = $row['activity'][$idea_id]['points'];
+				$sum += $idea_points;
+			}
+			return '<p>' . $idea_points . '</p>';
+		})->addColumn('approved', function ($row) use (&$sum) {
+			$idea_points = 0;
+
+			$idea_id = 5;
+
+			if (isset($row['activity'][$idea_id])) {
+				$idea_points = $row['activity'][$idea_id]['points'];
+				$sum += $idea_points;
+			}
+
+			return '<p>' . $idea_points . '</p>';
+
+		})->addColumn('answers', function ($row) use (&$sum) {
+			$idea_points = 0;
+
+			$idea_id = 7;
+
+			if (isset($row['activity'][$idea_id])) {
+				$idea_points = $row['activity'][$idea_id]['points'];
+				$sum += $idea_points;
+			}
+
+			return '<p>' . $idea_points . '</p>';
+		})->addColumn('solutions', function ($row) use (&$sum) {
+			$idea_points = 0;
+
+			$idea_id = 6;
+
+			if (isset($row['activity'][$idea_id])) {
+				$idea_points = $row['activity'][$idea_id]['points'];
+				$sum += $idea_points;
+			}
+
+			return '<p>' . $idea_points . '</p>';
+		})->addColumn('comments', function ($row) use (&$sum) {
+			$idea_points = 0;
+
+			$idea_id = 3;
+
+			if (isset($row['activity'][$idea_id])) {
+				$idea_points = $row['activity'][$idea_id]['points'];
+				$sum += $idea_points;
+			}
+
+			return '<p>' . $idea_points . '</p>';
+		})->addColumn('likes', function ($row) use (&$sum) {
+			$idea_points = 0;
+
+			$idea_id = 4;
+
+			if (isset($row['activity'][$idea_id])) {
+				$idea_points = $row['activity'][$idea_id]['points'];
+				$sum += $idea_points;
+			}
+
+			return '<p>' . $idea_points . '</p>';
+		})->addColumn('vote', function ($row) use (&$sum) {
+			$idea_points = 0;
+
+			$idea_id = 2;
+
+			if (isset($row['activity'][$idea_id])) {
+				$idea_points = $row['activity'][$idea_id]['points'];
+				$sum += $idea_points;
+			}
+
+			return '<p>' . $idea_points . '</p>';
+		})->addColumn('total', function ($row) use (&$sum) {
+
+			return '<p>' . $sum . '</p>';
+		})->rawColumns(['name', 'post', 'approved', 'answers', 'solutions', 'comments', 'likes', 'vote', 'total'])->make(true);
+	}
+
+	public function myGroupUsers(Request $request) {
+
+		$currUser = Auth::user();
+
+		$user_id = $currUser->id;
+
+		$groups_ids = GroupUser::where('user_id', $user_id)->get()->pluck('group_id');
+		$group_user_ids = array_values(array_unique(GroupUser::whereIn('group_id', $groups_ids)->get()->pluck('user_id')->toArray()));
+
+		$pointsDataQuery = UserActivity::select(DB::raw('user_id ,activity_id , sum(points) as pts'));
+
+		$pointsDataQuery = $pointsDataQuery->whereIn('user_id', $group_user_ids);
+
 		$pointsData = $pointsDataQuery->with('user_detail')->groupBy('activity_id', 'user_id')->get()->toArray();
 		$points_listing = [];
 

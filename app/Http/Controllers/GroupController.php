@@ -1011,5 +1011,6 @@ class GroupController extends Controller {
             }
         }
         return Response::json($data);
+
 	}
 }
