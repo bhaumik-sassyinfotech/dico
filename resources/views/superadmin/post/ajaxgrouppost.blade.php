@@ -26,7 +26,7 @@ if (!empty($group_posts)) {
                     </div>
                 </div>
                 <div class="panel-body meetings">
-                    <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                    <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity post-title">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                     <div class="user-wrap"> 
                         <div class="user-img"> 
                             @if(empty($grouppost['post_user']['profile_image']) || $grouppost['is_anonymous'] == 1)
@@ -36,7 +36,7 @@ if (!empty($group_posts)) {
                             @endif
                         </div> 
                         <p class="user-icon">-<?php if($grouppost['is_anonymous'] == 0) { ?>
-                            <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
+                            <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}" class="user-a-post">{{$grouppost['post_user']['name']}}</a>
                             <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                     </div>
                     <fieldset>

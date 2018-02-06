@@ -26,12 +26,18 @@ $("#company_form").validate({
     rules: {
         company_name: {
             required: true,
-        }
+        }/*,
+        file_upload: {
+            required: true,
+        }*/
     },
     messages: {
         company_name: {
             required: 'This field is required',
-        }
+        }/*,
+        file_upload: {
+            required: 'This field is required',
+        }*/
     }
 });
 //==================== security question =====================//

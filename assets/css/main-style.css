@@ -520,7 +520,7 @@ body .group-tabs[class*="panel-"] .panel-primary .panel-body {
   border: 1px solid #a3a3a3;
   clear: both;
   min-height: 192px;
-  padding: 25px 0;
+  padding: 23px 0;
 }
 .group-images-left .group-item {
   border-right: 1px solid #a3a3a3;
@@ -2501,7 +2501,7 @@ form .form-group:last-child {
 
 
 .super-user .panel-heading {
-  background-color: #314a5d;
+  background-color: #34495e;
 }
 .gallery .list-block .panel-heading > h4 {
   display: block;
@@ -2621,11 +2621,11 @@ form .form-group:last-child {
 }
 
 .employee .panel-heading {
-  background-color: #5bc3ea;
+  background-color:#76c3ed;
 }
 
 .admin .panel-heading {
-  background-color: #5f7ea1;
+  background-color: #677fa5;
 }
 
 .admin .grid-details > h4.text-color {
@@ -3574,12 +3574,6 @@ body .idea-page #page-heading h1.icon-mark {
   margin: 0 0 15px;
 }
 
-.profile-page .modal-dialog .modal-content,
-.padding-box .modal-dialog .modal-content
-{
-  max-height: 420px;
-}
-
 .follow-name {
   float: left;
   padding-top: 10px;
@@ -3970,7 +3964,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
     display: block;
 }
 .all-group-list .trophy.setting-icon .pull-right a {
-    margin: 10px 15px;
+    margin: 0px 15px;
 }
 .point-page.user-profile .table tr td {
     padding: 15px 0;
@@ -4715,16 +4709,7 @@ ul.tagit {
     padding: 10px 0px 10px 30px;
     text-align: center;
 }
-.navbar-brand:before {
-    background: url(../img/icon-logo.png) no-repeat center;
-    position: absolute;
-    content: "";
-    height: 45px;
-    width: 35px;
-    left: 0;
-    top: 0;
-    background-size: 80% auto;
-}
+
 .navbar-brand {
     height: 100%;
     width: 100%;
@@ -4733,7 +4718,7 @@ ul.tagit {
     font-size: 24px !important;
     line-height: 110% !important;
     display: inline-block;
-    padding-left: 40px;
+    padding-left: 15px;
     text-transform: uppercase;
     position: relative;
     font-family: 'Open Sans', sans-serif !important;
@@ -4758,6 +4743,7 @@ body .member-wrap .member-details .text-12:hover {
 }
 .profile-page .modal-header {
     padding: 0;
+    border: none;
 }
 .profile-page .list-block fieldset {
     min-height: 80px;
@@ -4847,4 +4833,10 @@ body .user-a-post:hover{
 .tag-button:hover {
     background-color: #4fa7e7;
 }
+.navbar-brand img {
+    width: 85px; 
+    height: 30px; 
+     display: inline-block; 
+}
+
 /*close 03-02-2018*/

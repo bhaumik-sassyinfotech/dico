@@ -82,7 +82,7 @@
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              </div>
 
@@ -201,7 +201,7 @@ if (!empty($post['post_tag'])) {
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body meetings">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity post-title">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
                                                                     @if(empty($grouppost['post_user']['profile_image']) || $grouppost['is_anonymous'] == 1)
@@ -211,7 +211,7 @@ if (!empty($post['post_tag'])) {
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($grouppost['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}" class="user-a-post">{{$grouppost['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                                                                 </div>
                                                                 <fieldset>
@@ -324,7 +324,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body meetings">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity post-title">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
                                                                     @if(empty($mypost['post_user']['profile_image']) || $mypost['is_anonymous'] == 1)
@@ -334,7 +334,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($mypost['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}">{{$mypost['post_user']['name']}}</a>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}" class="user-a-post">{{$mypost['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                                                                 </div>
 

@@ -59,7 +59,7 @@
                                                     <h4 class="icon">{{ $type }} Meeting</h4>
                                                     <div class="pull-right">
                                                         <a href="#"> <i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                        <!-- <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>-->
                                                     </div>
                                                 </div>
                                                 <div class="panel-body">
@@ -132,8 +132,7 @@
                                                         <h4 class="icon">{{ $type }} Meeting</h4>
                                                         <div class="pull-right">
                                                             <a href="#"> <i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-exclamation-triangle"
-                                                                           aria-hidden="true"></i></a>
+                                                            <!-- <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>-->
                                                         </div>
                                                     </div>
                                                     <div class="panel-body">

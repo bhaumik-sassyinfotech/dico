@@ -15,7 +15,7 @@
             <div class="container">
                 <div class="row">
                     <div id="company-from">
-                        <form name="company_form" class="common-form" id="company_form" method="post" action="{{route('company.store')}}">
+                        <form name="company_form" class="common-form" id="company_form" method="post" action="{{route('company.store')}}" enctype="multipart/form-data">
                             {{ csrf_field() }}
                                 <div class="form-group">
                                     <label class="text-15">Company Name<span>*</span></label>
@@ -44,11 +44,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <p>Company Logo<span>*</span></p>
                                     <div class="upload-btn-wrapper">
                                         <button class="upload-btn">Upload Files</button>
                                         <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                     </div>
-                                </div>    
+                                </div> 
                                 <div class="form-group">
                                     <div class="btn-wrap-div">
                                         <input type="submit" name="save" id="save" class="st-btn" value="Submit" />

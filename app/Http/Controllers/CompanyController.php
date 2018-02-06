@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Helpers;
-    use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use App\Company;
 use App\Point;
 use App\CompanyPoint;
@@ -49,10 +49,16 @@ class CompanyController extends Controller {
     }
 
     public function store(Request $request) {
+        //dd($request->all());
         try {
-            $this->validate($request, [
-                'company_name' => 'required|max:255|unique:companies,company_name'
+            $validator = Validator::make($request->all(),
+            [
+                'company_name' => 'required|max:255|unique:companies,company_name',
+                'file_upload' => 'required'
             ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator)->withInput();
+            }
             if($request->input('allow_anonymous')) {
                 $allow_anonymous = 1;
             } else {
@@ -71,6 +77,20 @@ class CompanyController extends Controller {
             $company->allow_add_admin = $allow_add_admin;
             $company->company_admin = 1;//$request->input('company_admin');
             $company->created_at = Carbon\Carbon::now();
+            $file = $request->file('file_upload');
+            if ($file != "")
+            {
+                $postData = array();
+                //echo "here";die();
+                $fileName        = $file->getClientOriginalName();
+                $extension       = $file->getClientOriginalExtension();
+                $folderName      = '/uploads/';
+                $destinationPath = public_path() . $folderName;
+                $safeName        = str_random(10) . '.' . $extension;
+                $file->move($destinationPath , $safeName);
+                //$attachment = new Attachment;
+                $company->company_logo = $safeName;
+            }
             $company->save();
             $points = Point::select('activity','points','notes',DB::raw($company->id.' as company_id'))->whereNull('deleted_at')->get()->toArray();
             $company_points = CompanyPoint::insert($points);
@@ -111,8 +131,27 @@ class CompanyController extends Controller {
             }
 
             $postData = array('company_name'=>$request->input('company_name'),'description'=>$request->input('company_description'),'allow_anonymous'=>$allow_anonymous,'allow_add_admin'=>$allow_add_admin,'company_admin'=>1,'updated_at'=>Carbon\Carbon::now());
+            $file = $request->file('file_upload');
+            if ($file != "")
+            {
+                $postData = array();
+                //echo "here";die();
+                $fileName        = $file->getClientOriginalName();
+                $extension       = $file->getClientOriginalExtension();
+                $folderName      = '/uploads/company_logo/';
+                $destinationPath = public_path() . $folderName;
+                $safeName        = str_random(10) . '.' . $extension;
+                $file->move($destinationPath , $safeName);
+                //$attachment = new Attachment;
+                $postData['company_logo'] = $safeName;
+            }
             $res = $company->where('id', $id)->update($postData);
             if ($res) {
+                if ($file != "") {
+                    if(file_exists(UPLOAD_PATH.$request->company_logo)) {
+                        unlink(UPLOAD_PATH.$request->company_logo);
+                    }
+                }
                 return redirect()->route('company.index')->with('success', 'Company '.Config::get('constant.UPDATE_MESSAGE'));
             } else {
                 return redirect()->route('company.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));

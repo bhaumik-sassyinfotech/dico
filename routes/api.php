@@ -33,3 +33,5 @@ define('DEFAULT_ATTACHMENT_IMAGE', 'assets/img/uploadfiles1.PNG');
 define('DEFAULT_LOADER_IMAGE', 'assets/img/spinner.gif');
 define('IMAGE_PATH', 'assets/img');
 define('DATETIME_FORMAT', 'm/d/Y H:i:s');
+define('DEFAULT_COMPANY_LOGO', 'assets/img/logo.png');
+define('UPLOAD_PATH', 'public/uploads/company_logo/');

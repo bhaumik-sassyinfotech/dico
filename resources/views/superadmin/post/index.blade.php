@@ -12,7 +12,7 @@
             <h1 class="tp-bp-0">Post</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">News Post</span></a>
+                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">New Post</span></a>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
 
@@ -29,8 +29,8 @@
                             <h4>
                                 <ul class="nav nav-tabs">
                                        <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Posts</span></a></li>
-                                       <?php /*<li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
-                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>*/?>
+                                       <li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
+                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>
                                 </ul>
                             </h4>
                             <div class="pull-right search-form">
@@ -82,7 +82,7 @@
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              </div>
 
@@ -160,6 +160,7 @@ if (!empty($post['post_tag'])) {
 }
 ?>
                                     <input type="hidden" id="count_post" value="{{$count_post}}">
+
                                     <?php if (!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
 	?>
                                     <div class="all_viewmore col-md-12">
@@ -167,7 +168,6 @@ if (!empty($post['post_tag'])) {
                                     </div>
                                     <?php
 }?>
-                                    
                                 </div>
                                 <!-- END ALL POST -->
                                 <!-- START GROUP POST -->
@@ -201,7 +201,7 @@ if (!empty($post['post_tag'])) {
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body meetings">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity post-title">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
                                                                     @if(empty($grouppost['post_user']['profile_image']) || $grouppost['is_anonymous'] == 1)
@@ -211,7 +211,7 @@ if (!empty($post['post_tag'])) {
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($grouppost['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}">{{$grouppost['post_user']['name']}}</a>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}" class="user-a-post">{{$grouppost['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                                                                 </div>
                                                                 <fieldset>
@@ -292,7 +292,6 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                     <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">View More</a></div>
                                     <?php
                                         }?>
-                                    
                                 </div>
                                 <!-- END GROUP POST -->
                                 <!-- START USER POST -->
@@ -325,7 +324,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body meetings">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity post-title">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
                                                                     @if(empty($mypost['post_user']['profile_image']) || $mypost['is_anonymous'] == 1)
@@ -335,7 +334,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($mypost['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}">{{$mypost['post_user']['name']}}</a>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}" class="user-a-post">{{$mypost['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                                                                 </div>
 
@@ -405,11 +404,11 @@ if (!empty($mypost['post_tag'])) {
                                                        </div>
                                                    </div>
                                     <?php
-}
-} else {
-	echo "No post found.";
-}
-?>
+                                    }
+                                    } else {
+                                            echo "No post found.";
+                                    }
+                                    ?>
                                     <input type="hidden" id="count_mypost" value="{{$count_user_post}}">
                                     <?php
 if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
@@ -594,7 +593,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                 error: function() {
                 }
             });
-        } else {
+        } else if($('#groups').hasClass('active')) {
             var id = $('#load_grouppost').attr('data-id');
             var offset = 0;
             var searchText = $('#search_text').val();

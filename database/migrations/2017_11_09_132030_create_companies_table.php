@@ -17,6 +17,7 @@ class CreateCompaniesTable extends Migration
             $table->increments('id')->unsigned();
             $table->string('company_name','255')->unique();
             $table->text('description')->nullable();
+            $table->string('company_logo','255');
             $table->boolean('allow_anonymous')->default(0);	
             $table->boolean('allow_add_admin')->default(0);
             $table->integer('company_admin');	

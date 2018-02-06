@@ -47,6 +47,24 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <p>Company Logo<span>*</span></p>
+                        <div class="upload-btn-wrapper">
+                            <button class="upload-btn">Upload Files</button>
+                            <input type="file" name="file_upload" id="file_upload" class="file-upload__input" value="{{asset(UPLOAD_PATH.$company->company_logo)}}">
+                        </div>
+                    </div>
+                    <div class="preview-box">
+                        <?php
+                            if(empty($company->company_logo)) {
+                                $company_logo = DEFAULT_COMPANY_LOGO;
+                            } else {
+                                $company_logo = UPLOAD_PATH.$company->company_logo;
+                            }
+                        ?>
+                        <input type="hidden" id="company_logo" name="company_logo" value="{{$company->company_logo}}">
+                        <img src="{{asset($company_logo)}}" id="user-profile" height="135" width="135">
+                    </div>
+                    <div class="form-group">
                         <div class="btn-wrap-div">
                             <input type="submit" name="save" id="save" class="st-btn" value="Submit" />
                             <a href="{{ route('company.index') }}" class="st-btn">Back</a>

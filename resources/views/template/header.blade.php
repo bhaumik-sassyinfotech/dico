@@ -1,10 +1,17 @@
 <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
         <a id="leftmenu-trigger" class="tooltips" data-toggle="tooltip" data-placement="right" title="Toggle Sidebar"></a>
-
+        <?php
+            if(!empty(Auth::user()->company->company_logo)) {
+                $companyLogo = Auth::user()->company->company_logo;
+            } else {
+                $companyLogo = DEFAULT_COMPANY_LOGO;
+            }
+        ?>
         <div class="navbar-header pull-left">
-            <a class="navbar-brand" href="{{url('/')}}">Dico</a>
+            <a class="navbar-brand" href="{{url('/')}}"><img src="{{asset($companyLogo)}}"></a>
         </div>
         <?php
+        //dd(Auth::user()->company);
 if (!empty(Auth::user()->profile_image)) {
 	$profile_pic = PROFILE_PATH . Auth::user()->profile_image;
 } else {

@@ -36,8 +36,7 @@
                             
                             <div class="form-group">
                                 <label class="text-15">Full Name<span>*</span></label>
-                                <input type="text" name="user_name" id="user_name" value="{{$user->name}}" placeholder="Full Name"
-                                       class="form-control required">
+                                <input type="text" name="user_name" id="user_name" value="{{$user->name}}" placeholder="Full Name" class="form-control required">
                             </div>
                             
                             <div class="form-group">
@@ -89,6 +88,7 @@
                                     </label>
                                 </div>
                             </div>
+                            
                             <div class="form-group">
                                 <div class="btn-wrap-div">
                                     <input type="submit" class="st-btn" value="Submit" />
