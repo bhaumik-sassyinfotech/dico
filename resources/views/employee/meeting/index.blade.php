@@ -59,12 +59,12 @@
                                                     <h4 class="icon">{{ $type }} Meeting</h4>
                                                     <div class="pull-right">
                                                         <a href="#"> <i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                        <!-- <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>-->
                                                     </div>
                                                 </div>
                                                 <div class="panel-body">
-                                                    <h4><a href="{{ route('meeting.show',[Helpers::encode_url($meeting->id)]) }}" class="profanity">{{ $meeting->meeting_title }}</a></h4>
-                                                    <p class="user-icon"> - <a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}">{{ $meeting->meetingCreator->name }}</a><span>on {{ date(DATE_FORMAT,strtotime($meeting->created_at)) }}</span></p>
+                                                    <h4><a href="{{ route('meeting.show',[Helpers::encode_url($meeting->id)]) }}" class="profanity post-title">{{ $meeting->meeting_title }}</a></h4>
+                                                    <p class="user-icon"> - <a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}" class="user-a-post">{{ $meeting->meetingCreator->name }}</a><span>on {{ date(DATE_FORMAT,strtotime($meeting->created_at)) }}</span></p>
                                                     <fieldset>
                                                         <p class="text-12 desc-content profanity" id="desc_content_{{$meeting->id}}">{{ nl2br($meeting->meeting_description) }}</p>
                                                     </fieldset>
@@ -132,13 +132,12 @@
                                                         <h4 class="icon">{{ $type }} Meeting</h4>
                                                         <div class="pull-right">
                                                             <a href="#"> <i class="fa fa-bell-o" aria-hidden="true"></i></a>
-                                                            <a href="#"><i class="fa fa-exclamation-triangle"
-                                                                           aria-hidden="true"></i></a>
+                                                            <!-- <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>-->
                                                         </div>
                                                     </div>
                                                     <div class="panel-body">
-                                                        <h4><a href="{{ route('meeting.show',[Helpers::encode_url($meeting->id)]) }}" class="profanity">{{ $meeting->meeting_title }}</a></h4>
-                                                        <p class="user-icon"> - {{ $meeting->meetingCreator->name }}<span>on {{ date(DATE_FORMAT,strtotime($meeting->created_at)) }}</span></p>
+                                                        <h4><a href="{{ route('meeting.show',[Helpers::encode_url($meeting->id)]) }}" class="profanity post-title">{{ $meeting->meeting_title }}</a></h4>
+                                                        <p class="user-icon"> - <a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}" class="user-a-post">{{ $meeting->meetingCreator->name }}<span>on {{ date(DATE_FORMAT,strtotime($meeting->created_at)) }}</span></a></p>
                                                         <fieldset>
                                                             <p class="text-12 profanity" id="desc_mycontent_{{$meeting->id}}">{{ nl2br($meeting->meeting_description) }}</p>
                                                         </fieldset>

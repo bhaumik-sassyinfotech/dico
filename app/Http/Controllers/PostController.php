@@ -81,10 +81,10 @@ class PostController extends Controller {
 					                        'post_title' => 'required|max:'.POST_TITLE_LIMIT,
 				*/
 				$validator = Validator::make($request->all(),
-					[
-						'post_type' => 'required',
-						'post_title' => 'required|max:' . POST_TITLE_LIMIT,
-					]);
+                                [
+                                        'post_type' => 'required',
+                                        'post_title' => 'required|max:' . POST_TITLE_LIMIT,
+                                ]);
 				if ($validator->fails()) {
 					return Redirect::back()->withErrors($validator)->withInput();
 				}
@@ -221,39 +221,39 @@ class PostController extends Controller {
 	public function loadmorepost(Request $request) {
 		try
 		{
-			if ($request) {
-				$offset = $request->get('offset');
-				$query = Post::with(['postUser', 'postLike', 'postDisLike', 'postComment', 'postTag.tag', 'postUserLike' => function ($q) {
-					return $q->where('user_id', Auth::user()->id);
-				}, 'postUserDisLike' => function ($q) {
-					return $q->where('user_id', Auth::user()->id);
-				}, 'postAttachment', 'postFlagged' => function ($q) {
-					return $q->where('user_id', Auth::user()->id);
-				}])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id', Auth::user()->company_id);
-				if (!empty($request->get('search_text'))) {
-					$search_text = $request->get('search_text');
-                                        $query->whereNested(function($q) use ($search_text) {
-                                            $q->where('post_title', 'like', '%' . $search_text . '%');
-                                            $q->orWhere('post_description', 'like', '%' . $search_text . '%');
-                                        });
-					//$query->where('post_title', 'like', '%' . $search_text . '%');
-					//$query->orWhere('post_description', 'like', '%' . $search_text . '%');
-				}
-				$query->orderBy('post_like_count', 'desc');
-				$count_post = count($query->get());
-				$posts = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
-				//echo "<pre>";print_r($posts);die();
-				$html = view::make($this->folder . '.post.ajaxpost', compact('posts', 'count_post'));
-				$output = array('html' => $html->render(), 'count' => $count_post);
-				return $output;
-			} else {
-				return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
-			}
-		} catch (\exception $e) {
-			DB::rollback();
+                    if ($request) {
+                            $offset = $request->get('offset');
+                            $query = Post::with(['postUser', 'postLike', 'postDisLike', 'postComment', 'postTag.tag', 'postUserLike' => function ($q) {
+                                    return $q->where('user_id', Auth::user()->id);
+                            }, 'postUserDisLike' => function ($q) {
+                                    return $q->where('user_id', Auth::user()->id);
+                            }, 'postAttachment', 'postFlagged' => function ($q) {
+                                    return $q->where('user_id', Auth::user()->id);
+                            }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id', Auth::user()->company_id);
+                            if (!empty($request->get('search_text'))) {
+                                    $search_text = $request->get('search_text');
+                                    $query->whereNested(function($q) use ($search_text) {
+                                        $q->where('post_title', 'like', '%' . $search_text . '%');
+                                        $q->orWhere('post_description', 'like', '%' . $search_text . '%');
+                                    });
+                                    //$query->where('post_title', 'like', '%' . $search_text . '%');
+                                    //$query->orWhere('post_description', 'like', '%' . $search_text . '%');
+                            }
+                            $query->orderBy('post_like_count', 'desc');
+                            $count_post = count($query->get());
+                            $posts = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                            //echo "<pre>";print_r($posts);die();
+                            $html = view::make($this->folder . '.post.ajaxpost', compact('posts', 'count_post'));
+                            $output = array('html' => $html->render(), 'count' => $count_post);
+                            return $output;
+                    } else {
+                            return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                    }
+            } catch (\exception $e) {
+                    DB::rollback();
 
-			return Redirect::back()->with('err_msg', $e->getMessage());
-		}
+                    return Redirect::back()->with('err_msg', $e->getMessage());
+            }
 	}
 
 	public function loadmoremypost(Request $request) {
@@ -558,13 +558,7 @@ class PostController extends Controller {
 		$currUser = Auth::user();
 		$id = Helpers::decode_url($id);
 		$view = Helpers::postViews($id, Auth::user()->id);
-		//DB::connection()->enableQueryLog();
-		/*$post = Post::with(['postUser' => function($q) {
-	                    $q->withCount('following');
-	                }])->get();
-
-*/
-		$post = Post::with(['company', 'postUser.following', 'postLike', 'postDisLike', 'postUserLike' => function ($q) {
+		$post = Post::with(['company','postUser.following', 'postLike', 'postDisLike', 'postUserLike' => function ($q) {
 			$q->where('user_id', Auth::user()->id)->first();
 		}, 'postUserDisLike' => function ($q) {
 			$q->where('user_id', Auth::user()->id)->first(); // '=' is optional

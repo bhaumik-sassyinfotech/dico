@@ -2,7 +2,7 @@
         <a id="leftmenu-trigger" class="tooltips" data-toggle="tooltip" data-placement="right" title="Toggle Sidebar"></a>
         <?php
             if(!empty(Auth::user()->company->company_logo)) {
-                $companyLogo = Auth::user()->company->company_logo;
+                $companyLogo = UPLOAD_PATH.Auth::user()->company->company_logo;
             } else {
                 $companyLogo = DEFAULT_COMPANY_LOGO;
             }

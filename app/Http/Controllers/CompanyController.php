@@ -84,7 +84,7 @@ class CompanyController extends Controller {
                 //echo "here";die();
                 $fileName        = $file->getClientOriginalName();
                 $extension       = $file->getClientOriginalExtension();
-                $folderName      = '/uploads/';
+                $folderName      = '/uploads/company_logo/';
                 $destinationPath = public_path() . $folderName;
                 $safeName        = str_random(10) . '.' . $extension;
                 $file->move($destinationPath , $safeName);

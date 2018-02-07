@@ -58,7 +58,7 @@ if (!empty($post['postComment'])) {
                                     }
                                     ?> 
                                     <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                        <?php if ($commentUser['id'] == Auth::user()->id || $commentUser['role_id'] > Auth::user()->role_id) { ?>
+                                        <?php if ($commentUser['id'] == Auth::user()->id || $commentUser['role_id'] > Auth::user()->role_id || count(Auth::user()->group) > 0) { ?>
                                             <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
                                         <?php } else { ?>
                                             Correct  
