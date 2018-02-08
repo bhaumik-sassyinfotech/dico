@@ -118,6 +118,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::post('getMeetingCommentReply','MeetingController@getMeetingCommentReply');
         Route::post('meeting_comment_reply_update','MeetingController@meeting_comment_reply_update');
         Route::get('deleteMeetingCommentReply/{id}','MeetingController@deleteMeetingCommentReply');
+        Route::post('checkEmailExists','DashboardController@checkEmailExists');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');

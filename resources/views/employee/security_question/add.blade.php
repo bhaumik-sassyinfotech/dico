@@ -86,7 +86,7 @@
                                     <input type="file" class="fileinput" name="profile_picture" id="image">
                                     <label style="left: 139px;">Upload Photo</label>
                                     <div class="preview_box">
-                                        <img src="{{ asset('assets/img/emplye-image.png') }}" id="preview_img">
+                                        <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}" id="preview_img">
                                     </div>
                                 </div>
                             </div>

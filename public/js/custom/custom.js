@@ -187,7 +187,7 @@ $("#user_form").validate({
         },
         user_email: {
             required: 'This field is required',
-            email: 'Enter valid email',
+            email: 'Enter valid email'
         },
         company_id: {
             required: 'This field is required',
@@ -195,7 +195,10 @@ $("#user_form").validate({
         role_id: {
             required: 'This field is required'
         }
-    }
+    },
+    submitHandler: function(form) {
+            form.submit();
+         }
 });
 $('#user-search-form').on('submit', function (e) {
     userTable.draw();
@@ -457,4 +460,38 @@ function closeCommentReply(id) {
         $("#comment_reply_text_disp_"+id).slideDown('fast');
         $('#cancel_comment_reply_'+id).css('display','none');
     }
+     function checkEmail(email) {
+        if (email)
+        {
+            $("#spinner").show();
+            $.ajax({
+                url: SITE_URL + '/checkEmailExists',
+                type: "POST",
+                data: {email: email,_token: CSRF_TOKEN},
+                success: function (data)
+                {
+                    var response = JSON.parse(data);
+                    if (response.status == 1)
+                    {
+                        $('#emailerror').removeClass('hidden');
+                        $('#emailerror').css({'display': 'block', 'color': '#FF0000'});
+                        $('#emailerror').text(response.msg);
+                        $('#for_me_emailerror').val('1');//exist
+                        return  false;
+                    } else
+                    {
+                        $('#emailerror').text('');
+                        $('#emailerror').hide();
+                        $('#for_me_emailerror').val('2');//not exist
+                    }
+                },
+                complete: function (data) {
+                    $("#spinner").hide();
+                }
+            });
+        } else
+        {
+            $('#emailerror').hide();
+        }
+        }
 //============================================================//

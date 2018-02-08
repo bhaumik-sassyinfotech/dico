@@ -10,27 +10,37 @@
                         <div id="follow-box">
                             <div class="preview-box">
                                 <?php
-$profile_image = '';
-if (!empty($user->profile_image)) {
-	$profile_image = asset(PROFILE_PATH . $user->profile_image);
-} else {
-	$profile_image = asset('public/assets/demo/avatar/jackson.png');
-}
-?>
+                                    $profile_image = '';
+                                    if (!empty($user->profile_image)) {
+                                            $profile_image = asset(PROFILE_PATH . $user->profile_image);
+                                    } else {
+                                            $profile_image = asset('public/assets/demo/avatar/jackson.png');
+                                    }
+                                    ?>
                                 <img src="{{ $profile_image }}" id="user-profile">
                             </div>
-
-                            @if(Auth::user()->id != $user->id)
-                                @if(!empty($user->following) && count($user->following) > 0)
-                                    @if($user->following[0]->status == 1)
+                            <?php //dd($user->followers); ?>
+                            <?php
+                                if(!empty($follow->followers) && count($follow->followers) > 0) {
+                            ?>
+                            <a href="{{ url('/unfollow/'.$user->id) }}">Unfollow</a>
+                            <?php
+                                } else {
+                            ?>
+                            <a href="{{ url('/follow/'.$user->id) }}"> Follow</a>
+                            <?php } ?>
+                            <?php /*if(Auth::user()->id != $user->id) {
+                                 ?>@if(!empty($user->followers) && count($user->followers) > 0 && in_array(Auth::user()->id, array_pluck($user->followers,'sender_user_id')))
+                                    @if($user->followers[0]->status == 1)
                                         <a href="{{ url('/unfollow/'.$user->id) }}">Unfollow</a>
                                     @else
                                         <a href="{{ url('/follow/'.$user->id) }}"> Follow</a>
                                     @endif
                                 @else
                                     <a href="{{ url('/follow/'.$user->id) }}" >Follow</a>
-                                @endif
-                            @endif
+                                @endif <?php
+                            }*/
+                            ?>
                             <div style="display: none;" class="modal fade" id="followers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -38,7 +48,7 @@ if (!empty($user->profile_image)) {
                                             <button type="button" data-dismiss="modal" aria-hidden="true"></button>
                                             <h3>Followers({{ (isset($user->followers)) ? count($user->followers) : 0 }})</h3>
                                             <div class="followers-list">
-                                                @if(isset($user->followers))
+                                                @if(!empty($user->followers) && count($user->followers) > 0)
                                                     @foreach($user->followers as $follower)
                                                         <div class="followers-details">
                                                             <div class="follow-img">
@@ -87,25 +97,26 @@ if (!empty($follower->followUser->profile_image)) {
                                             <button type="button" data-dismiss="modal" aria-hidden="true"></button>
                                             <h3>Following({{ (isset($user->following)) ? count($user->following) : 0 }})</h3>
                                             <div class="followers-list">
-                                                @if(isset($user->following))
-                                                    @foreach($user->following as $following)
+                                                <?php
+                                                if(count($user->following) > 0) {
+                                                    foreach($user->following as $following) { ?>
                                                         <div class="followers-details">
                                                             <div class="follow-img">
                                                                 <?php
-$profile_image = '';
-if (!empty($following->followingUser->profile_image)) {
-	$profile_image = asset(PROFILE_PATH . $following->followingUser->profile_image);
-} else {
-	$profile_image = asset('public/assets/demo/avatar/jackson.png');
-}
-?>
+                                                                $profile_image = '';
+                                                                if (!empty($following->followingUser->profile_image)) {
+                                                                        $profile_image = asset(PROFILE_PATH . $following->followingUser->profile_image);
+                                                                } else {
+                                                                        $profile_image = asset('public/assets/demo/avatar/jackson.png');
+                                                                }
+                                                                ?>
                                                                 <img src="{{ $profile_image }}" alt="followers" >
                                                             </div>
                                                             <div class="follow-name">
                                                                 <p>{{ $following->followingUser->name }}</p>
                                                                 <a href="mailto:{{ $following->followingUser->email }}">{{ $following->followingUser->email }}</a>
                                                             </div>
-                                                            @php
+                                                            <?php
                                                                 $str='';
                                                                 if($following->followingUser->role_id == '1')
                                                                     $str = 'Super Admin';
@@ -113,15 +124,18 @@ if (!empty($following->followingUser->profile_image)) {
                                                                     $str = 'Company Admin';
                                                                 else
                                                                     $str='Employee';
-                                                            @endphp
+                                                            ?>
                                                             <p class="jobs-title emp">{{ $str }}</p>
                                                         </div>
-                                                    @endforeach
-                                                @else
+                                                <?php
+                                                    } 
+                                                    }
+                                                else { ?>
                                                     <div class="followers-details">
                                                         <p class="jobs-title emp">No followers yet</p>
                                                     </div>
-                                                @endif
+                                                <?php  } 
+                                                ?>
                                             </div>
 
                                         </div>

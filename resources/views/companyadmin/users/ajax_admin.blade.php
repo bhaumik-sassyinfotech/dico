@@ -35,28 +35,28 @@ $profile_pic = asset('assets/img/super-user.PNG');
                             <img src="{{ $profile_pic }}" alt="super-user">
                         </div>
                         <div class="grid-details">
-                            <h4><?=$user['user_detail']['name'];?></h4>
+                            <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user['id']))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user['id']))}}"><?=$user['user_detail']['name'];?></a></h4>
                             <a href="mailto:{{ $user['user_detail']['email'] }}">{{ $user['user_detail']['email'] }}</a>
                             <h4>Admin</h4>
                         </div>
 
                     </fieldset>
                     <div class="btn-wrap">
-                    @php
+                        <?php
                         $uid = $user['user_detail']['id'];
                         $text = "";
-                        if(count($user['user_detail']['following']) > 0 && !empty($user['user_detail']['following']))
+                        if(count($user['user_detail']['followers']) > 0 && !empty($user['user_detail']['followers']) && in_array(Auth::user()->id,array_pluck($user['user_detail']['followers'],'sender_user_id')))
+                        //if(count($user['user_detail']['following']) > 0 && !empty($user['user_detail']['following']))
                         {
                             $text = "Following";
                         } else {
                             $text = "Follow";
                         }
                         $url = url('view_profile/'.Helpers::encode_url($uid));
-                    @endphp
-
-                    <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
-                    <?php $pts = Helpers::user_points($uid);?>
-                    <a href="#">Point:{{ $pts['points'] }}</a>
+                        ?>
+                        <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
+                        <?php $pts = Helpers::user_points($user['user_detail']['id']);?>
+                        <a href="#">Point:{{ $pts['points'] }}</a>
                     </div>
                     <div class="panel-body-wrap">
                         <div class="follower-text pull-left">
@@ -77,11 +77,12 @@ $profile_pic = asset('assets/img/super-user.PNG');
 </div>
 <?php
 } //if-end
-
 else {
 	?>
-    <div class="col-xs-12">
-        <p>No data found.</p>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>No Data found</p>
+        </div>
     </div>
 <?php
 }

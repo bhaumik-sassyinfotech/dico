@@ -139,6 +139,10 @@ class DashboardController extends Controller {
 			$company_id = $view_user->company_id;
 			$user = User::with(['followers', 'following', 'followers.followUser', 'following.followingUser'])->where('id', $user_id)->first();
 			$group_ids = GroupUser::select('group_id')->where('user_id', $user_id)->pluck('group_id')->toArray();
+                        $follow = User::with(['followers'=>function($q) {
+                            $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
+                        }])->where('id', $user_id)->first();
+                        //dd($follow);
 			// print_r($group_ids);
 			// DB::enableQueryLog();
 			// $groupDetails = DB::table('group_users')->Join('groups', 'groups.id', '=', 'group_users.group_id')
@@ -172,7 +176,7 @@ class DashboardController extends Controller {
 			// dd($user);
 			$points = Helpers::user_points($user_id);
 			$points = $points['points'];
-			return view($this->folder . '.users.view_profile', compact('user', 'groupDetails', 'userPosts', 'points', 'user_id'));
+			return view($this->folder . '.users.view_profile', compact('user', 'groupDetails', 'userPosts', 'points', 'user_id','follow'));
 		} else {
 			return redirect('/index');
 		}
@@ -252,6 +256,14 @@ class DashboardController extends Controller {
 			return $output;
 		}
 	}
-
+        public function checkEmailExists(Request $request) {
+            $email = $request->input('email');
+            $user = User::where('email',$email)->first();
+            if($user) {
+                echo json_encode(array('status' => 1, 'msg' => "Email already exists"));
+            } else {
+                echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+            }
+        }
 }
 ?>

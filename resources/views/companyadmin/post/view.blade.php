@@ -191,17 +191,17 @@
                                                         ?>
                                                             <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Unfollow</a>
                                                             <?php
-                } else {
+                                                        } else {
                                                         ?>
                                                             <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
                                                             <?php
-                }
-                                        } else if ($commentUser->id != Auth::user()->id) {
+                                                        }
+                                                    } else if ($commentUser->id != Auth::user()->id) {
                                                 ?>
                                                         <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
                                                         <?php
-                }
-                                        ?>
+                                                        }
+                                                    ?>
                                             </div>
                                             <div class="col-sm-10 user-rply">
                                                 <div class="post-inner-reply">

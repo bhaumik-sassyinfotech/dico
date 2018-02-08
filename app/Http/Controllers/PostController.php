@@ -75,84 +75,84 @@ class PostController extends Controller {
 		//dd($request->input('post_type'));
 		try
 		{
-			if (Auth::user()) {
-				/*$this->validate($request , [
-					                        'post_type'  => 'required' ,
-					                        'post_title' => 'required|max:'.POST_TITLE_LIMIT,
-				*/
-				$validator = Validator::make($request->all(),
-                                [
-                                        'post_type' => 'required',
-                                        'post_title' => 'required|max:' . POST_TITLE_LIMIT,
-                                ]);
-				if ($validator->fails()) {
-					return Redirect::back()->withErrors($validator)->withInput();
-				}
-				if ($request->input('is_anonymous')) {
-					$is_anonymous = 1;
-				} else {
-					$is_anonymous = 0;
-				}
-				DB::beginTransaction();
-				$post = new Post;
-				$post->company_id = Auth::user()->company_id;
-				$post->post_title = $request->input('post_title');
-				$post->post_description = $request->input('post_description');
-				$post->post_type = $request->input('post_type');
-				$post->user_id = Auth::user()->id;
-				$post->is_anonymous = $is_anonymous;
-				//=== groups saving start ===//
-				$post_groups = $request->input('user_groups');
+                    if (Auth::user()) {
+                            /*$this->validate($request , [
+                                                            'post_type'  => 'required' ,
+                                                            'post_title' => 'required|max:'.POST_TITLE_LIMIT,
+                            */
+                            $validator = Validator::make($request->all(),
+                            [
+                                    'post_type' => 'required',
+                                    'post_title' => 'required|max:' . POST_TITLE_LIMIT,
+                            ]);
+                            if ($validator->fails()) {
+                                    return Redirect::back()->withErrors($validator)->withInput();
+                            }
+                            if ($request->input('is_anonymous')) {
+                                    $is_anonymous = 1;
+                            } else {
+                                    $is_anonymous = 0;
+                            }
+                            DB::beginTransaction();
+                            $post = new Post;
+                            $post->company_id = Auth::user()->company_id;
+                            $post->post_title = $request->input('post_title');
+                            $post->post_description = $request->input('post_description');
+                            $post->post_type = $request->input('post_type');
+                            $post->user_id = Auth::user()->id;
+                            $post->is_anonymous = $is_anonymous;
+                            //=== groups saving start ===//
+                            $post_groups = $request->input('user_groups');
 
-				if (!empty($post_groups)) {
-					$groups = implode(",", $post_groups);
-					$post->group_id = $groups;
-				}
-				//=== groups saving end ===//
-				$post->save();
-				$file = $request->file('file_upload');
-				if ($file != "") {
-					$postData = array();
-					//echo "here";die();
-					$fileName = $file->getClientOriginalName();
-					$extension = $file->getClientOriginalExtension();
-					$folderName = '/uploads/';
-					$destinationPath = public_path() . $folderName;
-					$safeName = str_random(10) . '.' . $extension;
-					$file->move($destinationPath, $safeName);
-					$attachment = new Attachment;
-					$attachment->file_name = $safeName;
-					$attachment->type = 1;
-					$attachment->type_id = $post->id;
-					$attachment->user_id = Auth::user()->id;
-					$attachment->save();
-					// $attachment = Attachment::insert($postData);
-				}
-				//=== tags saving start ===//
-				$post_tags = $request->input('post_tags');
-				if (!empty($post_tags)) {
-					$tags = explode(",", $post_tags);
-					foreach ($tags as $tag) {
-						$existTag = Tag::where("tag_name", $tag)->first();
-						if ($existTag) {
-							$tag_id = $existTag->id;
-						} else {
-							$tag_id = Tag::insertGetId(array("tag_name" => $tag, "created_at" => Carbon\Carbon::now()));
-						}
-						$post_tags = PostTag::insert(array("post_id" => $post->id, "tag_id" => $tag_id, "created_at" => Carbon\Carbon::now()));
-					}
-				}
-				//=== tagss saving end ===//
-				DB::commit();
-				if ($post) {
-					Helpers::add_points('CREATE_POST', $user_id, $id); // add create post  points
-					return redirect()->route('post.index')->with('success', 'Post ' . Config::get('constant.ADDED_MESSAGE'));
-				} else {
-					return redirect()->route('post.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
-				}
+                            if (!empty($post_groups)) {
+                                    $groups = implode(",", $post_groups);
+                                    $post->group_id = $groups;
+                            }
+                            //=== groups saving end ===//
+                            $post->save();
+                            $file = $request->file('file_upload');
+                            if ($file != "") {
+                                    $postData = array();
+                                    //echo "here";die();
+                                    $fileName = $file->getClientOriginalName();
+                                    $extension = $file->getClientOriginalExtension();
+                                    $folderName = '/uploads/';
+                                    $destinationPath = public_path() . $folderName;
+                                    $safeName = str_random(10) . '.' . $extension;
+                                    $file->move($destinationPath, $safeName);
+                                    $attachment = new Attachment;
+                                    $attachment->file_name = $safeName;
+                                    $attachment->type = 1;
+                                    $attachment->type_id = $post->id;
+                                    $attachment->user_id = Auth::user()->id;
+                                    $attachment->save();
+                                    // $attachment = Attachment::insert($postData);
+                            }
+                            //=== tags saving start ===//
+                            $post_tags = $request->input('post_tags');
+                            if (!empty($post_tags)) {
+                                    $tags = explode(",", $post_tags);
+                                    foreach ($tags as $tag) {
+                                            $existTag = Tag::where("tag_name", $tag)->first();
+                                            if ($existTag) {
+                                                    $tag_id = $existTag->id;
+                                            } else {
+                                                    $tag_id = Tag::insertGetId(array("tag_name" => $tag, "created_at" => Carbon\Carbon::now()));
+                                            }
+                                            $post_tags = PostTag::insert(array("post_id" => $post->id, "tag_id" => $tag_id, "created_at" => Carbon\Carbon::now()));
+                                    }
+                            }
+                            //=== tagss saving end ===//
+                            DB::commit();
+                            if ($post) {
+                                    Helpers::add_points('CREATE_POST', Auth::user()->id, $post->id); // add create post  points
+                                    return redirect()->route('post.index')->with('success', 'Post ' . Config::get('constant.ADDED_MESSAGE'));
+                            } else {
+                                    return redirect()->route('post.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                            }
 
 //                    return $next($request);
-			}
+                    }
 		} catch (\exception $e) {
 			DB::rollback();
 

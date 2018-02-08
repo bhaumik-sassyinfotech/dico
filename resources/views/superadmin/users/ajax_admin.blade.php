@@ -35,7 +35,7 @@ $profile_pic = asset('assets/img/super-user.PNG');
                             <img src="{{ $profile_pic }}" alt="super-user">
                         </div>
                         <div class="grid-details">
-                            <h4><?=$user['user_detail']['name'];?></h4>
+                            <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user['id']))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user['id']))}}"><?=$user['user_detail']['name'];?></a></h4>
                             <a href="mailto:{{ $user['user_detail']['email'] }}">{{ $user['user_detail']['email'] }}</a>
                             <h4>Admin</h4>
                         </div>
@@ -45,7 +45,7 @@ $profile_pic = asset('assets/img/super-user.PNG');
                         @php
                         $uid = $user['user_detail']['id'];
                         $text = "";
-                        if(count($user['user_detail']['following']) > 0 && !empty($user['user_detail']['following']))
+                        if(!empty($user['user_detail']['followers']) && count($user['user_detail']['followers']) > 0)
                         {
                             $text = "Following";
                         } else {
@@ -59,7 +59,7 @@ $profile_pic = asset('assets/img/super-user.PNG');
                     </div>
                     <div class="panel-body-wrap">
                         <div class="follower-text pull-left">
-                            <p>Followers:<span><?=count($user['user_detail']['followers']);?></span></p>
+                            <p>Followers:<span><?=$user['user_detail']['followers_count'];?></span></p>
                         </div>
                         <div class="follower-text pull-right">
                             <p>Following:<span><?=count($user['user_detail']['following']);?></span></p>
@@ -72,7 +72,7 @@ $profile_pic = asset('assets/img/super-user.PNG');
 } //end-foreach
 	?>
 <div class="all_viewmore col-md-12">
-    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
+    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">View More</a>
 </div>
 <?php
 } //if-end

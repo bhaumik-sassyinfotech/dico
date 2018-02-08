@@ -156,7 +156,8 @@ if (!empty($post['post_tag'])) {
                                     <?php
 }
 } else {
-	echo "No post found.";
+    echo '<p class="postlist">No post found.</p>';
+	//echo "No post found.";
 }
 ?>
                                     <input type="hidden" id="count_post" value="{{$count_post}}">
@@ -282,7 +283,8 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                     <?php
                                         }
                                         } else {
-                                                echo "No post found.";
+                                            echo '<p class="postlist">No post found.</p>';
+                                                //echo "No post found.";
                                         }
                                         ?>
                                     <input type="hidden" id="count_grouppost" value="{{$count_group_post}}">
@@ -406,7 +408,8 @@ if (!empty($mypost['post_tag'])) {
                                     <?php
                                     }
                                     } else {
-                                            echo "No post found.";
+                                        echo '<p class="postlist">No post found.</p>';
+                                            //echo "No post found.";
                                     }
                                     ?>
                                     <input type="hidden" id="count_mypost" value="{{$count_user_post}}">

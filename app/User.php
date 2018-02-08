@@ -5,6 +5,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Eloquent;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -31,6 +32,9 @@ class User extends Authenticatable
     public function group() {
         return $this->hasMany('App\Group','group_owner','id');
     }
+    public function groupUser() {
+        return $this->hasMany('App\GroupUser','user_id','id')->where('user_id',Auth::user()->id)->where('is_admin',1);
+    }
     /*to check user details of a given group */
     public function groupUserDetails()
     {
@@ -42,7 +46,7 @@ class User extends Authenticatable
     }
     
     public function following() {
-        return $this->hasMany('App\FollowUser','receiver_user_id','id');
+        return $this->hasMany('App\FollowUser','sender_user_id','id');
     }
     
 }

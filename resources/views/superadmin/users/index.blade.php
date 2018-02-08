@@ -1,7 +1,6 @@
 @extends('template.default')
 <title>DICO - User</title>
 @section('content')
-
     <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
         <div id='wrap'>
             <div id="page-heading">
@@ -47,11 +46,8 @@
                                         <div class="border-tabs">
                                             <div class="btn-toolbar form-group clearfix">
                                                 <ul class="nav nav-tabs">
-                                                    <li class="active"><a href="#employee" onclick="superUserGrid(1)" data-toggle="tab"
-                                                                          data-order="desc1" data-sort="default"
-                                                                          class="btn btn-default sort active "><i
-                                                                    class="fa fa-list visible-xs icon-scale"></i><span
-                                                                    class=" hidden-xs">Employee</span></a></li>
+                                                    <li class="active"><a href="#employee" onclick="superUserGrid(1)" data-toggle="tab" data-order="desc1" data-sort="default" class="btn btn-default sort active ">
+                                                            <i class="fa fa-list visible-xs icon-scale"></i><span class=" hidden-xs">Employee</span></a></li>
                                                     <li class=""><a href="#users" onclick="superUserGrid(2)" data-toggle="tab" data-order="desc2"
                                                                     data-sort="data-name"
                                                                     class="btn btn-default sort "><span class=""><i
@@ -124,7 +120,7 @@
                                                                     <img src="{{ $profile_pic }}" alt="super-user">
                                                                 </div>
                                                                 <div class="grid-details">
-                                                                    <h4>{{ $user->name }}</h4>
+                                                                    <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user->id))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user->id))}}">{{ $user->name }}</a></h4>
                                                                     <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                                                     <h4>Employee</h4>
                                                                 </div>
@@ -133,7 +129,7 @@
                                                             <div class="btn-wrap">
                                                                 @php
                                                                     $text = "";
-                                                                    if(count($user->following) > 0 && !empty($user->following))
+                                                                    if(!empty($user->followers) && count($user->followers) > 0)
                                                                     {
                                                                         $text = "Following";
                                                                     } else {
@@ -148,7 +144,7 @@
                                                             </div>
                                                             <div class="panel-body-wrap">
                                                                 <div class="follower-text pull-left">
-                                                                    <p>Followers:<span>{{ count($user->followers) }}</span></p>
+                                                                    <p>Followers:<span>{{ $user->followers_count }}</span></p>
                                                                 </div>
                                                                 <div class="follower-text pull-right">
                                                                     <p>Following:<span>{{ count($user->following) }}</span></p>
@@ -160,7 +156,7 @@
                                                 @endforeach
                                                 @if($users_count > POST_DISPLAY_LIMIT)
                                                 <div class="all_viewmore col-md-12">
-                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
+                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">View More</a>
                                                 </div>
                                                 @endif
 
@@ -191,8 +187,7 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
-                                                                                        <label class="check checkAll">User Name<input
-                                                                                                    type="checkbox" class="checkAllBox">
+                                                                                        <label class="check checkAll">User Name<input type="checkbox" class="checkAllBox">
                                                                                             <span class="checkmark"></span>
                                                                                         </label>
                                                                                     </th>
@@ -201,6 +196,7 @@
                                                                                     <th><label>Following</label></th>
                                                                                     <th><label>Followers</label></th>
                                                                                     <th><label>Points</label></th>
+                                                                                    <th><label>Action</label></th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -359,7 +355,7 @@
 
 @push('javascripts')
     <script type="text/javascript">
-        function loadMorePost() {
+        function loadMoreUser() {
             var offSet_selector = $('#offset');
             var tab_id = offSet_selector.data('tab');
             var id = offSet_selector.val();

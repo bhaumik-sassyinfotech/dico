@@ -28,29 +28,29 @@
                         <img src="{{ $profile_pic }}" alt="super-user">
                     </div>
                     <div class="grid-details">
-                        <h4>{{ $user['name'] }}</h4>
+                        <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user['id']))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user['id']))}}">{{ $user['name'] }}</a></h4>
                         <a href="mailto:{{ $user['email'] }}">{{ $user['email'] }}</a>
                         <h4>Employee</h4>
                     </div>
 
                 </fieldset>
                 <div class="btn-wrap">
-                    @php
+                    <?php
                         $uid = $user['id'];
                         $text = "";
-                        if(count($user['following']) > 0 && !empty($user['following']))
+                        if(count($user['followers']) > 0 && !empty($user['followers']) && in_array(Auth::user()->id,array_pluck($user['followers'],'sender_user_id')))
+                        //if(count($user['following']) > 0 && !empty($user['following']))
                         {
                             $text = "Following";
                         } else {
                             $text = "Follow";
                         }
                         $url = url('view_profile/'.Helpers::encode_url($uid));
-                    @endphp
-
+                    ?>
                     <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
-
                     <?php $pts = Helpers::user_points($uid);?>
                     <a href="#">Point:{{ $pts['points'] }}</a>
+
                 </div>
                 <div class="panel-body-wrap">
                     <div class="follower-text pull-left">
@@ -67,9 +67,10 @@
 <div class="all_viewmore col-md-12">
     <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
 </div>
-
 @else
-    <div class="col-md-12">
-        <p>No Data found.</p>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>No Data found</p>
+        </div>
     </div>
 @endif

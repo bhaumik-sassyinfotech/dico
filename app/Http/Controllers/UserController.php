@@ -66,20 +66,24 @@ class UserController extends Controller {
 				}
 				$roles = Role::whereIn('id', $role_id)->get();
 				$companies = Company::whereNull('deleted_at')->get();
-				$user_query = User::with(['following', 'followers'])->where('role_id', 3);
+				$user_query = User::with(['following', 'followers'=>function($q) {
+                                    $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
+                                }])->withCount('followers')->where('role_id', 3);
 				if (Auth::user()->role_id == 2) {
 					$user_query = $user_query->where('company_id', $company_id);
 				}
 				$users_count = count($user_query->get());
 				$users = $user_query->orderByDesc('created_at')->limit(POST_DISPLAY_LIMIT)->get();
 				$company_admins = User::with(['following', 'followers'])->where('role_id', 2)->get();
-				// return $users;
-				return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins'));
+				//return $users;
+				return view($this->folder . '.users.index', compact('roles', 'companies', 'users', 'users_count', 'company_admins','follow'));
 			} else {
 				$role_id = [3];
 				$roles = Role::whereIn('id', $role_id)->get();
 				$companies = Company::whereNull('deleted_at')->get();
-				$user_query = User::with(['following', 'followers'])->where('role_id', 3);
+				$user_query = User::with(['following', 'followers'=>function($q) {
+                                    $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
+                                }])->withCount('followers')->where('role_id', 3);
 				if (Auth::user()->role_id == 2) {
 					$user_query = $user_query->where('company_id', $company_id);
 				}
@@ -167,8 +171,8 @@ class UserController extends Controller {
 			} else {
 				$is_suspended = 0;
 			}
-			// $password = str_random(6);
-			$password = "123456";
+			$password = str_random(6);
+			//$password = "123456";
 			$email = $request->input('user_email');
 
 			$user = new User;
@@ -180,7 +184,7 @@ class UserController extends Controller {
 			$user->is_suspended = $is_suspended;
 			$user->password = Hash::make($password);
 			$user->created_at = Carbon\Carbon::now();
-			// $this->custom_send_mail($email, $password, $request->input('user_name'));
+			$this->custom_send_mail($email, $password, $request->input('user_name'));
 			if ($user->save()) {
 				if (!empty($request->user_groups)) {
 // add user in the groups selected
@@ -594,11 +598,13 @@ class UserController extends Controller {
 				return count($row->following);
 			})->addColumn('followers_count', function ($row) {
 				return count($row->followers);
+			})->addColumn('actions', function ($row) {
+				return '<a><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 			})->filter(function ($query) use ($request) {
 				if ($request->has('search_query') && !empty(trim($request->get('search_query')))) {
 					$query->where('name', 'like', "%{$request->get('search_query')}%")->orWhere('email', 'like', "%{$request->get('search_query')}%");
 				}
-			})->rawColumns(['name', 'email', 'following_count', 'followers_count', 'points'])->make(true);
+			})->rawColumns(['name', 'email', 'following_count', 'followers_count', 'points','actions'])->make(true);
 			/*
 				->addColumn('actions', function ($row) {
 								return '<a href="' . route('user.edit', [Helpers::encode_url($row->id)]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
@@ -635,7 +641,9 @@ class UserController extends Controller {
 
 	public function getEmployeeGrid(Request $request) {
 
-		$query = User::select('users.*')->with(['followers', 'following'])->where('role_id', 3);
+		$query = User::select('users.*')->with(['followers'=>function($q) {
+                                    $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
+                                }, 'following'])->withCount('followers')->where('role_id', 3);
 		if ($request->has('search') && !empty($request->input('search'))) {
 			$query = $query->Where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
 		}
@@ -664,7 +672,9 @@ class UserController extends Controller {
 			$offset = $request->input('offset');
 			// return $offset;
 		}
-		$query = User::with(['followers', 'following'])->where('role_id', 2);
+		$query = User::with(['followers'=>function($q) {
+                                    $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
+                                }, 'following'])->withCount('followers')->where('role_id', 2);
 		if ($request->has('search') && !empty($request->has('search'))) {
 			$query = $query->where(function ($q) use ($request) {
 				$q->where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
@@ -683,7 +693,9 @@ class UserController extends Controller {
 		// $group_owner = $groups->pluck('group_owner')->toArray();
 		$group_ids = $groups->pluck('group_id')->toArray();
 		DB::connection()->enableQueryLog();
-		$users_query = GroupUser::with(['userDetail', 'userDetail.followers', 'userDetail.following']);
+                $users_query = GroupUser::with(['userDetail'=>function($q) {$q->withCount('followers');}, 'userDetail.followers'=>function($q) {
+                                    $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
+                                }, 'userDetail.following']);
 
 		if ($request->has('search') && !empty($request->input('search'))) {
 			$users_query = $users_query->where(function ($q) use ($request) {
@@ -692,7 +704,7 @@ class UserController extends Controller {
 		}
 
 		$users = $users_query->where('is_admin', 1)->whereIn('group_id', $group_ids)->get()->toArray();
-
+                //dd($users);
 		$html = view::make($this->folder . '.users.ajax_admin', compact('users'));
 		$output = array('html' => $html->render(), 'count' => count($users));
 		return $output;

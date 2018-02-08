@@ -781,6 +781,7 @@ var employeeTable_superadmin = $("#emp-table").DataTable({
         {data: 'followers_count'},
         {data: 'following_count'},
         {data: 'points'},
+        {data: 'actions'},
         // {data: 'admin', sorting: false, orderable: false}
     ]
 });
@@ -1065,7 +1066,7 @@ $("#create_group_modal").validate({
         var name = $.trim($("#grp_name").val());
         var desc = $.trim($("#grp_desc").val());
         var company = $("#company_id option:selected").val();
-        console.log(company);
+        //console.log(company);
         var dataString = {_token: CSRF_TOKEN , name:name, desc:desc,company: company};
         if(company > 0)
         {
@@ -1085,6 +1086,7 @@ $("#create_group_modal").validate({
                 if(response.status == '1')
                 {
                     $("#company_id").trigger('change');
+                    $('#myModal,.modal-backdrop').fadeOut();
                 }
             }
         });
