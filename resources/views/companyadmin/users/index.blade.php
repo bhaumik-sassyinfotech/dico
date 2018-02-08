@@ -187,8 +187,7 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
-                                                                                        <label class="check checkAll">User Name<input
-                                                                                                    type="checkbox" class="checkAllBox">
+                                                                                        <label class="check checkAll">User Name<input type="checkbox" class="checkAllBox">
                                                                                             <span class="checkmark"></span>
                                                                                         </label>
                                                                                     </th>
@@ -197,6 +196,7 @@
                                                                                     <th><label>Following</label></th>
                                                                                     <th><label>Followers</label></th>
                                                                                     <th><label>Points</label></th>
+                                                                                    <th><label>Action</label></th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>

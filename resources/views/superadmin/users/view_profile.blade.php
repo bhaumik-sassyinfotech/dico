@@ -20,7 +20,7 @@ if (!empty($user->profile_image)) {
                                 <img src="{{ $profile_image }}" id="user-profile">
                             </div>
                             <?php
-                                if(!empty($follow->followers) && count($follow->followers) > 0) {
+                                if(!empty($user->followers) && count($user->followers) > 0) {
                             ?>
                             <a href="{{ url('/unfollow/'.$user->id) }}">Unfollow</a>
                             <?php

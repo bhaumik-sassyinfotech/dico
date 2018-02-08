@@ -35,18 +35,17 @@
 
                 </fieldset>
                 <div class="btn-wrap">
-                    <?php
+                    @php
                         $uid = $user['id'];
                         $text = "";
-                        if(count($user['followers']) > 0 && !empty($user['followers']) && in_array(Auth::user()->id,array_pluck($user['followers'],'sender_user_id')))
-                        //if(count($user['following']) > 0 && !empty($user['following']))
+                        if(!empty($user['followers']) && count($user['followers']) > 0)
                         {
                             $text = "Following";
                         } else {
                             $text = "Follow";
                         }
                         $url = url('view_profile/'.Helpers::encode_url($uid));
-                    ?>
+                    @endphp
                     <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
                     <?php $pts = Helpers::user_points($uid);?>
                     <a href="#">Point:{{ $pts['points'] }}</a>
@@ -54,7 +53,7 @@
                 </div>
                 <div class="panel-body-wrap">
                     <div class="follower-text pull-left">
-                        <p>Followers:<span>{{ count($user['followers']) }}</span></p>
+                        <p>Followers:<span>{{ $user['followers_count'] }}</span></p>
                     </div>
                     <div class="follower-text pull-right">
                         <p>Following:<span>{{ count($user['following']) }}</span></p>
@@ -65,7 +64,7 @@
     </li>
     @endforeach
 <div class="all_viewmore col-md-12">
-    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
+    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">View More</a>
 </div>
 @else
     <div class="row">
