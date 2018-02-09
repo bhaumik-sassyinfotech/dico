@@ -258,7 +258,12 @@ class DashboardController extends Controller {
 	}
         public function checkEmailExists(Request $request) {
             $email = $request->input('email');
-            $user = User::where('email',$email)->first();
+            $user_id = $request->input('user_id');
+            $query = User::where('email',$email);
+            if($user_id > 0) {
+                $query->where('id','!=',$user_id);
+            }
+            $user = $query->first();
             if($user) {
                 echo json_encode(array('status' => 1, 'msg' => "Email already exists"));
             } else {

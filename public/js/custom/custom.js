@@ -460,14 +460,14 @@ function closeCommentReply(id) {
         $("#comment_reply_text_disp_"+id).slideDown('fast');
         $('#cancel_comment_reply_'+id).css('display','none');
     }
-     function checkEmail(email) {
+     function checkEmail(email,user_id) {
         if (email)
         {
             $("#spinner").show();
             $.ajax({
                 url: SITE_URL + '/checkEmailExists',
                 type: "POST",
-                data: {email: email,_token: CSRF_TOKEN},
+                data: {email: email,_token: CSRF_TOKEN,user_id:user_id},
                 success: function (data)
                 {
                     var response = JSON.parse(data);

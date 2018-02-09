@@ -10,17 +10,18 @@
                         <div id="follow-box">
                             <div class="preview-box">
                                 <?php
-$profile_image = '';
-if (!empty($user->profile_image)) {
-	$profile_image = asset(PROFILE_PATH . $user->profile_image);
-} else {
-	$profile_image = asset('public/assets/demo/avatar/jackson.png');
-}
-?>
+                                $profile_image = '';
+                                if (!empty($user->profile_image)) {
+                                        $profile_image = asset(PROFILE_PATH . $user->profile_image);
+                                } else {
+                                        $profile_image = asset('public/assets/demo/avatar/jackson.png');
+                                }
+                                ?>
                                 <img src="{{ $profile_image }}" id="user-profile">
                             </div>
+                            <?php //dd($user->followers);?>
                             <?php
-                                if(!empty($user->followers) && count($user->followers) > 0) {
+                                if(!empty($follow->followers) && count($follow->followers) > 0) {
                             ?>
                             <a href="{{ url('/unfollow/'.$user->id) }}">Unfollow</a>
                             <?php

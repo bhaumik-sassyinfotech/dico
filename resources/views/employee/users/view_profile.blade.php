@@ -21,7 +21,7 @@
                             </div>
                             <?php //dd($user->followers); ?>
                             <?php
-                                if(!empty($user->followers) && count($user->followers) > 0) {
+                                if(!empty($follow->followers) && count($follow->followers) > 0) {
                             ?>
                             <a href="{{ url('/unfollow/'.$user->id) }}">Unfollow</a>
                             <?php

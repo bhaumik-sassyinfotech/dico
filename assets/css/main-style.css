@@ -1692,12 +1692,8 @@ body .new-meeting-details .new-meeting-tab li.active > a {
   display: block;
 }
 
-.category-tab .st-btn {
-  border: none;
-  float: right;
-  font-size: 10px;
-  padding: 3px 12px;
-}
+.category-tab .st-btn { border: none; float: right; font-size: 10px; padding: 3px 10px; }
+
 .new-meeting-details #profile1 .category-tab {
     background-color: #fff;
     border: 1px solid #999;
@@ -2572,7 +2568,7 @@ form .form-group:last-child {
   display: inline-block;
   font-size: 12px;
   margin-right: 16px;
-  padding: 7px 39px;
+  padding: 7px 35px;
   position: relative;
   vertical-align: top;
 }
@@ -2661,7 +2657,7 @@ form .form-group:last-child {
   display: none;
 }
 
-.btn-group.top-set > form {
+.btn-group.top-set .search-form {
   float: left;
   margin-right: 15px;
   position: relative;

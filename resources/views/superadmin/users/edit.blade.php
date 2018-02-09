@@ -41,7 +41,7 @@
                             
                             <div class="form-group">
                                 <label class="text-15">Email Id<span>*</span></label>
-                                <input type="text" name="user_email" id="user_email" value="{{$user->email}}" placeholder="User Email" onkeyup="$('#emailerror').text('');" onblur="checkEmail(this.value)" class="form-control">
+                                <input type="text" name="user_email" id="user_email" value="{{$user->email}}" placeholder="User Email" onkeyup="$('#emailerror').text('');" onblur="checkEmail(this.value,{{$user->id}})" class="form-control">
                                 <label id="emailerror" class="error hidden" ></label>
                                 <input id="for_me_emailerror" value="" type="hidden">            
                             </div>

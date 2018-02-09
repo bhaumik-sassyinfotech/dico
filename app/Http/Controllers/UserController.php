@@ -591,7 +591,7 @@ class UserController extends Controller {
 				$points = Helpers::user_points($row->id);
 				return '<p>' . $points['points'] . '</p>';
 			})->addColumn('name', function ($row) {
-				return '<label class="check">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span></label>';
+				return '<label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span></label>';
 			})->addColumn('email', function ($row) {
 				return '<p>' . $row->email . '</p>';
 			})->addColumn('following_count', function ($row) {
@@ -599,7 +599,8 @@ class UserController extends Controller {
 			})->addColumn('followers_count', function ($row) {
 				return count($row->followers);
 			})->addColumn('actions', function ($row) {
-				return '<a><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                            $edit_url = route('user.edit', Helpers::encode_url($row->id));
+				return '<a href="'.$edit_url.'"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 			})->filter(function ($query) use ($request) {
 				if ($request->has('search_query') && !empty(trim($request->get('search_query')))) {
 					$query->where('name', 'like', "%{$request->get('search_query')}%")->orWhere('email', 'like', "%{$request->get('search_query')}%");
