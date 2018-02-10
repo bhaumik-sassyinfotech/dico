@@ -300,6 +300,60 @@ class Helpers {
 			}
 		}
 	}
+        /*     * ***********************Parse Email*************************** */
+
+    public static function parseTemplate($template, $data) {
+        if ($template == '') {
+            return FALSE;
+        }
+        $l_delim = '{{';
+        $r_delim = '}}';
+        foreach ($data as $key => $val) {
+            if (!is_array($val)) {
+                $template = str_replace($l_delim . $key . $r_delim, (string) $val, $template);
+            }
+        }
+        return $template;
+    }
+
+    public static function sendEmail($post = null) {
+        $path = 'mail/template';
+        Mail::send($path, ['post' => $post], function($message) use ($post) {
+            $message->from(FROM_EMAIL, REPLAY_NAME);
+            $message->to($post['email'])->subject($post['emailTemplate']->subject);
+        });
+        return true;
+    }
+///unlock_the_digital_solution_of_your_business
+     public static function getBlockTitle($identifier = null) {
+        if ($identifier != null) {
+            $identifier = DB::table('blocks')->select('title')->where('slug_name', $identifier)->first();
+            if (!is_object($identifier)) {
+                $identifier = new stdClass();
+            }
+            return $identifier->title;
+        }
+        throw new Exception('Block identifier not define');
+    }
+     public static function getBlockDescription($identifier = null) {
+        if ($identifier != null) {
+            $identifier = DB::table('blocks')->select('description')->where('slug_name', $identifier)->first();
+            if (!is_object($identifier)) {
+                $identifier = new stdClass();
+            }
+            return $identifier->description;
+        }
+        throw new Exception('Block identifier not define');
+    }
+     public static function getSettings() {
+        
+            $identifier = DB::table('settings')->select('*')->where('id', 1)->first();
+            if (!is_object($identifier)) {
+                $identifier = new stdClass();
+            }
+            return $identifier;        
+    }
+    /*     * **************************************************************** */
 }
 
 ?>

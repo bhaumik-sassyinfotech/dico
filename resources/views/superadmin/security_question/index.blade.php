@@ -9,7 +9,7 @@
                 <li><a href="{{ url('/home') }}">Dashboard</a></li>
                 <li class="active">Security Question</li>
             </ol>
-            <h1>Security Question</h1>
+            <h1 class="tp-bp-0">Security Question</h1>
             <div class="options">
                 <div class="btn-toolbar">
                     <a class="btn btn-default" href="{{ route('security_question.create') }}">

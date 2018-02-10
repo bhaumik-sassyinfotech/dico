@@ -53,6 +53,7 @@
         protected $routeMiddleware = [
             'admin'      => \App\Http\Middleware\Admin::class ,
             'auth'       => \Illuminate\Auth\Middleware\Authenticate::class ,
+            'front'      => \App\Http\Middleware\FrontAuthenticate::class ,
             'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class ,
             'bindings'   => \Illuminate\Routing\Middleware\SubstituteBindings::class ,
             'can'        => \Illuminate\Auth\Middleware\Authorize::class ,

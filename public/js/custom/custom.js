@@ -495,3 +495,266 @@ function closeCommentReply(id) {
         }
         }
 //============================================================//
+//============= Rajesh =================//
+
+//==================== Block section =====================//
+$('#blockList').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: SITE_URL + '/blockList',
+    columns: [
+        {data: 'id'},
+        {data: 'title'},
+        {data: 'description'},
+        {data: 'actions', sorting: false, orderable: false},
+    ],
+});
+$("#blockEdit").validate({
+    rules: {
+        title: {
+            required: true,
+        },
+        description: {
+            required: true,
+        }
+    },
+    messages: {
+        title: {
+            required: 'This field is required',
+        },
+        description: {
+            required: 'This field is required',
+        }
+    }
+});
+//============================================================//
+
+//==================== Packages section =====================//
+$('#packageList').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: SITE_URL + '/packagesList',
+    columns: [
+        {data: 'id'},
+        {data: 'name'},
+        {data: 'amount'},
+        {data: 'total_user'},
+        {data: 'actions', sorting: false, orderable: false},
+    ],
+});
+$("#packageEdit").validate({
+    rules: {
+        name: {
+            required: true,
+        },
+        amount: {
+            required: true,
+        },
+        total_user: {
+            required: true,
+        }
+    },
+    messages: {
+        name: {
+            required: 'This field is required',
+        },
+        amount: {
+            required: 'This field is required',
+        },
+        total_user: {
+            required: 'This field is required',
+        }
+    }
+});
+//============================================================//
+
+//==================== FAQS section =====================//
+$('#adminfaqList').DataTable({
+    processing: true,
+     ordering: true,
+    serverSide: true,
+    ajax: SITE_URL + '/faqList',
+    columns: [
+        {data: 'id'},
+        {data: 'question'},
+        {data: 'answer'},
+        {data: 'actions', sorting: false, orderable: false},
+    ],
+});
+$("#faqsAdd").validate({
+    rules: {
+        question: {
+            required: true,
+        },
+        answer: {
+            required: true,
+        }
+    },
+    messages: {
+        question: {
+            required: 'This field is required',
+        },
+        answer: {
+            required: 'This field is required',
+        }
+    }
+});
+$("#faqsEdit").validate({
+    rules: {
+        question: {
+            required: true,
+        },
+        answer: {
+            required: true,
+        }
+    },
+    messages: {
+        question: {
+            required: 'This field is required',
+        },
+        answer: {
+            required: 'This field is required',
+        }
+    }
+});
+//============================================================//
+
+//==================== FAQS Listing =====================//
+$('#faqsList').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: SITE_URL + '/faqList',
+    columns: [
+        {data: 'id'},
+        {data: 'question'},
+        {data: 'answer'},
+        {data: 'actions', sorting: false, orderable: false},
+    ],
+});
+$("#faqsAdd").validate({
+    rules: {
+        question: {
+            required: true,
+        },
+        answer: {
+            required: true,
+        }
+    },
+    messages: {
+        question: {
+            required: 'This field is required',
+        },
+        answer: {
+            required: 'This field is required',
+        }
+    }
+});
+//============================================================//
+//==================== Contact Us section =====================//
+//$('#contactUsList').DataTable({
+//    processing: true,
+//    serverSide: true,
+//    ajax: SITE_URL + '/contactUsList',
+//    columns: [
+//        {data: 'id'},
+//        {data: 'name'},
+//        {data: 'email'},
+//        {data: 'mobile'},
+//        {data: 'message'},
+//        {data: 'actions', sorting: false, orderable: false},
+//    ],
+//});
+
+//=============================================================//
+//========================Settings=======================//
+$("#SettingsEdit").validate({
+    rules: {
+        email1: {
+            required: true,
+        },
+        support_email: {
+            required: true,
+        },
+        copyright: {
+            required: true,
+        },
+        mobile: {
+            required: true,
+        }
+        ,
+        twitter: {
+            url: true,
+        },
+        facebook: {
+            url: true,
+        },
+        instagram: {
+            url: true,
+        }
+    },
+    messages: {
+        email1: {
+            required: 'This field is required',
+        },
+        support_email: {
+            required: 'This field is required',
+        },
+        copyright: {
+            required: 'This field is required',
+        },
+        mobile: {
+            required: 'This field is required',
+        },
+        twitter: {
+            url: 'Please enter proper url',
+        },
+        facebook: {
+            url: 'Please enter proper url',
+        },
+        instagram: {
+            url: 'Please enter proper url',
+        }
+    }
+});
+//=======================================================//
+//=====================Reset admin password ==================================//
+ $("#updateForgotPassword").validate({
+        rules: {
+
+            password: {
+                required: true,
+                minlength: 6
+            },
+            confirmPassword: {
+                required: true,
+                equalTo: "#password"
+            }
+        },
+        messages: {
+            password: {
+                required: 'This field is required',
+                minlength: 'Password must be a minimum 6 characters',
+            },
+            confirmPassword: {
+                required: 'This field is required',
+                equalTo: 'Password not match'
+            }
+        }
+    });
+//=======================================================//
+//=====================Forgot email  admin side ==================================//
+   $("#forgot_form").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            email: {
+                required: 'This field is required',
+                email: 'Please enter a valid email address.'
+            }
+        }
+    });
+//=======================================================//

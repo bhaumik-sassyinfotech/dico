@@ -174,11 +174,11 @@ if (!empty($following->followingUser->profile_image)) {
                                     </ul>
                                 </h4>
                                 <div class="pull-right">
-                                    <form method="post" class="search-form">
+                                    <div class="search-form">
                                         <input type="hidden" id="user_id" value="{{ $user_id }}" name="">
                                         <input type="text" id="search_group_text" placeholder="Search Group">
                                         <input type="button" value="#" id="search_group_btn" class="search-icon">
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                             <div class="panel-body">
@@ -255,10 +255,10 @@ if (!empty($following->followingUser->profile_image)) {
 
                                         </div>
                                         <a class="btn-left ">
-                                            <form method="post" class="search-form">
+                                            <div class="search-form">
                                                 <input type="text" placeholder="Search Post">
                                                 <input type="button" value="#" class="search-icon">
-                                            </form>
+                                            </div>
                                         </a>
                                     </div>
                                 </div>

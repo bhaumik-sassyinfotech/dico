@@ -1145,6 +1145,12 @@ p.user-icon {
 .group-listing tbody tr:last-child td p {
   border-bottom: medium none;
 }    
+.create-user-from .update-block-wrap {
+    padding: 0 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
 }
 
 

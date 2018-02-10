@@ -1,7 +1,43 @@
 <?php
+define('FROM_EMAIL', 'testacc2016@gmail.com');
+define('REPLAY_NAME', 'Dico');
 Route::get('/', function () {
 	return redirect('/index');
 });
+//front end url
+Route::get('/front', 'front\HomeController@index');
+Route::get('/how-it-works', 'front\HomeController@how_it_works');
+Route::get('/why-us', 'front\HomeController@why_us');
+Route::get('/package', 'front\HomeController@packages');
+Route::get('/faqs', 'front\HomeController@faqs');
+Route::POST('/faqsEmail', 'front\HomeController@faqsEmail');
+
+Route::get('/contactUs', 'front\HomeController@contactUs');
+Route::get('/users-login', 'front\HomeController@users_login');
+Route::get('/privacy-policy', 'front\HomeController@privacypolicy');
+Route::get('/teams-condition', 'front\HomeController@teams_condition');
+Route::get('/package', 'front\HomeController@packages');
+
+Route::POST('frontLogin', 'front\UsersController@frontLogin');
+Route::POST('companyRegister', 'front\UsersController@companyRegister');
+Route::get('/front-logout', 'front\UsersController@logout');
+Route::POST('/forgotPasswordMail', 'front\UsersController@forgotPasswordMail');
+Route::POST('/updateForgotPassword', 'front\UsersController@updateForgotPassword');
+
+Route::get('/forgotPasswordRequest/{data}', 'front\UsersController@forgotPasswordRequest');
+
+/** test order**/
+
+Route::get('/order', 'front\PagesController@getOrder');
+Route::post('order', 'front\PagesController@postOrder');
+
+/*****************/
+Route::group(['middleware' => 'front'], function () {
+    Route::get('/companyProfile', 'front\DashboardController@companyProfile');
+});
+
+
+/***********************End front URL****************************/
 
 Route::get('index', 'HomeController@index');
 
@@ -119,6 +155,25 @@ Route::group(['middleware' => 'admin'], function () {
         Route::post('meeting_comment_reply_update','MeetingController@meeting_comment_reply_update');
         Route::get('deleteMeetingCommentReply/{id}','MeetingController@deleteMeetingCommentReply');
         Route::post('checkEmailExists','DashboardController@checkEmailExists');
+        
+        /*******Block**Section*************/
+        Route::resource('block', 'BlockController');
+        Route::GET('blockList', 'BlockController@blockList');
+         /*******Block**Section*************/
+        Route::resource('packages', 'PackageController');
+        Route::GET('packagesList', 'PackageController@packagesList');        
+        /*******FAQs**Section*************/
+        Route::resource('adminfaq', 'FaqsController');
+        Route::GET('faqList', 'FaqsController@faqList');
+        Route::post('deleteFaqs', 'FaqsController@deleteFaqs');
+        
+        /*******Contact us**Section*************/
+        Route::resource('adminContactUs', 'ContactusController');
+        Route::GET('contactUsList', 'ContactusController@contactUsList');
+        Route::post('contactDelete', 'ContactusController@contactDelete');
+        
+        /*******Settings Section*************/
+        Route::resource('settings', 'SettingsController');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');

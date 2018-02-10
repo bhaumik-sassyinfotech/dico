@@ -1,0 +1,40 @@
+.error{
+    color:red;
+}
+.tbl {
+    display: table;
+}
+.tbl-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+.form-group.tbl .tbl-cell{
+    width: 33.3333%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.form-horizontal select {
+    width: 100%;
+    padding: 5px 10px;
+    height: 50px;
+    background-color: #fafafa;
+    border: none;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+        font-size: 14px;
+}
+.form-horizontal select:focus{
+    box-shadow: 0 0 8px rgba(69, 69, 70, 0.2);
+}
+.form-horizontal .form-group .field .field-half{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.form-horizontal .form-group .field label.error{
+    width: 100%;
+    text-align: left;
+}
+.no-padding{
+    padding: 0 !important;
+}

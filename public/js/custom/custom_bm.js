@@ -841,6 +841,7 @@ $(document).on('click',"#search_group_btn",function(){
         data: dataString,
         method:"POST",
         success: function(response){
+            $("#view_user_groups").html('');
             $("#view_user_groups").append(response.html).owlCarousel('destroy').owlCarousel();
             // var owl = $('.owl-carousel');
         }

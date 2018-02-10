@@ -58,3 +58,13 @@
 <script type='text/javascript' src="{{asset('assets/demo/demo.js')}}"></script>
 <script type='text/javascript' src="{{asset('assets/js/previews.js')}}"></script>
 <script type='text/javascript' src="{{asset('assets/js/owl.carousel.min.js')}}"></script>
+<script type='text/javascript' src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
+<script type='text/javascript' src="{{asset('public/ckeditor/sample.js')}}"></script>
+<script type="text/javascript">
+    if($('#editor').val()){
+        //console.log('dd',$('#editor').val());
+       window.onload=function(){
+        initSample();
+   } 
+   }
+</script>

@@ -1931,7 +1931,7 @@ body .post-details #page-heading h1.icon-mark{
 
 #create-user-from {
   padding: 0 10px;
-  width: 45.5%;
+  width:57.5%;
 }
 body.modal-open .modal-backdrop.in {
   background-color: rgba(255, 255, 255, 0.8);
@@ -2790,7 +2790,8 @@ form .form-group:last-child {
 /* create select user */
 .add-grp-wrap {
   position: absolute;
-  right: -215px;
+  right: -225px;
+  top: 0;
 }
 .form-group .select {
   border: 1px solid #aaaaaa;
@@ -3975,7 +3976,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 }
 .pagination li a, .pagination li.active a {
     line-height: 130%;
-    padding: 10px 15px;
+    padding: 8px 15px;
 }
 .wrap-button { position: relative; }
 .all-group-list form .form-group:first-child {
@@ -4226,7 +4227,7 @@ body a:hover, body a:focus {
     background-color: #e6e7e8;
     bottom: 0;
     padding: 15px 15px 10px;
-    width: 230px;
+    width: 229px;
     position: absolute;
 }
 .bottom-sidebar a {
@@ -4478,7 +4479,7 @@ body .modal-dialog.updatesecurity .modal-content,
 
 nav#page-leftbar {
     background-color: #e6e7e8;
-    height: 619px;
+    height: 630px;
     padding-bottom: 150px;
 }
 
@@ -4591,7 +4592,7 @@ panel-body fieldset p {
 }
 .p-font {
     /* color: #ffae00; */
-    font-size: 12px;
+    font-size: 11px;
     font-family: Open sans;
     text-transform: uppercase;
     font-weight: 700;
@@ -4686,7 +4687,7 @@ panel-body fieldset p {
 .check input.error {
     display: inline-block !important;
     visibility: visible;
-    opacity: 1;
+    opacity: 0;
     position: relative;
     height: initial;
 }
@@ -4836,3 +4837,36 @@ body .user-a-post:hover{
 }
 
 /*close 03-02-2018*/
+
+/* 09-02-2018 */
+.update-block-wrap {
+    padding: 0 10px;
+    width: 57.5%;
+    margin-bottom: 30px;
+}
+.create-user-from .editor-files {
+    background: #ccc;
+    margin: 10px;
+}
+.create-user-from .editor-files label {
+    width: 100%;
+    padding: 10px;
+    float: none;
+}
+.navbar-inverse {
+  background-color: #444;
+}
+
+.company-section-wrap {
+  margin-bottom: 30px;
+  margin-left: 29%;
+}
+.common-form .check > p {
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.pagination li a {
+    padding: 10px 15px;
+}
+/*close 09-02-2018 */

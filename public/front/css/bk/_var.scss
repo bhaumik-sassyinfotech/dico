@@ -1,0 +1,162 @@
+$anchor:#1787a5;
+$white:#fff;
+$red-site:#ff1900;
+$primary:#00ebeb;
+$secondary:#1a8cab;
+$black:#000;
+$facebook:#3b5998;
+$twitter:#4099ff;
+$youtube:#cc181e;
+
+$yellow:#ffaf00;
+$red:#e83c3c;
+$vio:#9632c8;
+$blue:#4f8edd;
+$green:#16a086;
+
+
+$yellow-text:#fac819;
+$secondary-text:#1a8cab;
+$pink-text:#8c1c56;
+$instagram:#fb3958;
+$default-color:#323232;
+$email:#d34836;
+$pintrest:#d34836;
+$desc-text:#646464;
+$default-text:#323232;
+$link:#0064c8;
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+%gred-bg-trans{
+  //background: url("../images/grad-bg.jpg") no-repeat;
+  //background-size: cover;
+  //background-attachment: fixed;
+  //opacity: 0.8;
+  background: rgba(0,217,255,1);
+  background: -moz-linear-gradient(top, rgba(0,217,255,1) 0%, rgba(0,72,179,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,217,255,1)), color-stop(100%, rgba(0,72,179,1)));
+  background: -webkit-linear-gradient(top, rgba(0,217,255,1) 0%, rgba(0,72,179,1) 100%);
+  background: -o-linear-gradient(top, rgba(0,217,255,1) 0%, rgba(0,72,179,1) 100%);
+  background: -ms-linear-gradient(top, rgba(0,217,255,1) 0%, rgba(0,72,179,1) 100%);
+  background: linear-gradient(to bottom, rgba(0,217,255,1) 0%, rgba(0,72,179,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00d9ff', endColorstr='#0048b3', GradientType=0 );
+}
+%smooth {
+  -webkit-transition: all 0.4s ease-in;
+  -moz-transition: all 0.4s ease-in;
+  -ms-transition: all 0.4s ease-in;
+  -o-transition: all 0.4s ease-in;
+  transition: all 0.4s ease-in;
+  &:hover:hover {
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    -ms-transition: all 0.4s ease-out;
+    -o-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+  }
+}
+%tbl{
+  display: table;
+  width: 100%;
+}
+
+%tbl-cell{
+  display: table-cell;
+  vertical-align: middle;
+  //@extend %tbl-cell;
+}
+%middle{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  //@extend %middle;
+}
+@mixin border-radius($cir-rad...) {
+  -webkit-border-radius: $cir-rad;
+  -moz-border-radius: $cir-rad;
+  border-radius:$cir-rad;
+  //@include circle-radius();
+}
+@mixin box-shadow($shadows...) {
+  -moz-box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  box-shadow: $shadows;
+  //@include box-shadow(0px 4px 5px #666, 2px 6px 10px #999);
+}
+@mixin transition($trans03...) {
+  -webkit-transition: $trans03;
+  -moz-transition: $trans03;
+  -ms-transition: $trans03;
+  -o-transition: $trans03;
+  transition: $trans03;
+  //@include transition03(0.3s ease-in-out);
+}
+@mixin transform($any...) {
+  -webkit-transform: $any;
+  -moz-transform: $any;
+  -ms-transform: $any;
+  -o-transform: $any;
+  transform: $any;
+  //@include transition03(0.3s ease-in-out);
+}
+@mixin animation($anim...) {
+  -webkit-animation: $anim; /* Safari 4+ */
+  -moz-animation:    $anim; /* Fx 5+ */
+  -o-animation:      $anim; /* Opera 12+ */
+  animation:         $anim;
+  //@include transition03(0.3s ease-in-out);
+}
+
+%fl-fw {
+  float: left;
+  width: 100%;
+}
+
+%fl-fw-nmp {
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+%fl-fw-nmpl {
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+%fl-hw {
+  float: left;
+  width: 50%;
+}
+
+%fr-fw {
+  float: right;
+  width: 100%;
+}
+
+%fr-hw {
+  float: right;
+  width: 50%;
+}
+
+%pa-fw {
+  position: absolute;
+  width: 100%;
+}
+
+%pa-hw {
+  position: absolute;
+  width: 50%;
+}

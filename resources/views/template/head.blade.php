@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 	<title>Avant</title>
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Avant">
 	<meta name="author" content="The Red Team">
-
+<link rel="shortcut icon" href="{{asset('assets/img/fevicon.png')}}">
     <!-- <link href="assets/less/styles.less" rel="stylesheet/less" media="all">  -->
     <link rel="stylesheet" href="{{asset(ASSETS_URL.'css/styles.css?=140')}}">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
@@ -14,8 +14,8 @@
    
 
 <link rel='stylesheet' type='text/css' href="{{asset('assets/css/styles.css')}}" />
-<link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-responsive.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-style.css')}}" /> 
+<link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-responsive.css')}}" />
 
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/codeprettifier/prettify.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/form-toggle/toggles.css')}}" />

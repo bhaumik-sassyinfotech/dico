@@ -50,6 +50,36 @@ if ($role_id == 1) {
             </ul>
         </li>
         <!-- <li><a href="{{ route('points.index') }}"><i class="fa fa-usd" aria-hidden="true"></i><span>Points</span></a> -->
+        <!--</li>-->
+        <li><a href="javascript:;"><i class="fa fa-external-link"></i> <span>Block List</span></a>
+            <ul class="acc-menu">
+                <li><a href="{{ route('block.index') }}"><span>View Block List</span></a></li>
+                
+            </ul>
+        </li>
+        <li><a href="javascript:;"><i class="fa fa-gift"></i> <span>Package List</span></a>
+            <ul class="acc-menu">
+                <li><a href="{{ route('packages.index') }}"><span>View Package List</span></a></li>
+                
+            </ul>
+        </li>
+        <li><a href="javascript:;"><i class="fa fa-question"></i> <span>FAQs List</span></a>
+            <ul class="acc-menu">
+                <li><a href="{{ route('adminfaq.index') }}"><span>View FAQs List</span></a></li>
+                
+            </ul>
+        </li>
+          <li><a href="javascript:;"><i class="fa fa-adjust"></i> <span>Contact List</span></a>
+            <ul class="acc-menu">
+                <li><a href="{{ route('adminContactUs.index') }}"><span>View Contact List</span></a></li>
+                
+            </ul>
+        </li>
+          <li><a href="javascript:;"><i class="fa fa-gear"></i> <span>Settings View</span></a>
+            <ul class="acc-menu">
+                <li><a href="{{ route('settings.index') }}"><span>Settings View</span></a></li>
+                
+            </ul>
         </li>
         <?php
 }
@@ -103,4 +133,10 @@ else if ($role_id == 3) {
 
     </ul>
     <!-- END SIDEBAR MENU -->
+    <div class="bottom-sidebar">
+      <div class="feedback"><a href="feedback.php">
+      <i class="fa fa-check-square" aria-hidden="true"></i><span>Give Us feedback </span></a></div>
+      <div class="support"><a href="support.php"><i class="fa fa-comments-o" aria-hidden="true"></i> <span>Support</span></a></div>
+        <div class="bottom-logo"><a href="#"><i><img src="{{asset('assets/img/fevicon.png')}}"></i><span> <img src="{{asset('assets/img/logo.png')}}"></span></a></div>
+    </div>
 </nav>

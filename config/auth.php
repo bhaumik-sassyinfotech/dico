@@ -45,6 +45,10 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+        'front' => [
+            'driver' => 'session',
+            'provider' => 'front',
+        ],
     ],
 
     /*
@@ -69,7 +73,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
-
+        'front' => [
+             'driver' => 'database',
+             'model' => App\User::class,
+             'table'  => 'users', // **This was missing**
+         ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
