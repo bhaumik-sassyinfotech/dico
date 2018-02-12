@@ -805,6 +805,7 @@ var otherManagerTable_superadmin = $("#other-managers-table").DataTable({
         {data: 'following_count'},
         {data: 'followers_count'},
         {data: 'points'},
+        {data: 'actions'},
         // {data: 'admin', sorting: false, orderable: false}
     ]
 });
@@ -826,6 +827,7 @@ var companyManagerTable_superadmin = $("#company-manager-table").DataTable({
         {data: 'following_count'},
         {data: 'followers_count'},
         {data: 'points'},
+        {data: 'actions'},
         // {data: 'admin', sorting: false, orderable: false}
     ]
 });

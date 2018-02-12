@@ -62,11 +62,11 @@
                                                     </li>
                                                 </ul>
 
-                                                <div class="btn-group top-set">
-                                                    <form method="post" class="search-form">
+                                                <div class="btn-group top-set search-form">
+                                                    <div method="post" class="search-form">
                                                         <input id="search_query" type="text" placeholder="Search User"/>
                                                         <input type="button" id="search_btn" value="#" class="search-icon"/>
-                                                    </form>
+                                                    </div>
                                                     <button id="GoList" class="grid-view">
                                                         <img src="assets/img/icon/group-list.png" alt="group"
                                                              class="block">
@@ -104,7 +104,10 @@
                                                         <div class="panel-heading">
                                                             <div class="pull-right">
                                                                 <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                                <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                <?php
+                                                                    $edit_url = route('user.edit', Helpers::encode_url($user->id));
+                                                                ?>
+                                                                <a href="{{$edit_url}}" onclick="window.open('<?=$edit_url?>','_self')"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                                 <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                             </div>
 
@@ -187,8 +190,7 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
-                                                                                        <label class="check checkAll">User Name<input
-                                                                                                    type="checkbox" class="checkAllBox">
+                                                                                        <label class="check checkAll">User Name<input type="checkbox" class="checkAllBox">
                                                                                             <span class="checkmark"></span>
                                                                                         </label>
                                                                                     </th>
@@ -197,6 +199,7 @@
                                                                                     <th><label>Following</label></th>
                                                                                     <th><label>Followers</label></th>
                                                                                     <th><label>Points</label></th>
+                                                                                    <th><label>Action</label></th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -255,6 +258,7 @@
                                                                                 <th><label>Following</label></th>
                                                                                 <th><label>Followers</label></th>
                                                                                 <th><label>Points</label></th>
+                                                                                <th><label>Action</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -314,6 +318,7 @@
                                                                                 <th><label>Following</label></th>
                                                                                 <th><label>Followers</label></th>
                                                                                 <th><label>Points</label></th>
+                                                                                <th><label>Action</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -356,20 +361,21 @@
 @push('javascripts')
     <script type="text/javascript">
         function loadMoreUser() {
+            $('#spinner').show();
             var offSet_selector = $('#offset');
-            var tab_id = offSet_selector.data('tab');
+            var tab_id = offSet_selector.attr('data-tab');
+            //alert(tab_id);
             var id = offSet_selector.val();
             var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
-            console.log(formData);
-            var new_url = '/user/employeeGrid';
-
+            //console.log(formData);
+            if(tab_id == 1)
+                var new_url = '/user/employeeGrid';
             if(tab_id == 2)
-                new_url = '/user/adminGrid';
+                var new_url = '/user/adminGrid';
             else if(tab_id == 3)
-                new_url = '/user/otherManagersGrid';
-
+                var new_url = '/user/otherManagersGrid';
             $.ajax({
                 url: SITE_URL+new_url,
                 type: "POST",
@@ -377,6 +383,7 @@
                 async:true,
                 success: function (response)
                 {
+                    $('#spinner').hide();
                     if(response != "")
                     {
                         if(response.html != "")

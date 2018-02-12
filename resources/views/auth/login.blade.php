@@ -34,6 +34,7 @@
                     <label class="check">Remember Me<input type="checkbox" {{ old('remember') ? 'checked' : '' }}>
                         <span class="checkmark"></span>
                     </label>
+                    <a href="{{url('/adminForgotPassword')}}">Forgot Password</a>
                     <input type="submit" value="Login" class="st-btn loginBtn">
                 </div>
             </div>

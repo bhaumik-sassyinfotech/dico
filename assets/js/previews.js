@@ -22,7 +22,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 
 $('.profile-slider').owlCarousel({
-    loop:true,
+    loop:false,
     margin:40,
     autoplay: true,
     autoPlaySpeed: 1000,

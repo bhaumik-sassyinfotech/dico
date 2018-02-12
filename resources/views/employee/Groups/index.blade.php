@@ -1,6 +1,6 @@
 @extends('template.default')
 @section('content')
-
+<title>DICO - Group</title>
     <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
         <div id='wrap'>
             <div id="page-heading">
@@ -21,7 +21,6 @@
             </div>
             <div class="container">
                 <div class="row">
-                    @include('template.notification')
                     <div class="col-lg-12">
                         <div class="panel panel-danger">
                             <div class="panel-body no-gapping">
@@ -40,15 +39,15 @@
                                                                     data-sort="data-name"
                                                                     class="btn btn-default sort "><span class=""><i
                                                                         class="fa fa-user fa-6 visible-xs"
-                                                                        aria-hidden="true"></i><span class=" hidden-xs">My Groups</span></a>
+                                                                        aria-hidden="true"></i><span class=" hidden-xs">All Groups</span></a>
                                                     </li>
                                                 </ul>
 
                                                 <div class="btn-group top-set">
-                                                    <form method="post" class="search-form">
-                                                        <input id="search_query" type="text" placeholder="Search User"/>
+                                                    <div class="search-form">
+                                                        <input id="search_query" type="text" placeholder="Search Group"/>
                                                         <input type="button" value="#" class="search-icon searchBtn searchBt"/>
-                                                    </form>
+                                                    </div>
                                                     <button id="GoList" class="grid-view">
                                                         <img src="assets/img/icon/group-list.png" alt="group"
                                                              class="block">
@@ -142,7 +141,7 @@
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info">
                                                                 <div class="panel-heading trophy">
-                                                                    <h4 class="icon">Users List</h4>
+                                                                    <h4 class="icon">Groups Listing</h4>
                                                                     <div class="pull-right">
                                                                         <a href="settings.php"><img
                                                                                     src="assets/img/settings-icon.png"
@@ -174,8 +173,8 @@
                                                                 </select>
                                                             </div>
                                                             <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                    <input type="button" name="" class="st-btn multiple-action" value="Submit">
-                                                                </div>
+                                                               <input type="button" name="" class="st-btn multiple-action" value="Submit">
+                                                            </div>
                                                             </div>
                                                             </div>
                                                         </div>

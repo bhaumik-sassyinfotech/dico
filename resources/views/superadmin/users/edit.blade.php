@@ -16,8 +16,7 @@
             <div class="container">
                 <div class="row">
                     <div id="create-user-from">
-                        <form class="common-form" name="user_form" id="user_form" method="POST" enctype= 'multipart/form-data'
-                              action="{{route('user.update',[$user->id])}}">
+                        <form class="common-form" name="user_form" id="user_form" method="POST" enctype= 'multipart/form-data' action="{{route('user.update',[$user->id])}}">
                             {{ method_field('PUT') }}
                             {{ csrf_field() }}
                             <div class="form-group">
@@ -27,7 +26,7 @@
                                         <option value="">------ Select ------</option>
                                         @if( !empty($companies) )
                                             @foreach($companies as $company)
-                                                <option value="{{$company->id}}" {{ ( $company->id == $user->company_id )  ? "selected" : ' '  }}>{{$company->company_name}}</option>
+                                                <option value="{{$company->id}}" <?php ( $company->id == $user->company_id )  ? "selected" : ' '  ?>>{{$company->company_name}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -53,7 +52,7 @@
                                         
                                         @if(!empty($roles))
                                             @foreach($roles as $role)
-                                                <option value="{{$role->id}}" {{ ( $user->role_id == $role->id ) ? 'selected ': ' ' }}>{{$role->role_name}}</option>
+                                                <option value="{{$role->id}}" <?php ( $user->role_id == $role->id ) ? 'selected ': ' ' ?>>{{$role->role_name}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -61,11 +60,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Groups:</label>
-                                <select name="user_groups[]" id="user_groups" class="form-control select"
-                                        multiple="multiple" style="width: 71%">
+                                <select name="user_groups[]" id="user_groups" class="form-control select" multiple="multiple">
+                                    <option disabled="disabled" value="">Select company first.</option>
                                     @if(count($groups) > 0)
                                         @foreach($groups as $group)
-                                            <option value="{{ $group->id }}" {{ ( in_array($group->id, $user_group_ids) ) ? 'selected ': ' ' }}>{{$group->group_name}}</option>
+                                            <option value="{{ $group->id }}" <?php ( in_array($group->id, $user_group_ids) ) ? 'selected ': ' ' ?>>{{$group->group_name}}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -76,7 +75,7 @@
                                     <label class="check">
                                         <p>Active</p>
                                         If user is inactive, than user will not be able to login into the system.
-                                        <input type="checkbox" name="is_active" id="is_active"  {{ ( $user->is_active == 1 ) ? "checked" : ' ' }} >
+                                        <input type="checkbox" name="is_active" id="is_active"  <?php ( $user->is_active == 1 ) ? "checked" : ' ' ?> >
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -84,7 +83,7 @@
                             <div class="form-group">
                                 <div class="blank">
                                     <label class="check"><p>Suspend</p>If user is suspended, than user can login but will not be able to create a new post.
-                                        <input type="checkbox" name="is_suspended" id="is_suspended" {{ ( $user->is_suspended == 1 ) ? "checked" : ' ' }} >
+                                        <input type="checkbox" name="is_suspended" id="is_suspended" <?php ( $user->is_suspended == 1 ) ? "checked" : ' ' ?> >
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>

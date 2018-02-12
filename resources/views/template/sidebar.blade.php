@@ -9,8 +9,8 @@
             </form>
         </li>
         <?php $currUser = Auth::user();
-$role_id = $currUser->role_id;
-?>
+              $role_id = $currUser->role_id;
+        ?>
         <li style="display: none;" class="divider"></li>
         <?php
 //=====start superadmin menu=====//
@@ -94,6 +94,7 @@ else if ($role_id == 2) {
 	<li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
 	 */
 	?>
+                <li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
                 <li><a href="{{ route('user.index') }}"><span>View User</span></a></li>
             </ul>
         </li>
@@ -117,6 +118,11 @@ else if ($role_id == 2) {
 else if ($role_id == 3) {
 	?>
         <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
+        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>User</span></a>
+            <ul class="acc-menu">
+                <li><a href="{{ route('user.index') }}"><span>View User</span></a></li>
+            </ul>
+        </li>
         <li><a href="{{ route('group.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Group</span></a></li>
         <?php
 }

@@ -45,7 +45,7 @@ if (!empty($user->profile_image)) {
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" data-dismiss="modal" aria-hidden="true"></button>
+                                            <button type="button" class="close-button-small" data-dismiss="modal" aria-hidden="true"></button>
                                             <h3>Followers({{ (isset($user->followers)) ? count($user->followers) : 0 }})</h3>
                                             <div class="followers-list">
                                                 @if(!empty($user->followers) && count($user->followers) > 0)
@@ -66,16 +66,22 @@ if (!empty($follower->followUser->profile_image)) {
                                                                 <p>{{ $follower->followUser->name }}</p>
                                                                 <a href="mailto:{{ $follower->followUser->email }}">{{ $follower->followUser->email }}</a>
                                                             </div>
-                                                            @php
+                                                            <?php
                                                                 $str='';
-                                                                if($follower->followUser->role_id == '1')
+                                                                if($follower->followUser->role_id == '1') {
                                                                     $str = 'Super Admin';
-                                                                else if($follower->followUser->role_id == '2')
-                                                                    $str = 'Company Admin';
-                                                                else
+                                                                    $cls = "su";
+                                                                }
+                                                                else if($follower->followUser->role_id == '2') {
+                                                                    $str = 'Admin';
+                                                                    $cls = "adm";
+                                                                }
+                                                                else {
                                                                     $str='Employee';
-                                                            @endphp
-                                                            <p class="jobs-title emp">{{ $str }}</p>
+                                                                    $cls = "emp";
+                                                                }
+                                                            ?>
+                                                            <p class="jobs-title {{$cls}}">{{ $str }}</p>
                                                         </div>
                                                     @endforeach
                                                 @else
@@ -94,7 +100,7 @@ if (!empty($follower->followUser->profile_image)) {
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" data-dismiss="modal" aria-hidden="true"></button>
+                                            <button type="button" class="close-button-small" data-dismiss="modal" aria-hidden="true"></button>
                                             <h3>Following({{ (isset($user->following)) ? count($user->following) : 0 }})</h3>
                                             <div class="followers-list">
                                                 @if(!empty($user->following) && count($user->following) > 0)
@@ -102,29 +108,35 @@ if (!empty($follower->followUser->profile_image)) {
                                                         <div class="followers-details">
                                                             <div class="follow-img">
                                                                 <?php
-$profile_image = '';
-if (!empty($following->followingUser->profile_image)) {
-	$profile_image = asset(PROFILE_PATH . $following->followingUser->profile_image);
-} else {
-	$profile_image = asset('public/assets/demo/avatar/jackson.png');
-}
-?>
+                                                                $profile_image = '';
+                                                                if (!empty($following->followingUser->profile_image)) {
+                                                                        $profile_image = asset(PROFILE_PATH . $following->followingUser->profile_image);
+                                                                } else {
+                                                                        $profile_image = asset('public/assets/demo/avatar/jackson.png');
+                                                                }
+                                                                ?>
                                                                 <img src="{{ $profile_image }}" alt="followers" >
                                                             </div>
                                                             <div class="follow-name">
                                                                 <p>{{ $following->followingUser->name }}</p>
                                                                 <a href="mailto:{{ $following->followingUser->email }}">{{ $following->followingUser->email }}</a>
                                                             </div>
-                                                            @php
+                                                            <?php
                                                                 $str='';
-                                                                if($following->followingUser->role_id == '1')
+                                                                if($following->followingUser->role_id == '1') {
                                                                     $str = 'Super Admin';
-                                                                else if($following->followingUser->role_id == '2')
-                                                                    $str = 'Company Admin';
-                                                                else
+                                                                    $cls = "su";
+                                                                }
+                                                                else if($following->followingUser->role_id == '2') {
+                                                                    $str = 'Admin';
+                                                                    $cls = "adm";
+                                                                }
+                                                                else {
                                                                     $str='Employee';
-                                                            @endphp
-                                                            <p class="jobs-title emp">{{ $str }}</p>
+                                                                    $cls = "emp";
+                                                                }
+                                                            ?>
+                                                            <p class="jobs-title {{$cls}}">{{ $str }}</p>
                                                         </div>
                                                     @endforeach
                                                 @else

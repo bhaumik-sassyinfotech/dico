@@ -103,8 +103,8 @@ class UserController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-
-		if (Auth::user() && Auth::user()->role_id < 2) {
+                if (Auth::user()) {
+		//if (Auth::user() && Auth::user()->role_id < 2) {
 			$currUser = Auth::user();
 			$company_id = Auth::user()->company_id;
 			$usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();
@@ -294,8 +294,10 @@ class UserController extends Controller {
 		$id = Helpers::decode_url($id);
 		if (Auth::user()) {
 			$user = User::find($id);
+                        //dd($user);
 			$company_id = $user->company_id;
 			$usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();
+                        //dd($usercompany);
 			if ($usercompany) {
 				if ($usercompany->allow_add_admin == 1) {
 					$role_id = [2, 3];
@@ -312,7 +314,6 @@ class UserController extends Controller {
 
 				$user_group_ids = GroupUser::where('user_id', $id)->get()->pluck('group_id')->toArray();
 				$groups = Group::whereIn('id', $user_group_ids)->where('company_id', $company_id)->get();
-
 				return view($this->folder . '.users.edit', compact('user', 'roles', 'companies', 'groups', 'user_group_ids'));
 			}
 		} else {
@@ -322,19 +323,12 @@ class UserController extends Controller {
 
 	public function update(Request $request, $id) {
 		try {
-			/*$this->validate($request, [
-								'user_name' => 'required',
-								'user_email' => 'required|email|unique:users,email,' . $id,
-				//                'company_id' => 'required',
-								'role_id' => 'required',
-			*/
 			$validator = Validator::make($request->all(),
-				[
-					'user_name' => 'required',
-					'user_email' => 'required|email|unique:users,email,' . $id,
-//                'company_id' => 'required',
-					'role_id' => 'required',
-				]);
+                        [
+                                'user_name' => 'required',
+                                'user_email' => 'required|email|unique:users,email,' . $id,
+                                'role_id' => 'required',
+                        ]);
 			if ($validator->fails()) {
 				return Redirect::back()->withErrors($validator)->withInput();
 			}
@@ -348,7 +342,6 @@ class UserController extends Controller {
 			} else {
 				$is_suspended = 0;
 			}
-			DB::beginTransaction();
 			$user = User::find($id);
 			$company_id = $user->company_id;
 
@@ -381,9 +374,9 @@ class UserController extends Controller {
 				GroupUser::insert($addData);
 			}
 
-			dd([$request->input('user_groups'), $removed, $new_added]);
+			//dd([$request->input('user_groups'), $removed, $new_added]);
 			$postData = array('name' => $request->input('user_name'), 'email' => $request->input('user_email'), 'role_id' => $request->input('role_id'), 'company_id' => $request->input('company_id'), 'is_active' => $is_active, 'is_suspended' => $is_suspended, 'updated_at' => Carbon\Carbon::now());
-			$res = User::where('id', $id)->update($postData);
+                        $res = User::where('id', $id)->update($postData);
 			if ($res) {
 				DB::commit();
 				return redirect()->route('user.index')->with('success', 'User ' . Config::get('constant.UPDATE_MESSAGE'));
@@ -578,9 +571,9 @@ class UserController extends Controller {
 			$roleId = 3; // role ID of employee
 
 			$query = User::select('users.*')->with(['followers', 'following'])->where('role_id', $roleId);
-			if ($currUser->role_id == 1) {
+			//if ($currUser->role_id == 1) {
 				$query = $query->where('id', '!=', Auth::user()->id);
-			} else if ($currUser->role_id > 1) {
+			/*} else*/ if ($currUser->role_id > 1) {
 				$query = $query->where('company_id', $currUser->company_id);
 			}
 
@@ -616,19 +609,22 @@ class UserController extends Controller {
 
 	public function getOtherManagerList(Request $request) {
 		$query = User::with(['followers', 'following'])->where('role_id', 2);
-		if ($request->has('search') && !empty($request->has('search'))) {
+		if ($request->input('search') && !empty($request->input('search'))) {
 			$query = $query->where(function ($q) use ($request) {
 				$q->where('name', 'like', "%{$request->input('search_query')}%")->orWhere('email', 'like', "%{$request->input('search_query')}%");
 			});
 		}
-		$res = $query->orderBy('id', 'desc');
+                if(Auth::user()->role_id > 1) {
+                    $query->where('company_id',Auth::user()->company_id);
+                }
+		$res = $query->where('id','!=',Auth::user()->id)->orderBy('id', 'desc');
 		return Datatables::of($res)->addColumn('position', function ($row) {
 			return 'Company Manager';
 		})->addColumn('points', function ($row) {
 			$points = Helpers::user_points($row->id);
 			return '<p>' . $points['points'] . '</p>';
 		})->addColumn('name', function ($row) {
-			return '<label class="check">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
+			return '<label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a><input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
 		})->addColumn('email', function ($row) {
 			return '<p>' . $row->email . '</p>';
 		})->addColumn('following_count', function ($row) {
@@ -637,21 +633,29 @@ class UserController extends Controller {
 			return count($row->followers);
 		})->addColumn('role', function ($row) {
 			return 'Company Manager';
-		})->rawColumns(['name', 'email', 'following_count', 'followers_count', 'points'])->make(true);
+		})->addColumn('actions', function ($row) {
+                            $edit_url = route('user.edit', Helpers::encode_url($row->id));
+				return '<a href="'.$edit_url.'"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+			})->rawColumns(['name', 'email', 'following_count', 'followers_count', 'points','actions'])->make(true);
 	}
 
 	public function getEmployeeGrid(Request $request) {
-
+                //DB::connection()->enableQueryLog();
 		$query = User::select('users.*')->with(['followers'=>function($q) {
                                     $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                                 }, 'following'])->withCount('followers')->where('role_id', 3);
-		if ($request->has('search') && !empty($request->input('search'))) {
-			$query = $query->Where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
-		}
-		if (Auth::user()->role_id == 2) {
+                $query = $query->where('id','!=',Auth::user()->id);   
+                if (Auth::user()->role_id == 2) {
 			$query = $query->where('company_id', Auth::user()->company_id);
 		}
-
+		if ($request->has('search') && !empty($request->input('search'))) {
+                    $search_text = $request->input('search');
+                    $query->whereNested(function($q) use ($search_text) {
+                        $q->where('name', 'like', '%' . $search_text . '%');
+                        $q->orWhere('email', 'like', '%' . $search_text . '%');
+                    });
+			//$query = $query->Where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
+		}
 		$offset = 0;
 		if ($request->has('offset')) {
 			$offset = $request->input('offset');
@@ -662,12 +666,14 @@ class UserController extends Controller {
 		// }
 		$users_count = count($query->get());
 		$users = $query->offset($offset)->limit(POST_DISPLAY_LIMIT)->orderBy('id', 'desc')->get()->toArray();
+                //dd(DB::getQueryLog());
 		// dd($users);
 		$html = view::make($this->folder . '.users.ajax_employee', compact('users'));
 		$output = array('html' => $html->render(), 'count' => $users_count);
 		return $output;
 	}
 	public function getOtherManagerGrid(Request $request) {
+                //DB::connection()->enableQueryLog();
 		$offset = 0;
 		if ($request->has('offset')) {
 			$offset = $request->input('offset');
@@ -676,24 +682,32 @@ class UserController extends Controller {
 		$query = User::with(['followers'=>function($q) {
                                     $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                                 }, 'following'])->withCount('followers')->where('role_id', 2);
-		if ($request->has('search') && !empty($request->has('search'))) {
+		if ($request->input('search') && !empty($request->input('search'))) {
 			$query = $query->where(function ($q) use ($request) {
 				$q->where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
 			});
 		}
-		$users_query = $query->orderBy('id', 'desc');
+                if(Auth::user()->role_id > 1) {
+                    $query->where('company_id',Auth::user()->company_id);
+                }
+		$users_query = $query->where('id','!=',Auth::user()->id)->orderBy('id', 'desc');
 		$users_count = count($users_query->get());
 		$users = $users_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
+                //dd(DB::getQueryLog());
 		$html = view::make($this->folder . '.users.ajax_other_managers', compact('users'));
 		$output = array('html' => $html->render(), 'count' => $users_count);
 		return $output;
 	}
 
 	public function getGroupAdminGrid(Request $request) {
-		$groups = GroupUser::where('is_admin', 1)->get();
-		// $group_owner = $groups->pluck('group_owner')->toArray();
+                //DB::connection()->enableQueryLog();
+		$groups_query = GroupUser::where('is_admin', 1);
+                if (Auth::user()->role_id == 2) {
+                    $groups_query->where('company_id', Auth::user()->company_id);
+                }
+		$groups = $groups_query->groupBy('group_id')->get();
+                // $group_owner = $groups->pluck('group_owner')->toArray();
 		$group_ids = $groups->pluck('group_id')->toArray();
-		DB::connection()->enableQueryLog();
                 $users_query = GroupUser::with(['userDetail'=>function($q) {$q->withCount('followers');}, 'userDetail.followers'=>function($q) {
                                     $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                                 }, 'userDetail.following']);
@@ -703,16 +717,19 @@ class UserController extends Controller {
 				$q->where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
 			});
 		}
-
+                if (Auth::user()->role_id == 2) {
+			$users_query = $users_query->where('company_id', Auth::user()->company_id);
+		}
 		$users = $users_query->where('is_admin', 1)->whereIn('group_id', $group_ids)->get()->toArray();
                 //dd($users);
+                //dd(DB::getQueryLog());
 		$html = view::make($this->folder . '.users.ajax_admin', compact('users'));
 		$output = array('html' => $html->render(), 'count' => count($users));
 		return $output;
 	}
 
 	public function getGroupAdminList(Request $request) {
-
+                 DB::connection()->enableQueryLog();
 		$group_admins_query = User::with(['following', 'followers'])->select(DB::raw('users.name, users.id, roles.role_name ,GROUP_CONCAT(groups.group_name SEPARATOR ", ") as group_admins'));
 
 		if ($request->has('search_query') && !empty($request->input('search_query'))) {
@@ -720,16 +737,18 @@ class UserController extends Controller {
 				$q->where('name', 'like', "%{$request->input('search_query')}%")->orWhere('email', 'like', "%{$request->input('search_query')}%");
 			});
 		}
-
-		$group_admins = $group_admins_query->leftJoin('group_users', 'group_users.user_id', '=', 'users.id')->leftJoin('groups', 'groups.id', '=', 'group_users.group_id')->leftJoin('roles', 'roles.id', '=', 'users.role_id')->where('group_users.is_admin', '1')->groupBy('users.id')->get();
-
+                 if (Auth::user()->role_id == 2) {
+			$group_admins_query = $group_admins_query->where('users.company_id', Auth::user()->company_id);
+		}
+		$group_admins = $group_admins_query->leftJoin('group_users', 'group_users.user_id', '=', 'users.id')->leftJoin('groups', 'groups.id', '=', 'group_users.group_id')->leftJoin('roles', 'roles.id', '=', 'users.role_id')->where('group_users.is_admin', '1')->where('users.id','!=',Auth::user()->id)->groupBy('users.id')->get();
+                //dd(DB::getQueryLog());
 		return Datatables::of($group_admins)->addColumn('role', function ($row) {
 			return '<p>' . $row->role_name . '</p>';
 		})->addColumn('points', function ($row) {
 			$points = Helpers::user_points($row->id);
 			return '<p>' . $points['points'] . '</p>';
 		})->addColumn('name', function ($row) {
-			return '<label class="check">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
+			return '<label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a><input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
 		})->addColumn('email', function ($row) {
 			return '<p>' . $row->email . '</p>';
 		})->addColumn('following_count', function ($row) {
@@ -738,7 +757,10 @@ class UserController extends Controller {
 			return count($row->followers);
 		})->addColumn('group_admins', function ($row) {
 			return '<p>' . $row->group_admins . '</p>';
-		})->rawColumns(['role', 'points', 'name', 'email', 'following_count', 'followers_count', 'group_admins'])->make(true);
+		})->addColumn('actions', function ($row) {
+                    $edit_url = route('user.edit', Helpers::encode_url($row->id));
+                        return '<a href="'.$edit_url.'"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                })->rawColumns(['role', 'points', 'name', 'email', 'following_count', 'followers_count', 'group_admins','actions'])->make(true);
 	}
 
 	public function alterStatus(Request $request) {

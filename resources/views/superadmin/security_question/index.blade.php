@@ -2,7 +2,7 @@
 <title>DICO - SecurityQuestion</title>
 @section('content')
 
-<div id="page-content">
+<div id="page-content" class="user-table">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">

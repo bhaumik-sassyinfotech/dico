@@ -1202,7 +1202,7 @@ ul.dropdown-menu li:not(:last-child) {
     border-bottom: 1px solid #ccc;
 }
 .point-page .table tr td {
-    padding: 15px 18px;
+    padding: 15px 5px;
 }
 body .dropdown-menu {
     padding: 0px 0 0;
@@ -1580,7 +1580,8 @@ form .form-group {
     line-height: 100%;
 }
 .common-form .btn-wrap-div {
-  margin-left: 29%;
+    margin-left: 29%;
+    position: relative;
 }
 .common-form #myModal .form-group > label {
   line-height:90%;
@@ -2788,7 +2789,7 @@ form .form-group:last-child {
 /* create user popup(SAE) */
 
 /* create select user */
-.add-grp-wrap {
+.create-user .add-grp-wrap {
   position: absolute;
   right: -225px;
   top: 0;
@@ -3021,7 +3022,7 @@ select::-ms-expand {
 
 .profile-slider .owl-nav.disabled,
 .post-slider .owl-nav.disabled {
-  display: block !important;
+  display: none !important;
 }
 
 .owl-carousel.profile-slider .owl-nav div:after,
@@ -3563,6 +3564,7 @@ body .idea-page #page-heading h1.icon-mark {
     right: 0;
     text-align: right;
     vertical-align: bottom;
+    top: 0;
 }
 .profile-page .modal-dialog h3,
 .idea-details .modal-dialog h3
@@ -3906,7 +3908,7 @@ body .breadcrumb > li + li:before {
   font-size: 15px;
   font-weight: 600;
 }
-
+/*
 .all-group-list tr td:nth-child(1) {
   width: 20%;
 }
@@ -3926,7 +3928,7 @@ body .breadcrumb > li + li:before {
 .all-group-list tr td:nth-child(5) {
   width: 20%;
 }
-
+*/
 
 body .point-page.all-group-list .tab-content .panel-info .panel-body{
      background-color: #fff !important;
@@ -3957,15 +3959,13 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 
 .all-group-list .trophy .pull-right a {
     position: relative;
-    margin: 0 15px;
+    margin: 0px 15px;
     display: block;
 }
 .all-group-list .trophy.setting-icon .pull-right a {
     margin: 0px 15px;
 }
-.point-page.user-profile .table tr td {
-    padding: 15px 0;
-}
+
 .point-page.all-group-list .table p {
   color: #646464;
   font-size: 12px;
@@ -4006,7 +4006,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
   line-height: 140%;
 }
 .point-page.all-group-list .table > thead > tr > th {
-  padding: 15px 20px;
+    padding: 15px 5px;
 }
 .all-group-list.super-user-employee #page-heading .options {
   right: 20px;
@@ -4055,20 +4055,16 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 .action.notice-left {
   margin-right: 10px;
 }
-.point-page.all-group-list.super-user-employee .table > thead > tr > th {
-  padding: 15px 30px;
-}
-
 
 .super-user-employee tr label {
   -moz-user-select: none;
   cursor: pointer;
   display: block;
-  font-size: 11.5px;
+  font-size: 10px;
   font-weight: 600;
   line-height: 140%;
   margin-bottom: 0;
-  padding-left: 10px;
+  padding-left: 0px;
   position: relative;
 }
 .super-user-employee table tbody tr label {
@@ -4084,6 +4080,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
   float: left;
 }
 
+/*
 
 .all-group-list.super-user-employee tr td:nth-child(1) {
   width: 15%;
@@ -4129,6 +4126,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 .all-group-list.super-user-employee #users tr td:nth-child(4) {
   width: 28%;
 }
+*/
 
 .color-changes li > a{
   color: #323232 !important;  
@@ -4155,7 +4153,7 @@ body .point-page.all-group-list .tab-content .panel-info .panel-body{
 }
 
 .main-user-profile .table {
-    display: block;
+    display: inline-table;
     margin: 0 0 20px !important;
     max-width: 100% !important;
     padding: 0 20px !important;
@@ -4410,9 +4408,7 @@ body .modal-dialog.updatesecurity .modal-content,
   color: #4d4d4d;
   font-weight: 600;
 }
-.point-page.all-group-list .table > thead > tr:first-child > th {
-  padding-left: 0px;
-}
+
 .toggle-wrap:last-child .toggle-text {
   float: none;
   width: 100%;
@@ -4719,11 +4715,12 @@ ul.tagit {
     text-transform: uppercase;
     position: relative;
     font-family: 'Open Sans', sans-serif !important;
+    padding: 5px 10px;
 }
 .bottom-logo span img {
     max-width: 75px;
 }
-.all-group-list.point-page.super-user-employee tr td:nth-child(5) { width: 10%; }
+/*.all-group-list.point-page.super-user-employee tr td:nth-child(5) { width: 10%; }*/
 .none{display:none;}
 .group-listing tbody tr td:last-child p { margin-right: 25px; padding: 18px 10px; line-height: 120%; }
 #page-content {
@@ -4866,7 +4863,122 @@ body .user-a-post:hover{
   margin-right: 4px;
 }
 
-.pagination li a {
+.profile-page .profile-slider .owl-next.disabled, 
+.profile-page .profile-slider .owl-prev.disabled,
+.post-slider .profile-slider .owl-prev.disabled,
+.post-slider .profile-slider .owl-next.disabled{
+    display: none;
+}
+
+
+/*close 09-02-2018 */
+
+/*10-02-2018 */
+.create-user .select2-search__field {
+  color: #222;
+  display: block;
+  font-size: 14px !important;
+  height: 30px;
+  padding: 0 !important;
+  line-height: 100%;
+}
+
+
+.main-user-profile.user-profile .pagination li a, 
+.main-user-profile.user-profile .pagination li.active a {
+    line-height: 98%;
     padding: 10px 15px;
 }
-/*close 09-02-2018 */
+
+
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee .pagination li a{
+    line-height: 130%;
+    padding: 10px 15px;
+}
+
+/*close 10-02-2018 */
+
+/*12-02-2018 */
+
+.login-page .btn-wrap-div label + a {
+    display: block;
+    margin-bottom: 0;
+    position: absolute;
+    top: -7px;
+    z-index: 0;
+    right: 0;
+}
+#company_table_wrapper .pagination li a {
+    padding: 10px 15px;
+    line-height: 94%;
+}
+
+.point-page .table#points-listing tr td {
+    padding-left: 20px;
+}
+#points_table_paginate .pagination li a {
+    padding: 10px 15px;
+}
+#points_table_paginate .pagination li.active a {
+    padding: 8px 15px;
+}
+.create-user .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    font-size: 9px;
+    padding: 0 7px;
+}
+
+.select2-container--default .select2-results__option[aria-disabled=true] {
+    color: #000 !important;
+}
+
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee .table > thead > tr > th,
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee .table tr td{
+    padding: 15px 25px;
+}
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee .hide-table .pagination li a {
+    line-height: 130%;
+}
+
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee tr label {
+    font-size: 12px;
+}    
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee .trophy .pull-right a {
+    margin: 0px 15px;
+}
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee.user-table .hide-table .pagination li a {
+    line-height: 93%;
+}
+
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee.user-table .trophy .pull-right a {
+    margin: 10px 15px;
+}
+#adminfaqList_wrapper .pagination li a {
+    padding: 10px 15px;
+    line-height: 95%;
+}
+.point-page.user-table .table tr td {
+    font-size: 12px;
+    color: #999;
+}
+table.dataTable thead .sorting:last-child {
+    background: none;
+}
+
+.common-form .form-group input.error + label.error {
+    margin-left: 29%;
+}
+
+body .create-user .select2-container--default .select2-selection--multiple {
+    border: 1px solid #aaa !important;
+    border-radius: 0;
+}
+.setting-page form .form-group:last-child { margin-bottom: 30px; } 
+.setting-page .common-form .btn-wrap-div { margin-left: 2%; }
+
+.create-user .select2-container--default .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
+    font-size: 9px;
+    padding: 0 7px;
+    line-height: 200%;
+    margin-top: 10px;
+}
+/*close 12-02-2018 */

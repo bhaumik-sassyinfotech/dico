@@ -5,13 +5,13 @@
 	<meta name="description" content="Avant">
 	<meta name="author" content="The Red Team">
 <link rel="shortcut icon" href="{{asset('assets/img/fevicon.png')}}">
+<link href="{{asset('public/css/select2.css')}}" rel="stylesheet" />
     <!-- <link href="assets/less/styles.less" rel="stylesheet/less" media="all">  -->
     <link rel="stylesheet" href="{{asset(ASSETS_URL.'css/styles.css?=140')}}">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
 
     <link href="{{asset('public/assets/demo/variations/default.css')}}" rel='stylesheet' type='text/css' media='all' id='styleswitcher'> 
     <link href="{{asset('public/assets/demo/variations/default.css')}}" rel='stylesheet' type='text/css' media='all' id='headerswitcher'> 
-   
 
 <link rel='stylesheet' type='text/css' href="{{asset('assets/css/styles.css')}}" />
 <link rel='stylesheet' type='text/css' href="{{asset('assets/css/main-style.css')}}" /> 
@@ -24,7 +24,6 @@
 <link rel='stylesheet' type='text/css' href="{{asset(ASSETS_URL.'plugins/form-markdown/css/bootstrap-markdown.min.css')}}" /> 
 <link rel='stylesheet' type='text/css' href="{{asset('public/css/sweetalert.css')}}" />
 <link rel='stylesheet' type='text/css' href="{{asset('public/css/bootstrap-datetimepicker.min.css')}}" />
-<link href="{{asset('public/css/select2.css')}}" rel="stylesheet" />
 <link href="{{asset(ASSETS_URL.'css/jquery.tagit.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset(ASSETS_URL.'css/tagit.ui-zendesk.css')}}" rel="stylesheet" type="text/css">
 <link href="{{ asset('assets/css/owl.carousel.css') }}" rel="stylesheet" type="text/css">

@@ -1,7 +1,7 @@
 @extends('template.default')
 <title>DICO - User</title>
 @section('content')
-    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee user-table">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -258,6 +258,7 @@
                                                                                 <th><label>Following</label></th>
                                                                                 <th><label>Followers</label></th>
                                                                                 <th><label>Points</label></th>
+                                                                                <th><label>Action</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -317,6 +318,7 @@
                                                                                 <th><label>Following</label></th>
                                                                                 <th><label>Followers</label></th>
                                                                                 <th><label>Points</label></th>
+                                                                                <th><label>Action</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -359,20 +361,21 @@
 @push('javascripts')
     <script type="text/javascript">
         function loadMoreUser() {
+            $('#spinner').show();
             var offSet_selector = $('#offset');
-            var tab_id = offSet_selector.data('tab');
+            var tab_id = offSet_selector.attr('data-tab');
+            //alert(tab_id);
             var id = offSet_selector.val();
             var offset = parseInt(id) + {{POST_DISPLAY_LIMIT}};
             var searchText = $('#search_text').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
-            console.log(formData);
-            var new_url = '/user/employeeGrid';
-
+            //console.log(formData);
+            if(tab_id == 1)
+                var new_url = '/user/employeeGrid';
             if(tab_id == 2)
-                new_url = '/user/adminGrid';
+                var new_url = '/user/adminGrid';
             else if(tab_id == 3)
-                new_url = '/user/otherManagersGrid';
-
+                var new_url = '/user/otherManagersGrid';
             $.ajax({
                 url: SITE_URL+new_url,
                 type: "POST",
@@ -380,6 +383,7 @@
                 async:true,
                 success: function (response)
                 {
+                    $('#spinner').hide();
                     if(response != "")
                     {
                         if(response.html != "")

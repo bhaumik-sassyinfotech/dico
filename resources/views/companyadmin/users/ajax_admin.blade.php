@@ -17,8 +17,11 @@ if (count($users) > 0) {
             <div class="list-block super-user">
                 <div class="panel-heading">
                     <div class="pull-right">
+                        <?php
+                        $edit_url = route('user.edit', Helpers::encode_url($user['user_detail']['id']));
+                        ?>
                         <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                        <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="{{$edit_url}}" onclick="window.open('<?=$edit_url?>','_self')"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                     </div>
                 </div>
@@ -26,16 +29,16 @@ if (count($users) > 0) {
                     <fieldset>
                         <div class="grid-image">
                             <?php
-$profile_pic = asset('assets/img/super-user.PNG');
-		if ($user['user_detail']['profile_image'] != "") {
-			$profile_pic = asset(PROFILE_PATH . $user['user_detail']['profile_image']);
-		}
+                                $profile_pic = asset('assets/img/super-user.PNG');
+                                if ($user['user_detail']['profile_image'] != "") {
+                                        $profile_pic = asset(PROFILE_PATH . $user['user_detail']['profile_image']);
+                                }
 
-		?>
+                                ?>
                             <img src="{{ $profile_pic }}" alt="super-user">
                         </div>
                         <div class="grid-details">
-                            <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user['id']))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user['id']))}}"><?=$user['user_detail']['name'];?></a></h4>
+                            <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user['user_detail']['id']))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user['user_detail']['id']))}}"><?=$user['user_detail']['name'];?></a></h4>
                             <a href="mailto:{{ $user['user_detail']['email'] }}">{{ $user['user_detail']['email'] }}</a>
                             <h4>Admin</h4>
                         </div>

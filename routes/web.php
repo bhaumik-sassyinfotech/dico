@@ -1,5 +1,5 @@
 <?php
-define('FROM_EMAIL', 'testacc2016@gmail.com');
+define('FROM_EMAIL', 'devsassyinfotech@gmail.com');
 define('REPLAY_NAME', 'Dico');
 Route::get('/', function () {
 	return redirect('/index');
@@ -43,6 +43,7 @@ Route::get('index', 'HomeController@index');
 
 Auth::routes();
 Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@firstLogin')->name('security.firstLogin');
+Route::get('/adminForgotPassword', 'Auth\ForgotPasswordController@adminForgotPassword');
 Route::group(['middleware' => 'admin'], function () {
 	Route::get('/setting', function () {
 		return view('settings');

@@ -1,6 +1,6 @@
 @extends('template.default')
 @section('content')
-
+<title>DICO - Group</title>
     <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
         <div id='wrap'>
             <div id="page-heading">
@@ -44,10 +44,10 @@
                                                 </ul>
 
                                                 <div class="btn-group top-set">
-                                                    <form method="post" class="search-form">
-                                                        <input id="search_query" type="text" placeholder="Search User"/>
+                                                    <div class="search-form">
+                                                        <input id="search_query" type="text" placeholder="Search Group"/>
                                                         <input type="button" value="#" class="search-icon searchBtn searchBt"/>
-                                                    </form>
+                                                    </div>
                                                     <button id="GoList" class="grid-view">
                                                         <img src="assets/img/icon/group-list.png" alt="group"
                                                              class="block">

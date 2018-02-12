@@ -10,13 +10,13 @@
                         <div id="follow-box">
                             <div class="preview-box">
                                 <?php
-                                    $profile_image = '';
-                                    if (!empty($user->profile_image)) {
-                                            $profile_image = asset(PROFILE_PATH . $user->profile_image);
-                                    } else {
-                                            $profile_image = asset('public/assets/demo/avatar/jackson.png');
-                                    }
-                                    ?>
+$profile_image = '';
+if (!empty($user->profile_image)) {
+	$profile_image = asset(PROFILE_PATH . $user->profile_image);
+} else {
+	$profile_image = asset('public/assets/demo/avatar/jackson.png');
+}
+?>
                                 <img src="{{ $profile_image }}" id="user-profile">
                             </div>
                             <?php //dd($user->followers); ?>
@@ -45,7 +45,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" data-dismiss="modal" aria-hidden="true"></button>
+                                            <button type="button" class="close-button-small" data-dismiss="modal" aria-hidden="true"></button>
                                             <h3>Followers({{ (isset($user->followers)) ? count($user->followers) : 0 }})</h3>
                                             <div class="followers-list">
                                                 @if(!empty($user->followers) && count($user->followers) > 0)
@@ -66,16 +66,22 @@ if (!empty($follower->followUser->profile_image)) {
                                                                 <p>{{ $follower->followUser->name }}</p>
                                                                 <a href="mailto:{{ $follower->followUser->email }}">{{ $follower->followUser->email }}</a>
                                                             </div>
-                                                            @php
+                                                            <?php
                                                                 $str='';
-                                                                if($follower->followUser->role_id == '1')
+                                                                if($follower->followUser->role_id == '1') {
                                                                     $str = 'Super Admin';
-                                                                else if($follower->followUser->role_id == '2')
-                                                                    $str = 'Company Admin';
-                                                                else
+                                                                    $cls = "su";
+                                                                }
+                                                                else if($follower->followUser->role_id == '2') {
+                                                                    $str = 'Admin';
+                                                                    $cls = "adm";
+                                                                }
+                                                                else {
                                                                     $str='Employee';
-                                                            @endphp
-                                                            <p class="jobs-title emp">{{ $str }}</p>
+                                                                    $cls = "emp";
+                                                                }
+                                                            ?>
+                                                            <p class="jobs-title {{$cls}}">{{ $str }}</p>
                                                         </div>
                                                     @endforeach
                                                 @else
@@ -94,12 +100,11 @@ if (!empty($follower->followUser->profile_image)) {
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" data-dismiss="modal" aria-hidden="true"></button>
+                                            <button type="button" class="close-button-small" data-dismiss="modal" aria-hidden="true"></button>
                                             <h3>Following({{ (isset($user->following)) ? count($user->following) : 0 }})</h3>
                                             <div class="followers-list">
-                                                <?php
-                                                if(count($user->following) > 0) {
-                                                    foreach($user->following as $following) { ?>
+                                                @if(!empty($user->following) && count($user->following) > 0)
+                                                    @foreach($user->following as $following)
                                                         <div class="followers-details">
                                                             <div class="follow-img">
                                                                 <?php
@@ -118,24 +123,27 @@ if (!empty($follower->followUser->profile_image)) {
                                                             </div>
                                                             <?php
                                                                 $str='';
-                                                                if($following->followingUser->role_id == '1')
+                                                                if($following->followingUser->role_id == '1') {
                                                                     $str = 'Super Admin';
-                                                                else if($following->followingUser->role_id == '2')
-                                                                    $str = 'Company Admin';
-                                                                else
+                                                                    $cls = "su";
+                                                                }
+                                                                else if($following->followingUser->role_id == '2') {
+                                                                    $str = 'Admin';
+                                                                    $cls = "adm";
+                                                                }
+                                                                else {
                                                                     $str='Employee';
+                                                                    $cls = "emp";
+                                                                }
                                                             ?>
-                                                            <p class="jobs-title emp">{{ $str }}</p>
+                                                            <p class="jobs-title {{$cls}}">{{ $str }}</p>
                                                         </div>
-                                                <?php
-                                                    } 
-                                                    }
-                                                else { ?>
+                                                    @endforeach
+                                                @else
                                                     <div class="followers-details">
                                                         <p class="jobs-title emp">No followers yet</p>
                                                     </div>
-                                                <?php  } 
-                                                ?>
+                                                @endif
                                             </div>
 
                                         </div>
