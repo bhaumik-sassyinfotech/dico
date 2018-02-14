@@ -37,8 +37,13 @@ class UsersController extends Controller {
             }
             $user = User::where('role_id', 2)->where('email', $request->input('email'))->first();
             if ($user) {
-                if (Auth::guard('front')->attempt(['email' => $request->email, 'password' => $request->password])) {
-                    return redirect('/companyProfile')->with('success', 'Login successfully.');
+                /* if (Auth::guard('front')->attempt(['email' => $request->email, 'password' => $request->password])) {
+                  return redirect('/companyProfile')->with('success', 'Login successfully.');
+                  } else {
+                  return Redirect::back()->with('err_msg', 'Username and password are invalid');
+                  } */
+                if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password])) {
+                    return redirect('/')->with('success', 'Login successfully.');
                 } else {
                     return Redirect::back()->with('err_msg', 'Username and password are invalid');
                 }
@@ -57,23 +62,29 @@ class UsersController extends Controller {
 
     public function companyRegister(Request $request) {
         try {
-            $validator = Validator::make($request->all(), [
-                        'name' => 'required',
-                        'company_name' => 'required',
-                        'email' => 'required|email|unique:users,email',
-                        'package_id' => 'required',
-                        'password' => 'required',
-                        'card_number' => 'required',
-                        'cvc' => 'required',
-                        'ex_month' => 'required',
-                        'ex_year' => 'required',
-            ]);
+            if ($request->package_id != 1) {
+                $validator = Validator::make($request->all(), [
+                            'name' => 'required',
+                            'company_name' => 'required|max:255|unique:companies,company_name',
+                            'email' => 'required|email|unique:users,email',
+                            'package_id' => 'required',
+                            'password' => 'required',
+                            'card_number' => 'required',
+                            'cvc' => 'required',
+                            'ex_month' => 'required',
+                            'ex_year' => 'required',
+                ]);
+            } else {
+                $validator = Validator::make($request->all(), [
+                            'name' => 'required',
+                            'company_name' => 'required|max:255|unique:companies,company_name',
+                            'email' => 'required|email|unique:users,email',
+                            'package_id' => 'required',
+                            'password' => 'required',
+                ]);
+            }
             if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator)->withInput();
-            }
-            $companyList = Company::where('company_name', $request->company_name)->first();
-            if ($companyList) {
-                return Redirect::back()->with('err_msg', 'The company name has already been taken.')->withInput();
             }
             /* Stripe Payment */
             /* Get product ID from packages table */
@@ -108,7 +119,6 @@ class UsersController extends Controller {
                 } catch (Exception $e) {
                     return Redirect::back()->with('err_msg', $e->getMessage())->withInput(); // Something else happened, completely unrelated to Stripe
                 }
-
 //  return $source;
                 $sourceId = $source->id;
                 /* End Create source */
@@ -192,17 +202,24 @@ class UsersController extends Controller {
             }
             $companyData = new Company;
             $companyData->company_name = $request->company_name;
+            $companyData->slug_name= $this->slugify($request->company_name);
             $companyData->description = $request->company_description;
             $companyData->allow_anonymous = 0;
             $companyData->allow_add_admin = 0;
             $companyData->company_admin = 1;
+
+            $companyData->package_id = $package->id;
             $companyData->package_name = $package->name;
             $companyData->package_amount = $package->amount;
             $companyData->package_total_user = $package->total_user;
             if ($my_plan == 0) {
                 $companyData->stripe_customer_id = $customerID; //stripe customer id
+                $companyData->payment_expiry_date = date('Y-m-d', strtotime("+30 days")); //stripe customer payment expiry date
+                $companyData->subscription_id = $subscriptionwithstripe->id;
             } else {
                 $companyData->stripe_customer_id = null;
+                $companyData->payment_expiry_date = null;
+                $companyData->subscription_id = null;
             }
 
             $companyData->save();
@@ -226,6 +243,7 @@ class UsersController extends Controller {
             if ($userData->save()) {
                 /*                 * *****company Log******** */
                 if ($my_plan == 0) {
+
                     $CompanyPayment = new CompanyPayment;
                     $CompanyPayment->amount = $package->amount;
                     $CompanyPayment->currency = $charge->currency;
@@ -245,6 +263,7 @@ class UsersController extends Controller {
                     $CompanyPayment->package_amount = $package->amount;
                     $CompanyPayment->package_total_user = $package->total_user;
                     $CompanyPayment->json = $charge;
+                    $CompanyPayment->subscription = $subscriptionwithstripe;
                     $CompanyPayment->save();
                 }
                 /*                 * *********End Company log************** */
@@ -280,8 +299,8 @@ class UsersController extends Controller {
             $user = User::where('email', $request->email)->first();
             $emailTemplate = EmailTemplate::where('slug', 'forgot_password')->first();
             $link = Helpers::encode_url($request->email . "===" . date('d') . '===' . $user->id . '===' . $request->usertype);
-          //  echo $request->email . "===" . date('d') . '===' . $user->id . '===' . $request->usertype;
-           // dd($link);
+            //  echo $request->email . "===" . date('d') . '===' . $user->id . '===' . $request->usertype;
+            // dd($link);
             $emailLink = url('/forgotPasswordRequest/') . '/' . $link;
 // dd($emailLink);
             if ($emailTemplate != null) {
@@ -345,6 +364,32 @@ class UsersController extends Controller {
             }
         }
         return redirect('/users-login')->with('err_msg', 'Something went erong please try again.');
+    }
+
+    static public function slugify($text) {
+        // replace non letter or digits by -
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // remove duplicate -
+        $text = preg_replace('~-+~', '-', $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
     }
 
     public function logout() {

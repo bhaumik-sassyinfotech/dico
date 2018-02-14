@@ -55,40 +55,7 @@
 </div>
 
 <script>
-    
-var oTable;
-$(function () {
-    var url = "{{ URL::to('/contactUsList')}}";
-    $('#contactUsList').DataTable({
-        processing: true,
-        serverSide: true,
-        order: [ [0, 'asc'] ],
-        ajax: {
-            url: url,
-        },
-        columns: [
-            {data: 'id'},
-            {data: 'name'},
-            {data: 'email'},
-            {data: 'mobile'},
-            {data: 'message'},
-            {data: 'actions', orderable: false, searchable: false},
-        ]
-    });
-});
-/*$('#contactUsList').DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: SITE_URL + '/contactUsList',
-    columns: [
-        {data: 'id'},
-        {data: 'name'},
-        {data: 'email'},
-        {data: 'mobile'},
-        {data: 'message'},
-        {data: 'actions', sorting: false, orderable: false},
-    ],
-});*/
+ 
     function contactDelete(id)
     {
         swal({

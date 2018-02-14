@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - FAQs</title>
+<title>DICO - Feedback</title>
 @section('content')
 
 <div id="page-content">
@@ -7,15 +7,12 @@
         <div id="page-heading">
             <ol class="breadcrumb">
                 <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li class="active">FAQs</li>
+                <li class="active">Feedback</li>
             </ol>
-            <h1>FAQs</h1>
+            <h1>Feedback</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                    <a class="btn btn-default" href="{{ route('adminfaq.create') }}">
-                        <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
-                        <span class="hidden-xs hidden-sm">Create FAQs</span>
-                    </a>
+
                 </div>
             </div>
         </div>
@@ -26,15 +23,15 @@
                     <div class="panel-body">
                         <div class="panel panel-info " style="overflow-x:auto;">
                             <div class="panel-heading trophy">
-                                <h4 class="icon">FAQs</h4>
+                                <h4 class="icon">Feedback</h4>
                             </div>
                             <div class="panel-body">
-                                <table class="table table-bordered table-striped" id="adminfaqList">
+                                <table class="table table-bordered table-striped" id="feedbackList">
                                     <thead>
                                         <tr>
                                             <th>#ID</th>
-                                            <th>Question</th>
-                                            <th>Answer</th>
+                                            <th>Subject</th>
+                                            <th>Description</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -43,6 +40,7 @@
                                 <div class="col-lg-6"></div>
                                 <div class="col-lg-6">
                                     <div class="col-lg-6">
+
                                     </div>
                                 </div>
                             </div>
@@ -53,13 +51,12 @@
         </div>
     </div>
 </div>
-
 <script>
-    function deleteFaqs(id)
+    function deleteFeedback(id)
     {
         swal({
             title: 'Are you sure?',
-            text: 'Are you sure you want to delete this faqs',
+            text: 'Are you sure you want to delete this feedback',
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -67,19 +64,19 @@
             confirmButtonText: 'Yes, delete it!'
         }, function (result) {
             if (result) {
-                var url = "{{ URL::to('deleteFaqs')}}";
+                var url = "{{ URL::to('deleteFeedback')}}";
                 var _token = CSRF_TOKEN;
                 $('#loader').show();
                 $.ajax({
                     url: url,
                     method: "POST",
-                    data: {faqs_id: id,_token:_token},
+                    data: {feed_id: id,_token:_token},
                     success: function (data) {
                         obj = jQuery.parseJSON(data);
                         if (obj.msg)
                         {
                             $('#loader').hide();
-                            $('#adminfaqList').DataTable().row('.selected').remove().draw(false);
+                            $('#feedbackList').DataTable().row('.selected').remove().draw(false);
                             swal("Deleted", obj.msg, "success");
                         }
                     },

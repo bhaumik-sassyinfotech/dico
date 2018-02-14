@@ -333,8 +333,6 @@ $(document).on('click', '.removeUser', function (event) {
                     companyUsers();
                 }
             });
-
-
         });
 });
 $("#group_users_edit_form").validate({

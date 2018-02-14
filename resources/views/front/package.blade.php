@@ -24,7 +24,7 @@
                             <div class="user-limit">Upto {{$package->total_user}} Users</div>
                         </div>
                         <div class="bottom">
-                            <a href="#" class="btn btn-{{$package->color}}">SELECT PLAN</a>
+                            <a href="{{url('registerPackage/')}}{{'/'}}{{$package->slug_name}}" class="btn btn-{{$package->color}}">SELECT PLAN</a>
                         </div>
                     </div>
                     @endforeach                   

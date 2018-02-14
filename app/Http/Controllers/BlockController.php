@@ -31,15 +31,15 @@ class BlockController extends Controller {
     }
 
     /**
-     * Use the following function to get block list design
+     * Use the following function to get blog list design
      */
     public function index() {
         //dd("here");
-        return view('superadmin.block.index');
+        return view('superadmin.blog.index');
     }
 
     /**
-     * Use the following function to get block list from block table
+     * Use the following function to get blog list from blog table
      */
     public function create() {
         
@@ -48,7 +48,7 @@ class BlockController extends Controller {
     public function edit($id) {
         $id = Helpers::decode_url($id);
         $block = Blocks::findOrFail($id);
-        return view('superadmin.block.edit', compact('block'));
+        return view('superadmin.blog.edit', compact('block'));
     }
 
     public function update(Request $request, $id) {
@@ -69,9 +69,9 @@ class BlockController extends Controller {
             $block->description = $request->get('description', null);
             
             if ($block->save()) {
-                return Redirect::route('block.index')->with('success', 'Block ' . Config::get('constant.UPDATE_MESSAGE'));
+                return Redirect::route('blog.index')->with('success', 'Blog ' . Config::get('constant.UPDATE_MESSAGE'));
             } else {
-                return Redirect::route('block.index')->with('error', '' . Config::get('constant.TRY_MESSAGE'));
+                return Redirect::route('blog.index')->with('error', '' . Config::get('constant.TRY_MESSAGE'));
             }
         } catch (\exception $e) {
             dd($e->getMessage());
@@ -84,8 +84,8 @@ class BlockController extends Controller {
         $res = $block->select('*')
                         ->whereNULL('deleted_at');
         return Datatables::of($res)->addColumn('actions', function ( $row ) {
-                    return '<a href="' . route('block.edit', [Helpers::encode_url($row->id)]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
-                })->rawColumns(['actions','description'])->make(true);
+                    return '<a href="' . route('blog.edit', [Helpers::encode_url($row->id)]) . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                })->rawColumns(['actions','description','title'])->make(true);
     }
 
 }

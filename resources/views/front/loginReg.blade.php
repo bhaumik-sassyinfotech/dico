@@ -1,6 +1,18 @@
 @extends('front_template.layout')
 @section('content')    
 <!-- ************* content-Section ********************-->
+<style>
+    .hidden{
+            display: none;
+    }    
+</style>
+<?php 
+    $pkg_id = '0';
+    if(isset($package) && $package != null)
+    {
+        $pkg_id =$package;
+    }    
+?>
 <div class="content-wrapper">
     <div class="wrap login-register-wrap">
         <div class="container">
@@ -66,12 +78,12 @@
 
                             <div class="form-group">
                                 <div class="field">
-                                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => 'Full Name', 'maxlength' => '30']) !!}
+                                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => 'Full Name', 'maxlength' => '20']) !!}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="field">
-                                    {!! Form::text('company_name', old('company_name'), ['class' => 'form-control', 'placeholder' => 'Company Name', 'maxlength' => '50']) !!}
+                                    {!! Form::text('company_name', old('company_name'), ['class' => 'form-control', 'placeholder' => 'Company Name', 'maxlength' => '30']) !!}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -81,51 +93,53 @@
                             </div>
                             <div class="form-group">
                                 <div class="field">
-                                    <select name="package_id" id="package_id" class="form-control" >
-                                        <option value="" disabled="" selected="">Select Package List</option>
+                                    <select name="package_id" id="package_id" class="form-control" onchange="packageType()">
+                                        <option value="" disabled="" selected="" >Select Package List</option>
                                         @foreach ($packageList as $package)
-                                        <option value="{{ $package->id }}">{{ $package->name }}</option>
+                                        <option value="{{ $package->id }}" <?php if($pkg_id !='0' && $pkg_id == $package->slug_name ){echo "selected";} ?> >{{ $package->name }}</option>
                                         @endforeach
                                     </select>
                                     <div class="error_package_id"></div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="field">
-                                    <input type="text" class="form-control" name="card_number" id="card_number" maxlength="16" placeholder="Card Number" required>
+                            <div class="my_package">
+                                <div class="form-group">
+                                    <div class="field">
+                                        <input type="text" class="form-control" name="card_number" id="card_number" maxlength="16" placeholder="Card Number" required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group tbl">
-                                <div class="tbl-cell">
-                                    <input type="password" class="form-control" name="cvc" id="cvc" maxlength="4" placeholder="CVC" required>
-                                </div>
-                                <div class="tbl-cell">
-                                    <select name="ex_month" id="ex_month" class="form-control" >
-                                        <option value="" disabled="" selected="">Select month</option>
-                                        <?php
-                                        for ($i = 1; $i < 12; $i++) {
-                                            ?>
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        <?php } ?>
-                                    </select>
-                                    <div class="error_month"></div>
-                                </div>
-                                <div class="tbl-cell">
-                                    <select name="ex_year" id="ex_year" class="form-control" >
-                                        <option value="" disabled="" selected="">Select Year</option>
-                                        <?php
-                                        $Y = date('Y');
-                                        for ($i = 1; $i < 15; $i++) {
-                                            ?>
-
-                                            <option value="{{ $Y }}">{{ $Y }}</option>
+                                <div class="form-group tbl">
+                                    <div class="tbl-cell">
+                                        <input type="password" class="form-control" name="cvc" id="cvc" maxlength="4" placeholder="CVC" required>
+                                    </div>
+                                    <div class="tbl-cell">
+                                        <select name="ex_month" id="ex_month" class="form-control" >
+                                            <option value="" disabled="" selected="">Select month</option>
                                             <?php
-                                            $Y++;
-                                        }
-                                        ?>
-                                    </select>
-                                    <div class="error_year"></div>
+                                            for ($i = 1; $i < 12; $i++) {
+                                                ?>
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            <?php } ?>
+                                        </select>
+                                        <div class="error_month"></div>
+                                    </div>
+                                    <div class="tbl-cell">
+                                        <select name="ex_year" id="ex_year" class="form-control" >
+                                            <option value="" disabled="" selected="">Select Year</option>
+                                            <?php
+                                            $Y = date('Y');
+                                            for ($i = 1; $i < 15; $i++) {
+                                                ?>
+
+                                                <option value="{{ $Y }}">{{ $Y }}</option>
+                                                <?php
+                                                $Y++;
+                                            }
+                                            ?>
+                                        </select>
+                                        <div class="error_year"></div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -133,12 +147,12 @@
                             <div class="form-group">
                                 <div class="field no-padding">
                                     <div class="field-half">
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" maxlength="15" required>
                                     </div>
 
 
                                     <div class="field-half">
-                                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required>
+                                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" maxlength="15" required>
                                     </div>                                
                                 </div>
 
@@ -326,10 +340,26 @@
         $('.alert-success').delay(5000).fadeOut('slow');
         $('.alert-danger').delay(5000).fadeOut('slow');
         $('.alert-warning').delay(5000).fadeOut('slow');
-        //this is use for package price with select 2
-        // $('#package_id').select2({width: 100 + '%'});
-        //$('#ex_year').select2({width: 100 + '%'});
-        // $('#ex_month').select2({width: 100 + '%'});
+        <?php if($pkg_id != '0'){ ?> showRegisterForm() <?php } ?>
     });
+    function packageType()
+    {
+        var pk_id = $('#package_id').val();
+        if (pk_id == 1) {
+            $('.my_package').addClass('hidden');
+        }else{
+            $('.my_package').removeClass('hidden');
+        }
+    }
+     <?php if($pkg_id == '0'){ ?>
+   /*function showRegisterForm(){
+    $('.login-box').slideUp('300',function(){
+        $('.register-box').slideDown('300');
+        $('.forgot-box').slideUp('300');
+    });
+    $('.error').removeClass('alert alert-danger').html('');
+
+}*/
+    <?php } ?>
 </script>
 @endsection

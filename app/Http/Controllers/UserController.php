@@ -654,7 +654,7 @@ class UserController extends Controller {
                                     $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                                 }, 'following'])->withCount('followers')->where('role_id', 3);
                 $query = $query->where('id','!=',Auth::user()->id);   
-                if (Auth::user()->role_id == 2) {
+                if (Auth::user()->role_id > 1) {
 			$query = $query->where('company_id', Auth::user()->company_id);
 		}
 		if ($request->has('search') && !empty($request->input('search'))) {
@@ -682,7 +682,7 @@ class UserController extends Controller {
 		return $output;
 	}
 	public function getOtherManagerGrid(Request $request) {
-                //DB::connection()->enableQueryLog();
+                DB::connection()->enableQueryLog();
 		$offset = 0;
 		if ($request->has('offset')) {
 			$offset = $request->input('offset');
@@ -691,18 +691,19 @@ class UserController extends Controller {
 		$query = User::with(['followers'=>function($q) {
                                     $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                                 }, 'following'])->withCount('followers')->where('role_id', 2);
+                if(Auth::user()->role_id > 1) {
+                    $query->where('company_id',Auth::user()->company_id)->where('id','!=',Auth::user()->id);
+                }                
 		if ($request->input('search') && !empty($request->input('search'))) {
 			$query = $query->where(function ($q) use ($request) {
 				$q->where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
 			});
 		}
-                if(Auth::user()->role_id > 1) {
-                    $query->where('company_id',Auth::user()->company_id);
-                }
-		$users_query = $query->where('id','!=',Auth::user()->id)->orderBy('id', 'desc');
+                
+		$users_query = $query->orderBy('id', 'desc');
 		$users_count = count($users_query->get());
 		$users = $users_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
-                //dd(DB::getQueryLog());
+                dd(DB::getQueryLog());
 		$html = view::make($this->folder . '.users.ajax_other_managers', compact('users'));
 		$output = array('html' => $html->render(), 'count' => $users_count);
 		return $output;
@@ -711,7 +712,7 @@ class UserController extends Controller {
 	public function getGroupAdminGrid(Request $request) {
                 //DB::connection()->enableQueryLog();
 		$groups_query = GroupUser::where('is_admin', 1);
-                if (Auth::user()->role_id == 2) {
+                if (Auth::user()->role_id > 1) {
                     $groups_query->where('company_id', Auth::user()->company_id);
                 }
 		$groups = $groups_query->groupBy('group_id')->get();
@@ -720,14 +721,13 @@ class UserController extends Controller {
                 $users_query = GroupUser::with(['userDetail'=>function($q) {$q->withCount('followers');}, 'userDetail.followers'=>function($q) {
                                     $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                                 }, 'userDetail.following']);
-
+                if (Auth::user()->role_id > 1) {
+			$users_query = $users_query->where('company_id', Auth::user()->company_id);
+		}
 		if ($request->has('search') && !empty($request->input('search'))) {
 			$users_query = $users_query->where(function ($q) use ($request) {
 				$q->where('name', 'like', "%{$request->input('search')}%")->orWhere('email', 'like', "%{$request->input('search')}%");
 			});
-		}
-                if (Auth::user()->role_id == 2) {
-			$users_query = $users_query->where('company_id', Auth::user()->company_id);
 		}
 		$users = $users_query->where('is_admin', 1)->whereIn('group_id', $group_ids)->get()->toArray();
                 //dd($users);

@@ -85,7 +85,7 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                    <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a onclick='window.open("{{ $route }}","_self")' href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                 </div>
 

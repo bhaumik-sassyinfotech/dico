@@ -17,7 +17,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <div id="create-user-from" style="width: 100%;padding: 10px">
+                <div id="create-user-from" style="width: 100%;padding: 10px" class="setting-page">
                     <form name="SettingsEdit" id="SettingsEdit" method="POST" action="{{ route('settings.update',[$settings->id]) }}" class="common-form" >
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}

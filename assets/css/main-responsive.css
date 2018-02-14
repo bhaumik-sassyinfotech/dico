@@ -59,6 +59,12 @@ body .modal-dialog.updatesecurity .modal-content,
     font-size: 12px;
     vertical-align: middle;
 }    
+/* package page*/
+
+.pricing-grid .pricing-item .top:after {
+    width: 270px;
+} 
+/*close package page*/    
     
     
 }
@@ -533,6 +539,23 @@ body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialo
     min-height: 15px;
     margin: 0 auto 5px;
 }    
+/* package page*/
+
+.pricing-grid .pricing-item .top:after {
+    width: 230px;
+} 
+.pricing-grid .pricing-item .top {
+    min-height: 100px;
+}    
+.pricing-grid .pricing-item .content {
+    margin-top: 6px;
+    margin-bottom: 30px;
+}
+.pricing-grid .pricing-item {
+    min-height: 370px;
+}  
+
+/*close package page*/
     
     
 }
@@ -697,6 +720,14 @@ body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialo
 .group-listing .table thead tr th {
   padding: 15px 2px;
 }    
+/* package page*/
+
+.pricing-grid .pricing-item {
+    width: 33.33%;
+    margin-bottom: 5%;
+}
+/*close package page*/
+    
 
 }
 
@@ -1682,6 +1713,33 @@ body .group-tabs[class*="panel-"] .panel-primary .panel-body {
 .common-form .form-group label.error {
     margin-left: 0%;
 }
+/* package page*/
+
+.form-group.submit-package .btn-wrap-div {
+    margin-left: 0;
+}
+.form-group.submit-package {
+    padding-top: 10px;
+}
+.pricing-grid .pricing-item {
+    width: 210px ;
+    border-right: none;
+    text-align: center;
+    background-color: #E6E7E8;
+    float: none;
+    display: block;
+    margin: 0 auto;
+}
+.pricing-grid .pricing-item:not(:last-child) {
+    margin-bottom: 30px;
+}
+.pricing-wrap-grid {
+    background-color: transparent !important;
+}
+.pricing-grid .pricing-item .top:after {
+    width: 290px;
+}
+/* package page*/    
     
     
 }

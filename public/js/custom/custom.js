@@ -758,3 +758,86 @@ $("#SettingsEdit").validate({
         }
     });
 //=======================================================//
+//=======================================================//
+ $("#feedbackAdd").validate({
+    rules: {
+        subject: {
+            required: true,
+        },
+        description: {
+            required: true,
+        }
+    },
+    messages: {
+        subject: {
+            required: 'This field is required',
+        },
+        description: {
+            required: 'This field is required',
+        }
+    }
+});
+//=======================================================//
+  $("#supportAdd").validate({
+    rules: {
+        issue: {
+            required: true,
+        },
+        description: {
+            required: true,
+        }
+    },
+    messages: {
+        issue: {
+            required: 'This field is required',
+        },
+        description: {
+            required: 'This field is required',
+        }
+    }
+});
+//=======================================================//
+//==================== Feedback section =====================//
+$('#feedbackList').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: SITE_URL + '/feedbackList',
+    columns: [
+        {data: 'id'},
+        {data: 'subject'},
+        {data: 'description'},       
+        {data: 'actions', sorting: false, orderable: false},
+    ],
+});
+
+//=============================================================//
+//==================== Support section =====================//
+$('#supportList').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: SITE_URL + '/supportList',
+    columns: [
+        {data: 'id'},
+        {data: 'issue'},
+        {data: 'description'},       
+        {data: 'actions', sorting: false, orderable: false},
+    ],
+});
+
+//=============================================================//
+//==================== Contact Us section =====================//
+$('#contactUsList').DataTable({
+    processing: true,
+    serverSide: true,
+    order: [ [0, 'desc'] ],
+    ajax: SITE_URL + '/contactUsList',
+    columns: [
+        {data: 'id'},
+        {data: 'name'},
+        {data: 'email'},
+        {data: 'mobile'},
+        {data: 'message'},
+        {data: 'actions', sorting: false, orderable: false},
+    ],
+});
+//================================================================//

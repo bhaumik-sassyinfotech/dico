@@ -466,7 +466,7 @@ class GroupController extends Controller {
 
 			if ($row->group_owner == $currUser->id) {
 
-				$addUserBtn = ' | <a class="left-10" href="javascript:void(0);" data-group-id="' . $row->id . '" data-company-id="' . $row->company_id . '" title="Edit" class="addUserToGroup" ><i class="fa fa-user"></i></a>';
+				$addUserBtn = ' | <a class="left-10" href="javascript:void(0);" data-group-id="' . $row->id . '" data-company-id="' . $row->company_id . '" class="addUserToGroup" ><i class="fa fa-user"></i></a>';
 
 			}
 
@@ -592,7 +592,7 @@ class GroupController extends Controller {
 
 						$admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class="active-admin demoteToUser">Promote to admin</a>';
 
-						$admin .= ' <a data-group-user-id="' . $row->id . '" style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
+						//$admin .= ' <a data-group-user-id="' . $row->id . '" style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
 
 					} else {
 

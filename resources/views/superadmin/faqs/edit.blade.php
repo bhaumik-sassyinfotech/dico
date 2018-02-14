@@ -20,22 +20,25 @@
         </div>
         <div class="container">
             <div class="row">
-                <div id="create-user-from" style="width: 100%">
+                <div class="create-user-from">
                     <form name="faqsEdit" id="faqsEdit" method="POST"
                           action="{{ route('adminfaq.update',[$faqs->id]) }}" class="common-form" >
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
-                        <div class="form-group">
-                            <label class="text-15">Question<span>*</span></label>
-                            <input type="text" name="question" id="question"
-                                   placeholder="Question"
-                                   class="form-control required" value="{{$faqs->question}}">
-                        </div>
+                        <div class="update-block-wrap">
 
-                        <div class="form-group">
-                            <label class="text-15" style="width: 100%">Answer<span>*</span></label>
+                            <div class="form-group">
+                                <label class="text-15">Question<span>*</span></label>
+                                <input type="text" name="question" id="question"
+                                       placeholder="Question"
+                                       class="form-control required" value="{{$faqs->question}}">
+                            </div>
+                        </div>
+                        <div class="form-group editor-files">
+                            <label class="text-15" >Answer<span>*</span></label>
                             <textarea id="editor" name="answer">{{$faqs->answer}}</textarea>                           
                         </div>
+                      
                         <div class="form-group">
                             <div class="btn-wrap-div">
                                 <input type="submit" class="st-btn" value="Submit">
@@ -51,6 +54,6 @@
 @stop
 @section('javascript')
 <script type="text/javascript">
-    initSample();  
+    initSample();
 </script>
 @endsection

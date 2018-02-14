@@ -7,9 +7,9 @@
         <div id="page-heading">
             <ol class="breadcrumb">
                 <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li class="active">Packages List</li>
+                <li class="active">Packages</li>
             </ol>
-            <h1>Packages List</h1>
+            <h1>Packages</h1>
             <div class="options">
                 <div class="btn-toolbar">
                     
@@ -23,7 +23,7 @@
                     <div class="panel-body">
                             <div class="panel panel-info " style="overflow-x:auto;">
                             <div class="panel-heading trophy">
-                                <h4 class="icon">Packages List</h4>
+                                <h4 class="icon">Packages</h4>
                             </div>
                             <div class="panel-body">
                             <table class="table table-bordered table-striped" id="packageList">

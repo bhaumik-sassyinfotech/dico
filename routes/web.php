@@ -158,7 +158,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::post('checkEmailExists','DashboardController@checkEmailExists');
         
         /*******Block**Section*************/
-        Route::resource('block', 'BlockController');
+        Route::resource('blog', 'BlockController');
         Route::GET('blockList', 'BlockController@blockList');
          /*******Block**Section*************/
         Route::resource('packages', 'PackageController');
@@ -175,6 +175,19 @@ Route::group(['middleware' => 'admin'], function () {
         
         /*******Settings Section*************/
         Route::resource('settings', 'SettingsController');
+        /*** Company admin update and  upgread own package **/
+        Route::GET('companyEdit', 'CompanyController@companyEdit');
+        Route::POST('updateCompany', 'CompanyController@updateCompany');
+        Route::POST('packageUpgrade', 'CompanyController@packageUpgrade');
+        
+        /* feed back*/
+        Route::resource('feedback', 'FeedbackController');
+        Route::GET('feedbackList', 'FeedbackController@feedbackList');
+        Route::POST('deleteFeedback', 'FeedbackController@deleteFeedback');
+        Route::resource('support', 'SupportController');
+        Route::GET('supportList', 'SupportController@supportList');
+        Route::POST('deleteSupport', 'SupportController@deleteSupport');
+        Route::get('/registerPackage', 'front\HomeController@registerPackage');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');
