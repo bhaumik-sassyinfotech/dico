@@ -1,7 +1,7 @@
 @extends('template.default')
 <title>DICO - User</title>
 @section('content')
-    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee user-table">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -11,7 +11,7 @@
                 <h1 class="tp-bp-0">Users</h1>
                 <div class="options">
                     <div class="btn-toolbar">
-                        <a class="btn btn-default" href="{{ route('user.create') }}">
+                        <a class="btn btn-default" style="display: none;" href="{{ route('user.create') }}">
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
                             <span class="hidden-xs hidden-sm">Create User</span>
                         </a>
@@ -103,12 +103,12 @@
                                                     <div class="list-block super-user">
                                                         <div class="panel-heading">
                                                             <div class="pull-right">
-                                                                <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
+                                                              <?php /*  <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
                                                                 <?php
                                                                     $edit_url = route('user.edit', Helpers::encode_url($user->id));
                                                                 ?>
                                                                 <a href="{{$edit_url}}" onclick="window.open('<?=$edit_url?>','_self')"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                                <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                                <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>*/?>
                                                             </div>
 
                                                         </div>
@@ -199,7 +199,7 @@
                                                                                     <th><label>Following</label></th>
                                                                                     <th><label>Followers</label></th>
                                                                                     <th><label>Points</label></th>
-                                                                                    <th><label>Action</label></th>
+                                                                                    <th style="display: none;"><label>Action</label></th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -258,7 +258,7 @@
                                                                                 <th><label>Following</label></th>
                                                                                 <th><label>Followers</label></th>
                                                                                 <th><label>Points</label></th>
-                                                                                <th><label>Action</label></th>
+                                                                                <th style="display: none;"><label>Action</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -318,7 +318,7 @@
                                                                                 <th><label>Following</label></th>
                                                                                 <th><label>Followers</label></th>
                                                                                 <th><label>Points</label></th>
-                                                                                <th><label>Action</label></th>
+                                                                                <th style="display: none;"><label>Action</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>

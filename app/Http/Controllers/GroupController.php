@@ -190,7 +190,7 @@ class GroupController extends Controller {
 
 					$now = Carbon::now();
 
-					$insertData = [['group_id' => $group->id, 'user_id' => $request->group_owner, 'company_id' => $company, 'is_admin' => 0, 'created_at' => $now, 'updated_at' => $now]];
+					$insertData = [['group_id' => $group->id, 'user_id' => $request->group_owner, 'company_id' => $company, 'is_admin' => 1, 'created_at' => $now, 'updated_at' => $now]];
 
 					foreach ($users as $k => $v) {
 
@@ -521,7 +521,6 @@ class GroupController extends Controller {
 		} else if ($request->get('removeFromGroup') == 1) {
 
 			if ($groupUser->delete()) {
-
 				return Response::json(['msg' => 'User has been removed from the group.', 'status' => 1]);
 
 			} else {
@@ -535,8 +534,10 @@ class GroupController extends Controller {
 			$groupUserIds = GroupUser::where('group_id', $group_id)->get()->pluck('user_id')->prepend(1)->toArray(); // select user_id which are already in the group
 
 			$users = User::whereNotIn('id', $groupUserIds)->where('role_id', '!=', '1')->where('company_id', $company_id)->get()->toArray();
-
-			return Response::json(['msg' => 'Users listing.', 'data' => $users, 'status' => 1]);
+                        $count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $request->get('group_id'))->get()->toArray()) + 1;
+                        $groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $request->get('group_id'))->first();
+                        $count['total_users'] = $groupData->groupUsers->count();
+			return Response::json(['msg' => 'Users listing.', 'data' => $users, 'status' => 1,'count'=>$count]);
 
 		} else if ($request->get('addGroupUsers') == 1) {
 
@@ -567,6 +568,11 @@ class GroupController extends Controller {
 		}
 
 		$i = 25;
+                //$groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $id)->first();
+
+		//$userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->where('group_id', $groupId)->get();
+
+		
 
 //            $rowCount = 0;
 

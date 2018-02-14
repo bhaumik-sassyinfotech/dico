@@ -103,8 +103,8 @@ class UserController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-                if (Auth::user()) {
-		//if (Auth::user() && Auth::user()->role_id < 2) {
+                //if (Auth::user()) {
+		if (Auth::user()->role_id != 3) {
 			$currUser = Auth::user();
 			$company_id = Auth::user()->company_id;
 			$usercompany = Company::whereNull('deleted_at')->where('id', $company_id)->first();
@@ -130,6 +130,7 @@ class UserController extends Controller {
 				$roles = Role::whereIn('id', $role_id)->get();
 				return view($this->folder . '.users.create', compact('roles', 'companies'));
 			}
+               // }
 		} else {
 			return redirect('/index')->with('error_msg', "You don't have rights to create a user.");
 		}
@@ -322,6 +323,7 @@ class UserController extends Controller {
 	}
 
 	public function update(Request $request, $id) {
+            //dd($request->all());
 		try {
 			$validator = Validator::make($request->all(),
                         [
@@ -343,7 +345,7 @@ class UserController extends Controller {
 				$is_suspended = 0;
 			}
 			$user = User::find($id);
-			$company_id = $user->company_id;
+			$company_id = $request->input('company_id');
 
 			$user_group_ids = GroupUser::where('user_id', $id)->get()->pluck('group_id')->toArray();
 
@@ -593,7 +595,12 @@ class UserController extends Controller {
 				return count($row->followers);
 			})->addColumn('actions', function ($row) {
                             $edit_url = route('user.edit', Helpers::encode_url($row->id));
+                            if(Auth::user()->role_id != 3) {
 				return '<a href="'.$edit_url.'"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                            }
+                            else {
+                                //return true;
+                            }
 			})->filter(function ($query) use ($request) {
 				if ($request->has('search_query') && !empty(trim($request->get('search_query')))) {
 					$query->where('name', 'like', "%{$request->get('search_query')}%")->orWhere('email', 'like', "%{$request->get('search_query')}%");
@@ -609,14 +616,14 @@ class UserController extends Controller {
 
 	public function getOtherManagerList(Request $request) {
 		$query = User::with(['followers', 'following'])->where('role_id', 2);
-		if ($request->input('search') && !empty($request->input('search'))) {
-			$query = $query->where(function ($q) use ($request) {
-				$q->where('name', 'like', "%{$request->input('search_query')}%")->orWhere('email', 'like', "%{$request->input('search_query')}%");
-			});
-		}
                 if(Auth::user()->role_id > 1) {
                     $query->where('company_id',Auth::user()->company_id);
                 }
+		if ($request->input('search') && !empty($request->input('search'))) {
+                    $query = $query->where(function ($q) use ($request) {
+                            $q->where('name', 'like', "%{$request->input('search_query')}%")->orWhere('email', 'like', "%{$request->input('search_query')}%");
+                    });
+		}
 		$res = $query->where('id','!=',Auth::user()->id)->orderBy('id', 'desc');
 		return Datatables::of($res)->addColumn('position', function ($row) {
 			return 'Company Manager';
@@ -634,8 +641,10 @@ class UserController extends Controller {
 		})->addColumn('role', function ($row) {
 			return 'Company Manager';
 		})->addColumn('actions', function ($row) {
+                    if(Auth::user()->role_id != 3) {
                             $edit_url = route('user.edit', Helpers::encode_url($row->id));
 				return '<a href="'.$edit_url.'"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    }else { }
 			})->rawColumns(['name', 'email', 'following_count', 'followers_count', 'points','actions'])->make(true);
 	}
 
@@ -758,8 +767,10 @@ class UserController extends Controller {
 		})->addColumn('group_admins', function ($row) {
 			return '<p>' . $row->group_admins . '</p>';
 		})->addColumn('actions', function ($row) {
+                    if(Auth::user()->role_id != 3) {
                     $edit_url = route('user.edit', Helpers::encode_url($row->id));
                         return '<a href="'.$edit_url.'"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    }else { }
                 })->rawColumns(['role', 'points', 'name', 'email', 'following_count', 'followers_count', 'group_admins','actions'])->make(true);
 	}
 

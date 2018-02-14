@@ -97,15 +97,15 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
 
                         <div class="group-box">
                             <div class="group-item one">
-                                <h2>{{ $count['admins'] + 1 }}</h2>
+                                <h2 id="total_admin">{{ $count['admins'] + 1 }}</h2>
                                 <p>Group Admins</p>
                             </div>
                             <div class="group-item two">
-                                <h2>{{ $count['total_users'] }}</h2>
+                                <h2 id="total_users">{{ $count['total_users'] }}</h2>
                                 <p>Group Members</p>
                             </div>
                             <div class="group-item three">
-                                <h2>{{ $count['total_posts'] }}</h2>
+                                <h2 id="total_posts">{{ $count['total_posts'] }}</h2>
                                 <p>Group Posts</p>
                             </div>
                         </div>

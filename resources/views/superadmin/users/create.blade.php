@@ -83,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="blank">
-                                    <label class="check"><p>Suspend</p>If user is suspended, than user can login but will not be able to create a new post.
+                                    <label class="check"><p>Suspend</p>If user is suspended, than user will not be able to login into the system.
                                         <input type="checkbox" name="is_suspended" id="is_suspended" >
                                         <span class="checkmark"></span>
                                     </label>

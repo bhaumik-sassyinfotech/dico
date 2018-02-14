@@ -18,11 +18,11 @@ if (count($users) > 0) {
                 <div class="panel-heading">
                     <div class="pull-right">
                         <?php
-                        $edit_url = route('user.edit', Helpers::encode_url($user['id']));
+                        /*$edit_url = route('user.edit', Helpers::encode_url($user['id']));
                         ?>
                         <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
                         <a href="{{$edit_url}}" onclick="window.open('<?=$edit_url?>','_self')"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>*/?>
                     </div>
                 </div>
                 <div class="panel-body">

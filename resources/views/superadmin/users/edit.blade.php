@@ -22,13 +22,16 @@
                             <div class="form-group">
                                 <label>Company<span>*</span></label>
                                 <div class="select">
-                                    <select id="company_id" name="company_id" class="form-control" disabled="disabled">
+                                    <select id="company_id" name="company_id" class="form-control" readonly style="pointer-events: none;">
                                         <option value="">------ Select ------</option>
-                                        @if( !empty($companies) )
-                                            @foreach($companies as $company)
-                                                <option value="{{$company->id}}" <?php ( $company->id == $user->company_id )  ? "selected" : ' '  ?>>{{$company->company_name}}</option>
-                                            @endforeach
-                                        @endif
+                                        <?php
+                                        if( !empty($companies) ) {
+                                            foreach($companies as $company) { 
+                                                ?>
+                                                <option value="{{$company->id}}" <?php if( $company->id == $user->company_id )  {echo "selected";} ?>>{{$company->company_name}}</option>
+                                            <?php
+                                            }
+                                        } ?>
                                     </select>
                                 </div>
                             </div>
@@ -40,21 +43,21 @@
                             
                             <div class="form-group">
                                 <label class="text-15">Email Id<span>*</span></label>
-                                <input type="text" name="user_email" id="user_email" value="{{$user->email}}" placeholder="User Email" onkeyup="$('#emailerror').text('');" onblur="checkEmail(this.value,{{$user->id}})" class="form-control">
+                                <input type="text" name="user_email" id="user_email" value="{{$user->email}}" placeholder="User Email" readonly="" onkeyup="$('#emailerror').text('');" onblur="checkEmail(this.value,{{$user->id}})" class="form-control">
                                 <label id="emailerror" class="error hidden" ></label>
                                 <input id="for_me_emailerror" value="" type="hidden">            
                             </div>
                             <div class="form-group">
                                 <label>Role:</label>
                                 <div class="select">
-                                    <select id="role_id" name="role_id" class="form-control">
+                                    <select id="role_id" name="role_id" class="form-control" readonly style="pointer-events: none;">
                                         <option value="">------ Select ------</option>
-                                        
-                                        @if(!empty($roles))
-                                            @foreach($roles as $role)
-                                                <option value="{{$role->id}}" <?php ( $user->role_id == $role->id ) ? 'selected ': ' ' ?>>{{$role->role_name}}</option>
-                                            @endforeach
-                                        @endif
+                                        <?php
+                                        if(!empty($roles)) {
+                                            foreach($roles as $role) { ?>
+                                                <option value="{{$role->id}}" <?php if( $user->role_id == $role->id ) { echo 'selected ';} ?>>{{$role->role_name}}</option>
+                                            <?php }
+                                        }?>
                                     </select>
                                 </div>
                             </div>
@@ -62,11 +65,11 @@
                                 <label>Groups:</label>
                                 <select name="user_groups[]" id="user_groups" class="form-control select" multiple="multiple">
                                     <option disabled="disabled" value="">Select company first.</option>
-                                    @if(count($groups) > 0)
-                                        @foreach($groups as $group)
-                                            <option value="{{ $group->id }}" <?php ( in_array($group->id, $user_group_ids) ) ? 'selected ': ' ' ?>>{{$group->group_name}}</option>
-                                        @endforeach
-                                    @endif
+                                    <?php
+                                    if(count($groups) > 0) {
+                                        foreach($groups as $group) { ?>
+                                            <option value="{{ $group->id }}" <?php  if(in_array($group->id, $user_group_ids)) { echo 'selected';} ?>>{{$group->group_name}}</option>
+                                    <?php } } ?>
                                 </select>
     
                             </div>
@@ -75,15 +78,15 @@
                                     <label class="check">
                                         <p>Active</p>
                                         If user is inactive, than user will not be able to login into the system.
-                                        <input type="checkbox" name="is_active" id="is_active"  <?php ( $user->is_active == 1 ) ? "checked" : ' ' ?> >
+                                        <input type="checkbox" name="is_active" id="is_active"  <?php if( $user->is_active == 1 ) { echo "checked"; } ?> >
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="blank">
-                                    <label class="check"><p>Suspend</p>If user is suspended, than user can login but will not be able to create a new post.
-                                        <input type="checkbox" name="is_suspended" id="is_suspended" <?php ( $user->is_suspended == 1 ) ? "checked" : ' ' ?> >
+                                    <label class="check"><p>Suspend</p>If user is suspended, than user will not be able to login into the system.
+                                        <input type="checkbox" name="is_suspended" id="is_suspended" <?php if( $user->is_suspended == 1 ) { echo "checked"; } ?> >
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>

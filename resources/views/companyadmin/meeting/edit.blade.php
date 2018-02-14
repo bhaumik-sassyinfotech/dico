@@ -116,12 +116,13 @@
                                           </div> 
                                         <div class="post-category" id="meeting_users_list">
                                             <?php
+                                                //dd($meeting->meetingUsers);
                                                 if(!empty($meeting->meetingUsers) && count($meeting->meetingUsers) > 0) {
                                                     foreach ($meeting->meetingUsers as $meetingUsers) {
                                                         $userDetail = $meetingUsers->UserDetail;
                                                         if($meetingUsers->group_id != 0) {
                                             ?>
-                                            <div class="member-wrap" id="user_{{$userDetail->id}}">
+                                            <div class="member-wrap" id="user_<?php echo $userDetail->id;?>">
                                                 <div class="member-img">
                                                     <?php
                                                         if (!empty($userDetail->profile_image)) {

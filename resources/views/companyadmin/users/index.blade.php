@@ -1,7 +1,7 @@
 @extends('template.default')
 <title>DICO - User</title>
 @section('content')
-    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee user-table">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">

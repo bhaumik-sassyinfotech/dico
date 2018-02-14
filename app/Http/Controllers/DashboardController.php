@@ -138,7 +138,7 @@ class DashboardController extends Controller {
 			$view_user = User::find($id);
 			$company_id = $view_user->company_id;
 			$user = User::with(['followers', 'following', 'followers.followUser', 'following.followingUser'])->where('id', $user_id)->first();
-			$group_ids = GroupUser::select('group_id')->where('user_id', $user_id)->pluck('group_id')->toArray();
+			$group_ids = GroupUser::select('group_id')->where(['user_id'=>$user_id,'deleted_at'=>null])->pluck('group_id')->toArray();
                         $follow = User::with(['followers'=>function($q) {
                             $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                         }])->where('id', $user_id)->first();
@@ -160,6 +160,7 @@ class DashboardController extends Controller {
 				->join('groups', 'groups.id', '=', 'group_users.group_id')
 				->where('groups.company_id', $company_id)
 				->where('group_users.user_id', $user_id)
+                                ->where('group_users.deleted_at', null)
 				->select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* , (SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as total_posts'))
 				->groupBy('group_users.group_id');
 //			 if ($currUser->role_id != 1) {
@@ -259,7 +260,7 @@ class DashboardController extends Controller {
         public function checkEmailExists(Request $request) {
             $email = $request->input('email');
             $user_id = $request->input('user_id');
-            $query = User::where('email',$email);
+            $query = User::where(['email'=>$email,'deleted_at'=>null]);
             if($user_id > 0) {
                 $query->where('id','!=',$user_id);
             }

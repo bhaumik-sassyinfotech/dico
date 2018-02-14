@@ -108,11 +108,13 @@ $("#company_listing").change(function () {
     var dataString = {_token: CSRF_TOKEN, company_id: that.val()};
     if (that.val() != "")
     {
+        $("#spinner").show();
         $.ajax({
             url: 'companyUsers',
             data: dataString,
             method: "POST",
             success: function (response) {
+                $("#spinner").hide();
                 $("#company-warn").css('display','none');
                 $("#users_listing,#group_owner").empty().append($("<option></option>").val("").html("Select user"));
                 var userData = response.data;
@@ -129,6 +131,7 @@ $("#company_listing").change(function () {
     }
 });
 $("#group_owner").change(function () {
+    $("#spinner").show();
     var userDropDown = $("#users_listing");
     var group_owner = $("#group_owner").val();
     var company_id = $("#company_listing").val();
@@ -141,6 +144,7 @@ $("#group_owner").change(function () {
         data: dataString,
         async: false,
         success: function (response) {
+            $("#spinner").hide();
             userDropDown.empty();
             var status = response.success;
             if (status == 1) {
@@ -321,11 +325,11 @@ $(document).on('click', '.removeUser', function (event) {
                 success: function (response) {
 
                     var status = response.status;
-
                     swal("Success", response.msg, "success");
                     if (status == 1) {
                         groupEditTable.draw();
                     }
+                    //location.reload();
                     companyUsers();
                 }
             });
@@ -436,6 +440,10 @@ function companyUsers() {
         method: 'POST',
         data: dataString,
         success: function (response) {
+            if(response['count']) {
+                $('#total_admin').html(response.count.admins);
+                $('#total_users').html(response.count.total_users);
+            }
             var userSelect = $("#company_users");
             userSelect.empty();
             var users = response.data;
