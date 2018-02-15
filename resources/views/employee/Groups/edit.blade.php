@@ -68,9 +68,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                     </div>
                                 </div>
                                 @if($currUserIsAdmin == '1')
-                                    <input class="update-button st-btn"
-                                           style="position:relative;display: block; width: 100%;" type="submit"
-                                           value="Submit" name="">
+                                    <input class="update-button st-btn" style="position:relative;display: block; width: 100%;" type="submit" value="Submit" name="">
                                 @endif
                             </form>
                         </div>
@@ -97,15 +95,15 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
 
                         <div class="group-box">
                             <div class="group-item one">
-                                <h2>{{ $count['admins'] + 1 }}</h2>
+                                <h2 id="total_admin">{{ $count['admins']}}</h2>
                                 <p>Group Admins</p>
                             </div>
                             <div class="group-item two">
-                                <h2>{{ $count['total_users'] }}</h2>
+                                <h2 id="total_users">{{ $count['total_users'] }}</h2>
                                 <p>Group Members</p>
                             </div>
                             <div class="group-item three">
-                                <h2>{{ $count['total_posts'] }}</h2>
+                                <h2 id="total_posts">{{ $count['total_posts'] }}</h2>
                                 <p>Group Posts</p>
                             </div>
                         </div>
@@ -115,8 +113,10 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                         <div class="category">
                             <h2>Group Admins</h2>
                             <div class="post-category">
-                                @foreach($groupData->groupUsers as $user)
-                                    @if($user->user_id == $groupData->group_owner || $user->is_admin == '1')
+                                <?php
+                                if(!empty($groupData->groupUsers) && count($groupData->groupUsers) > 0) {
+                                foreach($groupData->groupUsers as $user) {
+                                    if($user->user_id == $groupData->group_owner || $user->is_admin == '1') { ?>
                                         <div class="member-wrap">
                                             <div class="member-img">
                                                 @if($user->userDetail->profile_image != "")
@@ -130,8 +130,13 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                                 <a href="mailto:ricardo_ranchet@gmail.com">{{ $user->userDetail->email }}</a>
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
+                                <?php
+                                    }
+                                }
+                                } else {
+                                    echo "<div class='member-wrap'>No group admin assign.</div>";
+                                }
+                                ?>
                             </div>
                         </div>
 
@@ -338,6 +343,8 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div><!--wrap -->
     </div><!-- page-content -->

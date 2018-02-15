@@ -55,8 +55,8 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
 
                                 <div class="update-wrap">
                                     @if($currUserIsAdmin == '1')
-                                    <input type="file" id="image" name="group_picture" class="fileinput">
-                                    <label>Upload Photo</label>
+                                        <input type="file" id="image" name="group_picture" class="fileinput">
+                                        <label>Upload Photo</label>
                                     @endif
                                     <div class="preview_box">
                                         @php
@@ -68,9 +68,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                     </div>
                                 </div>
                                 @if($currUserIsAdmin == '1')
-                                    <input class="update-button st-btn"
-                                           style="position:relative;display: block; width: 100%;" type="submit"
-                                           value="Submit" name="">
+                                    <input class="update-button st-btn" style="position:relative;display: block; width: 100%;" type="submit" value="Submit" name="">
                                 @endif
                             </form>
                         </div>
@@ -97,7 +95,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
 
                         <div class="group-box">
                             <div class="group-item one">
-                                <h2 id="total_admin">{{ $count['admins'] + 1 }}</h2>
+                                <h2 id="total_admin">{{ $count['admins']}}</h2>
                                 <p>Group Admins</p>
                             </div>
                             <div class="group-item two">
@@ -115,8 +113,10 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                         <div class="category">
                             <h2>Group Admins</h2>
                             <div class="post-category">
-                                @foreach($groupData->groupUsers as $user)
-                                    @if($user->user_id == $groupData->group_owner || $user->is_admin == '1')
+                                <?php
+                                if(!empty($groupData->groupUsers) && count($groupData->groupUsers) > 0) {
+                                foreach($groupData->groupUsers as $user) {
+                                    if($user->user_id == $groupData->group_owner || $user->is_admin == '1') { ?>
                                         <div class="member-wrap">
                                             <div class="member-img">
                                                 @if($user->userDetail->profile_image != "")
@@ -127,11 +127,16 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                             </div>
                                             <div class="member-details">
                                                 <h3 class="text-12"><a href="{{ url('view_profile/'.Helpers::encode_url($user->userDetail->id)) }}">{{ $user->userDetail->name }}</a></h3>
-                                                <a href="mailto:{{ $user->userDetail->email }}">{{ $user->userDetail->email }}</a>
+                                                <a href="mailto:ricardo_ranchet@gmail.com">{{ $user->userDetail->email }}</a>
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
+                                <?php
+                                    }
+                                }
+                                } else {
+                                    echo "<div class='member-wrap'>No group admin assign.</div>";
+                                }
+                                ?>
                             </div>
                         </div>
 
@@ -153,14 +158,18 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                             </div>
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <div tabindex="5000" class="tab-pane" id="threads">
-                                        
+                                    <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane" id="threads">
+                                        <div  class="post-slider owl-carousel">
                                             @if(count($userPosts) == 0)
-                                                <!-- <div class="item">-->
-                                                    <p>Current no post belong to this group.</p>
-                                                <!-- </div> -->
+                                                <div class="item">
+                                                    <div class="panel-primary panel-1">
+                                                        <div class="panel-heading"></div>
+                                                        <div class="panel-body">
+                                                            <p>Current no post belong to this group.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @else
-                                            <div  class="post-slider owl-carousel">
                                                 @foreach($userPosts as $post)
                                                     <div class="item">
                                                         @php
@@ -221,12 +230,87 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <?php
+/*
+<div class="item">
+<div class="panel-2 panel-primary">
+<div class="panel-heading">
+<h4 class="icon">Questions</h4>
+<div class="pull-right">
+<a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
+<i class="fa fa-pencil" aria-hidden="true"></i></a>
+<a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+</div>
+</div>
+<div class="panel-body">
+<h4>Lorem lpsum is dummy text</h4>
+<p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
+<fieldset>
+<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+</fieldset>
+<div class="btn-wrap">
+<a href="question-details.php">Read More</a>
+</div>
+<div class="panel-body-wrap">
+<div class="wrap-social pull-left">
+<div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
+</div>
+<div class="status pull-right">
+<p>Status:<span>Active</span></p>
+</div>
+</div>
+<hr>
+<div class="post-circle">
+<a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
+</div>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="panel-3 panel-primary">
+<div class="panel-heading">
+<h4 class="icon">Challenge</h4>
+<div class="pull-right">
+<a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
+<i class="fa fa-pencil" aria-hidden="true"></i></a>
+<a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+</div>
+</div>
+<div class="panel-body">
+<h4>Lorem lpsum is dummy text</h4>
+<p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
+<fieldset>
+<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+</fieldset>
+<div class="btn-wrap">
+<a href="challenges.php">Read More</a>
+</div>
+<div class="panel-body-wrap">
+<div class="wrap-social pull-left">
+<div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
+<div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
+</div>
+<div class="status pull-right">
+<p>Status:<span>Active</span></p>
+</div>
+</div>
+<hr>
+<div class="post-circle">
+<a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
+</div>
+</div>
+</div>
+</div>
+ */
+?>
                                                 @endforeach
-                                                </div>
                                             @endif
-                                        
+                                        </div>
                                     </div>
-                                    <div tabindex="5002" class="tab-pane tab-border active" id="users">
+                                    <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane tab-border active" id="users">
                                         <table class="table table-responsive" id="group_users_edit_table">
                                             <thead>
                                             <tr>

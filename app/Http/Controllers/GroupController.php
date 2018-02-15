@@ -267,7 +267,6 @@ class GroupController extends Controller {
 		$companies = Company::all();
 
 		$groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $id)->first();
-
 		$userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->where('group_id', $groupId)->get();
 
 		$count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $groupId)->get()->toArray());
@@ -534,7 +533,7 @@ class GroupController extends Controller {
 			$groupUserIds = GroupUser::where('group_id', $group_id)->get()->pluck('user_id')->prepend(1)->toArray(); // select user_id which are already in the group
 
 			$users = User::whereNotIn('id', $groupUserIds)->where('role_id', '!=', '1')->where('company_id', $company_id)->get()->toArray();
-                        $count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $request->get('group_id'))->get()->toArray()) + 1;
+                        $count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $request->get('group_id'))->get()->toArray());
                         $groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $request->get('group_id'))->first();
                         $count['total_users'] = $groupData->groupUsers->count();
 			return Response::json(['msg' => 'Users listing.', 'data' => $users, 'status' => 1,'count'=>$count]);

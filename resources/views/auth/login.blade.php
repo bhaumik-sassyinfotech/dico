@@ -15,7 +15,6 @@
         </div>
     </header>
     <div class="verticalcenter">
-        @include('template.notification')
         {{--<p>Company: <span>Agency 96</span></p>--}}
         <form class="common-form" method="POST" action="{{ route('login') }}" id="login_form">
             {{ csrf_field() }}

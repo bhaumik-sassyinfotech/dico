@@ -187,7 +187,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::resource('support', 'SupportController');
         Route::GET('supportList', 'SupportController@supportList');
         Route::POST('deleteSupport', 'SupportController@deleteSupport');
-        Route::get('/registerPackage', 'front\HomeController@registerPackage');
+        Route::get('/registerPackage/{package}','front\HomeController@registerPackage');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');

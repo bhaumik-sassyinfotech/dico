@@ -682,7 +682,7 @@ class UserController extends Controller {
 		return $output;
 	}
 	public function getOtherManagerGrid(Request $request) {
-                DB::connection()->enableQueryLog();
+                //DB::connection()->enableQueryLog();
 		$offset = 0;
 		if ($request->has('offset')) {
 			$offset = $request->input('offset');
@@ -703,7 +703,7 @@ class UserController extends Controller {
 		$users_query = $query->orderBy('id', 'desc');
 		$users_count = count($users_query->get());
 		$users = $users_query->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
-                dd(DB::getQueryLog());
+                //dd(DB::getQueryLog());
 		$html = view::make($this->folder . '.users.ajax_other_managers', compact('users'));
 		$output = array('html' => $html->render(), 'count' => $users_count);
 		return $output;
