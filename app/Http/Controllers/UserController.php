@@ -239,7 +239,7 @@ class UserController extends Controller {
 		}
 
 		return "template not found";
-	}
+	} 
 
 	/**
 	 * Remove the specified resource from storage.
@@ -586,7 +586,7 @@ class UserController extends Controller {
 				$points = Helpers::user_points($row->id);
 				return '<p>' . $points['points'] . '</p>';
 			})->addColumn('name', function ($row) {
-				return '<label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '<input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span></label>';
+				return '<input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span><label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';
 			})->addColumn('email', function ($row) {
 				return '<p>' . $row->email . '</p>';
 			})->addColumn('following_count', function ($row) {
@@ -721,6 +721,7 @@ class UserController extends Controller {
                 $users_query = GroupUser::with(['userDetail'=>function($q) {$q->withCount('followers');}, 'userDetail.followers'=>function($q) {
                                     $q->where(['sender_user_id'=>Auth::user()->id,'status'=>1]);
                                 }, 'userDetail.following']);
+                $users_query = $users_query->where('user_id','!=',Auth::user()->id);                
                 if (Auth::user()->role_id > 1) {
 			$users_query = $users_query->where('company_id', Auth::user()->company_id);
 		}
@@ -740,15 +741,15 @@ class UserController extends Controller {
 	public function getGroupAdminList(Request $request) {
                  DB::connection()->enableQueryLog();
 		$group_admins_query = User::with(['following', 'followers'])->select(DB::raw('users.name, users.id, roles.role_name ,GROUP_CONCAT(groups.group_name SEPARATOR ", ") as group_admins'));
-
+                if (Auth::user()->role_id > 1) {
+			$group_admins_query = $group_admins_query->where('users.company_id', Auth::user()->company_id);
+		}
 		if ($request->has('search_query') && !empty($request->input('search_query'))) {
 			$group_admins_query = $group_admins_query->where(function ($q) use ($request) {
 				$q->where('name', 'like', "%{$request->input('search_query')}%")->orWhere('email', 'like', "%{$request->input('search_query')}%");
 			});
 		}
-                 if (Auth::user()->role_id == 2) {
-			$group_admins_query = $group_admins_query->where('users.company_id', Auth::user()->company_id);
-		}
+                
 		$group_admins = $group_admins_query->leftJoin('group_users', 'group_users.user_id', '=', 'users.id')->leftJoin('groups', 'groups.id', '=', 'group_users.group_id')->leftJoin('roles', 'roles.id', '=', 'users.role_id')->where('group_users.is_admin', '1')->where('users.id','!=',Auth::user()->id)->groupBy('users.id')->get();
                 //dd(DB::getQueryLog());
 		return Datatables::of($group_admins)->addColumn('role', function ($row) {

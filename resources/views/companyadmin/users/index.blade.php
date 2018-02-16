@@ -210,13 +210,14 @@
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
                                                                                 <select name="slct" id="slct" class="action">
+                                                                                    <option value="">---Select---</option>
                                                                                     <option value="active">Active</option>
                                                                                     <option value="inactive">Inactive</option>
                                                                                     <option value="suspend">Suspend</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                               <input type="button" name="" class="st-btn multiple-action" value="Submit">
+                                                                               <input type="button" name="" class="st-btn multiple-action user_multiple_action" value="Submit">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -270,13 +271,14 @@
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
                                                                                 <select name="slct" id="slct" class="action">
+                                                                                    <option value="">---Select---</option>
                                                                                     <option value="active">Active</option>
                                                                                     <option value="inactive">Inactive</option>
                                                                                     <option value="suspend">Suspend</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                               <input type="button" name="" class="st-btn multiple-action" value="Submit">
+                                                                               <input type="button" name="" class="st-btn multiple-action user_multiple_action" value="Submit">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -330,13 +332,14 @@
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
                                                                                 <select name="slct" id="slct" class="action">
+                                                                                    <option value="">---Select---</option>
                                                                                     <option value="active">Active</option>
                                                                                     <option value="inactive">Inactive</option>
                                                                                     <option value="suspend">Suspend</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                               <input type="button" name="" class="st-btn multiple-action" value="Submit">
+                                                                               <input type="button" name="" class="st-btn multiple-action user_multiple_action" value="Submit">
                                                                             </div>
                                                                         </div>
                                                                     </div>

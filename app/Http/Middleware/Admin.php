@@ -22,6 +22,10 @@ class Admin {
 			Auth::logout();
 			return redirect()->route('login')->with('err_msg', 'Your account has been suspended please contact admin.');
 		}
+                if (Auth::user()->is_active == 0) {
+			Auth::logout();
+			return redirect()->route('login')->with('err_msg', 'Your account is inactive please contact admin.');
+		}
 		if (Auth::user()->first_login == 0 && Auth::user()->role_id > 1) {
 			return redirect()->route('security.firstLogin');
 		}
