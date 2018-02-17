@@ -162,12 +162,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                         <div  class="post-slider owl-carousel">
                                             @if(count($userPosts) == 0)
                                                 <div class="item">
-                                                    <div class="panel-primary panel-1">
-                                                        <div class="panel-heading"></div>
-                                                        <div class="panel-body">
-                                                            <p>Current no post belong to this group.</p>
-                                                        </div>
-                                                    </div>
+                                                    <p>No post found.</p>
                                                 </div>
                                             @else
                                                 @foreach($userPosts as $post)

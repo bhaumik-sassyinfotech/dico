@@ -1,7 +1,7 @@
 @extends('template.default')
-@section('content')
 <title>DICO - Group</title>
-    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+@section('content')
+<div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -169,6 +169,7 @@
                                                             <div class="action notice-left"><p>Action</p></div>
                                                             <div class="select notice-left">
                                                                 <select name="slct" id="slct">
+                                                                  <option value="">---Select---</option>  
                                                                   <option value="delete">Delete</option>
                                                                 </select>
                                                             </div>

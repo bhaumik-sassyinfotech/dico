@@ -62,11 +62,11 @@ class GroupController extends Controller {
 
 					$msg = '';
 
-					if ($url_segments[1] == 'create') {
+					/*if ($url_segments[1] == 'create') {
 
 						$msg = "You don't have permissions to create a group.";
 
-					}
+					}*/
 
 					if (!empty($msg)) {
 
@@ -126,12 +126,16 @@ class GroupController extends Controller {
 
 	public function create(Request $request) {
 
-		//
-
-		$companies = Company::all();
-
-		return view($this->folder . '.groups.create', compact('companies'));
-
+		if (Auth::user()) {
+                if (Auth::user()->role_id == '2') {
+                    $companies = Company::where('id',Auth::user()->company_id)->get();
+                } else {
+                    $companies = Company::all();
+                }
+                    return view($this->folder . '.groups.create', compact('companies'));
+                }else {
+                    return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                }
 	}
 
 	/**
@@ -268,7 +272,6 @@ class GroupController extends Controller {
 
 		$groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $id)->first();
 		$userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->where('group_id', $groupId)->get();
-
 		$count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $groupId)->get()->toArray());
 
 		$count['total_users'] = $groupData->groupUsers->count();
@@ -280,17 +283,14 @@ class GroupController extends Controller {
 		$currUserIsAdmin = 1;
 
 		$admin = GroupUser::where('is_admin', '1')->where('user_id', Auth::user()->id)->where('group_id', $groupId)->first();
-
 		if (is_null($admin) && Auth::user()->id != $groupData->group_owner) {
 
 			$currUserIsAdmin = 0;
 
 		}
-
 		$groupUsers = $groupData->groupUsers->pluck('user_id')->toArray();
 
 		$companyEmployee = User::where('company_id', $groupData->company_id)->where('role_id', '!=', 1)->whereNotIn('id', $groupUsers)->get();
-
 		// dd($userPosts);
 
 		return view($this->folder . '.groups.edit', compact('groupData', 'count', 'companies', 'companyEmployee', 'groupId', 'userPosts', 'currUserIsAdmin'));
@@ -461,7 +461,7 @@ class GroupController extends Controller {
 
 			$addUserBtn = '';
 
-			$editBtn = '<a class="left-10" href="' . route('group.edit', [Helpers::encode_url($row->id)]) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
+			$editBtn = '<a class="left-10" href="' . url('editGroup/'.Helpers::encode_url($row->id)) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
 
 			if ($row->group_owner == $currUser->id) {
 
@@ -904,29 +904,26 @@ class GroupController extends Controller {
 					$current_group_query = Group::where('id', $group);
 
 					$current_group = $current_group_query->first();
+					/*if ($currUser->role_id == 2) {
+                                            if ($currUser->id != $current_group->group_owner) {
+                                                    continue;
+                                            }
+					}*/
 
-					if ($currUser->role_id == 2) {
-						if ($currUser->id != $current_group->group_owner) {
-							continue;
-						}
-					}
-
-					$current_group_query->delete();
 					GroupUser::where('group_id', $group)->delete();
-
+                                        //return "here";
 					$posts_groups = Post::whereRaw("FIND_IN_SET($group,group_id)")->get();
 
 					foreach ($posts_groups as $posts) {
 						$post = Post::find($posts->id);
-
 						$old_groups = explode(',', $post->group_id);
 
 						$new_groups = array_diff($old_groups, (array) $group);
 
 						if (empty($new_groups) && count($new_groups) == 0) {
-							$new_groups = 0;
+                                                    $new_groups = 0;
 						} else {
-							$new_groups = implode(',', $new_groups);
+                                                    $new_groups = implode(',', $new_groups);
 						}
 
 						$post->group_id = $new_groups;
@@ -941,9 +938,8 @@ class GroupController extends Controller {
 							DB::rollBack();
 							break;
 						}
-
 					}
-
+                                        $current_group_query->delete();
 					// return response()->json($posts);
 				}
 
@@ -1018,4 +1014,44 @@ class GroupController extends Controller {
         return Response::json($data);
 
 	}
+        
+        public function editGroup($id) {
+            $groupId = Helpers::decode_url($id);
+            $companies = Company::all();
+
+            $groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $groupId)->first();
+            $userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->where('group_id', $groupId)->get();
+            $count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $groupId)->get()->toArray());
+
+            $count['total_users'] = $groupData->groupUsers->count();
+
+            $count['total_posts'] = $userPosts->count();
+
+//            dd($groupData->groupUsers->pluck('user_id')->toArray());
+
+		$currUserIsAdmin = 1;
+
+		$admin = GroupUser::where('is_admin', '1')->where('user_id', Auth::user()->id)->where('group_id', $groupId)->first();
+		if (is_null($admin) && Auth::user()->id != $groupData->group_owner) {
+
+			$currUserIsAdmin = 0;
+
+		}
+		$groupUsers = $groupData->groupUsers->pluck('user_id')->toArray();
+
+		$companyEmployee = User::where('company_id', $groupData->company_id)->where('role_id', '!=', 1)->whereNotIn('id', $groupUsers)->get();
+		// dd($userPosts);
+
+		return view($this->folder . '.groups.editGroup', compact('groupData', 'count', 'companies', 'companyEmployee', 'groupId', 'userPosts', 'currUserIsAdmin'));
+        }
+        public function groupUpdate(Request $request) {
+            $group_id = $request->input('group_id');
+            $description = $request->input('description');
+            $res = Group::where('id',$group_id)->update(['description'=>$description]);
+            if($res) {
+               echo json_encode(array('status' => 1, 'msg' => "Group updated successfully")); 
+            } else {
+                echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+            }
+        }
 }

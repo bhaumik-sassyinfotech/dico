@@ -29,12 +29,12 @@ if (count($users) > 0) {
                     <fieldset>
                         <div class="grid-image">
                             <?php
-$profile_pic = asset('assets/img/super-user.PNG');
-		if ($user['profile_image'] != "") {
-			$profile_pic = asset(PROFILE_PATH . $user['profile_image']);
-		}
+                                $profile_pic = asset(DEFAULT_PROFILE_IMAGE);
+                                if ($user['profile_image'] != "") {
+                                        $profile_pic = asset(PROFILE_PATH . $user['profile_image']);
+                                }
 
-		?>
+                            ?>
                             <img src="{{ $profile_pic }}" alt="super-user">
                         </div>
                         <div class="grid-details">

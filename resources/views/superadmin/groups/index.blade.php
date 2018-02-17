@@ -1,6 +1,6 @@
 @extends('template.default')
-@section('content')
 <title>DICO - Group</title>
+@section('content')
     <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
         <div id='wrap'>
             <div id="page-heading">

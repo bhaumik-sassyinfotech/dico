@@ -586,7 +586,7 @@ class UserController extends Controller {
 				$points = Helpers::user_points($row->id);
 				return '<p>' . $points['points'] . '</p>';
 			})->addColumn('name', function ($row) {
-				return '<input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span><label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';
+				return '<label class="check"><input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';
 			})->addColumn('email', function ($row) {
 				return '<p>' . $row->email . '</p>';
 			})->addColumn('following_count', function ($row) {

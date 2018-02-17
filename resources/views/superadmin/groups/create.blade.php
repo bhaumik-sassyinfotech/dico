@@ -1,4 +1,5 @@
 @extends('template.default')
+<title>DICO - Group</title>
 @section('content')
 <div id="page-content" class="create-user create-user-popup">
                    <div id='wrap'>

@@ -948,9 +948,7 @@ $(document).on('click','.multiple-action',function(){
                 confirmButtonText: "Yes",
                 closeOnConfirm: false
             } , function () {
-                // console.log("herer");
                 var dataString = {_token:CSRF_TOKEN};
-                // dataString.groups = '';
                 var temp_url = '/group/delete_group';    
                 var action = '';
                 if(page_name == 'superadmin_user_listing')
@@ -970,8 +968,6 @@ $(document).on('click','.multiple-action',function(){
                         success: function (response) 
                         {
                             var status = response.status;
-                            
-                            
                             if( status == 0) {
                                 swal("Error!", response.msg, "error");
                             } else if (status == 1) 
@@ -980,9 +976,7 @@ $(document).on('click','.multiple-action',function(){
                                 setTimeout(function(){
                                     location.reload();
                                 },1000);
-                                //groupEditTable.draw();
                             } 
-                            // companyUsers();
                         }
                     });
                 });
@@ -1101,4 +1095,24 @@ $("#create_group_modal").validate({
         });
     }
 });
+function saveGroupDesc() {
+    var group_id = $('#group_id').val();
+    var desc = $('#group_desc').val();
+    var dataString = { _token : CSRF_TOKEN , group_id: group_id , description : desc };
+    $.ajax({
+        url: SITE_URL + '/group/groupUpdate',
+        method: 'POST',
+        data: dataString,
+        success: function (response) 
+        {
+            var res = JSON.parse(response);
+            if( res.status == 1) {
+                ajaxResponse('success',res.msg);
+            } else 
+            {
+                ajaxResponse('error',res.msg);
+            } 
+        }
+    });
+}
 

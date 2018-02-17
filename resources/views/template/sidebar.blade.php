@@ -114,6 +114,7 @@ else if ($role_id == 2) {
                 <span>Employee</span></a></li>
         <li><a href="javascript:;"><i class="fa fa-users"></i> <span>Group</span></a>
             <ul class="acc-menu">
+                <li><a href="{{ route('group.create') }}"><span>Add Group</span></a></li>
                 <li><a href="{{ route('group.index') }}"><span>View Groups</span></a></li>
             </ul>
         </li>

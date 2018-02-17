@@ -60,7 +60,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                     @endif
                                     <div class="preview_box">
                                         @php
-                                            $img = asset('assets/img/upload-image.png');
+                                            $img = asset(DEFAULT_GROUP_IMAGE);
                                             if($groupData->group_image != "")
                                                 $img = asset('public/uploads/groups/'.$groupData->group_image);
                                         @endphp
@@ -158,17 +158,18 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                             </div>
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane" id="threads">
+                                    <div tabindex="5000" class="tab-pane" id="threads">
                                         <div  class="post-slider owl-carousel">
                                             @if(count($userPosts) == 0)
-                                                <div class="item">
+                                            <p>No post found.</p>
+                                                <!--<div class="item">
                                                     <div class="panel-primary panel-1">
                                                         <div class="panel-heading"></div>
                                                         <div class="panel-body">
-                                                            <p>Current no post belong to this group.</p>
+                                                            
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
                                             @else
                                                 @foreach($userPosts as $post)
                                                     <div class="item">
@@ -310,7 +311,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                             @endif
                                         </div>
                                     </div>
-                                    <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane tab-border active" id="users">
+                                    <div tabindex="5002" class="tab-pane tab-border active" id="users">
                                         <table class="table table-responsive" id="group_users_edit_table">
                                             <thead>
                                             <tr>
@@ -321,21 +322,6 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
-                                           @php
-                                           /*
-                                            <tbody>
-                                            @foreach($groupData->groupUsers as $user)
-                                                <tr>
-                                                    <td><p class="blue">{{ $user->userDetail->name }}<span>{{ $user->userDetail->email }}</span></p></td>
-                                                    <td><p>{{ count($user->following) }}<span></span></p></td>
-                                                    <td><p>{{ count($user->followers) }}<span></span></p></td>
-                                                    <td><p>02<span></span></p></td>
-                                                    <td><p><a class="promoteToAdmin {{ ( $groupData->group_owner == $user->user_id OR $user->is_admin == '1') ? 'active-admin' : 'deactive-admin' }}">Make Group Admin<span></span></a></p></td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                           */
-                                           @endphp
                                         </table>
                                     </div>
                                 </div>

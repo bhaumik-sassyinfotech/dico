@@ -83,13 +83,14 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                         @endif
                                     </div>
                                 </div>
-                                <div class="panel-body">
+                                <textarea class="panel-body" onchange="saveGroupDesc()" name="group_desc" id="group_desc" style="margin: 0px;width: 603px;height: 94px;">{{$groupData->description}}</textarea>
+                                <?php /*<div class="panel-body">    
                                     @if(empty($groupData->description))
                                         <p>-</p>
                                     @else
                                         <p>{{ nl2br($groupData->description) }}</p>
                                     @endif
-                                </div>
+                                </div>*/?>
                             </div>
                         </div>
 

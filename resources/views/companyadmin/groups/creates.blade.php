@@ -1,5 +1,4 @@
 @extends('template.default')
-<title>DICO - Group</title>
 @section('content')
 
     <div id="page-content">

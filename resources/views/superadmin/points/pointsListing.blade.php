@@ -1,6 +1,5 @@
-
 @extends('template.default')
-
+<title>DICO - Points</title>
 @section('content')
 <div id="page-content" class="point-page" style="min-height: 650px;">
     <div id="wrap">
@@ -34,8 +33,7 @@
                         <div class="panel-heading">
                               <h4>
                                 <ul class="nav nav-tabs">
-                                  <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Users</span></a></li>
-                                  <li style="display: none;" class=""><a href="#users" data-toggle="tab"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Users</span></a></li>
+                                  <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Points</span></a></li>
                                 </ul>
                               </h4>
                        </div>
@@ -48,7 +46,7 @@
                                         <div class="col-md-12">
                                             <div class="panel panel-info ">
                                                 <div class="panel-heading trophy">
-                                                    <h4 class="icon">Users List</h4>
+                                                    <h4 class="icon">Point List</h4>
                                                 </div>
                                                 <div class="panel-body">
                                                     <div class="row">

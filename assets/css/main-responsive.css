@@ -55,10 +55,10 @@ body .modal-dialog.updatesecurity .modal-content,
     display: inline-block;
 }
 .point-page .table > thead > tr > th {
-    padding: 16px 10px;
-    font-size: 12px;
+    font-size: 11px;
+    padding: 16px 6px;
     vertical-align: middle;
-}    
+}   
 /* package page*/
 
 .pricing-grid .pricing-item .top:after {
@@ -70,7 +70,10 @@ body .modal-dialog.updatesecurity .modal-content,
 }
 
 @media screen and (max-width:1169px){
-
+.panel-info .panel-body {
+    overflow-x: scroll;
+    width: 100%;
+}
  .list-block .btn-wrap > a {
   font-size: 11px;
   padding: 7px 30px;
@@ -390,7 +393,7 @@ body.show-leftbar {
 }    
     
 .search-form > input:not([type="button"]) {
-  font-size: 10px;
+  font-size: 0px;
   line-height: 160%;
   padding: 5px 10px 5px 30px;
   width: 122px;
@@ -562,6 +565,8 @@ body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialo
 
 @media (min-width:768px) and (max-width:1024px){
     
+    
+    
 .follow_box .preview_box {
     height: 104px;
 }     
@@ -692,6 +697,10 @@ body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialo
 }    
     
 
+
+.btn-toolbar > .btn-default {
+    margin-right: 0;
+}
 }
 
 @media screen and (max-width:925px){
@@ -1639,15 +1648,12 @@ body .updatesecurity .modal-content {
 }       
 .point-page .group-tabs .tab-pane .panel-info table {
     display: block;
-    height: 150px;
+    height:  300px;
     overflow: scroll;
 }
 .add-group:before {
     line-height: 24px;    
 }
-    
-
-
 
 .create-post .common-form .box-check .check {
     display: block;
@@ -1655,31 +1661,20 @@ body .updatesecurity .modal-content {
     height: 35px;
     font-size: 11px;
 }    
-    
-
-
 body.show-leftbar #sidebar {
     display: block;
-    height: 350px;
+    height: 470px;
     overflow: scroll !important;
     width: 230px;
 }
-
-
 body.show-leftbar #page-content {
     position: fixed;
 }
-    
-    
-
-
 
 .all-group-list.main-user-profile.point-page #wrap .btn-group.top-set {
   padding: 0;
   top: -20px;
 }
-    
-
 
 .create-user-from .update-block-wrap {
     padding: 0 10px;
@@ -1693,9 +1688,6 @@ body.show-leftbar #page-content {
 .point-page .color-changes .dropdown-menu {
   margin: 42px 0 0;
 }    
-    
-
-
 .point-page.all-group-list .table > thead > tr > th {
     text-align: left;
 }
@@ -1740,6 +1732,24 @@ body .group-tabs[class*="panel-"] .panel-primary .panel-body {
     width: 290px;
 }
 /* package page*/    
+    
+    
+
+
+
+body.show-leftbar #page-leftbar {
+    width: 230px;
+    display: block;
+}
+body #page-leftbar {
+    display: none;
+}    
+    
+
+
+body .bottom-sidebar {
+    position: absolute;
+}
     
     
 }
