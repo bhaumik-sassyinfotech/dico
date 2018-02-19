@@ -161,155 +161,122 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                 <div class="tab-content">
                                     <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane" id="threads">
                                         <div  class="post-slider owl-carousel">
-                                            @if(count($userPosts) == 0)
-                                                <div class="item">
-                                                    <p>No post found.</p>
-                                                    <!--<div class="panel-primary panel-1">
-                                                        <div class="panel-heading"></div>
-                                                        <div class="panel-body">
-                                                        </div>
-                                                    </div>-->
-                                                </div>
-                                            @else
-                                                @foreach($userPosts as $post)
-                                                    <div class="item">
-                                                        @php
-                                                            $panelClass = '';
-                                                            $question_type = $post->post_type;
-                                                            if($question_type == 'idea')
-                                                                $panelClass = 'panel-1';
-                                                            else if($question_type == 'question')
-                                                                $panelClass = 'panel-2';
-                                                            else
-                                                                $panelClass = 'panel-3';
-                                                        @endphp
-
-                                                        <div class="{{ $panelClass }} panel-primary">
-                                                            <div class="panel-heading">
-                                                                <h4 class="icon">{{ ucfirst($question_type) }}</h4>
-                                                                <div class="pull-right">
-                                                                    <form action="{{ url('/post/index') }}" method="post" id="delete_post_form">
-                                                                        <input type="hidden" value="{{ $post->id }}">
-                                                                        <a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                                                                        @if($post->user_id == Auth::user()->id)
-                                                                            <a href="{{ route('post.edit',[$post->id])  }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                                            <a href="javascript:;" class="delete_post_btn">
-                                                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                                            </a>
-                                                                        @endif
-                                                                    </form>
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="panel-body">
-                                                                <h4>{{ $post->post_title }}</h4>
-                                                                <p class="user-icon">-{{ $post->postUser->name }}<span>on {{ date('Y-m-d H:i' , strtotime($post->created_at)) }}</span></p>
-                                                                <fieldset>
-                                                                    <p>{{ $post->post_description }}</p>
-                                                                </fieldset>
-                                                                <div class="btn-wrap">
-                                                                    <a href="{{ url('viewpost/'.Helpers::encode_url($post->id)) }}">Read More</a>
-                                                                </div>
-                                                                <div class="panel-body-wrap">
-                                                                    <div class="wrap-social pull-left">
-                                                                        <div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>{{ (isset($post->postLike) && count($post->postLike) != 0) ? count($post->postLike) : 0  }}</span></div>
-                                                                        <div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>{{ isset(Helpers::postViews($post->id)['views']) ? Helpers::postViews($post->id)['views'] : 0 }}</span></div>
-                                                                        <div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>{{ (isset($post->postComment) && count($post->postComment) != 0) ? count($post->postComment) : 0  }}</span></div>
-                                                                    </div>
-                                                                    <div class="status pull-right">
-                                                                        <p>Status:<span>{{ $post->status == '1' ? 'Active' : 'Inactive' }}</span></p>
-                                                                    </div>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="post-circle">
-                                                                    @if(isset($post->postTag))
-                                                                        {{--                                                                @foreach($post->postTag as $tag)--}}
-                                                                        <a href="#"> Dummy</a>
-                                                                        {{--@endforeach--}}
+                                            
+                                        <?php   if (!empty($userPosts)) {
+                                            //dd($userPosts);
+                                            foreach ($userPosts as $post) {
+                                                    $post_type = $post['post_type'];
+                                                    if ($post_type == "idea") {
+                                                            $post_class = 1;
+                                                    } else if ($post_type == "question") {
+                                                            $post_class = 2;
+                                                    } else if ($post_type == "challenge") {
+                                                            $post_class = 3;
+                                                    }
+                                                    ?>
+                                            <div class="item">
+                                                    <div class="panel-{{$post_class}} panel-primary">
+                                                         <div class="panel-heading">
+                                                             <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
+                                                             <div class="pull-right no-icon">
+                                                                <a><img src="{{asset('assets/img/notification-icon.png')}}"></a>
+                                                                <?php
+                                                                     if(!empty($post['post_flagged'])) {
+                                                                ?>
+                                                                    <a class="" href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                                                <?php } else { ?>
+                                                                    <a class="" href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
+                                                                <?php } ?>
+                                                             </div>
+                                                         </div>
+                                                         <div class="panel-body meetings">
+                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                             <div class="user-wrap"> 
+                                                                <div class="user-img">
+                                                                    @if(empty($post['postUser']['profile_image']) || $post['is_anonymous'] == 1)
+                                                                        <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                                                                    @else
+                                                                        <img src="{{ asset(PROFILE_PATH.$post['postUser']['profile_image']) }}">
                                                                     @endif
+                                                                </div> 
+                                                                <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['postUser']['id']))}}" class="user-a-post">{{$post['postUser']['name']}}</a>
+                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                             </div>
+
+                                                             <fieldset>
+                                                                 <p class="desc-content profanity" id="desc_content_{{$post['id']}}">{{$post['post_description']}}</p>
+                                                                 <?php /*<p class="desc-content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
+                                                             </fieldset>
+                                                             <?php
+                                                                if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
+                                                             ?>
+                                                                <div class="btn-wrap" id="postread{{$post['id']}}">
+                                                                   <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
                                                                 </div>
-                                                            </div>
-                                                        </div>
+                                                             <?php
+                                                                }
+                                                             ?>
+                                                             <div class="panel-body-wrap">
+                                                                 <div class="wrap-social pull-left">
+                                                                     <div class="wrap-inner-icon"><a href="javascript:void(0)" id="like_post_{{$post['id']}}" onclick="like_post({{$post['id']}})">
+                                                                         <?php
+                                                                            if (!empty($post['post_user_like'])) {
+                                                                                                    ?>
+                                                                             <i class="fa fa-thumbs-up"></i>
+                                                                         <?php } else {?>
+                                                                             <i class="fa fa-thumbs-o-up"></i>
+                                                                         <?php }?>
+                                                                         </a>
+                                                                         <span id="post_like_count_{{$post['id']}}"><?php echo count($post['post_like']); ?></span>
+                                                                     </div>
+
+                                                                     <div class="wrap-inner-icon"><a href="javascript:void(0)" id="dislike_post_{{$post['id']}}" onclick="dislike_post({{$post['id']}})">
+                                                                         <?php
+if (!empty($post['post_user_dis_like'])) {
+			?>
+                                                                             <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                                                         <?php } else {?>
+                                                                             <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                                                                         <?php }?>
+                                                                         </a>
+                                                                         <span id="post_dislike_count_{{$post['id']}}"><?php echo count($post['post_dis_like']); ?></span>
+                                                                     </div>
+
+                                                                     <div class="wrap-inner-icon"><i aria-hidden="true" class="fa fa-eye"></i> <span>{{$post['post_view_count']}}</span></div>
+
+                                                                     <div class="wrap-inner-icon"><a href="javascript:void(0);">
+                                                                         <?php
+if (!empty($post['post_comment'])) {
+			?>
+                                                                                 <i class="fa fa-comments"></i>
+                                                                             <?php } else {?>
+                                                                                 <i class="fa fa-comments-o"></i>
+                                                                             <?php }?>
+                                                                         </a></div>
+                                                                     <span><?php echo count($post['post_comment']); ?></span>
+                                                                 </div>
+                                                                 <div class="status pull-right">
+                                                                       <p>Status:<span>Active</span></p>
+                                                                 </div>
+                                                             </div>
+                                                             <?php
+if (!empty($post['post_tag'])) {
+			?>
+                                                             <hr>
+                                                             <div class="post-circle">
+                                                                 <?php foreach ($post['post_tag'] as $post_tag) {?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?=$post_tag['tag']['tag_name'];?></a><?php }?>
+                                                              </div>
+                                                                 <?php }?>
+                                                         </div>
                                                     </div>
-                                                    <?php
-/*
-<div class="item">
-<div class="panel-2 panel-primary">
-<div class="panel-heading">
-<h4 class="icon">Questions</h4>
-<div class="pull-right">
-<a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
-<i class="fa fa-pencil" aria-hidden="true"></i></a>
-<a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
-</div>
-</div>
-<div class="panel-body">
-<h4>Lorem lpsum is dummy text</h4>
-<p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-<fieldset>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-</fieldset>
-<div class="btn-wrap">
-<a href="question-details.php">Read More</a>
-</div>
-<div class="panel-body-wrap">
-<div class="wrap-social pull-left">
-<div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
-<div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
-<div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
-</div>
-<div class="status pull-right">
-<p>Status:<span>Active</span></p>
-</div>
-</div>
-<hr>
-<div class="post-circle">
-<a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
-</div>
-</div>
-</div>
-</div>
-<div class="item">
-<div class="panel-3 panel-primary">
-<div class="panel-heading">
-<h4 class="icon">Challenge</h4>
-<div class="pull-right">
-<a href="#"> <i aria-hidden="true" class="fa fa-bell-o"></i></a><a href="#">
-<i class="fa fa-pencil" aria-hidden="true"></i></a>
-<a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i></a>
-</div>
-</div>
-<div class="panel-body">
-<h4>Lorem lpsum is dummy text</h4>
-<p class="user-icon">-Ricardo Ranchet<span>on 24th sep 2017</span></p>
-<fieldset>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
-</fieldset>
-<div class="btn-wrap">
-<a href="challenges.php">Read More</a>
-</div>
-<div class="panel-body-wrap">
-<div class="wrap-social pull-left">
-<div class="wrap-inner-icon"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i><span>106</span></div>
-<div class="wrap-inner-icon"><i class="fa fa-eye" aria-hidden="true"></i> <span>19</span></div>
-<div class="wrap-inner-icon"><i class="fa fa-comment-o" aria-hidden="true"></i><span>06</span></div>
-</div>
-<div class="status pull-right">
-<p>Status:<span>Active</span></p>
-</div>
-</div>
-<hr>
-<div class="post-circle">
-<a href="#"> Dummy</a><a href="#">Lorem lpsum</a><a href="#">cuckoo's</a><a href="#">Flew</a><a href="#">Lane Del Rey</a><a href="#">Jane waterman</a>
-</div>
-</div>
-</div>
-</div>
- */
-?>
-                                                @endforeach
-                                            @endif
-                                        </div>
+                                            </div>
+                                    <?php
+                                        }
+                                    } else {
+                                        echo '<p class="postlist">No post found.</p>';
+                                    }?>
+                                            </div>
                                     </div>
                                     <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane tab-border active" id="users">
                                         <table class="table table-responsive" id="group_users_edit_table">

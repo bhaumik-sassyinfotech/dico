@@ -1,7 +1,7 @@
 @extends('template.default')
 <title>DICO - Group</title>
 @section('content')
-    <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
+<div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
@@ -84,10 +84,14 @@
         <div class="list-block super-user">
             <div class="panel-heading">
                 <div class="pull-right">
-                    <?php $route = route('group.edit', [Helpers::encode_url($group['id'])]);?>
+                    <?php $route = url('editGroup/'.Helpers::encode_url($group['id']));//route('group.edit', [Helpers::encode_url($group['id'])]);?>
                     <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
-                    <a onclick='window.open("{{ $route }}","_self")' href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <?php
+                        if ($group['group_owner'] == Auth::user()->id || Auth::user()->role_id == 1) {
+                    ?>
+                    <a onclick='window.open("{{ $route }}","_self")' href="{{ $route }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    <?php } ?>
                 </div>
 
             </div>
@@ -102,7 +106,6 @@
                         <img src="{{ $profile_pic }}" alt="super-user">
                     </div>
                     <div class="grid-details">
-                        <?php $route = route('group.edit', [Helpers::encode_url($group['id'])]);?>
                         <h4 class="profanity" > <a onclick='window.open("{{ $route }}","_self")' href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}">{{ $group['group_name'] }}</a> </h4>
                         <h4 class="profanity" > {{ $group['description']}}</h4>
                     </div>
@@ -170,7 +173,7 @@
                                                             <div class="action notice-left"><p>Action</p></div>
                                                             <div class="select notice-left">
                                                                 <select name="slct" id="slct">
-                                                                  <option value="delete">Delete</option>
+                                                                    <option value="delete">Delete</option>
                                                                 </select>
                                                             </div>
                                                             <div class="action notice-left" style="padding: 0px 10px; ">

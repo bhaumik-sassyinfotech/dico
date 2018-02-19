@@ -12,14 +12,14 @@
             <div style="display: none;" class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
-                                       <div class="btn-group color-changes">
-                                           <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm">Filter</span> </a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">Notification off</a></li>
-                                                    <li><a href="#">Edit Post</a></li>
-                                                    <li><a href="#">Delete Post</a></li>
-                                                </ul>
-                                        </div>
+                        <div class="btn-group color-changes">
+                            <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm">Filter</span> </a>
+                                 <ul class="dropdown-menu">
+                                     <li><a href="#">Notification off</a></li>
+                                     <li><a href="#">Edit Post</a></li>
+                                     <li><a href="#">Delete Post</a></li>
+                                 </ul>
+                         </div>
                     </div>
 
                 </div>
@@ -56,6 +56,7 @@
                                                                 <th class="p-font p-user"><img src="{{ asset(IMAGE_PATH.'/p-icon.png') }}" class="mr-10">User Name</th>
                                                                 <th class="p-font p-idea"><img src="{{ asset(IMAGE_PATH.'/p-light.png') }}" class="mr-10"> Idea</th>
                                                                 <th class="p-font p-question"><img src="{{ asset(IMAGE_PATH.'/p-help.png') }}" class="mr-10">Questions</th>
+                                                                <th class="p-font p-challenge"><img src="{{asset(IMAGE_PATH.'/challenge-icon.png')}}" class="mr-10">Challenges</th>
                                                                 <th class="p-font p-approve"><img src="{{ asset(IMAGE_PATH.'/p-approve.png') }}" class="mr-10">Approved</th>
                                                                 <th class="p-font p-answer"><img src="{{ asset(IMAGE_PATH.'/p-answer.png') }}" class="mr-10">Answers</th>
                                                                 <th class="p-font p-solution"><img src="{{ asset(IMAGE_PATH.'/p-solution.png') }}" class="mr-10">Solutions</th>

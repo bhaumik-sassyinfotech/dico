@@ -269,10 +269,9 @@ class GroupController extends Controller {
 		$groupId = $id;
 
 		$companies = Company::all();
-
 		$groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $id)->first();
-		$userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->where('group_id', $groupId)->get();
-		$count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $groupId)->get()->toArray());
+                $userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->whereRaw("find_in_set($groupId,group_id)")->get();
+                $count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $groupId)->get()->toArray());
 
 		$count['total_users'] = $groupData->groupUsers->count();
 
@@ -460,13 +459,10 @@ class GroupController extends Controller {
 		})->addColumn('actions', function ($row) use ($currUser) {
 
 			$addUserBtn = '';
-
-			$editBtn = '<a class="left-10" href="' . url('editGroup/'.Helpers::encode_url($row->id)) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
-
-			if ($row->group_owner == $currUser->id) {
-
-				$addUserBtn = ' | <a class="left-10" href="javascript:void(0);" data-group-id="' . $row->id . '" data-company-id="' . $row->company_id . '" class="addUserToGroup" ><i class="fa fa-user"></i></a>';
-
+                        $editBtn = '-';
+                        if ($row->group_owner == $currUser->id || Auth::user()->role_id == 1) {
+                            $editBtn = '<a class="left-10" href="' . url('editGroup/'.Helpers::encode_url($row->id)) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
+                            $addUserBtn = ' | <a class="left-10" href="javascript:void(0);" data-group-id="' . $row->id . '" data-company-id="' . $row->company_id . '" class="addUserToGroup" ><i class="fa fa-user"></i></a>';
 			}
 
 			return '<p>' . $editBtn . $addUserBtn . '</p>';
@@ -1020,7 +1016,7 @@ class GroupController extends Controller {
             $companies = Company::all();
 
             $groupData = Group::with(['groupUsers', 'groupUsers.userDetail', 'groupUsers.followers', 'groupUsers.following'])->where('id', $groupId)->first();
-            $userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->where('group_id', $groupId)->get();
+            $userPosts = Post::with(['postLike', 'postComment', 'postTag', 'postUser'])->whereRaw("find_in_set($groupId,group_id)")->get();
             $count['admins'] = count(GroupUser::where('is_admin', '1')->where('group_id', $groupId)->get()->toArray());
 
             $count['total_users'] = $groupData->groupUsers->count();
@@ -1040,7 +1036,6 @@ class GroupController extends Controller {
 		$groupUsers = $groupData->groupUsers->pluck('user_id')->toArray();
 
 		$companyEmployee = User::where('company_id', $groupData->company_id)->where('role_id', '!=', 1)->whereNotIn('id', $groupUsers)->get();
-		// dd($userPosts);
 
 		return view($this->folder . '.groups.editGroup', compact('groupData', 'count', 'companies', 'companyEmployee', 'groupId', 'userPosts', 'currUserIsAdmin'));
         }

@@ -86,8 +86,12 @@
                 <div class="pull-right">
                     <?php $route = url('editGroup/'.Helpers::encode_url($group['id']));//route('group.edit', [Helpers::encode_url($group['id'])]);?>
                     <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
+                    <?php
+                        if ($group['group_owner'] == Auth::user()->id || Auth::user()->role_id == 1) {
+                    ?>
                     <a onclick='window.open("{{ $route }}","_self")' href="{{ $route }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    <?php } ?>
                 </div>
 
             </div>
@@ -99,10 +103,11 @@
                             if( $group['group_image'] != "" )
                                 $profile_pic = asset(GROUP_PATH.$group['group_image']);
                         @endphp
+                        <?php $url = route('group.edit', [Helpers::encode_url($group['id'])]); ?>
                         <img src="{{ $profile_pic }}" alt="super-user">
                     </div>
                     <div class="grid-details">
-                        <h4 class="profanity" > <a onclick='window.open("{{ $route }}","_self")' href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}">{{ $group['group_name'] }}</a> </h4>
+                        <h4 class="profanity" > <a onclick='window.open("<?= $url;?>","_self")' href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}">{{ $group['group_name'] }}</a> </h4>
                         <h4 class="profanity" > {{ $group['description']}}</h4>
                     </div>
                 </fieldset>

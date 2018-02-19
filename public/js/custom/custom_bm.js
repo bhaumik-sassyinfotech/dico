@@ -245,9 +245,10 @@ $(document).on('click', '.promoteToAdmin', function (event) {
                     var status = response.status;
                     swal("Success", response.msg, "success");
                     if (status == 1) {
-                        groupEditTable.draw();
+                        location.reload();
+                       // groupEditTable.draw();
                     }
-                    companyUsers();
+                    //companyUsers();
                 }
             });
         });
