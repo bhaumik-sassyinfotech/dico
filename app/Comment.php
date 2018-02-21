@@ -48,4 +48,8 @@ class Comment extends Model
     {
         return $this->hasOne('App\CommentFlag' , 'comment_id' , 'id');
     }
+    public function postTagUsers()
+    {
+        return $this->hasMany('App\PostTagUser' , 'comment_id' , 'id');
+    }
 }

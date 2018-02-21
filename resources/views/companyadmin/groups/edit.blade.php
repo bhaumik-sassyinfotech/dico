@@ -161,7 +161,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                     <div tabindex="5000" class="tab-pane" id="threads">
                                         <div  class="post-slider owl-carousel">
                                             
-                                        <?php   if (!empty($userPosts)) {
+                                        <?php   if (!empty($userPosts) && count($userPosts) > 0) {
                                             //dd($userPosts);
                                             foreach ($userPosts as $post) {
                                                     $post_type = $post['post_type'];

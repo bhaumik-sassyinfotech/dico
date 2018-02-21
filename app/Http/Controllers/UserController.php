@@ -586,7 +586,11 @@ class UserController extends Controller {
 				$points = Helpers::user_points($row->id);
 				return '<p>' . $points['points'] . '</p>';
 			})->addColumn('name', function ($row) {
-				return '<label class="check"><input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';
+                                if(Auth::user()->role_id != 3) {
+                                    return '<label class="check"><input type="checkbox" name="user_id[]" value="' . $row->id . '" class="checkbox"><span class="checkmark"></span><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';
+                                } else {
+                                    return '<label><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';
+                                }
 			})->addColumn('email', function ($row) {
 				return '<p>' . $row->email . '</p>';
 			})->addColumn('following_count', function ($row) {
@@ -631,7 +635,11 @@ class UserController extends Controller {
 			$points = Helpers::user_points($row->id);
 			return '<p>' . $points['points'] . '</p>';
 		})->addColumn('name', function ($row) {
+                    if(Auth::user()->role_id != 3) {
 			return '<label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a><input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
+                    }else {
+                        return '<label><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';
+                    }
 		})->addColumn('email', function ($row) {
 			return '<p>' . $row->email . '</p>';
 		})->addColumn('following_count', function ($row) {
@@ -758,7 +766,11 @@ class UserController extends Controller {
 			$points = Helpers::user_points($row->id);
 			return '<p>' . $points['points'] . '</p>';
 		})->addColumn('name', function ($row) {
+                     if(Auth::user()->role_id != 3) {
 			return '<label class="check"><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a><input type="checkbox" name="user_id[]" value="' . $row->id . '"  class="checkbox"><span class="checkmark"></span></label>';
+                        } else {
+                          return '<label><a href="'.url('view_profile', Helpers::encode_url($row->id)).'">' . $row->name . '</a></label>';  
+                        }
 		})->addColumn('email', function ($row) {
 			return '<p>' . $row->email . '</p>';
 		})->addColumn('following_count', function ($row) {

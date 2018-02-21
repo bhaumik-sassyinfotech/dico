@@ -1002,7 +1002,6 @@ body .text-12 {
   font-weight: 100;
   margin-left: 0;
   text-align: justify;
-  overflow: scroll;
 }
 
 .post-user-nam .user-a{
@@ -2263,7 +2262,7 @@ form .form-group:last-child {
   transition: all 500ms ease-in-out; }
 
 .slider-viewport {
-  border: 2px solid rgb(0, 189, 222);
+  border: 2px solid #50535a;
   cursor: pointer;
   display: block;
   height: 30px;
@@ -2324,7 +2323,7 @@ form .form-group:last-child {
 }
 
 .slider-toggle + .slider-viewport .left {
-  background-color: rgb(0, 189, 222);
+  background-color: #50535a;
   margin-left: 0;
   position: relative;
   top: 0;
@@ -2367,14 +2366,15 @@ form .form-group:last-child {
 
 
 .slider-toggle:checked + .slider-viewport .left {
-  background-color: rgb(0, 189, 222);
+  background-color: #50535A;
   margin-left: 32px;
 }
 
 .slider-toggle:checked + .slider-viewport .right {
-  background-color: #50535A;
+  background-color: rgb(0, 189, 222);
   margin-left: 32px;
 }
+
 .toggle-text > p {
     color: #333;
     font-size: 14px;
@@ -2384,7 +2384,7 @@ form .form-group:last-child {
 
 .slider-toggle:checked + .slider-viewport{
     
-    border: 2px solid #50535A;
+    border: 2px solid rgb(0, 189, 222);
     
 }
 .close-button-small {
@@ -2719,7 +2719,7 @@ form .form-group:last-child {
 }
 
 .create-box {
-  float: left;
+  display: inline-block;
   height: 91px;
   margin-right: 10px;
   padding: 10px;
@@ -2735,8 +2735,9 @@ form .form-group:last-child {
 }
 
 .create-user-wrap {
-  display: block;
-  position: relative;
+    display: block;
+    position: relative;
+    text-align: center;
 }
 
 .create-box:last-child {
@@ -2802,7 +2803,7 @@ form .form-group:last-child {
   top: 0;
 }
 .form-group .select {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #aaaaaa !important;
   display: inline-block;
   height: 40px;
   width: 71%;
@@ -4793,7 +4794,7 @@ body .idea-details.all-group-list .modal-dialog {
     display: none;
 }
 .create-user .select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 140%;
+    line-height: 250%;
 }
 .list-block .grid-details {
     height: 90px;
@@ -4929,9 +4930,7 @@ body .user-a-post:hover{
 #points_table_paginate .pagination li a {
     padding: 10px 15px;
 }
-#points_table_paginate .pagination li.active a {
-    padding: 8px 15px;
-}
+
 .create-user .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     font-size: 9px;
     padding: 0 7px;
@@ -4945,15 +4944,17 @@ body .user-a-post:hover{
 .main-user-profile.user-profile.point-page.all-group-list.super-user-employee .table tr td{
     padding: 15px 25px;
 }
-.main-user-profile.user-profile.point-page.all-group-list.super-user-employee .hide-table .pagination li a {
-    line-height: 130%;
+.main-user-profile.user-profile.point-page.all-group-list.super-user-employee .hide-table .pagination li a,
+.pagination li a, .pagination li.active a{
+    line-height: 98%;
 }
 
 .main-user-profile.user-profile.point-page.all-group-list.super-user-employee tr label {
     font-size: 12px;
 }    
+
 .main-user-profile.user-profile.point-page.all-group-list.super-user-employee .trophy .pull-right a {
-    margin: 0px 15px;
+    margin: 10px 15px;
 }
 .main-user-profile.user-profile.point-page.all-group-list.super-user-employee.user-table .hide-table .pagination li a {
     line-height: 93%;
@@ -5305,5 +5306,22 @@ body .group-listing .group-tabs .tab-content #users,
 body .group-listing .group-tabs .tab-content #threads {
     overflow-y: scroll !important;
     overflow-x: hidden !important;
+}
+.form-group .select {
+    background-image: url(../img/drop-down-icon.png);
+    background-position: 95% center;
+    background-repeat: no-repeat;
+}
+.navbar-fixed-top {
+    z-index: 999999;
+}
+.create-post .common-form .box-check input[type="checkbox"] {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    height: 31px;
+    top: 0;
+    cursor: pointer;
 }
 /*close 16-02-2018*/

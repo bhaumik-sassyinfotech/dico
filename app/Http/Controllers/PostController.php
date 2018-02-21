@@ -614,7 +614,7 @@ class PostController extends Controller {
 				$view_page = 'view_challenge';
 			}
 //            dd($post);
-			return view($this->folder . '.post.' . $view_page, compact('post', 'post_group', 'currUser', 'similar_post'));
+			return view($this->folder . '.post.' . $view_page, compact('post', 'post_group', 'currUser', 'similar_post','company_user'));
 		} else {
 			return redirect('/index')->with('err_msg', Config::get('constant.TRY_MESSAGE'));
 		}

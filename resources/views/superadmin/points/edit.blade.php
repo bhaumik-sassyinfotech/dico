@@ -21,7 +21,7 @@
     </ul>
 </div>
 @endif
-<div id="page-content">
+<div id="page-content" class="create-user create-user-popup">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
@@ -33,7 +33,7 @@
         </div>
         <div class="container">
             <div class="panel panel-default">
-                {!! Form::model($point, ['method' => 'PUT', 'route' => ['points.update', $point->id],'enctype'=>'multipart/form-data', 'id' => 'points_form']) !!}
+                {!! Form::model($point, ['method' => 'PUT', 'route' => ['points.update', $point->id],'enctype'=>'multipart/form-data', 'id' => 'points_form','class' => 'common-form']) !!}
                     
                     <div class="panel-body">
                         <div class="row">

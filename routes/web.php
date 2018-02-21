@@ -1,10 +1,12 @@
 <?php
 define('FROM_EMAIL', 'devsassyinfotech@gmail.com');
 define('REPLAY_NAME', 'Dico');
-Route::get('/', function () {
-	return redirect('/index');
-});
+Route::group(['prefix' => Request::segment(1)], function () {
+//Route::get('/', function () {
+//	return redirect('/index');
+//});
 //front end url
+Route::get('/', 'front\HomeController@index');
 Route::get('/front', 'front\HomeController@index');
 Route::get('/how-it-works', 'front\HomeController@how_it_works');
 Route::get('/why-us', 'front\HomeController@why_us');
@@ -26,12 +28,6 @@ Route::POST('/updateForgotPassword', 'front\UsersController@updateForgotPassword
 
 Route::get('/forgotPasswordRequest/{data}', 'front\UsersController@forgotPasswordRequest');
 
-/** test order**/
-
-Route::get('/order', 'front\PagesController@getOrder');
-Route::post('order', 'front\PagesController@postOrder');
-
-/*****************/
 Route::group(['middleware' => 'front'], function () {
     Route::get('/companyProfile', 'front\DashboardController@companyProfile');
 });
@@ -43,11 +39,13 @@ Route::get('index', 'HomeController@index');
 
 Auth::routes();
 Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@firstLogin')->name('security.firstLogin');
+Route::match(['get', 'post'], '/saveSettings', 'DashboardController@saveSettings');
 Route::get('/adminForgotPassword', 'Auth\ForgotPasswordController@adminForgotPassword');
 Route::group(['middleware' => 'admin'], function () {
-	Route::get('/setting', function () {
+	/*Route::get('setting', function () {
 		return view('settings');
-	})->name('setting');
+	})->name('setting');*/
+        Route::get('setting','DashboardController@setting')->name('setting');
 	Route::resource('company', 'CompanyController');
 	Route::resource('security_question', 'SecurityQuestionController');
 	Route::match(['get', 'post'], '/user/alterStatus', 'UserController@alterStatus'); // user-alter-status
@@ -159,39 +157,40 @@ Route::group(['middleware' => 'admin'], function () {
         Route::get('editGroup/{id}','GroupController@editGroup');
         Route::post('group/groupUpdate','GroupController@groupUpdate');
         
-        /*******Block**Section*************/
+        /*         * *****Block**Section************ */
         Route::resource('blog', 'BlockController');
         Route::GET('blockList', 'BlockController@blockList');
-         /*******Block**Section*************/
+        /*         * *****Block**Section************ */
         Route::resource('packages', 'PackageController');
-        Route::GET('packagesList', 'PackageController@packagesList');        
-        /*******FAQs**Section*************/
+        Route::GET('packagesList', 'PackageController@packagesList');
+        /*         * *****FAQs**Section************ */
         Route::resource('adminfaq', 'FaqsController');
         Route::GET('faqList', 'FaqsController@faqList');
-        Route::post('deleteFaqs', 'FaqsController@deleteFaqs');
-        
-        /*******Contact us**Section*************/
+        Route::post('deleteFaqs', 'FaqsController@deleteFaqs')->name('deleteFaqs');
+
+        /*         * *****Contact us**Section************ */
         Route::resource('adminContactUs', 'ContactusController');
         Route::GET('contactUsList', 'ContactusController@contactUsList');
-        Route::post('contactDelete', 'ContactusController@contactDelete');
-        
-        /*******Settings Section*************/
+        Route::post('contactDelete', 'ContactusController@contactDelete')->name('contactDelete');
+
+        /*         * *****Settings Section************ */
         Route::resource('settings', 'SettingsController');
-        /*** Company admin update and  upgread own package **/
-        Route::GET('companyEdit', 'CompanyController@companyEdit');
+        /*         * * Company admin update and  upgread own package * */
+        Route::GET('companyEdit', 'CompanyController@companyEdit')->name('companyEdit');
         Route::POST('updateCompany', 'CompanyController@updateCompany');
         Route::POST('packageUpgrade', 'CompanyController@packageUpgrade');
-        
-        /* feed back*/
+
+        /* feed back */
         Route::resource('feedback', 'FeedbackController');
         Route::GET('feedbackList', 'FeedbackController@feedbackList');
-        Route::POST('deleteFeedback', 'FeedbackController@deleteFeedback');
+        Route::POST('deleteFeedback', 'FeedbackController@deleteFeedback')->name('deleteFeedback');
         Route::resource('support', 'SupportController');
         Route::GET('supportList', 'SupportController@supportList');
-        Route::POST('deleteSupport', 'SupportController@deleteSupport');
+        Route::POST('deleteSupport', 'SupportController@deleteSupport')->name('deleteSupport');
         Route::get('/registerPackage/{package}','front\HomeController@registerPackage');
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
+});
 ?>

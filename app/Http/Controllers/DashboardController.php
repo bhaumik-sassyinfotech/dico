@@ -6,6 +6,7 @@ use App\GroupUser;
 use App\Post;
 use App\SecurityQuestion;
 use App\User;
+use App\Company;
 use App\UserSecurityQuestion;
 use Auth;
 use Carbon;
@@ -267,6 +268,43 @@ class DashboardController extends Controller {
             $user = $query->first();
             if($user) {
                 echo json_encode(array('status' => 1, 'msg' => "Email already exists"));
+            } else {
+                echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+            }
+        }
+        public function setting(){
+            if (Auth::user()) {
+                $company = Company::where('id',Auth::user()->company_id)->first();
+                return view('settings', compact('company'));
+            } else {
+                return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+            }
+        }
+        public function saveSettings(Request $request) {
+            //return $request->all();
+            
+            $allow_anonymous = $request->input('allow_anonymous');
+            $allow_admin = $request->input('allow_admin');
+            $postData = array(
+                'allow_anonymous' => $allow_anonymous,
+                'allow_add_admin' => $allow_admin
+             );
+            $file = $request->file('file_upload');
+            if ($file != "") {
+                $postData = array();
+//echo "here";die();
+                $fileName = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $folderName = '/uploads/company_logo/';
+                $destinationPath = public_path() . $folderName;
+                $safeName = str_random(10) . '.' . $extension;
+                $file->move($destinationPath, $safeName);
+//$attachment = new Attachment;
+                $postData['company_logo'] = $safeName;
+            }
+            $res = Company::where('id', Auth::user()->company_id)->update($postData);
+            if($res) {
+                echo json_encode(array('status' => 1, 'msg' => "Settings changed successfully."));
             } else {
                 echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
             }

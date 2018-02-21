@@ -287,9 +287,10 @@ $(document).on('click', '.demoteToUser', function (event) {
                     var status = response.status;
                     swal("Success", response.msg, "success");
                     if (status == 1) {
-                        groupEditTable.draw();
+                        location.reload();
+                        //groupEditTable.draw();
                     }
-                    companyUsers();
+                    //companyUsers();
                 }
             });
         });
@@ -877,19 +878,20 @@ $(document).on('click',"#search_post_btn",function(){
 
 function groupGrid(type)
 {
+    alert(type);
     $("#offset").attr('data-tab',type);
     $("#offset").val(0);
     $('#load_post').slideDown();
     var url = new_url = '';
-    if(type == 1)
+    /*if(type == 1)
         url = '/';
-    else if(type == 2)
-        url = '/user/mygroups';
+    else if(type == 2)*/
+        url = '/group/mygroups';
 
     var search_text = $.trim($("#search_query").val());
     // console.log(url);
     new_url = SITE_URL+url;
-    var dataString = { _token : CSRF_TOKEN , offset: offset_val , search : search_text };
+    var dataString = { _token : CSRF_TOKEN , offset: 0 , search : search_text, type : type};
     $("#display-grid").empty();
     $.ajax({
         url:new_url,

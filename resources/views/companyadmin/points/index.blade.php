@@ -22,7 +22,7 @@
         <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <form method="POST" id="points-search-form" class="form-inline" role="form">
+                        <form method="POST" id="points-search-form" class="form-inline search-form" role="form">
                             <div class="form-group">
                                 <label for="name">Activity</label>
                                 <input type="text" class="form-control" name="activity" id="activity" placeholder="Activity">

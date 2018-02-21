@@ -15,7 +15,7 @@
         <div class="container">
             <div class="row">
                 <div id="company-from">
-                    <form name="company_form" class="common-form" id="company_form" method="post" action="{{route('company.store')}}" enctype="multipart/form-data">
+                    <form name="company_form" class="common-form" id="company_form" method="post" action="{{url('company.store')}}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="form-group">
                             <label class="text-15">Language<span>*</span></label>

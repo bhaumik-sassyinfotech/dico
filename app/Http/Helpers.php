@@ -302,7 +302,7 @@ class Helpers {
 	}
         /*     * ***********************Parse Email*************************** */
 
-    public static function parseTemplate($template, $data) {
+     public static function parseTemplate($template, $data) {
         if ($template == '') {
             return FALSE;
         }
@@ -320,38 +320,52 @@ class Helpers {
         $path = 'mail/template';
         Mail::send($path, ['post' => $post], function($message) use ($post) {
             $message->from(FROM_EMAIL, REPLAY_NAME);
-            $message->to($post['email'])->subject($post['emailTemplate']->subject);
+            if (App::isLocale('sp')){
+                $message->to($post['email'])->subject($post['emailTemplate']->spsubject);
+            }else{
+                $message->to($post['email'])->subject($post['emailTemplate']->subject);
+            }
         });
         return true;
     }
 ///unlock_the_digital_solution_of_your_business
-     public static function getBlockTitle($identifier = null) {
+      public static function getBlockTitle($identifier = null) {
         if ($identifier != null) {
-            $identifier = DB::table('blocks')->select('title')->where('slug_name', $identifier)->first();
+            $identifier = DB::table('blocks')->select('title','sptitle')->where('slug_name', $identifier)->first();
             if (!is_object($identifier)) {
                 $identifier = new stdClass();
             }
-            return $identifier->title;
+            
+            //dd(session('browser_language'));
+            if (App::isLocale('sp'))
+                return $identifier->sptitle;
+            else
+                return $identifier->title;
         }
         throw new Exception('Block identifier not define');
     }
-     public static function getBlockDescription($identifier = null) {
+
+    public static function getBlockDescription($identifier = null) {
         if ($identifier != null) {
-            $identifier = DB::table('blocks')->select('description')->where('slug_name', $identifier)->first();
+            $identifier = DB::table('blocks')->select('description','spdescription')->where('slug_name', $identifier)->first();
             if (!is_object($identifier)) {
                 $identifier = new stdClass();
             }
-            return $identifier->description;
+            if (App::isLocale('sp'))
+                return $identifier->spdescription;
+            else
+                return $identifier->description;
+            
         }
         throw new Exception('Block identifier not define');
     }
      public static function getSettings() {
-        
-            $identifier = DB::table('settings')->select('*')->where('id', 1)->first();
-            if (!is_object($identifier)) {
-                $identifier = new stdClass();
-            }
-            return $identifier;        
+
+        $identifier = DB::table('settings')->select('*')->where('id', 1)->first();
+        if (!is_object($identifier)) {
+            $identifier = new stdClass();
+        }
+        return $identifier;
     }
     /*     * **************************************************************** */
 }

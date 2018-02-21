@@ -179,9 +179,7 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">Users List</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="{{ url('setting') }}"><img
-                                                                                    src="assets/img/settings-icon.png"
-                                                                                    alt="settings"></a>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                                 <div class="panel-body">
@@ -190,8 +188,8 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
-                                                                                        <label class="check checkAll">User Name<input type="checkbox" class="checkAllBox">
-                                                                                            <span class="checkmark"></span>
+                                                                                        <label>User Name<!-- <input type="checkbox" class="checkAllBox">
+                                                                                            <span class="checkmark"></span>-->
                                                                                         </label>
                                                                                     </th>
                                                                                     <th><label>User Email Id</label></th>
@@ -205,7 +203,7 @@
                                                                             <tbody>
                                                                             </tbody>
                                                                         </table>
-                                                                        <div class="notice">
+                                                                        <?php /*<div class="notice">
                                                                             <div class="action notice-left"><p>
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
@@ -218,7 +216,7 @@
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
                                                                                <input type="button" name="" class="st-btn multiple-action" value="Submit">
                                                                             </div>
-                                                                        </div>
+                                                                        </div>*/?>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -237,9 +235,7 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">Users List</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="{{ url('setting') }}"><img
-                                                                                    src="assets/img/settings-icon.png"
-                                                                                    alt="settings"></a>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                                 <div class="panel-body">
@@ -248,9 +244,9 @@
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>
-                                                                                    <label class="check checkAll">Group Manager
-                                                                                        Details<input type="checkbox" class="checkAllBox">
-                                                                                        <span class="checkmark"></span>
+                                                                                    <label>Group Manager
+                                                                                        Details<!-- <input type="checkbox" class="checkAllBox">
+                                                                                        <span class="checkmark"></span>-->
                                                                                     </label>
                                                                                 </th>
                                                                                 <th><label>Role</label></th>
@@ -265,7 +261,7 @@
                                                                             </tbody>
 
                                                                         </table>
-                                                                        <div class="notice">
+                                                                        <?php /*<div class="notice">
                                                                             <div class="action notice-left"><p>
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
@@ -278,7 +274,7 @@
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
                                                                                <input type="button" name="" class="st-btn multiple-action" value="Submit">
                                                                             </div>
-                                                                        </div>
+                                                                        </div>*/?>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -296,9 +292,6 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">Users List</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="{{ url('setting') }}"><img
-                                                                                    src="assets/img/settings-icon.png"
-                                                                                    alt="settings"></a>
                                                                     </div>
                                                                 </div>
                                                                 <div class="panel-body">
@@ -307,10 +300,7 @@
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>
-                                                                                    <label class="check">User Name<input
-                                                                                                type="checkbox">
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label>
+                                                                                    <label>User Name</label>
                                                                                 </th>
                                                                                 <th><label>User Email Id</label></th>
                                                                                 <th><label>Role</label></th>
@@ -325,7 +315,7 @@
 
                                                                             </tbody>
                                                                         </table>
-                                                                        <div class="notice">
+                                                                        <?php /*<div class="notice">
                                                                             <div class="action notice-left"><p>
                                                                                     Action</p></div>
                                                                             <div class="select notice-left">
@@ -338,7 +328,7 @@
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
                                                                                <input type="button" name="" class="st-btn multiple-action" value="Submit">
                                                                             </div>
-                                                                        </div>
+                                                                        </div>*/?>
                                                                     </div>
                                                                 </div>
                                                             </div>

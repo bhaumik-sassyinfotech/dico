@@ -77,8 +77,8 @@ return [
     | to any of the locales which will be supported by the application.
     |
     */
-
-    'locale' => 'en',
+    'locale' => array('en' => 'English', 'sp' => 'Spanish'),
+    'displayLocal' => array('en' => 'English', 'sp' => 'Spanish'),
 
     /*
     |--------------------------------------------------------------------------

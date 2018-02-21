@@ -28,7 +28,7 @@ define('COMMENT_DISPLAY_LIMIT', 6);
 define('PROFILE_PATH', 'public/uploads/profile_pic/');
 define('GROUP_PATH', 'public/uploads/groups/');
 define('DEFAULT_GROUP_IMAGE', 'assets/img/custome-service.png');
-define('DEFAULT_PROFILE_IMAGE', 'assets/img/user.PNG');
+define('DEFAULT_PROFILE_IMAGE', 'assets/img/user.png');
 define('DEFAULT_ATTACHMENT_IMAGE', 'assets/img/uploadfiles1.PNG');
 define('DEFAULT_LOADER_IMAGE', 'assets/img/spinner.gif');
 define('IMAGE_PATH', 'assets/img');

@@ -16,13 +16,11 @@
             <div class="container">
                 <div class="row">
                     <div id="create-user-from">
-                        <form class="common-form" name="user_form" id="user_form" method="post"
-                              action="{{route('user.store')}}">
+                        <form class="common-form" name="user_form" id="user_form" method="post" action="{{route('user.store')}}">
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <label>Company<span>*</span></label>
-                                <div class="select">
-                                    <select id="company_id" name="company_id" class="form-control">
+                                    <select id="company_id" name="company_id" class="form-control select">
                                         <option value="">------ Select ------</option>
                                         @if( !empty($companies) )
                                             @foreach($companies as $company)
@@ -30,7 +28,6 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                </div>
                             </div>
 
                             <div class="form-group">
@@ -45,6 +42,7 @@
                                 <label id="emailerror" class="error hidden" ></label>
                                 <input id="for_me_emailerror" value="" type="hidden">            
                             </div>
+                            <?php /*
                             <div class="form-group">
                                 <label>Role:</label>
                                 <div class="select">
@@ -58,7 +56,8 @@
                                         @endif
                                     </select>
                                 </div>
-                            </div>
+                            </div>*/?>
+                            <input type="hidden" name="role_id" id="role_id">
                             <div class="form-group">
                                 <label>Groups:</label>
                                 <div class="select">
@@ -76,7 +75,7 @@
                                     <label class="check">
                                         <p>Active</p>
                                         If user is inactive, than user will not be able to login into the system.
-                                        <input type="checkbox" name="is_active" id="is_active"  >
+                                        <input type="checkbox" name="is_active" id="is_active">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -84,16 +83,38 @@
                             <div class="form-group">
                                 <div class="blank">
                                     <label class="check"><p>Suspend</p>If user is suspended, than user will not be able to login into the system.
-                                        <input type="checkbox" name="is_suspended" id="is_suspended" >
+                                        <input type="checkbox" name="is_suspended" id="is_suspended">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                            </div>
+                            </div> 
                             <div class="form-group">
                                 <div class="btn-wrap-div">
-                                    <input type="submit" class="st-btn" value="Submit" />
-
-
+                                    <!-- <input type="submit" class="st-btn" value="Submit" />-->
+                                    <a type="submit" class="st-btn" href="#myModal" data-toggle="modal">Create</a>
+                                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button">×</button>
+                                                    <div class="create-user-wrap">
+                                                        <div class="create-box A-letter">
+                                                            <a href="javascript:void(0)" onclick="selectRole(2)">
+                                                                <h1>A</h1>
+                                                                <p>Admin</p>
+                                                            </a>    
+                                                        </div>
+                                                        <div class="create-box E-letter">
+                                                            <a href="javascript:void(0)" onclick="selectRole(3)">
+                                                                <h1>E</h1>
+                                                                <p>Employee</p>
+                                                            </a>    
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                                                 </div>
                                     <a href="{{ url()->previous() }}" class="st-btn">Cancel</a>
                                 </div>
                             </div>
@@ -141,8 +162,18 @@
                               </div>
 
     <!-- Modal End -->
-@stop
-@section('javascript')
-    <script type="text/javascript">
-    </script>
 @endsection
+@push('javascripts')
+    <script type="text/javascript">
+        function selectRole(roleid) {
+            $('#role_id').val(roleid);
+            $('#myModal').fadeOut();
+            $('body').removeClass('modal-open');
+            if($('#user_form').valid() == 1) {
+                $('form#user_form').submit();
+            } else {
+                return false;
+            }
+        }
+    </script>
+@endpush

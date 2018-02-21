@@ -188,6 +188,7 @@ class PointsController extends Controller {
 			}
 		}
 		// return $points_listing;
+                //return $points_listing;
 		$sum = 0;
 		return Datatables::of($points_listing)->addColumn('name', function ($row) use (&$sum) {
 			$sum = 0;

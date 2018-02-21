@@ -183,6 +183,20 @@ class GroupController extends Controller {
 			$group->created_by = $user->id;
 
 			$group->updated_by = $user->id;
+                        
+                        $file = $request->file('file_upload');
+                        if ($file != "") {
+                            $postData = array();
+            //echo "here";die();
+                            $fileName = $file->getClientOriginalName();
+                            $extension = $file->getClientOriginalExtension();
+                            $folderName = '/uploads/groups';
+                            $destinationPath = public_path() . $folderName;
+                            $safeName = str_random(10) . '.' . $extension;
+                            $file->move($destinationPath, $safeName);
+            //$attachment = new Attachment;
+                            $group->group_image = $safeName;
+                        }
 
 			if ($group->save()) {
 
@@ -441,8 +455,15 @@ class GroupController extends Controller {
 			$id = Helpers::encode_url($row->id);
 
 			$raw_id = $row->id;
-
-			return '<label class="check"><p><a href="' . route('group.edit', [$id]) . '" >' . $row->group_name . '</a></p><input name="group_id[]" class="checkbox" value="' . $raw_id . '" type="checkbox"><span class="checkmark"></span></label>';
+                        if(Auth::user()->role_id != 3) {
+                            if($row->group_owner == Auth::user()->id || Auth::user()->role_id == 1) {
+                                return '<label class="check"><p><a href="' . route('group.edit', [$id]) . '" >' . $row->group_name . '</a></p><input name="group_id[]" class="checkbox" value="' . $raw_id . '" type="checkbox"><span class="checkmark"></span></label>';
+                            } else {
+                                return '<label class="check"><p><a href="' . route('group.edit', [$id]) . '" >' . $row->group_name . '</a></p></label>';
+                            }
+                        } else {
+                           return '<label><p><a href="' . route('group.edit', [$id]) . '" >' . $row->group_name . '</a></p></label>'; 
+                        }
 
 		})->addColumn('description', function ($row) {
 
@@ -459,13 +480,15 @@ class GroupController extends Controller {
 		})->addColumn('actions', function ($row) use ($currUser) {
 
 			$addUserBtn = '';
+                        $deleteBtn = '';
                         $editBtn = '-';
                         if ($row->group_owner == $currUser->id || Auth::user()->role_id == 1) {
                             $editBtn = '<a class="left-10" href="' . url('editGroup/'.Helpers::encode_url($row->id)) . '" title="Edit" ><i class="fa fa-pencil"></i></a>';
-                            $addUserBtn = ' | <a class="left-10" href="javascript:void(0);" data-group-id="' . $row->id . '" data-company-id="' . $row->company_id . '" class="addUserToGroup" ><i class="fa fa-user"></i></a>';
+                            $addUserBtn = ' <a class="left-10 addMemberToGroup" href="#myModal" data-toggle="modal" data-group-id="' . $row->id . '" data-company-id="' . $row->company_id . '"><img src="'.asset('assets/img/add-agent-active.png').'"></a>';
+                            $deleteBtn = ' <a href="javascript:void(0);" class="deleteGroup" data-group-id="' . $row->id . '"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
 			}
 
-			return '<p>' . $editBtn . $addUserBtn . '</p>';
+			return '<p>' . $editBtn . $addUserBtn . $deleteBtn . '</p>';
 
 		})->rawColumns(['actions', 'group_name', 'description', 'group_users_count', 'group_posts_count'])->make('true');
 
@@ -842,17 +865,21 @@ class GroupController extends Controller {
 		// 	$query = $query->where('company_id', $currUser->company_id);
 
 		// }
-
+                //DB::connection()->enableQueryLog();
 		$group_query = '';
 
 		$group_query = Group::select('groups.*')->withCount(['groupUsers', 'groupPosts']);
 
 		// return $currUser->company_id;
 
-		if ($currUser->role_id != 1) {
-
-			$group_query = $group_query->where('company_id', $currUser->company_id);
-
+		
+                if($request->input('type') == 1) {
+                    $group_query = $group_query->with(['groupUsers'=>function($q) use($currUser) {
+                        $q->where('user_id', $currUser->id);
+                    }]);
+                }
+                if ($currUser->role_id != 1) {
+                    $group_query = $group_query->where('company_id', $currUser->company_id);
 		}
 
 		if ($request->has('search_text') && !empty($request->input('search_text'))) {
@@ -874,8 +901,8 @@ class GroupController extends Controller {
 		$group_count = $group_query->count();
 
 		$groups = $group_query->orderBy('id', 'DESC')->offset($offset)->limit(POST_DISPLAY_LIMIT)->get()->toArray();
-
-		// return $groups;
+                //return DB::getQueryLog();
+		//return $groups;
 
 		$html = view::make($this->folder . '.groups.ajax_mygroups', compact('groups'));
 

@@ -147,9 +147,7 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">Groups Listing</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="settings.php"><img
-                                                                                    src="assets/img/settings-icon.png"
-                                                                                    alt="settings"></a>
+                                                                       
                                                                     </div>
                                                                 </div>
                                                                 <div class="panel-body">
@@ -157,10 +155,8 @@
                                                                 <table class="table" id="group_table">
                                                                     <thead>
                                                                     <tr>
-                                                                        <th><label class="check checkAll">
+                                                                        <th><label>
                                                                               <p>Group Name</p>
-                                                                               <input type="checkbox" class="checkAllBox">
-                                                                                <span class="checkmark"></span>
                                                                            </label></th>
                                                                         <th>Group Description</th>
                                                                         <th>Total Posts</th>
@@ -169,7 +165,7 @@
                                                                     </tr>
                                                                     </thead>
                                                                 </table>
-                                                                <div class="notice">
+                                                                <?php /*<div class="notice">
                                                             <div class="action notice-left"><p>Action</p></div>
                                                             <div class="select notice-left">
                                                                 <select name="slct" id="slct">
@@ -179,7 +175,7 @@
                                                             <div class="action notice-left" style="padding: 0px 10px; ">
                                                                <input type="button" name="" class="st-btn multiple-action" value="Submit">
                                                             </div>
-                                                            </div>
+                                                            </div>*/?>
                                                             </div>
                                                         </div>
                                                             </div>

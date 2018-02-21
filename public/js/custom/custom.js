@@ -841,3 +841,102 @@ $('#contactUsList').DataTable({
     ],
 });
 //================================================================//
+//==================== add member to group =======================//
+$('#addMember').validate({
+    rules: {
+        user_email: {
+            required: true,
+        }
+    },
+    messages: {
+        user_email: {
+            required: 'This field is required',
+        }
+    }
+});
+$(document).on('click','.addMemberToGroup',function() {
+      $('.addMemberPopup').find('input[name=member_group_id]').val($(this).data('group-id'));
+      $('.addMemberPopup').find('input[name=member_company_id]').val($(this).data('company-id'));
+});
+$('#addGroupMember').click(function() {
+    if($('#addMember').valid() == 1) {
+        $("#spinner").show();
+        var user_mail = $("#user_email").val();
+        if (user_mail === false) return false;
+        if (user_mail === "" || $.trim(user_mail) === "")
+        {
+            swal.showInputError("Please enter email address");
+            return false
+        }
+        var pattern = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+        var reg = pattern.test(user_mail);
+        if(!reg)
+        {
+            swal.showInputError("Please enter valid email address");
+            return false;
+        }
+        var groupId   = $('#member_group_id').val();
+        var companyId = $('#member_company_id').val();
+        var dataString = {
+            _token: CSRF_TOKEN,
+            user: user_mail,
+            company_id: companyId,
+            group_id: groupId
+        };
+        $.ajax({
+            url: SITE_URL + '/group/addUserByEmailAddress',
+            method: "POST",
+            data: dataString,
+            success: function (response) {
+                $("#spinner").hide();
+                if(response.status == 0) {
+                    swal("Error", response.msg, "error");
+                    return false;
+                }
+                else if(response.status == 1) {
+                    swal("Success", response.msg, "success");
+                    location.reload();
+                }
+            }
+        });
+    } else {
+        return false;
+    }
+});
+$(document).on('click','.deleteGroup',function() {
+    var groupId = $(this).data('group-id');
+    swal({
+        title: "Are you sure?",
+        text: "All details related to it will be affected!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes",
+        closeOnConfirm: false
+    } , function () {
+        var dataString = {_token:CSRF_TOKEN};
+        var temp_url = '/group/delete_group';    
+        var action = '';
+        dataString.groups = groupId;
+        
+        $.ajax({
+            url: SITE_URL + temp_url,
+            method: 'POST',
+            data: dataString,
+            success: function (response) 
+            {
+                var status = response.status;
+                if( status == 0) {
+                    swal("Error!", response.msg, "error");
+                } else if (status == 1) 
+                {
+                    swal("Success", response.msg, "success");
+                    setTimeout(function(){
+                        location.reload();
+                    },1000);
+                } 
+            }
+        });
+    });
+});
+//================================================================//
