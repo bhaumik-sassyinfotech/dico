@@ -38,9 +38,9 @@ if (count($users) > 0) {
                             <img src="{{ $profile_pic }}" alt="super-user">
                         </div>
                         <div class="grid-details">
-                            <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user['user_detail']['id']))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user['user_detail']['id']))}}"><?=$user['user_detail']['name'];?></a></h4>
+                            <h4><a onclick="window.open('<?= route('view_profile', Helpers::encode_url($user['user_detail']['id']))?>','_self')" href="{{route('view_profile', Helpers::encode_url($user['user_detail']['id']))}}"><?=$user['user_detail']['name'];?></a></h4>
                             <a href="mailto:{{ $user['user_detail']['email'] }}">{{ $user['user_detail']['email'] }}</a>
-                            <h4>Admin</h4>
+                            <h4>@lang("label.Admin")</h4>
                         </div>
 
                     </fieldset>
@@ -50,22 +50,22 @@ if (count($users) > 0) {
                         $text = "";
                         if(!empty($user['user_detail']['followers']) && count($user['user_detail']['followers']) > 0)
                         {
-                            $text = "Following";
+                            $text = __('label.Following');
                         } else {
-                            $text = "Follow";
+                            $text = __('label.Follow');
                         }
-                        $url = url('view_profile/'.Helpers::encode_url($uid));
+                        $url = route('view_profile',Helpers::encode_url($uid));
                     @endphp
                         <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
                         <?php $pts = Helpers::user_points($user['user_detail']['id']);?>
-                        <a href="#">Point:{{ $pts['points'] }}</a>
+                        <a href="#">@lang("label.Point"):{{ $pts['points'] }}</a>
                     </div>
                     <div class="panel-body-wrap">
                         <div class="follower-text pull-left">
-                            <p>Followers:<span><?=$user['user_detail']['followers_count'];?></span></p>
+                            <p>@lang("label.Followers"):<span><?=$user['user_detail']['followers_count'];?></span></p>
                         </div>
                         <div class="follower-text pull-right">
-                            <p>Following:<span><?=count($user['user_detail']['following']);?></span></p>
+                            <p>@lang("label.Following"):<span><?=count($user['user_detail']['following']);?></span></p>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@ if (count($users) > 0) {
 } //end-foreach
 	?>
 <div class="all_viewmore col-md-12">
-    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">View More</a>
+    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">@lang("label.ViewMore")</a>
 </div>
 <?php
 } //if-end
@@ -83,7 +83,7 @@ else {
 	?>
     <div class="row">
         <div class="col-xs-12">
-            <p>No Data found</p>
+            <p>@lang("label.NoDatafound")</p>
         </div>
     </div>
 <?php

@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - Add Feedback </title>
+<title>@lang("label.adDICO - Feedback")</title>
 @section('content')
 
 @include('template.notification')
@@ -8,10 +8,10 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li class="active">Add Feedback </li>
+                <li><a href="{{ route('index') }}">@lang("label.adDashboard")</a></li>
+                <li class="active">@lang("label.adAdd Feedback")</li>
             </ol>
-            <h1 class="tp-bp-0">Add Feedback </h1>
+            <h1 class="tp-bp-0">@lang("label.adAdd Feedback")</h1>
             <hr class="border-out-hr">
 
         </div>
@@ -23,21 +23,21 @@
                     {{ method_field('POST') }}
                     <div class="update-block-wrap">
                         <div class="form-group">
-                            <label class="text-15">Subject<span>*</span></label>
+                            <label class="text-15">@lang('label.adSubject')<span>*</span></label>
                             <input type="text" name="subject" id="subject"
-                                   placeholder="Subject"
+                                   placeholder="@lang('label.adSubject')"
                                    class="form-control required">
                         </div>
                     </div>
 
                     <div class="form-group editor-files">
-                        <label class="text-15" >Description<span>*</span></label>
+                        <label class="text-15" >@lang('label.adDescription')<span>*</span></label>
                         <textarea id="editor" name="description"> </textarea>                           
                     </div>
                     <div class="form-group">
                         <div class="btn-wrap-div">
-                            <input type="submit" class="st-btn" value="Submit">
-                            <a href="{{ url()->previous() }}" class="st-btn">Back</a>
+                            <input type="submit" class="st-btn" value="@lang('label.adSubmit')">
+                            <a href="{{ url()->previous() }}" class="st-btn">@lang('label.adBack')</a>
                         </div>
                     </div>
                     </form>
@@ -61,10 +61,10 @@
     },
     messages: {
         subject: {
-            required: 'This field is required',
+            required: '@lang("label.This field is required")',
         },
         description: {
-            required: 'This field is required',
+            required: '@lang("label.This field is required")',
         }
     }
 });

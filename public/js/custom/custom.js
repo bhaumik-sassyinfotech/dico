@@ -2,7 +2,7 @@ var companyTable = $('#company_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/get_company',
+        url:  SITE_URL +'/'+LANG + '/get_company',
         data: function (d) {
             d.company_name = $('input[name=company_name]').val();
 
@@ -14,6 +14,8 @@ var companyTable = $('#company_table').DataTable({
         {data: 'description'},
         {data: 'anonymous'},
         {data: 'add_admin'},
+        {data: 'package_name'},
+        {data: 'payment_expiry_date'},
         {data: 'actions', sorting: false, orderable: false},
     ],
     searching: false
@@ -44,7 +46,7 @@ $("#company_form").validate({
 $('#security_question_table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: SITE_URL + '/get_security_question',
+    ajax:  SITE_URL +'/'+LANG + '/get_security_question',
     columns: [
         {data: 'id'},
         {data: 'question'},
@@ -70,7 +72,7 @@ var employeeTable = $('#employee_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/get_employee',
+        url:  SITE_URL +'/'+LANG + '/get_employee',
         data: function (d) {
             d.employee_name = $('input[name=employee_name]').val();
             d.employee_email = $('input[name=employee_email]').val();
@@ -122,7 +124,7 @@ var userTable = $('#users-table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + "/user/list",
+        url:  SITE_URL +'/'+LANG + "/user/list",
         data: function (d) {
             d.user_name = $('input[name=user_name]').val();
             d.user_email = $('input[name=user_email]').val();
@@ -147,7 +149,7 @@ var companyuserTable = $('#company-users-table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/user/employeeList',
+        url:  SITE_URL +'/'+LANG + '/user/employeeList',
         data: function (d) {
             d.role_id      = $("#role_id").val();
             d.search_query = $("#search_query").val();
@@ -303,7 +305,7 @@ var pointsTable = $('#points_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/get_points',
+        url:  SITE_URL +'/'+LANG + '/get_points',
         data: function (d) {
             d.activity = $('input[name=activity]').val();
         }
@@ -378,7 +380,7 @@ $('#comment_replybox_form').validate({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL+'/get_post',
+        url:  SITE_URL +'/'+LANG+'/get_post',
 
     },
     columns : [
@@ -465,7 +467,7 @@ function closeCommentReply(id) {
         {
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/checkEmailExists',
+                url:  SITE_URL +'/'+LANG + '/checkEmailExists',
                 type: "POST",
                 data: {email: email,_token: CSRF_TOKEN,user_id:user_id},
                 success: function (data)
@@ -501,7 +503,7 @@ function closeCommentReply(id) {
 $('#blockList').DataTable({
     processing: true,
     serverSide: true,
-    ajax: SITE_URL + '/blockList',
+    ajax:  SITE_URL +'/'+LANG + '/blockList',
     columns: [
         {data: 'id'},
         {data: 'title'},
@@ -533,7 +535,7 @@ $("#blockEdit").validate({
 $('#packageList').DataTable({
     processing: true,
     serverSide: true,
-    ajax: SITE_URL + '/packagesList',
+    ajax:  SITE_URL +'/'+LANG + '/packagesList',
     columns: [
         {data: 'id'},
         {data: 'name'},
@@ -573,7 +575,7 @@ $('#adminfaqList').DataTable({
     processing: true,
      ordering: true,
     serverSide: true,
-    ajax: SITE_URL + '/faqList',
+    ajax:  SITE_URL +'/'+LANG + '/faqList',
     columns: [
         {data: 'id'},
         {data: 'question'},
@@ -623,7 +625,7 @@ $("#faqsEdit").validate({
 $('#faqsList').DataTable({
     processing: true,
     serverSide: true,
-    ajax: SITE_URL + '/faqList',
+    ajax:  SITE_URL +'/'+LANG + '/faqList',
     columns: [
         {data: 'id'},
         {data: 'question'},
@@ -654,7 +656,7 @@ $("#faqsAdd").validate({
 //$('#contactUsList').DataTable({
 //    processing: true,
 //    serverSide: true,
-//    ajax: SITE_URL + '/contactUsList',
+//    ajax:  SITE_URL +'/'+LANG + '/contactUsList',
 //    columns: [
 //        {data: 'id'},
 //        {data: 'name'},
@@ -801,7 +803,7 @@ $("#SettingsEdit").validate({
 $('#feedbackList').DataTable({
     processing: true,
     serverSide: true,
-    ajax: SITE_URL + '/feedbackList',
+    ajax:  SITE_URL +'/'+LANG + '/feedbackList',
     columns: [
         {data: 'id'},
         {data: 'subject'},
@@ -815,7 +817,7 @@ $('#feedbackList').DataTable({
 $('#supportList').DataTable({
     processing: true,
     serverSide: true,
-    ajax: SITE_URL + '/supportList',
+    ajax:  SITE_URL +'/'+LANG + '/supportList',
     columns: [
         {data: 'id'},
         {data: 'issue'},
@@ -830,7 +832,7 @@ $('#contactUsList').DataTable({
     processing: true,
     serverSide: true,
     order: [ [0, 'desc'] ],
-    ajax: SITE_URL + '/contactUsList',
+    ajax:  SITE_URL +'/'+LANG + '/contactUsList',
     columns: [
         {data: 'id'},
         {data: 'name'},
@@ -884,7 +886,7 @@ $('#addGroupMember').click(function() {
             group_id: groupId
         };
         $.ajax({
-            url: SITE_URL + '/group/addUserByEmailAddress',
+            url:  SITE_URL +'/'+LANG + '/group/addUserByEmailAddress',
             method: "POST",
             data: dataString,
             success: function (response) {
@@ -920,7 +922,7 @@ $(document).on('click','.deleteGroup',function() {
         dataString.groups = groupId;
         
         $.ajax({
-            url: SITE_URL + temp_url,
+            url:  SITE_URL +'/'+LANG + temp_url,
             method: 'POST',
             data: dataString,
             success: function (response) 

@@ -156,23 +156,28 @@ class DashboardController extends Controller {
 			// $groupDetails = GroupUser::select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* '))->leftJoin('groups', 'groups.id', '=', 'group_users.group_id')
 			// 	->leftJoin('posts', 'groups.id', '=', 'posts.group_id')
 			// 	->whereIn('group_users.group_id', $group_ids)->groupBy('group_users.group_id')->orderByDesc('posts.created_at')->get();
-
+                        //DB::connection()->enableQueryLog();
 			$groupDetails_query = DB::table('group_users')
 				->join('groups', 'groups.id', '=', 'group_users.group_id')
-				->where('groups.company_id', $company_id)
-				->where('group_users.user_id', $user_id)
-                                ->where('group_users.deleted_at', null)
+				->where('groups.company_id', $company_id);
+                        if(Auth::user()->role_id == 3) {        
+                            $groupDetails_query = $groupDetails_query->where('group_users.user_id', $user_id);
+                        }
+                        $groupDetails_query = $groupDetails_query->where('group_users.deleted_at', null)
 				->select(DB::raw('count(distinct(group_users.user_id)) as total_members, groups.* , (SELECT count(posts.id) FROM posts WHERE FIND_IN_SET(groups.id,posts.group_id) AND posts.deleted_at is null) as total_posts'))
 				->groupBy('group_users.group_id');
 //			 if ($currUser->role_id != 1) {
 //			 	$groupDetails_query = $groupDetails_query->where('groups.company_id', $company_id);
 //			 }
 			$groupDetails = $groupDetails_query->get();
+                        //dd(DB::getQueryLog());
 			// dd($groupDetails);
 
-			$userPosts = Post::with(['postLike', 'postComment', 'postTag.tag', 'postUser'])
-				->whereIn('group_id', $group_ids)->where('user_id', $user_id)->get();
+			//$userPosts = Post::with(['postLike', 'postComment', 'postTag.tag', 'postUser'])
+			//	->whereIn('group_id', $group_ids)->where('user_id', $user_id)->get();
 
+                        $userPosts = Post::with(['postLike', 'postComment', 'postTag.tag', 'postUser'])->where('user_id', $user_id)->get();
+                        
 			//$questions = SecurityQuestion::all();
 			//$userquestions = UserSecurityQuestion::where('user_id', $user_id)->get();
 			// dd($user);

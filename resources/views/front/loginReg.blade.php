@@ -7,6 +7,7 @@
     }    
 </style>
 <?php 
+    $language = App::getLocale();
     $pkg_id = '0';
     if(isset($package) && $package != null)
     {
@@ -44,57 +45,57 @@
                     @endif
 
                     <div class="login-box chng-box">
-                        <h3 class="page-title">LOGIN</h3>
-                        <form action="{{url('/frontLogin')}}" method="post" class="form-horizontal login-wrap" id="loginForm" name="loginForm">
+                        <h3 class="page-title">@lang('label.LOGIN')</h3>
+                        <form action="{{url($language.'/frontLogin')}}" method="post" class="form-horizontal login-wrap" id="loginForm" name="loginForm">
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <div class="field">
-                                    <input type="email" class="form-control" name="email" placeholder="Email Id" required>
+                                    <input type="email" class="form-control" name="email" placeholder="@lang('label.Email_Id')" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="field">
-                                    <input type="password" class="form-control" name="password" placeholder="Password" required>
+                                    <input type="password" class="form-control" name="password" placeholder="@lang('label.Password')" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="field">
                                     <div class="field-half">
-                                        <a href="javascript:void(0);" onclick="showForgetForm();" class="othr-link">Forgot Password?</a>
+                                        <a href="javascript:void(0);" onclick="showForgetForm();" class="othr-link">@lang('label.Forgot Password?')</a>
                                     </div>
                                     <div class="field-half button-wrap">
-                                        <input type="submit" class="btn btn-primary" value="SEND" name="login">                                        
+                                        <input type="submit" class="btn btn-primary" value="@lang('label.SEND')" name="login">                                        
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <div class="box-changer to-register">Don’t have an account yet? <a href="javascript:void(0);" onclick="showRegisterForm();" class="link">REGISTER</a></div>
+                        <div class="box-changer to-register">@lang('label.Dont have an account yet?') <a href="javascript:void(0);" onclick="showRegisterForm();" class="link">@lang('label.REGISTER')</a></div>
                     </div>
                     <div class="register-box chng-box">
-                        <h3 class="page-title">REGISTER</h3>
+                        <h3 class="page-title">@lang('label.REGISTER')</h3>
 
-                        <form action="{{url('/companyRegister')}}" method="post" class="form-horizontal register-wrap" id="registerForm" name="registerForm" enctype="multipart/form-data">
+                        <form action="{{url($language.'/companyRegister')}}" method="post" class="form-horizontal register-wrap" id="registerForm" name="registerForm" enctype="multipart/form-data">
                             {{ csrf_field() }}
 
                             <div class="form-group">
                                 <div class="field">
-                                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => 'Full Name', 'maxlength' => '20']) !!}
+                                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => __("label.Full Name"), 'maxlength' => '20']) !!}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="field">
-                                    {!! Form::text('company_name', old('company_name'), ['class' => 'form-control', 'placeholder' => 'Company Name', 'maxlength' => '30']) !!}
+                                    {!! Form::text('company_name', old('company_name'), ['class' => 'form-control', 'placeholder' => __("label.Company Name"), 'maxlength' => '30']) !!}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="field">
-                                    {!! Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => 'Email Id']) !!}
+                                    {!! Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' =>  __("label.Email_Id")]) !!}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="field">
                                     <select name="package_id" id="package_id" class="form-control" onchange="packageType()">
-                                        <option value="" disabled="" selected="" >Select Package List</option>
+                                        <option value="" disabled="" selected="" >@lang('label.Select Package List')</option>
                                         @foreach ($packageList as $package)
                                         <option value="{{ $package->id }}" <?php if($pkg_id !='0' && $pkg_id == $package->slug_name ){echo "selected";} ?> >{{ $package->name }}</option>
                                         @endforeach
@@ -105,17 +106,17 @@
                             <div class="my_package">
                                 <div class="form-group">
                                     <div class="field">
-                                        <input type="text" class="form-control" name="card_number" id="card_number" maxlength="16" placeholder="Card Number" required>
+                                        <input type="text" class="form-control" name="card_number" id="card_number" maxlength="16" placeholder="@lang('label.Card Number')" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group tbl">
                                     <div class="tbl-cell">
-                                        <input type="password" class="form-control" name="cvc" id="cvc" maxlength="4" placeholder="CVC" required>
+                                        <input type="password" class="form-control" name="cvc" id="cvc" maxlength="4" placeholder="@lang('label.CVC')" required>
                                     </div>
                                     <div class="tbl-cell">
                                         <select name="ex_month" id="ex_month" class="form-control" >
-                                            <option value="" disabled="" selected="">Select month</option>
+                                            <option value="" disabled="" selected="">@lang('label.Select month')</option>
                                             <?php
                                             for ($i = 1; $i < 12; $i++) {
                                                 ?>
@@ -126,7 +127,7 @@
                                     </div>
                                     <div class="tbl-cell">
                                         <select name="ex_year" id="ex_year" class="form-control" >
-                                            <option value="" disabled="" selected="">Select Year</option>
+                                            <option value="" disabled="" selected="">@lang('label.Select Year')</option>
                                             <?php
                                             $Y = date('Y');
                                             for ($i = 1; $i < 15; $i++) {
@@ -147,12 +148,12 @@
                             <div class="form-group">
                                 <div class="field no-padding">
                                     <div class="field-half">
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" maxlength="15" required>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="@lang('label.Password')" maxlength="15" required>
                                     </div>
 
 
                                     <div class="field-half">
-                                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" maxlength="15" required>
+                                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="@lang('label.Confirm Password')" maxlength="15" required>
                                     </div>                                
                                 </div>
 
@@ -161,32 +162,32 @@
                             <div class="form-group">
                                 <div class="field">
                                     <div class="text-right button-wrap">
-                                        <input type="submit" class="btn btn-primary" value="REGISTER" name="REGISTER">   
+                                        <input type="submit" class="btn btn-primary" value="@lang('label.REGISTER')" name="REGISTER">   
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <div class="box-changer to-login">Already have an account? <a href="javascript:void(0);" onclick="showLoginForm();" class="link">LOGIN</a></div>
+                        <div class="box-changer to-login">@lang('label.Already have an account?') <a href="javascript:void(0);" onclick="showLoginForm();" class="link">@lang('label.LOGIN')</a></div>
                     </div>
                     <div class="forgot-box chng-box">
-                        <h3 class="page-title">Forgot Your Password?</h3>
-                        <form action="{{url('/forgotPasswordMail')}}" method="post" class="form-horizontal login-wrap" id="forgotForm" name="forgotForm">
+                        <h3 class="page-title">@lang('label.Forgot Your Password?')</h3>
+                        <form action="{{url($language.'/forgotPasswordMail')}}" method="post" class="form-horizontal login-wrap" id="forgotForm" name="forgotForm">
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <div class="field">
                                     <input type="hidden" name="usertype" value="1">
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="Email Id" required>
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="@lang('label.Email_Id')" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="field">
                                     <div class="text-right button-wrap">
-                                        <input type="submit" class="btn btn-primary" value="SEND" name="SEND">   
+                                        <input type="submit" class="btn btn-primary" value="@lang('label.SEND')" name="SEND">   
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <div class="box-changer to-login">Already have an account? <a href="javascript:void(0);" onclick="showLoginForm();" class="link">LOGIN</a></div>
+                        <div class="box-changer to-login">@lang('label.Already have an account?') <a href="javascript:void(0);" onclick="showLoginForm();" class="link">@lang('label.LOGIN')</a></div>
                     </div>
                 </div>
             </div>
@@ -207,8 +208,8 @@
         },
         messages: {
             email: {
-                required: 'This field is required',
-                email: 'Please enter a valid email address.'
+                required: '@lang("label.This field is required")',
+                email:'@lang("label.Please enter a valid email address")',
             }
         }
     });
@@ -224,11 +225,11 @@
         },
         messages: {
             password: {
-                required: 'This field is required',
+                required: '@lang("label.This field is required")',
             },
             email: {
-                required: 'This field is required',
-                email: 'Please enter a valid email address.'
+                required: '@lang("label.This field is required")',
+                email:'@lang("label.Please enter a valid email address")',
             }
         }
     });
@@ -273,40 +274,40 @@
         },
         messages: {
             name: {
-                required: 'This field is required',
-                pattern: 'Please enter proper value'
+                required: '@lang("label.This field is required")',
+                pattern: '@lang("label.Please enter proper value")'
             },
             company_name: {
-                required: 'This field is required',
-                pattern: 'Please enter proper value'
+                required: '@lang("label.This field is required")',
+                pattern: '@lang("label.Please enter proper value")'
             },
             email: {
-                required: 'This field is required',
-                email: 'Please enter a valid email address.'
+                required: '@lang("label.This field is required")',
+                email:'@lang("label.Please enter a valid email address")',
             },
             password: {
-                required: 'This field is required',
-                minlength: 'Password must be a minimum 6 characters',
+                required: '@lang("label.This field is required")',
+                minlength: '@lang("label.Password must be a minimum characters")',
             },
             confirmPassword: {
-                required: 'This field is required',
-                equalTo: 'Password not match'
+                required: '@lang("label.This field is required")',
+                equalTo: '@lang("label.Password not match")',
             },
             package_id: {
-                required: 'This field is required',
+                required: '@lang("label.This field is required")',
             },
             card_number: {
-                required: 'This field is required',
-                number: 'Please enter numeric value only'
+                required: '@lang("label.This field is required")',
+                number: '@lang("label.Please enter numeric value only")',
             },
             cvc: {
-                required: 'This field is required',
+                required: '@lang("label.This field is required")',
             },
             ex_year: {
-                required: 'This field is required',
+                required: '@lang("label.This field is required")',
             },
             ex_month: {
-                required: 'This field is required',
+                required: '@lang("label.This field is required")',
             },
 
         },
@@ -328,7 +329,7 @@
             if (ex_year == currentYear)
             {
                 if (currentMonth > ex_month) {
-                    swal('Error', 'Please select valid expiry month/year', 'error')
+                    swal('Error', '@lang("label.Please select valid expiry month year")', 'error')
                     return false;
                 }
             }

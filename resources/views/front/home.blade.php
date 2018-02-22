@@ -1,5 +1,8 @@
 @extends('front_template.layout')
 @section('content')    
+<?php 
+    $language = App::getLocale();
+?>
 <!-- ************* content-Section ********************-->
 <div class="content-wrapper">
 
@@ -30,7 +33,7 @@
     <!-- App section-->
     <div class="wrap app-feat-wrap">
         <div class="container">
-            <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('app_features'));?></h3>
+            <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('app_features')); ?></h3>
             <div class="sub-title">{{strip_tags(Helpers::getBlockDescription('app_features'))}}</div>
             <div class="container-md">
                 <ul class="grid">
@@ -61,7 +64,7 @@
                                 </div>
                             </div>
                             <div class="bottom">
-                               {{strip_tags(Helpers::getBlockDescription('inquiries'))}}
+                                {{strip_tags(Helpers::getBlockDescription('inquiries'))}}
                             </div>
                         </div>
                     </li>
@@ -77,7 +80,7 @@
                                 </div>
                             </div>
                             <div class="bottom">
-                             {{strip_tags(Helpers::getBlockDescription('CHALLENGES'))}}
+                                {{strip_tags(Helpers::getBlockDescription('CHALLENGES'))}}
                             </div>
                         </div>
                     </li>
@@ -93,7 +96,7 @@
                                 </div>
                             </div>
                             <div class="bottom">
-                               {{strip_tags(Helpers::getBlockDescription('MEETINGS'))}}
+                                {{strip_tags(Helpers::getBlockDescription('MEETINGS'))}}
                             </div>
                         </div>
                     </li>
@@ -114,8 +117,8 @@
                     </div> 
                 </div>
                 <div class="video-wrap-cell content wow fadeIn" data-wow-delay="0.5s" data-wow-duration="2s">
-                    <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('VIDEOPRESENTATION'));?></h3>
-                    <div class="sub-title"><?= html_entity_decode(Helpers::getBlockDescription('VIDEOPRESENTATION'));?></div>
+                    <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('VIDEOPRESENTATION')); ?></h3>
+                    <div class="sub-title"><?= html_entity_decode(Helpers::getBlockDescription('VIDEOPRESENTATION')); ?></div>
                     <div class="button-wrap">
                         <a href="https://www.youtube.com/watch?v=tO01J-M3g0U" class="btn btn-icon-video play-video">VIEW VIDEO<img src="{{asset('public/front/images/video-play.png')}}" class="anim-arrow"></a>
                     </div>
@@ -131,8 +134,8 @@
             <div class="alter-wrapper">
                 <div class="alter-wrapper-item wow fadeIn" data-wow-duration="2s">
                     <div class="alter-wrapper-cell desc">
-                        <div class="title"><?= html_entity_decode(Helpers::getBlockTitle('promote_team_work'));?></div>
-                        <?= html_entity_decode(Helpers::getBlockDescription('promote_team_work'));?>
+                        <div class="title"><?= html_entity_decode(Helpers::getBlockTitle('promote_team_work')); ?></div>
+                        <?= html_entity_decode(Helpers::getBlockDescription('promote_team_work')); ?>
                     </div>
                     <div class="alter-wrapper-cell">
                         <div class="img-wrap">
@@ -148,13 +151,13 @@
                     </div>
                     <div class="alter-wrapper-cell desc">
                         <div class="title">{{Helpers::getBlockTitle('share_your_ideas_questions_or_challenge')}}</div>
-                         <?= html_entity_decode(Helpers::getBlockDescription('share_your_ideas_questions_or_challenge'))?>
+                        <?= html_entity_decode(Helpers::getBlockDescription('share_your_ideas_questions_or_challenge')) ?>
                     </div>
                 </div>
                 <div class="alter-wrapper-item wow fadeIn" data-wow-duration="2s">
                     <div class="alter-wrapper-cell desc">
-                        <div class="title"><?= html_entity_decode(Helpers::getBlockTitle('repository_of_information'));?></div>
-                        <?= html_entity_decode(Helpers::getBlockDescription('repository_of_information'));?>
+                        <div class="title"><?= html_entity_decode(Helpers::getBlockTitle('repository_of_information')); ?></div>
+                        <?= html_entity_decode(Helpers::getBlockDescription('repository_of_information')); ?>
                     </div>
                     <div class="alter-wrapper-cell">
                         <div class="img-wrap">
@@ -170,8 +173,8 @@
     <div class="wrap portal-section-wrap">
         <div class="container">
             <div class="portal-wrapper">
-                <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('web_portal'));?></h3>
-                <div class="sub-title"><?= html_entity_decode(Helpers::getBlockDescription('web_portal'));?></div>
+                <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('web_portal')); ?></h3>
+                <div class="sub-title"><?= html_entity_decode(Helpers::getBlockDescription('web_portal')); ?></div>
                 <div class="portal-slider-wrap">
                     <ul class="portal-slider">
                         <li><img src="{{asset('public/front/images/portal-1.png')}}"></li>
@@ -186,22 +189,28 @@
     <!--pricing section -->
     <div class="wrap pricing-wrapper">
         <div class="container">
-            <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('OUR_PRICING'));?></h3>
-            <div class="sub-title"><?= html_entity_decode(Helpers::getBlockDescription('OUR_PRICING'));?></div>
+            <h3 class="main-title"><?= html_entity_decode(Helpers::getBlockTitle('OUR_PRICING')); ?></h3>
+            <div class="sub-title"><?= html_entity_decode(Helpers::getBlockDescription('OUR_PRICING')); ?></div>
             <div class="pricing-wrap-grid">
                 <div class="pricing-grid">
-                     @foreach ($packageList as $package)
+                    
+                    @foreach ($packageList as $package)
                     <div class="pricing-item {{$package->color}}">
                         <div class="top">
                             <div class="price">${{$package->amount}}</div>
-                            <div class="duration">per month</div>
+                            <div class="duration">@lang("label.per month")</div>
                         </div>
                         <div class="content">
-                            <div class="multi-use">{{$package->name}}</div>
-                            <div class="user-limit">Upto {{$package->total_user}} Users</div>
+                            <div class="multi-use"><?php
+                                if (App::isLocale('sp'))
+                                   echo $package->spname;
+                                 else 
+                                    echo $package->name;                                
+                                ?></div>
+                            <div class = "user-limit">@lang("label.upto") {{$package->total_user}} @lang("label.Users")</div>
                         </div>
-                        <div class="bottom">
-                              <a href="{{url('registerPackage/')}}{{'/'}}{{$package->slug_name}}" class="btn btn-{{$package->color}}">SELECT PLAN</a>
+                        <div class = "bottom">
+                            <a href = "{{url($language.'/registerPackage/')}}{{'/'}}{{$package->slug_name}}" class = "btn btn-{{$package->color}}">@lang("label.SELECT PLAN")</a>
                         </div>
                     </div>
                     @endforeach
@@ -209,11 +218,11 @@
             </div>
         </div>
     </div>
-    <!-- pricing section close-->
+    <!--pricing section close-->
 </div>
-<!-- ************* content-Section close********************-->
+<!--************* content-Section close******************** -->
 @stop
-@section('javascript')    
+@section('javascript')
 <script>
     $(".portal-slider-wrap").flipster({
         style: 'flat',

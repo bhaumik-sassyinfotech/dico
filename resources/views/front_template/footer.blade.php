@@ -1,11 +1,14 @@
+<?php 
+    $language = App::getLocale();    
+?>
 <footer>
     <div class="container">
         <div class="footer-tbl">
             <div class="footer-cell">
                 <ul class="inlined other-lnk">
-                    <li><a href="{{url('/teams-condition')}}">Terms & Conditions</a></li>
-                    <li><a href="{{url('/privacy-policy')}}">Privacy Policy</a></li>
-                    <li><a href="{{url('/users-login')}}">Login</a></li>
+                    <li><a href="{{url($language.'/teams-condition')}}">@lang("label.Terms_Conditions")</a></li>
+                    <li><a href="{{url($language.'/privacy-policy')}}">@lang("label.Privacy Policy")</a></li>
+                    <li><a href="{{url($language.'/users-login')}}">@lang("label.Login")</a></li>
                 </ul>
             </div>
             <div class="footer-cell social-cell">
@@ -16,7 +19,7 @@
                 </ul>
             </div>
             <div class="footer-cell">
-                <span>Copyrights © <?=date('Y');?> <a href="{{url('/front')}}">Dico</a>. {{Helpers::getSettings()->copyright}}</span>
+                <span>@lang("label.Copyrights") © <?=date('Y');?> <a href="{{url($language.'/front')}}">Dico</a>. {{Helpers::getSettings()->copyright}}</span>
             </div>
         </div>
     </div>

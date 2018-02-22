@@ -56,7 +56,7 @@
           <div class="toggle-text"><p>Company Logo:</p></div>
           <div class="company-wrap">
             <div class="img-wrap">
-              <img src="{{$company_logo}}" alt="company logo">
+              <img src="{{asset($company_logo)}}" alt="company logo">
             </div>
             <div class="btn-wrap">
               <div class="upload-btn-wrapper">

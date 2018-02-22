@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - Settings</title>
+<title>@lang('label.adDICO - Settings')</title>
 @section('content')
 
 @include('template.notification')
@@ -8,10 +8,10 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>              
-                <li class="active">Settings</li>
+                <li><a href="{{ route('index') }}">@lang('label.adDashboard')</a></li>              
+                <li class="active">@lang('label.adSettings')</li>
             </ol>
-            <h1 class="tp-bp-0">Settings </h1>
+            <h1 class="tp-bp-0">@lang('label.adSettings') </h1>
             <hr class="border-out-hr">
 
         </div>
@@ -24,17 +24,17 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Email 1<span>*</span></label>
+                                    <label class="text-15">@lang('label.adEmail 1')<span>*</span></label>
                                     <input type="email" name="email1" id="email1"
-                                           placeholder="Email 1"
+                                           placeholder="@lang('label.adEmail 1')"
                                            class="form-control required" value="{{$settings->email1}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Email 2<span></span></label>
+                                    <label class="text-15">@lang('label.adEmail 2')<span></span></label>
                                     <input type="email" name="email2" id="email2"
-                                           placeholder="Email 2"
+                                           placeholder="@lang('label.adEmail 2')"
                                            class="form-control " value="{{$settings->email2}}">
                                 </div>
                             </div>
@@ -42,17 +42,17 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Support Email<span>*</span></label>
+                                    <label class="text-15">@lang('label.adSupport Email')<span>*</span></label>
                                     <input type="email" name="support_email" id="support_email"
-                                           placeholder="Support Email"
+                                           placeholder="@lang('label.adSupport Email')"
                                            class="form-control required" value="{{$settings->support_email}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Copyright<span>*</span></label>
+                                    <label class="text-15">@lang('label.adCopyright')<span>*</span></label>
                                     <input type="text" name="copyright" id="copyright"
-                                           placeholder="Copyright"
+                                           placeholder="@lang('label.adCopyright')"
                                            class="form-control required" value="{{$settings->copyright}}">
                                 </div>
                             </div>
@@ -60,31 +60,31 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Phone<span></span></label>
-                                    <input type="text" name="phone" id="phone" placeholder="Phone" class="form-control " value="{{$settings->phone}}">
+                                    <label class="text-15">@lang('label.adPhone')<span></span></label>
+                                    <input type="text" name="phone" id="phone" placeholder="@lang('label.adPhone')" class="form-control " value="{{$settings->phone}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Mobile<span>*</span></label>
-                                    <input type="number" name="mobile" id="mobile" placeholder="Mobile" class="form-control required" value="{{$settings->mobile}}">
+                                    <label class="text-15">@lang('label.adMobile')<span>*</span></label>
+                                    <input type="number" name="mobile" id="mobile" placeholder="@lang('label.adMobile')" class="form-control required" value="{{$settings->mobile}}">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Facebook<span></span></label>
+                                    <label class="text-15">@lang('label.adFacebook')<span></span></label>
                                     <input type="text" name="facebook" id="facebook"
-                                           placeholder="Facebook"
+                                           placeholder="@lang('label.adFacebook')"
                                            class="form-control " value="{{$settings->facebook}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Twitter<span></span></label>
+                                    <label class="text-15">@lang('label.adTwitter')<span></span></label>
                                     <input type="text" name="twitter" id="twitter"
-                                           placeholder="Twitter"
+                                           placeholder="@lang('label.adTwitter')"
                                            class="form-control " value="{{$settings->twitter}}">
                                 </div>
                             </div>
@@ -92,17 +92,17 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Instagram<span></span></label>
+                                    <label class="text-15">@lang('label.adInstagram')<span></span></label>
                                     <input type="text" name="instagram" id="instagram"
-                                           placeholder="Instagram"
+                                           placeholder="@lang('label.adInstagram')"
                                            class="form-control " value="{{$settings->instagram}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-15">Address<span></span></label>
+                                    <label class="text-15">@lang('label.adAddress')<span></span></label>
                                     <input type="text" name="address" id="address"
-                                           placeholder="Address"
+                                           placeholder="@lang('label.adAddress')"
                                            class="form-control " value="{{$settings->address}}">
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
 
                         <div class="form-group">
                             <div class="btn-wrap-div">
-                                <input type="submit" class="st-btn" value="Submit">                                
+                                <input type="submit" class="st-btn" value="@lang('label.adSubmit')">                                
                             </div>
                         </div>
                     </form>

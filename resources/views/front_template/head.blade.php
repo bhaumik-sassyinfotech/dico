@@ -1,5 +1,7 @@
 <meta charset="UTF-8">
 <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<meta id="lang" name="langauge" value="{{ App::getLocale()}}">
+
 <link rel="shortcut icon" href="{{asset('public/front/images/favicon.ico')}}" type="image/ico" sizes="16x16">
 
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -34,7 +36,9 @@
 <![endif]-->
 <script>
     var CSRF_TOKEN = "{{ csrf_token() }}";
+    var LANG = "{{ App::getLocale() }}";           
 </script>
+
 <div class="loader-group" id="loader" style="/* display: none; */">
     <div class="loader">
         <img src="{{asset('public/front/images/spinner.png')}}">

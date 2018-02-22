@@ -1,15 +1,15 @@
 @extends('template.default')
-<title>DICO - User</title>
+<title>@lang("label.DICOUser")</title>
 @section('content')
     <div id="page-content" class="create-user create-user-popup">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
-                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li><a href="{{ route('user.index') }}">User</a></li>
-                    <li class="active">Create User</li>
+                    <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                    <li><a href="{{ route('user.index') }}">@lang("label.adUser")</a></li>
+                    <li class="active">@lang("label.CreateUser")</li>
                 </ol>
-                <h1 class="tp-bp-0">Create User</h1>
+                <h1 class="tp-bp-0">@lang("label.CreateUser")</h1>
                 <hr class="border-out-hr">
 
             </div>
@@ -19,9 +19,9 @@
                         <form class="common-form" name="user_form" id="user_form" method="post" action="{{route('user.store')}}">
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label>Company<span>*</span></label>
+                                <label>@lang("label.ad")<span>*</span></label>
                                     <select id="company_id" name="company_id" class="form-control select">
-                                        <option value="">------ Select ------</option>
+                                        <option value="">------ @lang("label.Select") ------</option>
                                         @if( !empty($companies) )
                                             @foreach($companies as $company)
                                                 <option value="{{$company->id}}">{{$company->company_name}}</option>
@@ -31,14 +31,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="text-15">Full Name<span>*</span></label>
-                                <input type="text" name="user_name" id="user_name" placeholder="Full Name"
+                                <label class="text-15">@lang("label.Full Name")<span>*</span></label>
+                                <input type="text" name="user_name" id="user_name" placeholder="@lang('label.Full Name')"
                                        class="form-control required">
                             </div>
 
                             <div class="form-group">
-                                <label class="text-15">Email Id<span>*</span></label>
-                                <input type="text" name="user_email" id="user_email" placeholder="User Email" class="form-control" onkeyup="$('#emailerror').text('');" onblur="checkEmail(this.value,0)">
+                                <label class="text-15">@lang("label.Email_Id")<span>*</span></label>
+                                <input type="text" name="user_email" id="user_email" placeholder="@lang('label.UserEmail')" class="form-control" onkeyup="$('#emailerror').text('');" onblur="checkEmail(this.value,0)">
                                 <label id="emailerror" class="error hidden" ></label>
                                 <input id="for_me_emailerror" value="" type="hidden">            
                             </div>
@@ -59,22 +59,22 @@
                             </div>*/?>
                             <input type="hidden" name="role_id" id="role_id">
                             <div class="form-group">
-                                <label>Groups:</label>
+                                <label>@lang("label.Groups")</label>
                                 <div class="select">
                                     <select name="user_groups[]" id="user_groups" class="form-control" multiple="multiple">
-                                        <option disabled="disabled" value="">Select company first.</option>
+                                        <option disabled="disabled" value="">@lang("label.Selectcompanyfirst")</option>
                                     </select>
                                 </div>
                                 <div class="add-grp-wrap btn-wrap-div">
-                                   <a type="submit" class="add-group" href="#myModal" data-toggle="modal">Create New Group</a>
+                                   <a type="submit" class="add-group" href="#myModal" data-toggle="modal">@lang("label.CreateNewGroup")</a>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="blank">
                                     <label class="check">
-                                        <p>Active</p>
-                                        If user is inactive, than user will not be able to login into the system.
+                                        <p>@lang("label.Active")</p>
+                                        @lang("label.InactiveNote")
                                         <input type="checkbox" name="is_active" id="is_active">
                                         <span class="checkmark"></span>
                                     </label>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="blank">
-                                    <label class="check"><p>Suspend</p>If user is suspended, than user will not be able to login into the system.
+                                    <label class="check"><p>@lang("label.Suspend")</p>@lang("label.suspendedNote")
                                         <input type="checkbox" name="is_suspended" id="is_suspended">
                                         <span class="checkmark"></span>
                                     </label>
@@ -91,8 +91,8 @@
                             <div class="form-group">
                                 <div class="btn-wrap-div">
                                     <!-- <input type="submit" class="st-btn" value="Submit" />-->
-                                    <a type="submit" class="st-btn" href="#myModal" data-toggle="modal">Create</a>
-                                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                                    <a type="submit" class="st-btn" href="#createModal" data-toggle="modal">@lang("label.Create")</a>
+                                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="createModal" class="modal fade" style="display: none;">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -100,14 +100,14 @@
                                                     <div class="create-user-wrap">
                                                         <div class="create-box A-letter">
                                                             <a href="javascript:void(0)" onclick="selectRole(2)">
-                                                                <h1>A</h1>
-                                                                <p>Admin</p>
+                                                                <h1>@lang("label.A")</h1>
+                                                                <p>@lang("label.Admin")</p>
                                                             </a>    
                                                         </div>
                                                         <div class="create-box E-letter">
                                                             <a href="javascript:void(0)" onclick="selectRole(3)">
-                                                                <h1>E</h1>
-                                                                <p>Employee</p>
+                                                                <h1>@lang("label.E")</h1>
+                                                                <p>@lang("label.Employee")</p>
                                                             </a>    
                                                         </div>
                                                     </div>
@@ -115,7 +115,7 @@
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
                                                                  </div>
-                                    <a href="{{ url()->previous() }}" class="st-btn">Cancel</a>
+                                    <a href="{{ url()->previous() }}" class="st-btn">@lang("label.Cancel")</a>
                                 </div>
                             </div>
 
@@ -133,26 +133,26 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button">×</button>
-                                                <h4 class="modal-title">Create New Group</h4>
+                                                <h4 class="modal-title">@lang("label.CreateNewGroup")</h4>
                                             </div>
                                             <div class="common-form">
                                                 <form id="create_group_modal" method="POST">
                                                 <div class="form-group">
-                                                    <label class="text-15">Group Name:*</label>
-                                                    <input class="required" type="text" name="grp_name" id="grp_name" placeholder="Management">
+                                                    <label class="text-15">@lang("label.GroupName"):*</label>
+                                                    <input class="required" type="text" name="grp_name" id="grp_name" placeholder="@lang('label.Management')">
                                                 </div>
                                                 <div class="form-group">
                                                     <p class="error" id="company-warn" style="display: none;">Please select the company to which this group belongs.</p>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="text-15">Description:</label>
-                                                    <textarea name="grp_desc" id="grp_desc" type="text" placeholder="Lorem ipsum is a dummy text in the all typesetting industry"></textarea>
+                                                    <label class="text-15">@lang("label.adDescription"):</label>
+                                                    <textarea name="grp_desc" id="grp_desc" type="text" placeholder="@lang('label.DescriptionText')"></textarea>
                                                 </div>
                                                 <div class="form-group">
                                                    <div class="btn-wrap-div">
-                                                      <input class="st-btn" type="submit" value="Create">
-                                                      <input type="reset" value="Cancel" class="st-btn" data-dismiss="modal">
+                                                      <input class="st-btn" type="submit" value="@lang('label.Create')">
+                                                      <input type="reset" value="@lang('label.Cancel')" class="st-btn" data-dismiss="modal">
                                                   </div>
                                               </div>
                                               </form>
@@ -167,7 +167,7 @@
     <script type="text/javascript">
         function selectRole(roleid) {
             $('#role_id').val(roleid);
-            $('#myModal').fadeOut();
+            $('#createModal').fadeOut();
             $('body').removeClass('modal-open');
             if($('#user_form').valid() == 1) {
                 $('form#user_form').submit();

@@ -20,16 +20,16 @@ if (!empty($post['postComment'])) {
                     if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
                         if ($commentUser['following'][0]->status == 1) {
                             ?>
-                            <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Unfollow</a>
+                            <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Unfollow')</a>
                             <?php
                         } else {
                             ?>
-                            <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
+                            <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
                             <?php
                         }
                     } else if ($commentUser->id != Auth::user()->id) {
                         ?>
-                        <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
+                        <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
                         <?php
                     }
                     ?>
@@ -39,12 +39,12 @@ if (!empty($post['postComment'])) {
                         <div class="pull-left post-user-nam">
                             <h3 class="text-12"><?php
                                 if ($postComment['is_anonymous'] == 0) { ?>
-                                <a href="{{url('view_profile', Helpers::encode_url($commentUser['id']))}}"><?php echo $commentUser['name'];?></a>
+                                <a href="{{route('view_profile', Helpers::encode_url($commentUser['id']))}}"><?php echo $commentUser['name'];?></a>
                                 <?php } else {
-                                    echo "Anonymous";
+                                    echo __('label.Anonymous');
                                 }
                                 ?></h3>
-                            <p>- on <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
+                            <p>- @lang('label.on') <?php echo date(DATE_FORMAT, strtotime($commentUser['created_at'])); ?></p>
                         </div>
                         <div class="pull-right post-reply-pop">
                             <div class="options">
@@ -58,10 +58,10 @@ if (!empty($post['postComment'])) {
                                     }
                                     ?> 
                                     <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
-                                        <?php if ($commentUser['id'] == Auth::user()->id || $commentUser['role_id'] > Auth::user()->role_id) { ?>
-                                            <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
+                                        <?php if ($commentUser['id'] == Auth::user()->id || $commentUser['role_id'] > Auth::user()->role_id || count(Auth::user()->group) > 0) { ?>
+                                            <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">@lang('label.Correct')</a>
                                         <?php } else { ?>
-                                            Correct  
+                                            @lang('label.Correct')  
                                     <?php } ?>    
                                     </p>
                                 </div>
@@ -77,7 +77,7 @@ if (!empty($post['postComment'])) {
                                         <a class="set-warning" href="javascript:void(0)" onclick="openFlagComment({{$postComment['id']}}, {{$commentUser['id']}})">w</a>
                                         <?php } ?>
                                     <?php if ($commentUser['id'] == Auth::user()->id) { ?><a class="set-edit" href="javascript:void(0)" onclick="editComment('<?= 'popup_'.$postComment['id'] ?>');">e</a>
-                                        <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a><?php } ?>
+                                        <a class="set-alarm" href="{{route('deletecomment',$postComment['id'])}}">a</a><?php } ?>
                                 </div>
                             </div>    
                         </div> 
@@ -85,8 +85,8 @@ if (!empty($post['postComment'])) {
                     <p class="profanity" id="comment_disp_popup_<?=$postComment['id']?>"><?php echo $postComment['comment_text']; ?></p>
                     <textarea name="comment_text" id="comment_text_popup_<?= $postComment['id'] ?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo $postComment['comment_text']; ?></textarea>
                     <div class="btn-wrap-div">
-                        <input type="button" name="update_comment" id="update_comment_popup_<?= $postComment['id'] ?>" value="Save" onclick="updateComment(<?= $postComment['id'] ?>,'<?= 'popup_'.$postComment['id'] ?>')" class="st-btn" style="display: none;"/>
-                        <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$postComment['id']?>" value="Cancel" class="btn btn-secondary" onClick=" this.form.reset();closeComment('<?= 'popup_'.$postComment['id']?>')" style="display: none;"/>
+                        <input type="button" name="update_comment" id="update_comment_popup_<?= $postComment['id'] ?>" value="@lang('label.Save')" onclick="updateComment(<?= $postComment['id'] ?>,'<?= 'popup_'.$postComment['id'] ?>')" class="st-btn" style="display: none;"/>
+                        <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$postComment['id']?>" value="@lang('label.Cancel')" class="btn btn-secondary btn-st" onClick=" this.form.reset();closeComment('<?= 'popup_'.$postComment['id']?>')" style="display: none;"/>
                     </div>
                     <div class="rply-box">
                         <div class="rply-count like">

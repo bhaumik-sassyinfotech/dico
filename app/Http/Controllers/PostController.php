@@ -42,8 +42,8 @@ class PostController extends Controller {
 		$this->middleware(function ($request, $next) {
 
 			if (Auth::user()->role_id == 1) {
-				return redirect('/index');
-                                //$this->folder = 'superadmin';
+				//return redirect('/index');
+                                $this->folder = 'superadmin';
 			} else if (Auth::user()->role_id == 2) {
 				$this->folder = 'companyadmin';
 			} else if (Auth::user()->role_id == 3) {
@@ -230,6 +230,9 @@ class PostController extends Controller {
                             }, 'postAttachment', 'postFlagged' => function ($q) {
                                     return $q->where('user_id', Auth::user()->id);
                             }])->withCount('postLike')->withCount('postView')->whereNULL('deleted_at')->where('company_id', Auth::user()->company_id);
+                            /*if(Auth::user()->role_id > 1) {
+                            $query = $query->where('company_id', Auth::user()->company_id);
+                            }*/
                             if (!empty($request->get('search_text'))) {
                                     $search_text = $request->get('search_text');
                                     $query->whereNested(function($q) use ($search_text) {

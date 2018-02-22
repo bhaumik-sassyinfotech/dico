@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Helpers;
 use Validator;
 use DB;
+use App;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class UsersController extends Controller {
                   return Redirect::back()->with('err_msg', 'Username and password are invalid');
                   } */
                 if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password])) {
-                    return redirect('/')->with('success', 'Login successfully.');
+                    return redirect(\App::getLocale().'/index')->with('success', 'Login successfully.');
                 } else {
                     return Redirect::back()->with('err_msg', 'Username and password are invalid');
                 }
@@ -202,7 +203,7 @@ class UsersController extends Controller {
             }
             $companyData = new Company;
             $companyData->company_name = $request->company_name;
-            $companyData->slug_name= $this->slugify($request->company_name);
+            $companyData->slug_name = $this->slugify($request->company_name);
             $companyData->description = $request->company_description;
             $companyData->allow_anonymous = 0;
             $companyData->allow_add_admin = 0;
@@ -273,15 +274,20 @@ class UsersController extends Controller {
                         'USERNAME' => $_POST['name'],
                         'EMAIL' => $_POST['email'],
                     ];
-                    $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
-                    $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                    if (App::isLocale('sp')) {
+                        $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->spemail_body, $parse);
+                        $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                    } else {
+                        $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
+                        $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                    }
                     $emailTemplate->email = $_POST['email'];
                     $post = array('emailTemplate' => $emailTemplate, 'request' => $request, 'message' => $emailTemplate->email_body, 'email' => $emailTemplate->email);
                     Helpers::sendEmail($post);
                 }
-                return Redirect::back()->with('success', 'Registration has been successfully');
+                return Redirect::back()->with('success', trans("label.Registration has been successfully"));
             } else {
-                return Redirect::back()->with('err_msg', 'Something went erong please try again.');
+                return Redirect::back()->with('err_msg', trans("label.Something went wrong"));
             }
         } catch (Exception $e) {
             return Redirect::back()->with('err_msg', $e->getMessage());
@@ -308,15 +314,20 @@ class UsersController extends Controller {
                     'USERNAME' => $user->name,
                     'FORGOTPASSWORD' => $emailLink,
                 ];
-                $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
-                $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                if (App::isLocale('sp')) {
+                    $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->spemail_body, $parse);
+                    $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                } else {
+                    $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
+                    $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                }
                 $emailTemplate->email = $request->email;
                 $post = array('emailTemplate' => $emailTemplate, 'request' => $request, 'message' => $emailTemplate->email_body, 'email' => $emailTemplate->email);
                 Helpers::sendEmail($post);
                 User::where('id', $user->id)->update(['expiry_link' => 1]); //when mail sent that time set token 0 to 1  
-                return Redirect::back()->with('success', 'Link to reset password has been sent successfully to your email address.');
+                return Redirect::back()->with('success', trans("label.Link to reset password has been sent successfully to your email address"));
             } else {
-                return Redirect::back()->with('err_msg', 'Something went erong please try again.');
+                return Redirect::back()->with('err_msg', trans("label.Something went wrong"));
             }
         } catch (Exception $e) {
             return Redirect::back()->with('err_msg', $e->getMessage());
@@ -327,12 +338,12 @@ class UsersController extends Controller {
         $email = explode("===", Helpers::decode_url($data));
         $days = date('d');
         if ($days != $email[1]) {
-            return redirect('/users-login')->with('err_msg', 'Your link has been expire.');
+            return redirect('/users-login')->with('err_msg', trans("label.Your link has been expire"));
         }
         //check expiry link  is 1 then link is active otherwise expiry
         $user = User::where('email', $email[0])->where('expiry_link', 1)->first();
         if (!$user) {
-            return redirect('/users-login')->with('err_msg', 'Your link has been expire.');
+            return redirect('/users-login')->with('err_msg', trans("label.Your link has been expire"));
         }
         if ($email[3] == 0) {
             return view('auth.resetPassword', compact('email'));
@@ -357,13 +368,13 @@ class UsersController extends Controller {
             if ($userPassword) {
                 //when admin reset password that time usertype 0 and company reset password on front side that time usertype 1
                 if ($request->usertype == 0) {
-                    return redirect('/login')->with('success', "Your password has been change successfully.");
+                    return redirect('/login')->with('success', trans("label.Your password has been change successfully"));
                 } else {
-                    return redirect('/users-login')->with('success', "Your password has been change successfully.");
+                    return redirect('/users-login')->with('success', trans("label.Your password has been change successfully"));
                 }
             }
         }
-        return redirect('/users-login')->with('err_msg', 'Something went erong please try again.');
+        return redirect('/users-login')->with('err_msg', trans("label.Something went wrong"));
     }
 
     static public function slugify($text) {

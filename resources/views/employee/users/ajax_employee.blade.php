@@ -31,9 +31,9 @@
                         <img src="{{ $profile_pic }}" alt="super-user">
                     </div>
                     <div class="grid-details">
-                        <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user['id']))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user['id']))}}">{{ $user['name'] }}</a></h4>
+                        <h4><a onclick="window.open('<?= route('view_profile', Helpers::encode_url($user['id']))?>','_self')" href="{{route('view_profile', Helpers::encode_url($user['id']))}}">{{ $user['name'] }}</a></h4>
                         <a href="mailto:{{ $user['email'] }}">{{ $user['email'] }}</a>
-                        <h4>Employee</h4>
+                        <h4>@lang("label.Employee")</h4>
                     </div>
 
                 </fieldset>
@@ -43,23 +43,23 @@
                         $text = "";
                         if(!empty($user['followers']) && count($user['followers']) > 0)
                         {
-                            $text = "Following";
+                            $text = __('label.Following');
                         } else {
-                            $text = "Follow";
+                            $text = __('label.Follow');
                         }
-                        $url = url('view_profile/'.Helpers::encode_url($uid));
+                        $url = route('view_profile',Helpers::encode_url($uid));
                     @endphp
                     <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
                     <?php $pts = Helpers::user_points($uid);?>
-                    <a href="#">Point:{{ $pts['points'] }}</a>
+                    <a href="#">@lang("label.Point"):{{ $pts['points'] }}</a>
 
                 </div>
                 <div class="panel-body-wrap">
                     <div class="follower-text pull-left">
-                        <p>Followers:<span>{{ $user['followers_count'] }}</span></p>
+                        <p>@lang("label.Followers"):<span>{{ $user['followers_count'] }}</span></p>
                     </div>
                     <div class="follower-text pull-right">
-                        <p>Following:<span>{{ count($user['following']) }}</span></p>
+                        <p>@lang("label.Following"):<span>{{ count($user['following']) }}</span></p>
                     </div>
                 </div>
             </div>
@@ -67,12 +67,12 @@
     </li>
     @endforeach
 <div class="all_viewmore col-md-12">
-    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">View More</a>
+    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">@lang("label.ViewMore")</a>
 </div>
 @else
     <div class="row">
         <div class="col-xs-12">
-            <p>No Data found</p>
+            <p>@lang("label.NoDatafound")</p>
         </div>
     </div>
 @endif

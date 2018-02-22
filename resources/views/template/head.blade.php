@@ -29,6 +29,7 @@
 <link href="{{ asset('assets/css/owl.carousel.css') }}" rel="stylesheet" type="text/css">
 <script type="text/javascript">
     var SITE_URL = '<?php echo url('/'); ?>';
+    var LANG = "{{ App::getLocale()}}";
     var ROUTE_COMPANY_STORE = "{{route('company.store')}}";
     var CSRF_TOKEN = "{{ csrf_token() }}";
     var EXTERNAL_SWEARS = "{{ asset('public/profanity/swearWords.json') }}";
@@ -36,6 +37,7 @@
     var DEFAULT_PROFILE_IMAGE = "{{DEFAULT_PROFILE_IMAGE}}";
     var PROFILE_PATH = "{{PROFILE_PATH}}";
     var ASSETS_PATH = "{{asset('')}}";
+    
 </script>
 <style type="text/css">
 	.error {

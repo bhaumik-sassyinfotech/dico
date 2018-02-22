@@ -75,6 +75,80 @@
 
                                     </div>
                                 </div>
+
+                                <div tabindex="5002" style="overflow-y: hidden;" class="tab-pane" id="users">
+                                       <div class="container">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="panel panel-info ">
+                                                <div class="panel-heading trophy">
+                                                    <h4 class="icon">Group List</h4>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                    <table class="table">
+                                                                <thead>
+                                                                   <tr>
+                                                                        <th class="p-font p-user"><img src="assets/img/p-icon.png" class="mr-10">User Name</th>
+                                                                        <th class="p-font p-idea"><img src="assets/img/p-light.png" class="mr-10"> Idea</th>
+                                                                        <th class="p-font p-question"><img src="assets/img/p-help.png" class="mr-10">Questions</th>
+                                                                        <th class="p-font p-approve"><img src="assets/img/p-approve.png" class="mr-10">Approved</th>
+                                                                        <th class="p-font p-answer"><img src="assets/img/p-answer.png" class="mr-10">Answers</th>
+                                                                        <th class="p-font p-solution"><img src="assets/img/p-solution.png" class="mr-10">Solutions</th>
+                                                                        <th class="p-font p-comments"><img src="assets/img/p-comment.png" class="mr-10">Comments</th>
+                                                                        <th class="p-font p-like"><img src="assets/img/p-like.png" class="mr-10">Likes</th>
+                                                                        <th class="p-font p-Total"><img src="assets/img/p-total.png" class="mr-10">Total</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><a>Jason Durelo</a></td>
+                                                                        <td><p>234</p></td>
+                                                                        <td><p>150</p></td>
+                                                                        <td><p>68</p></td>
+                                                                        <td><p>148</p></td>
+                                                                        <td><p>258</p></td>
+                                                                        <td><p>48</p></td>
+                                                                        <td><p>25</p></td>
+                                                                        <td><p>685</p></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><a>Mary Jane</a></td>
+                                                                        <td><p>234</p></td>
+                                                                        <td><p>150</p></td>
+                                                                        <td><p>68</p></td>
+                                                                        <td><p>148</p></td>
+                                                                        <td><p>258</p></td>
+                                                                        <td><p>48</p></td>
+                                                                        <td><p>25</p></td>
+                                                                        <td><p>685</p></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><a>Mike Tyson</a></td>
+                                                                        <td><p>234</p></td>
+                                                                        <td><p>150</p></td>
+                                                                        <td><p>68</p></td>
+                                                                        <td><p>148</p></td>
+                                                                        <td><p>258</p></td>
+                                                                        <td><p>48</p></td>
+                                                                        <td><p>25</p></td>
+                                                                        <td><p>685</p></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,15 +1,15 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>@lang("label.DICOPost")</title>
 @section('content')
     <div id="page-content" class="post-details create-post">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
-                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li><a href="{{ route('post.index') }}">Post</a></li>
-                    <li class="active">Create Post</li>
+                    <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                    <li><a href="{{ route('post.index') }}">@lang("label.adPost")</a></li>
+                    <li class="active">@lang("label.CreatePost")</li>
                 </ol>
-                <h1 class="tp-bp-0">Create Post</h1>
+                <h1 class="tp-bp-0">@lang("label.CreatePost")</h1>
                 <hr class="border-out-hr">
             </div>
             <div class="container">
@@ -18,7 +18,7 @@
                         <div class="col-sm-8" id="post-detail-left">
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label class="text-15">Post<span>*</span></label>
+                                <label class="text-15">@lang("label.adPost")<span>*</span></label>
                                 <div class="check-wrap box-check">
                                     <?php /*<label class="check idea-check">Idea    
                                        <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check">
@@ -36,19 +36,19 @@
                                     <input id="checkbox1" type="checkbox" name="post_type" value="">
                                        <label for="checkbox1"><span></span></label>
                                    </div>*/?>
-                                    <div class="check ">Idea    
+                                    <div class="check ">@lang("label.Idea")   
                                         <input type="checkbox" name="post_type" id="post_type_idea" value="idea" class="post_type check idea-check error">
                                          <label for="post_type_idea"> 
                                              <span class="checked idea-checked"></span>
                                           </label>    
                                     </div>
-                                    <div class="check ">Question    
+                                    <div class="check ">@lang("label.Question")    
                                         <input type="checkbox" name="post_type" id="post_type_question" value="question" class="post_type check question-check error">
                                          <label for="post_type_question"> 
                                              <span class="checked question-checked"></span>
                                           </label>    
                                     </div>
-                                    <div class="check ">Challenge    
+                                    <div class="check ">@lang("label.Challenge")    
                                         <input type="checkbox" name="post_type" id="post_type_challenge" value="challenge" class="post_type check challenges-check error">
                                          <label for="post_type_challenge"> 
                                              <span class="checked challenges-checked"></span>
@@ -58,12 +58,12 @@
                                 <div id="err_post_type"></div>
                             </div>
                             <div class="form-group m-b-20">
-                                    <label class="text-15">Post Title<span>*</span></label>
-                                    <input type="text" name="post_title" id="post_title" placeholder="Post Title" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
+                                    <label class="text-15">@lang("label.PostTitle")<span>*</span></label>
+                                    <input type="text" name="post_title" id="post_title" placeholder="@lang('label.PostTitle')" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
                             </div>
                             <div class="form-group">
-                                    <label class="text-15">Post Description</label>
-                                    <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control"></textarea>
+                                    <label class="text-15">@lang("label.PostDescription")</label>
+                                    <textarea name="post_description" id="post_description" placeholder="@lang('label.PostDescription')" class="form-control"></textarea>
                             </div>
                             <?php /*<div class="form-group">
                                 <div class="col-xs-12 form-group">
@@ -75,7 +75,7 @@
                                 </div>
                             </div>*/?>
                             <div class="form-group">
-                                    <label>Tags</label>
+                                    <label>@lang("label.Tags")</label>
                                     <input type="hidden" name="post_tags" id="mySingleField" value="">
                                     <ul id="singleFieldTags"></ul>
                             </div>  
@@ -83,14 +83,14 @@
                             <?php
                             if(isset($company) && $company->allow_anonymous == 1) {
                             ?>
-                            <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous">
+                            <label class="check">@lang("label.PostAnonymous")<input type="checkbox" name="is_anonymous" id="is_anonymous">
                                 <span class="checkmark"></span>
                             </label> 
                             <?php } ?>
-                                <a href="{{ route('post.index') }}" class="st-btn btn-default">Back</a>
-                                <input type="submit" name="save" id="save" value="Submit" class="st-btn">
+                                <a href="{{ route('post.index') }}" class="st-btn btn-default">@lang("label.adBack")</a>
+                                <input type="submit" name="save" id="save" value="@lang('label.Submit')" class="st-btn">
                                 <div class="upload-btn-wrapper">
-                                    <button class="upload-btn">Upload Files</button>
+                                    <button class="upload-btn">@lang("label.adUpload Files")</button>
                                     <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                         <div class="category">
                                 <div class="main-group-wrap">
                                    <div class="category-tab tp-bp-0"> 
-                                       <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
+                                       <label class="check">@lang("label.Groups")<input type="checkbox" name="user_groups_all" id="checkAll">
                                          <span class="checkmark"></span>
                                      </label>
                                    </div>
@@ -139,7 +139,7 @@
                                         </label>
                                    </div> 
                                    <?php } } else { ?>
-                                    <div class="category-detials">No group found.</div>
+                                    <div class="category-detials">@lang("label.NoGroupfound")</div>
                                    <?php } ?>
                                </div>
                            </div>
@@ -157,7 +157,7 @@
            // $(document).ready(function() {
                 //var _token = CSRF_TOKEN;
                 $.ajax({
-                    url: SITE_URL + '/tags',
+                    url: SITE_URL +'/'+LANG+ '/tags',
                     type: 'GET',
                     //data: {_token},
                     success: function(response) {

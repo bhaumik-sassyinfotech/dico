@@ -119,7 +119,7 @@ $(document).ready(function ()
 });
 function likePost(id) {
     $.ajax({
-        url: SITE_URL+'/like_post/'+id,
+        url:  SITE_URL +'/'+LANG+'/like_post/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);
@@ -140,7 +140,7 @@ function likePost(id) {
 }
 function dislikePost(id) {
     $.ajax({
-        url: SITE_URL+'/dislike_post/'+id,
+        url:  SITE_URL +'/'+LANG+'/dislike_post/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);
@@ -161,7 +161,7 @@ function dislikePost(id) {
 }
 function like_post(id) {
     $.ajax({
-        url: SITE_URL+'/like_post/'+id,
+        url:  SITE_URL +'/'+LANG+'/like_post/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);
@@ -182,7 +182,7 @@ function like_post(id) {
 }
 function dislike_post(id) {
     $.ajax({
-        url: SITE_URL+'/dislike_post/'+id,
+        url:  SITE_URL +'/'+LANG+'/dislike_post/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);
@@ -204,7 +204,7 @@ function dislike_post(id) {
 
 function likeComment(id,elementid) {
     $.ajax({
-        url: SITE_URL+'/like_comment/'+id,
+        url:  SITE_URL +'/'+LANG+'/like_comment/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);
@@ -225,7 +225,7 @@ function likeComment(id,elementid) {
 }
 function dislikeComment(id,elementid) {
     $.ajax({
-        url: SITE_URL+'/dislike_comment/'+id,
+        url:  SITE_URL +'/'+LANG+'/dislike_comment/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);
@@ -272,7 +272,7 @@ function uploadFile() {
         }
     });
     $.ajax({
-        url: SITE_URL + '/uploadFile',
+        url:  SITE_URL +'/'+LANG + '/uploadFile',
         type:"post",
         cache: false,
         contentType: false,
@@ -301,7 +301,7 @@ function uploadFileMeeting() {
         }
     });
     $.ajax({
-        url: SITE_URL + '/uploadFileMeeting',
+        url:  SITE_URL +'/'+LANG + '/uploadFileMeeting',
         type:"post",
         cache: false,
         contentType: false,
@@ -340,7 +340,7 @@ function ajaxResponse(type,msg) {
 }
 function likeAttactmentComment(id,elementid) {
     $.ajax({
-        url: SITE_URL+'/like_attachment_comment/'+id,
+        url:  SITE_URL +'/'+LANG+'/like_attachment_comment/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);
@@ -361,7 +361,7 @@ function likeAttactmentComment(id,elementid) {
 }
 function dislikeAttachmentComment(id,elementid) {
     $.ajax({
-        url: SITE_URL+'/dislike_attachment_comment/'+id,
+        url:  SITE_URL +'/'+LANG+'/dislike_attachment_comment/'+id,
         type: 'GET',
         success: function(response) {
             var res = JSON.parse(response);

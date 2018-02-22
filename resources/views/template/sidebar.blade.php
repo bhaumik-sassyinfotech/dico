@@ -17,79 +17,79 @@
 if ($role_id == 1) {
 	?>
 
-        <li><a href="javascript:;"><i class="fa fa-building-o"></i> <span>Company</span></a>
+        <li><a href="javascript:;"><i class="fa fa-building-o"></i> <span>@lang("label.adCompany")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('company.create') }}"><span>Add Company</span></a></li>
-                <li><a href="{{ route('company.index') }}"><span>View Company</span></a></li>
+                <li><a href="{{ route('company.create') }}"><span>@lang("label.adAdd Company")</span></a></li>
+                <li><a href="{{ route('company.index') }}"><span>@lang("label.adView Company")</span></a></li>
             </ul>
         </li>
-        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>Security Question</span></a>
+        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>@lang("label.adSecurity Question")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('security_question.create') }}"><span>Add Security Question</span></a></li>
-                <li><a href="{{ route('security_question.index') }}"><span>View Security Question</span></a></li>
+                <li><a href="{{ route('security_question.create') }}"><span>@lang("label.adAdd Security Question")</span></a></li>
+                <li><a href="{{ route('security_question.index') }}"><span>@lang("label.adView Security Question")</span></a></li>
             </ul>
         </li>
-        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>User</span></a>
+        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>@lang("label.adUser")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
-                <li><a href="{{ route('user.index') }}"><span>View User</span></a></li>
+                <li><a href="{{ route('user.create') }}"><span>@lang("label.adAdd User")</span></a></li>
+                <li><a href="{{ route('user.index') }}"><span>@lang("label.adView User")</span></a></li>
             </ul>
         </li>
 
-        <li><a href="javascript:;"><i class="fa fa-users"></i> <span>Group</span></a>
+        <li><a href="javascript:;"><i class="fa fa-users"></i> <span>@lang("label.adGroup")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('group.create') }}"><span>Add Group</span></a></li>
-                <li><a href="{{ route('group.index') }}"><span>View Groups</span></a></li>
+                <li><a href="{{ route('group.create') }}"><span>@lang("label.adAdd Group")</span></a></li>
+                <li><a href="{{ route('group.index') }}"><span>@lang("label.adView Groups")</span></a></li>
             </ul>
         </li>
         <?php /*<li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>*/?>
-        <li><a href="javascript:;"><i class="fa fa-trophy"></i> <span>Points</span></a>
+        <li><a href="javascript:;"><i class="fa fa-trophy"></i> <span>@lang("label.adPoints")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('points.viewList') }}"><span>View Points</span></a></li>
-                <li><a href="{{ route('points.index') }}"><span>Edit Points</span></a></li>
+                <li><a href="{{ route('points.viewList') }}"><span>@lang("label.adView Points")</span></a></li>
+                <li><a href="{{ route('points.index') }}"><span>@lang("label.adEdit Points")</span></a></li>
             </ul>
         </li>
         <!-- <li><a href="{{ route('points.index') }}"><i class="fa fa-usd" aria-hidden="true"></i><span>Points</span></a> -->
         <!--</li>-->
-        <li><a href="javascript:;"><i class="fa fa-external-link"></i> <span>Blog</span></a>
+        <li><a href="javascript:;"><i class="fa fa-external-link"></i> <span>@lang("label.adBlog")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('blog.index') }}"><span>View Blog</span></a></li>
+                <li><a href="{{ route('blog.index') }}"><span>@lang("label.adView Blog")</span></a></li>
                 
             </ul>
         </li>
-        <li><a href="javascript:;"><i class="fa fa-gift"></i> <span>Package</span></a>
+        <li><a href="javascript:;"><i class="fa fa-gift"></i> <span>@lang("label.adPackage")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('packages.index') }}"><span>View Package</span></a></li>
+                <li><a href="{{ route('packages.index') }}"><span>@lang("label.adView Package")</span></a></li>
                 
             </ul>
         </li>
-        <li><a href="javascript:;"><i class="fa fa-question"></i> <span>FAQs</span></a>
+        <li><a href="javascript:;"><i class="fa fa-question"></i> <span>@lang("label.adFAQs")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('adminfaq.index') }}"><span>View FAQs</span></a></li>
+                <li><a href="{{ route('adminfaq.index') }}"><span>@lang("label.adView FAQs")</span></a></li>
                 
             </ul>
         </li>
-        <li><a href="javascript:;"><i class="fa fa-thumbs-o-up"></i> <span>Feedback</span></a>
+        <li><a href="javascript:;"><i class="fa fa-thumbs-o-up"></i> <span>@lang("label.adFeedback")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('feedback.index') }}"><span>View Feedback</span></a></li>
+                <li><a href="{{ route('feedback.index') }}"><span>@lang("label.adView Feedback")</span></a></li>
                 
             </ul>
         </li>
-          <li><a href="javascript:;"><i class="fa fa-info"></i> <span>Support</span></a>
+          <li><a href="javascript:;"><i class="fa fa-info"></i> <span>@lang("label.adSupport")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('support.index') }}"><span>View Support</span></a></li>
+                <li><a href="{{ route('support.index') }}"><span>@lang("label.adView Support")</span></a></li>
                 
             </ul>
         </li>
-          <li><a href="javascript:;"><i class="fa fa-adjust"></i> <span>Contact</span></a>
+          <li><a href="javascript:;"><i class="fa fa-adjust"></i> <span>@lang("label.adContact")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('adminContactUs.index') }}"><span>View Contact</span></a></li>
+                <li><a href="{{ route('adminContactUs.index') }}"><span>@lang("label.adView Contact")</span></a></li>
                 
             </ul>
         </li>
-          <li><a href="javascript:;"><i class="fa fa-gear"></i> <span>Settings</span></a>
+          <li><a href="javascript:;"><i class="fa fa-gear"></i> <span>@lang("label.adSettings")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('settings.index') }}"><span>View Settings</span></a></li>
+                <li><a href="{{ route('settings.index') }}"><span>@lang("label.adView Settings")</span></a></li>
                 
             </ul>
         </li>
@@ -99,53 +99,54 @@ if ($role_id == 1) {
 //=====start company admin menu=====//
 else if ($role_id == 2) {
 	?>
-        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>User</span></a>
+        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>@lang("label.adUser")</span></a>
             <ul class="acc-menu">
                 <?php
 /*
 	<li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
 	 */
 	?>
-                <li><a href="{{ route('user.create') }}"><span>Add User</span></a></li>
-                <li><a href="{{ route('user.index') }}"><span>View User</span></a></li>
+                <li><a href="{{ route('user.create') }}"><span>@lang("label.adAdd User")</span></a></li>
+                <li><a href="{{ route('user.index') }}"><span>@lang("label.adView User")</span></a></li>
+                <li><a href="{{ route('companyEdit') }}"><span>@lang("label.adCompany Detail")</span></a></li>
             </ul>
         </li>
         <li style="display: none;"><a href="{{ route('employee.index') }}"><i class="fa fa-home"></i>
                 <span>Employee</span></a></li>
-        <li><a href="javascript:;"><i class="fa fa-users"></i> <span>Group</span></a>
+        <li><a href="javascript:;"><i class="fa fa-users"></i> <span>@lang("label.adGroup")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('group.create') }}"><span>Add Group</span></a></li>
-                <li><a href="{{ route('group.index') }}"><span>View Groups</span></a></li>
+                <li><a href="{{ route('group.create') }}"><span>@lang("label.adAdd Group")</span></a></li>
+                <li><a href="{{ route('group.index') }}"><span>@lang("label.adView Groups")</span></a></li>
             </ul>
         </li>
-        <li><a href="javascript:;"><i class="fa fa-trophy"></i> <span>Points</span></a>
+        <li><a href="javascript:;"><i class="fa fa-trophy"></i> <span>@lang("label.adPoints")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('points.viewList') }}"><span>View Points</span></a></li>
-                <li><a href="{{ route('points.index') }}"><span>Edit Points</span></a></li>
+                <li><a href="{{ route('points.viewList') }}"><span>@lang("label.adView Points")</span></a></li>
+                <li><a href="{{ route('points.index') }}"><span>@lang("label.adEdit Points")</span></a></li>
             </ul>
         </li>
-        <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
+        <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>@lang("label.adPost")</span></a></li>
         <?php }
 //=====end company admin menu=====//
 //=====start employee menu=====//
 else if ($role_id == 3) {
 	?>
-        <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Post</span></a></li>
-        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>User</span></a>
+        <li><a href="{{ route('post.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>@lang("label.adPost")</span></a></li>
+        <li><a href="javascript:;"><i class="fa fa-lock"></i> <span>@lang("label.adUser")</span></a>
             <ul class="acc-menu">
-                <li><a href="{{ route('user.index') }}"><span>View User</span></a></li>
+                <li><a href="{{ route('user.index') }}"><span>@lang("label.adView User")</span></a></li>                
             </ul>
         </li>
-        <li><a href="{{ route('group.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>Group</span></a></li>
+        <li><a href="{{ route('group.index') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>@lang("label.adGroup")</span></a></li>
         <?php
 }
 //=====start employee menu=====//
 ?>
         @if($role_id > 1)
-            <li><a href="javascript:;"><i class="fa fa-users"></i> <span>Meetings</span></a>
+            <li><a href="javascript:;"><i class="fa fa-users"></i> <span>@lang("label.adMeetings")</span></a>
                 <ul class="acc-menu">
-                    <li><a href="{{ route('meeting.create') }}"><span>Create Meeting</span></a></li>
-                    <li><a href="{{ route('meeting.index') }}"><span>View Meetings</span></a></li>
+                    <li><a href="{{ route('meeting.create') }}"><span>@lang("label.adCreate Meeting")</span></a></li>
+                    <li><a href="{{ route('meeting.index') }}"><span>@lang("label.adView Meetings")</span></a></li>
                 </ul>
             </li>
         @endif
@@ -156,8 +157,8 @@ else if ($role_id == 3) {
         <div class="bottom-sidebar">
             <div class="bottom-logo"><a href="#"><i><img src="{{asset('assets/img/fevicon.png')}}" ></i><span> <img src="{{asset('assets/img/logo.png')}}"></span></a></div>
             <div class="feedback"><a href="{{route('feedback.create')}}">
-                    <i class="fa fa-check-square" aria-hidden="true"></i><span>Give Us feedback </span></a></div>
-            <div class="support"><a href="{{route('support.create')}}"><i class="fa fa-comments-o" aria-hidden="true"></i> <span>Support</span></a></div>        
+                    <i class="fa fa-check-square" aria-hidden="true"></i><span>@lang("label.adGive Us feedback") </span></a></div>
+            <div class="support"><a href="{{route('support.create')}}"><i class="fa fa-comments-o" aria-hidden="true"></i> <span>@lang("label.adSupport")</span></a></div>        
         </div>
 <?php } ?>
 </nav>

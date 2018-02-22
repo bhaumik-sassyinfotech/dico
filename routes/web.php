@@ -22,6 +22,7 @@ Route::get('/package', 'front\HomeController@packages');
 
 Route::POST('frontLogin', 'front\UsersController@frontLogin');
 Route::POST('companyRegister', 'front\UsersController@companyRegister');
+Route::get('/registerPackage/{package}','front\HomeController@registerPackage');
 Route::get('/front-logout', 'front\UsersController@logout');
 Route::POST('/forgotPasswordMail', 'front\UsersController@forgotPasswordMail');
 Route::POST('/updateForgotPassword', 'front\UsersController@updateForgotPassword');
@@ -35,7 +36,7 @@ Route::group(['middleware' => 'front'], function () {
 
 /***********************End front URL****************************/
 
-Route::get('index', 'HomeController@index');
+Route::get('index', 'HomeController@index')->name('index');
 
 Auth::routes();
 Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@firstLogin')->name('security.firstLogin');
@@ -75,16 +76,16 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('follow/{id}', 'DashboardController@follow');
 	Route::get('unfollow/{id}', 'DashboardController@unfollow');
 	Route::match(['get', 'post'], '/searchPost', 'DashboardController@searchPost'); // search post on view profile page
-	Route::get('view_profile/{id}', 'DashboardController@view_profile');
+	Route::get('view_profile/{id}', 'DashboardController@view_profile')->name('view_profile');
 	/*Group*/
 
 	Route::match(['get', 'post'], 'group/addGroup', 'GroupController@addGroup'); // add group via ajax on add user page (super admin)
 	Route::match(['get', 'post'], 'group/mygroups', 'GroupController@myGroupGrid');
 	Route::match(['get', 'post'], 'group/search', 'GroupController@searchGroup');
-	Route::match(['get', 'post'], 'group/list', 'GroupController@groupListing');
+	Route::match(['get', 'post'], 'group/list', 'GroupController@groupListing')->name('group.list');
 	Route::match(['get', 'post'], 'group/delete_group', 'GroupController@deleteGroup');
 	Route::match(['get', 'post'], 'group/addUserByEmailAddress', 'GroupController@addUserByEmailAddress');
-	Route::match(['get', 'post'], 'group/uploadGroupPicture', 'GroupController@uploadGroupPicture');
+	Route::match(['get', 'post'], 'group/uploadGroupPicture', 'GroupController@uploadGroupPicture')->name('group.uploadGroupPicture');
 	Route::match(['get', 'post'], 'group/editUsers', 'GroupController@groupUsersEdit');
 	Route::post('group/companyUsers', 'GroupController@companyUsers');
 	Route::resource('group', 'GroupController');
@@ -106,9 +107,9 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('like_post/{id}', 'PostController@like_post');
 	Route::get('dislike_post/{id}', 'PostController@dislike_post');
 	Route::get('get_post', 'PostController@get_post');
-	Route::get('viewpost/{id}', 'PostController@viewpost');
-	Route::post('savecomment/{id}', 'PostController@savecomment');
-	Route::get('deletecomment/{id}', 'PostController@deletecomment');
+	Route::get('viewpost/{id}', 'PostController@viewpost')->name('viewpost');
+	Route::post('savecomment/{id}', 'PostController@savecomment')->name('savecomment');
+	Route::get('deletecomment/{id}', 'PostController@deletecomment')->name('deletecomment');
 	Route::get('like_comment/{id}', 'PostController@like_comment');
 	Route::get('dislike_comment/{id}', 'PostController@dislike_comment');
 	Route::post('comment_solution', 'PostController@comment_solution');
@@ -127,10 +128,10 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::match(['get', 'post'], '/meeting/list', 'MeetingController@meetingList');
 	Route::match(['get', 'post'], '/meeting/leaveMeeting', 'MeetingController@leaveMeeting');
 	Route::resource('meeting', 'MeetingController');
-	Route::post('loadmorepost', 'PostController@loadmorepost');
+	Route::post('loadmorepost', 'PostController@loadmorepost')->name('loadmorepost');
 	Route::post('loadmoremypost', 'PostController@loadmoremypost');
 	Route::post('loadmoregrouppost', 'PostController@loadmoregrouppost');
-	Route::get('tag/{id}', 'TagController@tagpost');
+	Route::get('tag/{id}', 'TagController@tagpost')->name('tag');
 	Route::post('loadmoretagpost', 'TagController@loadmoretagpost');
 	Route::post('comment_update', 'PostController@comment_update');
 	Route::post('allComments', 'PostController@allComments');
@@ -138,7 +139,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('comment_flagged', 'PostController@comment_flagged');
 	Route::post('uploadFile', 'PostController@uploadFile');
 	Route::post('getCommentReply', 'PostController@getCommentReply');
-	Route::get('deletecommentReply/{id}', 'PostController@deletecommentReply');
+	Route::get('deletecommentReply/{id}', 'PostController@deletecommentReply')->name('deletecommentReply');
 	Route::post('comment_reply_update', 'PostController@comment_reply_update');
 	Route::post('uploadFileMeeting', 'MeetingController@uploadFileMeeting');
 	Route::post('deletepost', 'PostController@deletePost');
@@ -154,7 +155,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::post('meeting_comment_reply_update','MeetingController@meeting_comment_reply_update');
         Route::get('deleteMeetingCommentReply/{id}','MeetingController@deleteMeetingCommentReply');
         Route::post('checkEmailExists','DashboardController@checkEmailExists');
-        Route::get('editGroup/{id}','GroupController@editGroup');
+        Route::get('editGroup/{id}','GroupController@editGroup')->name('editGroup');
         Route::post('group/groupUpdate','GroupController@groupUpdate');
         
         /*         * *****Block**Section************ */
@@ -187,10 +188,10 @@ Route::group(['middleware' => 'admin'], function () {
         Route::resource('support', 'SupportController');
         Route::GET('supportList', 'SupportController@supportList');
         Route::POST('deleteSupport', 'SupportController@deleteSupport')->name('deleteSupport');
-        Route::get('/registerPackage/{package}','front\HomeController@registerPackage');
+        
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('/home');
 });
 ?>

@@ -1,7 +1,9 @@
 @extends('template.default')
 <title>DICO - Tags</title>
 @section('content')
-
+<?php 
+    $language = App::getLocale();
+?>
 <div id="page-content" class="group-listing posts">
     <div id='wrap'>
         <div id="page-heading">
@@ -137,7 +139,7 @@
                                                              ?>
                                                              <hr>
                                                              <div class="post-circle">
-                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
+                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url($language.'/tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
                                                               </div>
                                                                  <?php } ?>
                                                          </div>
@@ -205,7 +207,7 @@
         var tag_id = $('#tag_id').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText,tag_id:tag_id};
         $.ajax({
-            url: SITE_URL+"/loadmoretagpost",
+            url: SITE_URL+'/'+LANG+"/loadmoretagpost",
             type: "POST",
             data: formData,
             success: function (response) {
@@ -231,7 +233,7 @@
             var tag_id = $('#tag_id').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText,tag_id:tag_id};
             $.ajax({
-                url: SITE_URL+"/loadmoretagpost",
+                url: SITE_URL+'/'+LANG+"/loadmoretagpost",
                 type: "POST",
                 data: formData,
                 success: function (response) {

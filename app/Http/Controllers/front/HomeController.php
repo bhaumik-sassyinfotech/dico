@@ -8,6 +8,7 @@ use App\Faqs;
 use App\EmailTemplate;
 use App\Contactus;
 use Helpers;
+use App;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,6 +16,9 @@ use Illuminate\Http\Request;
 class HomeController extends Controller {
 
     public function __construct(Request $request) {
+      // \Session::put('browser_language', 'sp');
+        
+        //\App::setLocale(session('browser_language'));
         
     }
 
@@ -84,17 +88,26 @@ class HomeController extends Controller {
                         'MESSAGE' => $_POST['message'],
                     ];
                 }
-                $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
-                $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                if (App::isLocale('sp')){
+                    $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->spemail_body, $parse);
+                    $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                    $emailTemplate->subject = $emailTemplate->spsubject;
+                    $emailTemplate->title = $emailTemplate->sptitle;
+                }else{
+                    $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
+                     $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                     $emailTemplate->subject = $emailTemplate->subject;
+                     $emailTemplate->title = $emailTemplate->title;
+                }
+               
                 $emailTemplate->email = $_POST['email'];
                 $post = array('emailTemplate' => $emailTemplate, 'request' => $request, 'message' => $emailTemplate->email_body, 'email' => $emailTemplate->email);
-                //dd($post);
                 Helpers::sendEmail($post);
             }
-            return json_encode(array('status' => 1, 'msg' => "Your request submitted successfully."));
+            return json_encode(array('status' => 1, 'msg' => trans("label.Your request submitted successfully")));
         } else {
 
-            return json_encode(array('status' => 0, 'msg' => "Something went wrong."));
+            return json_encode(array('status' => 0, 'msg' => trans("label.Something went wrong")));
         }
     }
 
@@ -113,7 +126,10 @@ class HomeController extends Controller {
     }
 
     public function registerPackage($package=null) {
-          $auth = Auth::guard('front')->user();
+        $auth = Auth::guard('front')->user();
+         
+          //echo 123;
+        //  dd($tt);
 
         if ($auth != null) {
             return redirect('/companyProfile');

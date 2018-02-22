@@ -15,18 +15,18 @@ if (!empty($user_posts)) {
                 <div class="panel-heading">
                     <h4 class="icon">{{ucfirst($mypost['post_type'])}}</h4>
                     <div class="pull-right no-icon">
-                        <a><img src="assets/img/notification-icon.png"></a>  
+                        <a><img src="{{asset('assets/img/notification-icon.png')}}"></a>  
                         <?php
                             if(!empty($mypost['post_flagged'])) {
                         ?>
                            <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                         <?php } else { ?>
-                           <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                           <a href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
                         <?php } ?>
                     </div>
                 </div>
                 <div class="panel-body meetings">
-                    <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity post-title">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                    <h4><a href="{{route('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity post-title">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                     <div class="user-wrap"> 
                     <div class="user-img"> 
                         @if(empty($mypost['post_user']['profile_image']) || $mypost['is_anonymous'] == 1)
@@ -36,8 +36,8 @@ if (!empty($user_posts)) {
                         @endif
                     </div> 
                     <p class="user-icon">-<?php if($mypost['is_anonymous'] == 0) { ?>
-                        <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}" class="user-a-post">{{$mypost['post_user']['name']}}</a>
-                        <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
+                        <a href="{{route('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}" class="user-a-post">{{$mypost['post_user']['name']}}</a>
+                        <?php } else { echo __("label.Anonymous"); } ?><span>@lang("label.on") {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                     </div>
                     <fieldset>
                         <p class="desc-content profanity" id="desc_mycontent_{{$mypost['id']}}">{{ $mypost['post_description'] }}</p>
@@ -46,7 +46,7 @@ if (!empty($user_posts)) {
                        if(strlen($mypost['post_description']) > POST_DESCRIPTION_LIMIT) {
                     ?>
                     <div class="btn-wrap" id="mypostread{{$mypost['id']}}">
-                        <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">Read More</a>
+                        <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">@lang("label.ReadMore")</a>
                     </div>
                     <?php } ?>
                     <div class="panel-body-wrap">
@@ -89,7 +89,7 @@ if (!empty($user_posts)) {
                             <span><?php echo count($mypost['post_comment']); ?></span>
                         </div>
                         <div class="status pull-right">
-                            <p>Status:<span>Active</span></p>
+                            <p>@lang("label.Status"):<span>@lang("label.Active")</span></p>
                         </div>  
                     </div> 
                         <?php
@@ -97,7 +97,7 @@ if (!empty($user_posts)) {
                             ?>
                         <hr>
                         <div class="post-circle">
-            <?php foreach ($mypost['post_tag'] as $mypost_tag) { ?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?= $mypost_tag['tag']['tag_name']; ?></a><?php } ?>
+            <?php foreach ($mypost['post_tag'] as $mypost_tag) { ?><a href="{{route('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?= $mypost_tag['tag']['tag_name']; ?></a><?php } ?>
                         </div>
         <?php } ?>
                 </div>

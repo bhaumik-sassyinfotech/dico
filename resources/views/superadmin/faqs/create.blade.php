@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - Add FAQs </title>
+<title>@lang('label.adDICO - FAQs')</title>
 @section('content')
 
 @include('template.notification')
@@ -8,11 +8,11 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li><a href="{{ route('adminfaq.index') }}">FAQs</a></li>
-                <li class="active">Add FAQs </li>
+                <li><a href="{{ url('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{ route('adminfaq.index') }}">@lang("label.adFAQs")</a></li>
+                <li class="active">@lang("label.adAdd FAQs") </li>
             </ol>
-            <h1 class="tp-bp-0">Add FAQs </h1>
+            <h1 class="tp-bp-0">@lang("label.adAdd FAQs") </h1>
             <hr class="border-out-hr">
 
         </div>
@@ -24,21 +24,32 @@
                     {{ method_field('POST') }}
                     <div class="update-block-wrap">
                         <div class="form-group">
-                            <label class="text-15">Question<span>*</span></label>
+                            <label class="text-15">Question(English)<span>*</span></label>
                             <input type="text" name="question" id="question"
-                                   placeholder="Question"
+                                   placeholder="Question(English)"
                                    class="form-control required">
                         </div>
                     </div>
-
+                     <div class="update-block-wrap">
+                        <div class="form-group">
+                            <label class="text-15">Question(Spanish)<span>*</span></label>
+                            <input type="text" name="spanish_question" id="spanish_question"
+                                   placeholder="Question(Spanish)"
+                                   class="form-control required">
+                        </div>
+                    </div>
                     <div class="form-group editor-files">
-                        <label class="text-15" >Answer<span>*</span></label>
+                        <label class="text-15" >Answer(English)<span>*</span></label>
                         <textarea id="editor" name="answer"> </textarea>                           
+                    </div>
+                     <div class="form-group editor-files">
+                        <label class="text-15" >Answer(Spanish)<span>*</span></label>
+                        <textarea id="editor1" name="spanish_answer"> </textarea>                           
                     </div>
                     <div class="form-group">
                         <div class="btn-wrap-div">
-                            <input type="submit" class="st-btn" value="Submit">
-                            <a href="{{ url()->previous() }}" class="st-btn">Back</a>
+                            <input type="submit" class="st-btn" value="@lang('label.adSubmit')">
+                            <a href="{{ url()->previous() }}" class="st-btn">@lang("label.adBack")</a>
                         </div>
                     </div>
                     </form>
@@ -50,6 +61,6 @@
 @stop
 @section('javascript')
 <script type="text/javascript">
-    initSample();
+    //initSample();
 </script>
 @endsection

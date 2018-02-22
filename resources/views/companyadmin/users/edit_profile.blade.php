@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - Profile</title>
+<title>@lang("label.DICOProfile")</title>
 @section('content')
     <div id="page-content" class="employe-profile">
         <div id='wrap'>
@@ -10,7 +10,7 @@
                         <div class="follow_box form_box col-sm-12 col-md-2">
                             <div class="wrap-btn">
                             <input accept="image/x-png,image/gif,image/jpeg" type="file" class="fileinput" name="profile_image" id="image">
-                            <label>Upload Photo</label>
+                            <label>@lang("label.UploadPhoto")</label>
                                 <div class="preview_box">
                                     <?php
 $pic = '';
@@ -31,25 +31,25 @@ if ($user->profile_image == "") {
                         <div class="follow-block col-sm-12 col-md-10">
                             <div class="group-box">
                                 <div class="group-item one">
-                                    <p>Name : <span>{{ $user->name }}</span></p>
-                                    <p>Email Id : <span>{{ $user->email }}</span></p>
+                                    <p>@lang("label.adName") : <span>{{ $user->name }}</span></p>
+                                    <p>@lang("label.Email_Id") : <span>{{ $user->email }}</span></p>
                                     @php
-                                        $role = 'Super Admin';
+                                        $role = __("label.SuperAdmin");
 
                                     if($user->role_id == '2')
-                                        $role = 'Company Manager';
+                                        $role = __("label.CompanyManager");
                                     else if($user->role_id == '3')
-                                        $role = 'Employee';
+                                        $role = __("label.Employee");
                                     @endphp
-                                    <p>Role : <span><a href="#">{{ $role }}</a></span></p>
+                                    <p>@lang("label.Role") : <span><a href="#">{{ $role }}</a></span></p>
                                 </div>
                                 <div class="group-item two">
                                     <h2>{{ count($user->followers) }}</h2>
-                                    <p>Followers</p>
+                                    <p>@lang("label.Followers")</p>
                                 </div>
                                 <div class="group-item three">
                                     <h2>{{ count($user->followings  ) }}</h2>
-                                    <p>Following</p>
+                                    <p>@lang("label.Following")</p>
                                 </div>
                             </div>
                         </div>

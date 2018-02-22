@@ -1,20 +1,20 @@
 @extends('template.default')
-<title>DICO - FAQs</title>
+<title>@lang('label.adDICO - FAQs')</title>
 @section('content')
 
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li class="active">FAQs</li>
+                <li><a href="{{ route('index') }}">@lang("label.adDashboard")</a></li>
+                <li class="active">@lang("label.adFAQs")</li>
             </ol>
-            <h1>FAQs</h1>
+            <h1>@lang("label.adFAQs")</h1>
             <div class="options">
                 <div class="btn-toolbar">
                     <a class="btn btn-default" href="{{ route('adminfaq.create') }}">
                         <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
-                        <span class="hidden-xs hidden-sm">Create FAQs</span>
+                        <span class="hidden-xs hidden-sm">@lang("label.adCreate FAQs")</span>
                     </a>
                 </div>
             </div>
@@ -26,16 +26,16 @@
                     <div class="panel-body">
                         <div class="panel panel-info " style="overflow-x:auto;">
                             <div class="panel-heading trophy">
-                                <h4 class="icon">FAQs</h4>
+                                <h4 class="icon">@lang("label.adFAQs")</h4>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-bordered table-striped" id="adminfaqList">
                                     <thead>
                                         <tr>
-                                            <th>#ID</th>
-                                            <th>Question</th>
-                                            <th>Answer</th>
-                                            <th>Action</th>
+                                            <th>#@lang("label.adID")</th>
+                                            <th>@lang("label.adQuestion")</th>
+                                            <th>@lang("label.adAnswer")</th>
+                                            <th>@lang("label.adAction")</th>
                                         </tr>
                                     </thead>
 
@@ -58,16 +58,16 @@
     function deleteFaqs(id)
     {
         swal({
-            title: 'Are you sure?',
-            text: 'Are you sure you want to delete this faqs',
+            title: '@lang("label.adAre you sure?")',
+            text: '@lang("label.adAre you sure you want to delete this faqs")',
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: '@lang("label.adYes, delete it")'
         }, function (result) {
             if (result) {
-                var url = "{{ URL::to('deleteFaqs')}}";
+                var url = "{{route('deleteFaqs')}}";
                 var _token = CSRF_TOKEN;
                 $('#loader').show();
                 $.ajax({
@@ -80,12 +80,12 @@
                         {
                             $('#loader').hide();
                             $('#adminfaqList').DataTable().row('.selected').remove().draw(false);
-                            swal("Deleted", obj.msg, "success");
+                            swal("@lang('label.adDeleted')", obj.msg, "success");
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         $('#loader').hide();
-                        swal("warning", "Please try again", "error");
+                        swal("warning", "@lang('label.adPlease try again')", "error");
                     }
                 });
             }

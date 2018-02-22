@@ -15,18 +15,18 @@
                         <div class="panel-heading">
                             <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                             <div class="pull-right no-icon">
-                              <a><img src="assets/img/notification-icon.png"></a>  
+                              <a><img src="{{asset('assets/img/notification-icon.png')}}"></a>  
                               <?php
                                     if(!empty($post['post_flagged'])) {
                                ?>
                                    <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                <?php } else { ?>
-                                   <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                   <a href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
                                <?php } ?>
                             </div>
                         </div>
                         <div class="panel-body meetings">
-                            <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                            <h4><a href="{{route('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                             <div class="user-wrap"> 
                                 <div class="user-img"> 
                                     @if(empty($post['post_user']['profile_image']) || $post['is_anonymous'] == 1)
@@ -36,8 +36,8 @@
                                     @endif
                                 </div> 
                                 <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
-                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
-                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                    <a href="{{route('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
+                                    <?php } else { echo __("label.Anonymous"); } ?><span>@lang("label.on") {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                             </div>
                             <fieldset>
                                 <?php /*<p class="desc_content">{{ str_limit($post['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
@@ -47,7 +47,7 @@
                                 if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
                             ?>
                                 <div class="btn-wrap" id="postread{{$post['id']}}">
-                                    <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
+                                    <a href="#" onclick ="postReadMore({{$post['id']}})">@lang("label.ReadMore")</a>
                                 </div>
                             <?php } ?>
                             <div class="panel-body-wrap">
@@ -90,7 +90,7 @@
                                     <span><?php echo count($post['post_comment']); ?></span>
                                 </div>
                                 <div class="status pull-right">
-                                      <p>Status:<span>Active</span></p>
+                                      <p>@lang("label.Status"):<span>@lang("label.Active")</span></p>
                                 </div>  
                             </div> 
                             <?php
@@ -98,7 +98,7 @@
                             ?>
                             <hr>
                             <div class="post-circle">
-                                <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
+                                <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{route('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
                              </div>
                                 <?php } ?>
                         </div>

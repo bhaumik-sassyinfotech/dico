@@ -1,37 +1,20 @@
 @extends('template.default')
-<title>DICO - User</title>
+<title>@lang("label.DICOUser")</title>
 @section('content')
     <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee user-table">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
-                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li class="active">User</li>
+                    <li><a href="{{ route('/home') }}">Dashboard</a></li>
+                    <li class="active">@lang("label.adUser")</li>
                 </ol>
-                <h1 class="tp-bp-0">Users</h1>
+                <h1 class="tp-bp-0">@lang("label.Users")</h1>
                 <div class="options">
                     <div class="btn-toolbar">
                         <a class="btn btn-default" href="{{ route('user.create') }}">
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-6"></i>
-                            <span class="hidden-xs hidden-sm">Create User</span>
+                            <span class="hidden-xs hidden-sm">@lang("label.CreateUser")</span>
                         </a>
-                        <a style="display: none;" class="btn btn-default">
-                            <i class="fa fa-sort fa-6" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Sort</span>
-                        </a>
-                        <div style="display: none;" class="btn-group">
-                            <div class="btn-group color-changes">
-                                <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i
-                                            aria-hidden="true" class="fa fa-filter fa-6"></i><span
-                                            class="hidden-xs hidden-sm">Filter</span> </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Notification off</a></li>
-                                    <li><a href="#">Edit Post</a></li>
-                                    <li><a href="#">Delete Post</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -47,36 +30,36 @@
                                             <div class="btn-toolbar form-group clearfix">
                                                 <ul class="nav nav-tabs">
                                                     <li class="active"><a href="#employee" onclick="superUserGrid(1)" data-toggle="tab" data-order="desc1" data-sort="default" class="btn btn-default sort active ">
-                                                            <i class="fa fa-list visible-xs icon-scale"></i><span class=" hidden-xs">Employee</span></a></li>
+                                                            <i class="fa fa-list visible-xs icon-scale"></i><span class=" hidden-xs">@lang("label.Employee")</span></a></li>
                                                     <li class=""><a href="#users" onclick="superUserGrid(2)" data-toggle="tab" data-order="desc2"
                                                                     data-sort="data-name"
                                                                     class="btn btn-default sort "><span class=""><i
                                                                         class="fa fa-user fa-6 visible-xs"
-                                                                        aria-hidden="true"></i><span class=" hidden-xs">Group Admin</span></a>
+                                                                        aria-hidden="true"></i><span class=" hidden-xs">@lang("label.GroupAdmin")</span></a>
                                                     </li>
                                                     <li class=""><a href="#other-managers" onclick="superUserGrid(3)" data-toggle="tab"
                                                                     data-order="asc" data-sort="data-name"
                                                                     class="btn btn-default sort "><span class=""><i
                                                                         class="fa fa-group visible-xs" aria=""
-                                                                        hidden="true"></i><span class=" hidden-xs">Other Managers</span></a>
+                                                                        hidden="true"></i><span class=" hidden-xs">@lang("label.OtherManagers")</span></a>
                                                     </li>
                                                 </ul>
 
                                                 <div class="btn-group top-set search-form">
                                                     <div method="post" class="search-form">
-                                                        <input id="search_query" type="text" placeholder="Search User"/>
+                                                        <input id="search_query" type="text" placeholder="@lang('label.SearchUser')"/>
                                                         <input type="button" id="search_btn" value="#" class="search-icon"/>
                                                     </div>
                                                     <button id="GoList" class="grid-view">
-                                                        <img src="assets/img/icon/group-list.png" alt="group"
+                                                        <img src="{{asset('assets/img/icon/group-list.png')}}" alt="group"
                                                              class="block">
-                                                        <img src="assets/img/icon/group-lis-hover.png" alt="group"
+                                                        <img src="{{asset('assets/img/icon/group-lis-hover.png')}}" alt="group"
                                                              class="none" style="display:none">
                                                     </button>
                                                     <button id="GoGrid" class="grid-view active">
-                                                        <img src="assets/img/icon/grid-view.png" alt="group list"
+                                                        <img src="{{asset('assets/img/icon/grid-view.png')}}" alt="group list"
                                                              class="block">
-                                                        <img src="assets/img/icon/grid-view-hover.png" alt="group list"
+                                                        <img src="{{asset('assets/img/icon/grid-view-hover.png')}}" alt="group list"
                                                              class="none" style="display:none">
 
                                                     </button>
@@ -123,9 +106,9 @@
                                                                     <img src="{{ $profile_pic }}" alt="super-user">
                                                                 </div>
                                                                 <div class="grid-details">
-                                                                    <h4><a onclick="window.open('<?= url('view_profile', Helpers::encode_url($user->id))?>','_self')" href="{{url('view_profile', Helpers::encode_url($user->id))}}">{{ $user->name }}</a></h4>
+                                                                    <h4><a onclick="window.open('<?= route('view_profile',Helpers::encode_url($user->id));?>','_self')" href="{{route('view_profile',Helpers::encode_url($user->id))}}">{{ $user->name }}</a></h4>
                                                                     <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
-                                                                    <h4>Employee</h4>
+                                                                    <h4>@lang("label.Employee")</h4>
                                                                 </div>
 
                                                             </fieldset>
@@ -134,23 +117,23 @@
                                                                     $text = "";
                                                                     if(!empty($user->followers) && count($user->followers) > 0)
                                                                     {
-                                                                        $text = "Following";
+                                                                        $text = __('label.Following');
                                                                     } else {
-                                                                        $text = "Follow";
+                                                                        $text = __('label.Follow');
                                                                     }
-                                                                    $url = url('view_profile/'.Helpers::encode_url($user->id));
+                                                                    $url = route('view_profile',Helpers::encode_url($user->id));
                                                                 @endphp
-                                                                <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ url('view_profile/'.Helpers::encode_url($user->id)) }}">{{ $text }}</a>
+                                                                <a onclick="window.open('{{ $url }}' ,'_self')" href="{{ $url }}">{{ $text }}</a>
                                                                 <?php $pts = Helpers::user_points($user->id);?>
-                                                                <a href="#">Point:{{ $pts['points'] }}</a>
+                                                                <a href="#">@lang("label.Point"):{{ $pts['points'] }}</a>
 
                                                             </div>
                                                             <div class="panel-body-wrap">
                                                                 <div class="follower-text pull-left">
-                                                                    <p>Followers:<span>{{ $user->followers_count }}</span></p>
+                                                                    <p>@lang("label.Followers"):<span>{{ $user->followers_count }}</span></p>
                                                                 </div>
                                                                 <div class="follower-text pull-right">
-                                                                    <p>Following:<span>{{ count($user->following) }}</span></p>
+                                                                    <p>@lang("label.Following"):<span>{{ count($user->following) }}</span></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -159,7 +142,7 @@
                                                 @endforeach
                                                 @if($users_count > POST_DISPLAY_LIMIT)
                                                 <div class="all_viewmore col-md-12">
-                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">View More</a>
+                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMoreUser()" data-id="0">@lang("label.ViewMore")</a>
                                                 </div>
                                                 @endif
 
@@ -177,10 +160,10 @@
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info" style="overflow-x:auto;">
                                                                 <div class="panel-heading trophy">
-                                                                    <h4 class="icon">Users List</h4>
+                                                                    <h4 class="icon">@lang("label.UsersList")</h4>
                                                                     <div class="pull-right">
                                                                         <a href="{{ url('setting') }}"><img
-                                                                                    src="assets/img/settings-icon.png"
+                                                                                    src="{{asset('assets/img/settings-icon.png')}}"
                                                                                     alt="settings"></a>
                                                                     </div>
                                                                 </div>
@@ -190,16 +173,16 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>
-                                                                                        <label class="check checkAll">User Name<input type="checkbox" class="checkAllBox">
+                                                                                        <label class="check checkAll">@lang("label.UserName")<input type="checkbox" class="checkAllBox">
                                                                                             <span class="checkmark"></span>
                                                                                         </label>
                                                                                     </th>
-                                                                                    <th><label>User Email Id</label></th>
-                                                                                    <th><label>Role</label></th>
-                                                                                    <th><label>Following</label></th>
-                                                                                    <th><label>Followers</label></th>
-                                                                                    <th><label>Points</label></th>
-                                                                                    <th><label>Action</label></th>
+                                                                                    <th><label>@lang("label.UserEmailId")</label></th>
+                                                                                    <th><label>@lang("label.Role")</label></th>
+                                                                                    <th><label>@lang("label.Following")</label></th>
+                                                                                    <th><label>@lang("label.Followers")</label></th>
+                                                                                    <th><label>@lang("label.adPoints")</label></th>
+                                                                                    <th><label>@lang("label.adAction")</label></th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -207,17 +190,17 @@
                                                                         </table>
                                                                         <div class="notice">
                                                                             <div class="action notice-left"><p>
-                                                                                    Action</p></div>
+                                                                                    @lang("label.adAction")</p></div>
                                                                             <div class="select notice-left">
                                                                                 <select name="slct" id="slct" class="action">
-                                                                                    <option value="">---Select---</option>
-                                                                                    <option value="active">Active</option>
-                                                                                    <option value="inactive">Inactive</option>
-                                                                                    <option value="suspend">Suspend</option>
+                                                                                    <option value="">---@lang("label.Select")---</option>
+                                                                                    <option value="active">@lang("label.Active")</option>
+                                                                                    <option value="inactive">@lang("label.Inactive")</option>
+                                                                                    <option value="suspend">@lang("label.Suspend")</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                               <input type="button" name="" class="st-btn multiple-action user_multiple_action" value="Submit">
+                                                                               <input type="button" name="" class="st-btn multiple-action user_multiple_action" value="@lang('label.adSubmit')">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -236,10 +219,10 @@
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info" style="overflow-x:auto;">
                                                                 <div class="panel-heading trophy">
-                                                                    <h4 class="icon">Users List</h4>
+                                                                    <h4 class="icon">@lang("label.UsersList")</h4>
                                                                     <div class="pull-right">
                                                                         <a href="{{ url('setting') }}"><img
-                                                                                    src="assets/img/settings-icon.png"
+                                                                                    src="{{asset('assets/img/settings-icon.png')}}"
                                                                                     alt="settings"></a>
                                                                     </div>
                                                                 </div>
@@ -249,17 +232,16 @@
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>
-                                                                                    <label class="check checkAll">Group Manager
-                                                                                        Details<input type="checkbox" class="checkAllBox">
+                                                                                    <label class="check checkAll">@lang("label.GroupManagerDetails")<input type="checkbox" class="checkAllBox">
                                                                                         <span class="checkmark"></span>
                                                                                     </label>
                                                                                 </th>
-                                                                                <th><label>Role</label></th>
-                                                                                <th><label>Groups</label></th>
-                                                                                <th><label>Following</label></th>
-                                                                                <th><label>Followers</label></th>
-                                                                                <th><label>Points</label></th>
-                                                                                <th><label>Action</label></th>
+                                                                                <th><label>@lang("label.Role")</label></th>
+                                                                                <th><label>@lang("label.Groups")</label></th>
+                                                                                <th><label>@lang("label.Following")</label></th>
+                                                                                <th><label>@lang("label.Followers")</label></th>
+                                                                                <th><label>@lang("label.adPoints")</label></th>
+                                                                                <th><label>@lang("label.adAction")</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -268,17 +250,17 @@
                                                                         </table>
                                                                         <div class="notice">
                                                                             <div class="action notice-left"><p>
-                                                                                    Action</p></div>
+                                                                                    @lang("label.adAction")</p></div>
                                                                             <div class="select notice-left">
                                                                                 <select name="slct" id="slct" class="action">
-                                                                                    <option value="">---Select---</option>
-                                                                                    <option value="active">Active</option>
-                                                                                    <option value="inactive">Inactive</option>
-                                                                                    <option value="suspend">Suspend</option>
+                                                                                    <option value="">---@lang("label.Select")---</option>
+                                                                                    <option value="active">@lang("label.Active")</option>
+                                                                                    <option value="inactive">@lang("label.Inactive")</option>
+                                                                                    <option value="suspend">@lang("label.Suspend")</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                               <input type="button" name="" class="st-btn multiple-action user_multiple_action" value="Submit">
+                                                                               <input type="button" name="" class="st-btn multiple-action user_multiple_action" value="@lang('label.adSubmit')">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -296,10 +278,10 @@
                                                         <div class="col-md-12">
                                                             <div class="panel panel-info" style="overflow-x:auto;">
                                                                 <div class="panel-heading trophy">
-                                                                    <h4 class="icon">Users List</h4>
+                                                                    <h4 class="icon">@lang("label.UsersList")</h4>
                                                                     <div class="pull-right">
                                                                         <a href="{{ url('setting') }}"><img
-                                                                                    src="assets/img/settings-icon.png"
+                                                                                    src="{{asset('assets/img/settings-icon.png')}}"
                                                                                     alt="settings"></a>
                                                                     </div>
                                                                 </div>
@@ -309,18 +291,18 @@
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>
-                                                                                    <label class="check">User Name<input
+                                                                                    <label class="check">@lang("label.UserName")<input
                                                                                                 type="checkbox">
                                                                                         <span class="checkmark"></span>
                                                                                     </label>
                                                                                 </th>
-                                                                                <th><label>User Email Id</label></th>
-                                                                                <th><label>Role</label></th>
-                                                                                <th><label>Position</label></th>
-                                                                                <th><label>Following</label></th>
-                                                                                <th><label>Followers</label></th>
-                                                                                <th><label>Points</label></th>
-                                                                                <th><label>Action</label></th>
+                                                                                <th><label>@lang("label.UserEmailId")</label></th>
+                                                                                <th><label>@lang("label.Role")</label></th>
+                                                                                <th><label>@lang("label.Position")</label></th>
+                                                                                <th><label>@lang("label.Following")</label></th>
+                                                                                <th><label>@lang("label.Followers")</label></th>
+                                                                                <th><label>@lang("label.adPoints")</label></th>
+                                                                                <th><label>@lang("label.adAction")</label></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -380,7 +362,7 @@
             else if(tab_id == 3)
                 var new_url = '/user/otherManagersGrid';
             $.ajax({
-                url: SITE_URL+new_url,
+                url: SITE_URL +'/'+LANG +new_url,
                 type: "POST",
                 data: formData,
                 async:true,

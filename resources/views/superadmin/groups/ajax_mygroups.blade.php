@@ -28,17 +28,17 @@
                         <img src="{{ $profile_pic }}" alt="super-user">
                     </div>
                     <div class="grid-details">
-                        <h4 class="profanity"> <span><a href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}" >{{ $group['group_name'] }}</a></span>  </h4>
-                        <h4 class="profanity">{{ $group['description']}}</h4>
+                        <h4><a class="profanity" href="{{ route('group.edit',[Helpers::encode_url($group['id'])]) }}"> {{ $group['group_name'] }} </a></h4>
+                        <h4 class="profanity"> {{ $group['description'] }} </h4>
                     </div>
                 </fieldset>
                 <hr>
                 <div class="panel-body-wrap">
                     <div class="follower-text pull-left">
-                        <p>Members:<span>{{ $group['group_users_count'] }}</span></p>
+                        <p>@lang("label.Members"):<span>{{ $group['group_users_count'] }}</span></p>
                     </div>
                     <div class="follower-text pull-right">
-                        <p>Posts:<span>{{ $group['group_posts_count'] }}</span></p>
+                        <p>@lang("label.Posts"):<span>{{ $group['group_posts_count'] }}</span></p>
                     </div>
                 </div>
             </div>
@@ -47,11 +47,11 @@
     @endforeach
 
     <div class="all_viewmore col-md-12">
-        <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
+        <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">@lang("label.ViewMore")</a>
     </div>
 
 @else
     <div class="col-md-12">
-        <p>No Data found.</p>
+        <p>@lang("label.NoDatafound")</p>
     </div>
 @endif

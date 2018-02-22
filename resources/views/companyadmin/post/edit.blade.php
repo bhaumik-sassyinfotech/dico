@@ -1,15 +1,15 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>@lang("label.DICOPost")</title>
 @section('content')
 <div id="page-content" class="post-details create-post">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li><a href="{{ route('post.index') }}">Post</a></li>
-                <li class="active">Edit Post</li>
+                <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{ route('post.index') }}">@lang("label.adPost")</a></li>
+                <li class="active">@lang("label.EditPost")</li>
             </ol>
-            <h1 class="tp-bp-0">Edit Post</h1>
+            <h1 class="tp-bp-0">@lang("label.EditPost")</h1>
             <hr class="border-out-hr">
         </div>
         <div class="container">
@@ -17,21 +17,21 @@
                 {!! Form::model($post, ['method' => 'PUT', 'route' => ['post.update', $post->id],'enctype'=>'multipart/form-data', 'id' => 'post_form', 'class'=>'common-form']) !!}
                     <div class="col-sm-8" id="post-detail-left">
                         <div class="form-group">
-                            <label class="text-15">Post<span>*</span></label>
+                            <label class="text-15">@lang("label.adPost")<span>*</span></label>
                             <div class="check-wrap box-check">
-                                <div class="check <?php if($post->post_type == 'idea') { echo "idea-check";}?>">Idea    
+                                <div class="check <?php if($post->post_type == 'idea') { echo "idea-check";}?>">@lang("label.Idea")    
                                     <input type="checkbox" name="post_type" class="post_type check idea-check" id="post_type_idea" onclick="return false;" value="idea" <?php if($post->post_type == 'idea') { echo "checked"; } ?>>
                                      <label for="post_type_idea"> 
                                          <span class="checked idea-checked"></span>
                                       </label>    
                                 </div>
-                                <div class="check <?php if($post->post_type == 'question') { echo "question-check";}?>">Question    
+                                <div class="check <?php if($post->post_type == 'question') { echo "question-check";}?>">@lang("label.Question")    
                                     <input type="checkbox" name="post_type" class="post_type check question-check" id="post_type_question" onclick="return false;" value="question" <?php if($post->post_type == 'question') { echo "checked"; } ?>>
                                      <label for="post_type_question"> 
                                          <span class="checked question-checked"></span>
                                       </label>    
                                 </div>
-                                <div class="check <?php if($post->post_type == 'challenge') { echo "challenges-check";}?>">Challenge    
+                                <div class="check <?php if($post->post_type == 'challenge') { echo "challenges-check";}?>">@lang("label.Challenge")    
                                     <input type="checkbox" name="post_type" class="post_type check challenge-check" id="post_type_challenge" onclick="return false;" value="challenge" <?php if($post->post_type == 'challenge') { echo "checked"; } ?>>
                                      <label for="post_type_challenge"> 
                                          <span class="checked challenges-checked"></span>
@@ -41,12 +41,12 @@
                             <div id="err_post_type"></div>
                         </div>
                         <div class="form-group">
-                            <label>Post Title<span>*</span></label>
-                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="Post Title" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
+                            <label>@lang("label.PostTitle")<span>*</span></label>
+                            <input type="text" name="post_title" id="post_title" value="{{$post->post_title}}" placeholder="@lang('label.PostTitle')" maxlength="{{POST_TITLE_LIMIT}}" class="form-control required">
                         </div>
                         <div class="form-group">
-                            <label>Post Description</label>
-                            <textarea name="post_description" id="post_description" placeholder="Post Description" class="form-control">{{$post->post_description}}</textarea>
+                            <label>@lang("label.PostDescription")</label>
+                            <textarea name="post_description" id="post_description" placeholder="@lang('label.PostDescription')" class="form-control">{{$post->post_description}}</textarea>
                         </div>
                         <?php /* ?><div class="form-group">
                             <span class="btn btn-primary fileinput-button">
@@ -83,11 +83,11 @@
                             if(isset($company) && $company->allow_anonymous == 1) {
                         ?>
                         
-                            <label class="check">Post as Anonymous<input type="checkbox" name="is_anonymous" id="is_anonymous" <?php if($post->is_anonymous == 1) { echo "checked"; } ?>>
+                            <label class="check">@lang("label.PostasAnonymous")<input type="checkbox" name="is_anonymous" id="is_anonymous" <?php if($post->is_anonymous == 1) { echo "checked"; } ?>>
                             <span class="checkmark"></span></label>
                         <?php } ?>    
-                            <a href="{{ route('post.index') }}" class="st-btn">Back</a>
-                            <input type="submit" name="save" id="save" value="Submit" class="st-btn">
+                            <a href="{{ route('post.index') }}" class="st-btn">@lang("label.adBack")</a>
+                            <input type="submit" name="save" id="save" value="@lang('label.Submit')" class="st-btn">
                             <?php /*<div class="upload-btn-wrapper">
                                 <button class="upload-btn fileinput-button">Upload Files</button>
                                 <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
@@ -128,7 +128,7 @@
                         <div class="category">
                             <div class="main-group-wrap">
                                 <div class="category-tab tp-bp-0"> 
-                                    <label class="check">Groups<input type="checkbox" name="user_groups_all" id="checkAll">
+                                    <label class="check">@lang("label.Groups")<input type="checkbox" name="user_groups_all" id="checkAll">
                                       <span class="checkmark"></span>
                                   </label>
                                 </div>
@@ -149,7 +149,7 @@
                                      </label>
                                 </div> 
                                 <?php } } else { ?>
-                                 <div class="category-detials">No group found.</div>
+                                 <div class="category-detials">@lang("label.NoGroupfound")</div>
                                 <?php } ?>
                             </div>
                         </div>
@@ -159,20 +159,20 @@
                                //echo $post['postAttachment']['file_name']; 
                         ?>
                         <div class="category">
-                            <h2>Uploaded Files</h2>
+                            <h2>@lang("label.UploadedFiles")Files</h2>
                             <div class="wrap-name-upload">
                                 <div class="select">
                                     <select id="slct" name="slct">
-                                            <option>Name</option>
-                                            <option>Admin</option>
-                                            <option value="Super User">Super User</option>
-                                            <option value="Employee">Employee</option>
+                                            <option>@lang("label.adName")</option>
+                                            <option>@lang("label.Admin")</option>
+                                            <option value="Super User">@lang("label.SuperUser")</option>
+                                            <option value="Employee">@lang("label.Employee")</option>
                                     </select>
                                 </div>
                                 <div class="upload-btn-wrapper">
                                     <form name="uploadfile" id="uploadfile" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="postId" id="postId" value="{{$post['id']}}">
-                                        <button class="btn" id="uploadBtn">Upload File</button>
+                                        <button class="btn" id="uploadBtn">@lang("label.UploadFile")</button>
                                         <input name="file_upload" id="file_upload" type="file" onchange="uploadFile();">
                                     </form>
                                 </div>
@@ -190,12 +190,12 @@
                                     </div>
                                     <div class="member-details">
                                         <h3 class="text-10">{{$attachment['file_name']}}</h3>
-                                        <p>Uploaded By:<a href="#">{{$attachment['attachmentUser']['name']}}</a></p>
+                                        <p>@lang("label.UploadedBy"):<a href="#">{{$attachment['attachmentUser']['name']}}</a></p>
                                     </div>
                                 </div>    
                                     <?php } }
                                         else {
-                                            echo "<p class='text-12'>No files uploaded.</p>";
+                                            echo "<p class='text-12'>".__('label.Nofilesuploaded')."</p>";
                                         }
                                     ?>
                             </div> 
@@ -214,7 +214,7 @@
             var sampleTags = [];
             //$(document).ready(function() {
                 $.ajax({
-                    url: SITE_URL + '/tags',
+                    url: SITE_URL +'/'+LANG + '/tags',
                     type: 'GET',
                     success: function(response) {
                         var res = JSON.parse(response);

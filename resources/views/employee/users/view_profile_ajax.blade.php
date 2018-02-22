@@ -24,10 +24,10 @@
                     </p>
                     <div class="panel-body-wrap">
                         <div class="follower-text pull-left">
-                            <p>Total Posts:<span>{{ $group->total_posts }}</span></p>
+                            <p>@lang("label.TotalPosts"):<span>{{ $group->total_posts }}</span></p>
                         </div>
                         <div class="follower-text pull-right">
-                            <p>Total Members:<span>{{ $group->total_members }}</span></p>
+                            <p>@lang("label.TotalMembers"):<span>{{ $group->total_members }}</span></p>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
 @else
     <div class="row">
         <div class="col-xs-12">
-            <p>No data found.</p>
+            <p>@lang("label.NoDatafound")</p>
         </div>
     </div>
 @endif

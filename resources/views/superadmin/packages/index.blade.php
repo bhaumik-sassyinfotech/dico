@@ -1,15 +1,15 @@
 @extends('template.default')
-<title>DICO - Packages</title>
+<title>@lang("label.adDICO - Packages")</title>
 @section('content')
 
 <div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li class="active">Packages</li>
+                <li><a href="{{ url('/home') }}">@lang("label.adDashboard")</a></li>
+                <li class="active">@lang("label.adPackages")</li>
             </ol>
-            <h1>Packages</h1>
+            <h1>@lang("label.adPackages")</h1>
             <div class="options">
                 <div class="btn-toolbar">
                     
@@ -23,7 +23,7 @@
                     <div class="panel-body">
                             <div class="panel panel-info " style="overflow-x:auto;">
                             <div class="panel-heading trophy">
-                                <h4 class="icon">Packages</h4>
+                                <h4 class="icon">@lang("label.adPackages")</h4>
                             </div>
                             <div class="panel-body">
                             <table class="table table-bordered table-striped" id="packageList">

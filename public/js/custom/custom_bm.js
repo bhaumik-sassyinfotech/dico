@@ -57,7 +57,7 @@ $(document).ready(function () {
         var userId = $('#employees_listing').val();
         var dataString = {_token:CSRF_TOKEN,user_id: userId};
         e.preventDefault();
-        // console.log(SITE_URL+'/getUserProfile');
+        // console.log( SITE_URL +'/'+LANG+'/getUserProfile');
          console.log(dataString);
         var ajaxURL = '/dico/getUserProfile';
         $.ajax({
@@ -172,7 +172,7 @@ var groupTable = $('#group_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/group/list',
+        url:  SITE_URL +'/'+LANG + '/group/list',
         data: function (d) {
             d.search_text = $("#search_query").val();
         }
@@ -196,7 +196,7 @@ var groupEditTable = $("#group_users_edit_table").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/group/editUsers',
+        url:  SITE_URL +'/'+LANG + '/group/editUsers',
         data: function (d) {
             d.group_id   = $("#group_id").val();
             d.company_id = $("#company_id").val();
@@ -237,7 +237,7 @@ $(document).on('click', '.promoteToAdmin', function (event) {
         },
         function () {
             $.ajax({
-                url: SITE_URL + '/group/editUsers',
+                url:  SITE_URL +'/'+LANG + '/group/editUsers',
                 method: 'POST',
                 data: dataString,
                 success: function (response) {
@@ -279,7 +279,7 @@ $(document).on('click', '.demoteToUser', function (event) {
             };
 
             $.ajax({
-                url: SITE_URL + '/group/editUsers',
+                url:  SITE_URL +'/'+LANG + '/group/editUsers',
                 method: 'POST',
                 data: dataString,
                 success: function (response) {
@@ -321,7 +321,7 @@ $(document).on('click', '.removeUser', function (event) {
                 removeFromGroup: 1
             };
             $.ajax({
-                url: SITE_URL + '/group/editUsers',
+                url:  SITE_URL +'/'+LANG + '/group/editUsers',
                 method: 'POST',
                 data: dataString,
                 success: function (response) {
@@ -384,7 +384,7 @@ $(document).on('click','.addUserToGroup',function()
         };
 
         $.ajax({
-            url: SITE_URL + '/group/addUserByEmailAddress',
+            url:  SITE_URL +'/'+LANG + '/group/addUserByEmailAddress',
             method: "POST",
             data: dataString,
             success: function (response) {
@@ -413,7 +413,7 @@ $("#add_user").click(function (event) {
         };
         $.ajax({
             method: "POST",
-            url: SITE_URL + '/group/editUsers',
+            url:  SITE_URL +'/'+LANG + '/group/editUsers',
             data: dataString,
             success: function (response) {
                 var status = response.status;
@@ -436,7 +436,7 @@ function companyUsers() {
     var groupId = $("#group_id").val();
     var dataString = {_token: CSRF_TOKEN, company_id: companyId, group_id: groupId, getGroupUsers: 1};
     $.ajax({
-        url: SITE_URL + '/group/editUsers',
+        url:  SITE_URL +'/'+LANG + '/group/editUsers',
         method: 'POST',
         data: dataString,
         success: function (response) {
@@ -465,7 +465,7 @@ $("#company_id").change(function () {
     var dataString = {_token: CSRF_TOKEN, companyId: company_id};
     $.ajax({
         method: "POST",
-        url: SITE_URL + '/user/getCompanyGroups',
+        url:  SITE_URL +'/'+LANG + '/user/getCompanyGroups',
         data: dataString,
         success: function (response) {
             groupDropDown.empty();
@@ -521,7 +521,7 @@ $('.ideaStatus').click(function (ev) {
             }
             dataString.idea_reason = inputValue;
             $.ajax({
-                url: SITE_URL + '/post/change-status',
+                url:  SITE_URL +'/'+LANG + '/post/change-status',
                 method: "POST",
                 data: dataString,
                 success: function (response) {
@@ -563,7 +563,7 @@ $("#meeting_table").DataTable({
     serverSide: true,
     searching: false,
     ajax: {
-        url: SITE_URL + '/meeting/list',
+        url:  SITE_URL +'/'+LANG + '/meeting/list',
         data: function (d) {
             d.group_id = $("#group_id").val();
             d.company_id = $("#company_id").val();
@@ -619,7 +619,7 @@ $('.delete_post_btn').click(function () {
         },
         function () {
             $.ajax({
-                url: SITE_URL + '/group/editUsers',
+                url:  SITE_URL +'/'+LANG + '/group/editUsers',
                 method: 'POST',
                 data: dataString,
                 success: function (response) {
@@ -650,7 +650,7 @@ $(document).on('click','.leaveMeeting',function () {
     var meeting_id = $("#meeting_id").val();
     var dataString = {_token: CSRF_TOKEN , meeting_id:meeting_id };
     $.ajax({
-        url:SITE_URL+'/meeting/leaveMeeting',
+        url: SITE_URL +'/'+LANG+'/meeting/leaveMeeting',
         data: dataString,
         method: "POST",
         success: function (response)
@@ -690,7 +690,7 @@ function superUserGrid(type)
         url = '/user/otherManagersGrid';
     var search_text = $.trim($("#search_query").val());
     // console.log(url);
-    new_url = SITE_URL+url;
+    new_url =  SITE_URL +'/'+LANG+url;
     var dataString = { _token : CSRF_TOKEN , search : search_text };
     $("#display-grid").empty();
     $.ajax({
@@ -738,7 +738,7 @@ $(document).on('click',"#search_btn",function(){
     }
     var search_text = $.trim($("#search_query").val());
     
-    new_url = SITE_URL+url;
+    new_url =  SITE_URL +'/'+LANG+url;
     var dataString = { _token : CSRF_TOKEN , search : search_text,offset:0 };
     console.log(dataString);
     $("#display-grid").empty();
@@ -775,7 +775,7 @@ var employeeTable_superadmin = $("#emp-table").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/user/employeeList',
+        url:  SITE_URL +'/'+LANG + '/user/employeeList',
         data: function (d) {
             d.role_id      = $("#role_id").val();
             d.search_query = $("#search_query").val();
@@ -798,7 +798,7 @@ var otherManagerTable_superadmin = $("#other-managers-table").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/user/otherManagersList',
+        url:  SITE_URL +'/'+LANG + '/user/otherManagersList',
         data: function (d) {
             // d.role_id      = $("#role_id").val();
             d.search_query = $("#search_query").val();
@@ -821,7 +821,7 @@ var companyManagerTable_superadmin = $("#company-manager-table").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/user/adminList',
+        url:  SITE_URL +'/'+LANG + '/user/adminList',
         data: function (d) {
             // d.role_id      = $("#role_id").val();
             d.search_query = $.trim($("#search_query").val());
@@ -847,7 +847,7 @@ $(document).on('click',"#search_group_btn",function(){
     dataString = {_token: CSRF_TOKEN,user_id: uid ,search:search_text};
     $("#view_user_groups").empty();
     $.ajax({
-        url: SITE_URL+"/group/search",
+        url:  SITE_URL +'/'+LANG+"/group/search",
         data: dataString,
         method:"POST",
         success: function(response){
@@ -864,7 +864,7 @@ $(document).on('click',"#search_post_btn",function(){
     dataString = {_token: CSRF_TOKEN,user_id: uid ,search:search_text};
     $("#view_posts").empty();
     $.ajax({
-        url: SITE_URL+"/searchPost",
+        url:  SITE_URL +'/'+LANG+"/searchPost",
         data: dataString,
         method:"POST",
         success: function(response){
@@ -890,7 +890,7 @@ function groupGrid(type)
 
     var search_text = $.trim($("#search_query").val());
     // console.log(url);
-    new_url = SITE_URL+url;
+    new_url =  SITE_URL +'/'+LANG+url;
     var dataString = { _token : CSRF_TOKEN , offset: 0 , search : search_text, type : type};
     $("#display-grid").empty();
     $.ajax({
@@ -965,7 +965,7 @@ $(document).on('click','.multiple-action',function(){
                 }
 
                     $.ajax({
-                        url: SITE_URL + temp_url,
+                        url:  SITE_URL +'/'+LANG + temp_url,
                         method: 'POST',
                         data: dataString,
                         success: function (response) 
@@ -993,7 +993,7 @@ var pointsListing = $("#points-listing").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/points/listing',
+        url:  SITE_URL +'/'+LANG + '/points/listing',
         data: function (d) {
             // d.role_id      = $("#role_id").val();
             // d.search_query = $("#search_query").val();
@@ -1018,7 +1018,7 @@ var editProfile = $("#editProfile").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/points/listing',
+        url:  SITE_URL +'/'+LANG + '/points/listing',
         data: function (d) {
             d.user_id      = $.trim($("#user_id").val());
             // d.search_query = $("#search_query").val();
@@ -1047,7 +1047,7 @@ var my_group_points = $("#my-group-points").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: SITE_URL + '/points/my_group_users',
+        url:  SITE_URL +'/'+LANG + '/points/my_group_users',
         data: function (d) {
             // d.user_id      = $.trim($("#user_id").val());
         }
@@ -1085,7 +1085,7 @@ $("#create_group_modal").validate({
 
 
         $.ajax({
-            url: SITE_URL+"/group/addGroup",
+            url:  SITE_URL +'/'+LANG+"/group/addGroup",
             method: "POST",
             data: dataString,
             success: function(response){
@@ -1103,7 +1103,7 @@ function saveGroupDesc() {
     var desc = $('#group_desc').val();
     var dataString = { _token : CSRF_TOKEN , group_id: group_id , description : desc };
     $.ajax({
-        url: SITE_URL + '/group/groupUpdate',
+        url:  SITE_URL +'/'+LANG + '/group/groupUpdate',
         method: 'POST',
         data: dataString,
         success: function (response) 

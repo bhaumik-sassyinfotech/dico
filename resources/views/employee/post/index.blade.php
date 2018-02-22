@@ -1,18 +1,21 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>@lang("label.DICOPost")</title>
 @section('content')
+<?php 
+    $language = App::getLocale();
+?>
 
 <div id="page-content" class="group-listing posts">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-               <li><a href="{{ url('/home') }}">Dashboard</a></li>
-               <li class="active">Post</li>
+               <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+               <li class="active">@lang("label.adPost")</li>
             </ol>
-            <h1 class="tp-bp-0">Post</h1>
+            <h1 class="tp-bp-0">@lang("label.adPost")</h1>
             <div class="options">
                 <div class="btn-toolbar">
-                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">New Post</span></a>
+                        <a href="{{ route('post.create') }}" class="btn btn-default"><i class="fa fa-pencil-square-o fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm">@lang("label.NewPost")</span></a>
                     <div class="btn-group">
                         <a href="#" style="display: none;" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter fa-6" aria-hidden="true"></i><span class="hidden-xs hidden-sm hidden-md">Filter</span> </a>
 
@@ -28,14 +31,14 @@
                         <div class="panel-heading">
                             <h4>
                                 <ul class="nav nav-tabs">
-                                       <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Posts</span></a></li>
-                                       <li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Group Posts</span></a></li>
-                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">My Posts</span></a></li>
+                                       <li class="active"><a href="#threads" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">@lang("label.AllPosts")</span></a></li>
+                                       <li class=""><a href="#groups" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">@lang("label.MyGroupPosts")</span></a></li>
+                                       <li class=""><a href="#users" data-toggle="tab" onclick="document.getElementById('search_text').value = '';"><i class="fa fa-group visible-xs icon-scale"></i><span class="hidden-xs">@lang("label.MyPosts")</span></a></li>
                                 </ul>
                             </h4>
                             <div class="pull-right search-form">
                                   <!-- <form method="post" class="search-form">-->
-                                      <input type="text" name="search_text" id="search_text" placeholder="Search  Posts">
+                                      <input type="text" name="search_text" id="search_text" placeholder="@lang('label.SearchPost')">
                                       <input type="button" value="#" onclick="searchPost();" class="search-icon">
                                   <!-- </form>-->
                             </div>
@@ -61,18 +64,18 @@
                                                          <div class="panel-heading">
                                                              <h4 class="icon">{{ucfirst($post['post_type'])}}</h4>
                                                              <div class="pull-right no-icon">
-                                                                <a><img src="assets/img/notification-icon.png"></a>
+                                                                <a><img src="{{asset('assets/img/notification-icon.png')}}"></a>
                                                                 <?php
                                                                      if(!empty($post['post_flagged'])) {
                                                                 ?>
                                                                     <a class="" href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                                                 <?php } else { ?>
-                                                                    <a class="" href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                    <a class="" href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
                                                                 <?php } ?>
                                                              </div>
                                                          </div>
                                                          <div class="panel-body meetings">
-                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                             <h4><a href="{{route('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">
                                                                     @if(empty($post['post_user']['profile_image']) || $post['is_anonymous'] == 1)
@@ -82,8 +85,8 @@
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
-                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                                    <a href="{{route('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
+                                                                    <?php } else { echo __("label.Anonymous"); } ?><span>@lang("label.on") {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              </div>
 
                                                              <fieldset>
@@ -94,7 +97,7 @@
                                                                 if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
                                                              ?>
                                                                 <div class="btn-wrap" id="postread{{$post['id']}}">
-                                                                   <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
+                                                                   <a href="#" onclick ="postReadMore({{$post['id']}})">@lang("label.ReadMore")</a>
                                                                 </div>
                                                              <?php
                                                                 }
@@ -139,7 +142,7 @@ if (!empty($post['post_comment'])) {
                                                                      <span><?php echo count($post['post_comment']); ?></span>
                                                                  </div>
                                                                  <div class="status pull-right">
-                                                                       <p>Status:<span>Active</span></p>
+                                                                       <p>@lang("label.Status"):<span>@lang("label.Active")</span></p>
                                                                  </div>
                                                              </div>
                                                              <?php
@@ -147,7 +150,7 @@ if (!empty($post['post_tag'])) {
 			?>
                                                              <hr>
                                                              <div class="post-circle">
-                                                                 <?php foreach ($post['post_tag'] as $post_tag) {?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?=$post_tag['tag']['tag_name'];?></a><?php }?>
+                                                                 <?php foreach ($post['post_tag'] as $post_tag) {?><a href="{{url($language.'/tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?=$post_tag['tag']['tag_name'];?></a><?php }?>
                                                               </div>
                                                                  <?php }?>
                                                          </div>
@@ -156,7 +159,7 @@ if (!empty($post['post_tag'])) {
                                     <?php
 }
 } else {
-    echo '<p class="postlist">No post found.</p>';
+    echo '<p class="postlist">'.__("label.Nopostfound").'</p>';
 	//echo "No post found.";
 }
 ?>
@@ -165,7 +168,7 @@ if (!empty($post['post_tag'])) {
                                     <?php if (!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
 	?>
                                     <div class="all_viewmore col-md-12">
-                                        <a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a>
+                                        <a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">@lang("label.ViewMore")</a>
                                     </div>
                                     <?php
 }?>
@@ -190,19 +193,19 @@ if (!empty($post['post_tag'])) {
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($grouppost['post_type'])}}</h4>
                                                                 <div class="pull-right no-icon">
-                                                                  <a><img src="assets/img/notification-icon.png"></a>
+                                                                  <a><img src="{{asset('assets/img/notification-icon.png')}}"></a>
                                                                   <?php
                                                                      if(!empty($grouppost['post_flagged'])) {
                                                                 ?>
                                                                     <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                                                 <?php } else { ?>
-                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                    <a href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
                                                                 <?php } ?>
 
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body meetings">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity post-title">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <h4><a href="{{route('viewpost', Helpers::encode_url($grouppost['id']))}}" class="profanity post-title">{{ str_limit($grouppost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
                                                                     @if(empty($grouppost['post_user']['profile_image']) || $grouppost['is_anonymous'] == 1)
@@ -212,8 +215,8 @@ if (!empty($post['post_tag'])) {
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($grouppost['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}" class="user-a-post">{{$grouppost['post_user']['name']}}</a>
-                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
+                                                                    <a href="{{route('view_profile', Helpers::encode_url($grouppost['post_user']['id']))}}" class="user-a-post">{{$grouppost['post_user']['name']}}</a>
+                                                                    <?php } else { echo __("label.Anonymous"); } ?><span>@lang("label.on") {{date(DATE_FORMAT,strtotime($grouppost['created_at']))}}</span></p>
                                                                 </div>
                                                                 <fieldset>
                                                                    <?php /*<p class="desc-content" id="desc_mycontent_{{$post['id']}}">{{ str_limit($mypost['post_description'], $limit = POST_DESCRIPTION_LIMIT, $end = '...') }}</p>*/?>
@@ -223,7 +226,7 @@ if (!empty($post['post_tag'])) {
                                                                     if(strlen($grouppost['post_description']) > POST_DESCRIPTION_LIMIT) {
                                                                 ?>
                                                                 <div class="btn-wrap" id="mypostread{{$grouppost['id']}}">
-                                                                   <a href="#" onclick ="mypostReadMore({{$grouppost['id']}})">Read More</a>
+                                                                   <a href="#" onclick ="mypostReadMore({{$grouppost['id']}})">@lang("label.ReadMore")</a>
                                                                 </div>
                                                                     <?php } ?>
                                                                 <div class="panel-body-wrap">
@@ -266,7 +269,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                         <span><?php echo count($grouppost['post_comment']); ?></span>
                                                                     </div>
                                                                     <div class="status pull-right">
-                                                                          <p>Status:<span>Active</span></p>
+                                                                          <p>@lang("label.Status"):<span>@lang("label.Active")</span></p>
                                                                     </div>
                                                                 </div>
                                                                 <?php
@@ -274,7 +277,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                 ?>
                                                                 <hr>
                                                                 <div class="post-circle">
-                                                                    <?php foreach ($grouppost['post_tag'] as $mypost_tag) {?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
+                                                                    <?php foreach ($grouppost['post_tag'] as $mypost_tag) {?><a href="{{route('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
                                                                  </div>
                                                                     <?php }?>
                                                             </div>
@@ -283,7 +286,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                     <?php
                                         }
                                         } else {
-                                            echo '<p class="postlist">No post found.</p>';
+                                            echo '<p class="postlist">'.__("label.Nopostfound").'</p>';
                                                 //echo "No post found.";
                                         }
                                         ?>
@@ -291,7 +294,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                     <?php
                                         if (!empty($count_group_post) && $count_group_post > POST_DISPLAY_LIMIT) {
                                                 ?>
-                                    <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">View More</a></div>
+                                    <div class="group_viewmore col-md-12"><a href="javascript:void(0)" id="load_grouppost" onclick="loadMoreGroupPost();" data-id="0">@lang("label.ViewMore")</a></div>
                                     <?php
                                         }?>
                                 </div>
@@ -315,7 +318,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                             <div class="panel-heading">
                                                                 <h4 class="icon">{{ucfirst($mypost['post_type'])}}</h4>
                                                                 <div class="pull-right no-icon">
-                                                                  <a><img src="assets/img/notification-icon.png"></a> 
+                                                                  <a><img src="{{asset('assets/img/notification-icon.png')}}"></a> 
                                                                   <?php
                                                                      if(!empty($mypost['post_flagged'])) {
                                                                 ?>
@@ -326,7 +329,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                 </div>
                                                             </div>
                                                             <div class="panel-body meetings">
-                                                                <h4><a href="{{url('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity post-title">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                                <h4><a href="{{route('viewpost', Helpers::encode_url($mypost['id']))}}" class="profanity post-title">{{ str_limit($mypost['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                                 <div class="user-wrap"> 
                                                                 <div class="user-img"> 
                                                                     @if(empty($mypost['post_user']['profile_image']) || $mypost['is_anonymous'] == 1)
@@ -336,8 +339,8 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($mypost['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}" class="user-a-post">{{$mypost['post_user']['name']}}</a>
-                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
+                                                                    <a href="{{route('view_profile', Helpers::encode_url($mypost['post_user']['id']))}}" class="user-a-post">{{$mypost['post_user']['name']}}</a>
+                                                                    <?php } else { echo __("label.Anonymous"); } ?><span>@lang("label.on") {{date(DATE_FORMAT,strtotime($mypost['created_at']))}}</span></p>
                                                                 </div>
 
                                                                 <fieldset>
@@ -348,7 +351,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                     if(strlen($mypost['post_description']) > POST_DESCRIPTION_LIMIT) {
                                                                 ?>
                                                                 <div class="btn-wrap" id="mypostread{{$mypost['id']}}">
-                                                                   <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">Read More</a>
+                                                                   <a href="#" onclick ="mypostReadMore({{$mypost['id']}})">@lang("label.ReadMore")</a>
                                                                 </div>
                                                                 <?php } ?>
                                                                 <div class="panel-body-wrap">
@@ -391,7 +394,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                         <span><?php echo count($mypost['post_comment']); ?></span>
                                                                     </div>
                                                                     <div class="status pull-right">
-                                                                          <p>Status:<span>Active</span></p>
+                                                                          <p>@lang("label.Status"):<span>@lang("label.Active")</span></p>
                                                                     </div>
                                                                 </div>
                                                                 <?php
@@ -399,7 +402,7 @@ if (!empty($mypost['post_tag'])) {
 			?>
                                                                 <hr>
                                                                 <div class="post-circle">
-                                                                    <?php foreach ($mypost['post_tag'] as $mypost_tag) {?><a href="{{url('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
+                                                                    <?php foreach ($mypost['post_tag'] as $mypost_tag) {?><a href="{{route('tag', Helpers::encode_url($mypost_tag['tag']['id']))}}"><?=$mypost_tag['tag']['tag_name'];?></a><?php }?>
                                                                  </div>
                                                                     <?php }?>
                                                             </div>
@@ -408,7 +411,7 @@ if (!empty($mypost['post_tag'])) {
                                     <?php
                                     }
                                     } else {
-                                        echo '<p class="postlist">No post found.</p>';
+                                        echo '<p class="postlist">'.__('label.Nopostfound').'</p>';
                                             //echo "No post found.";
                                     }
                                     ?>
@@ -416,7 +419,7 @@ if (!empty($mypost['post_tag'])) {
                                     <?php
 if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
 	?>
-                                    <div class="user_viewmore col-md-12"><a href="javascript:void(0)" id="load_mypost" onclick="loadMoreMyPost();" data-id="0">View More</a></div>
+                                    <div class="user_viewmore col-md-12"><a href="javascript:void(0)" id="load_mypost" onclick="loadMoreMyPost();" data-id="0">@lang('label.ViewMore')</a></div>
                                     <?php
 }?>
                                     
@@ -443,7 +446,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
         $("#spinner").show();
         $.ajax({
-            url: SITE_URL+"/loadmorepost",
+            url: SITE_URL+'/'+LANG+"/loadmorepost",
             type: "POST",
             data: formData,
             success: function (response) {
@@ -472,7 +475,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
         $("#spinner").show();
         $.ajax({
-            url: SITE_URL+"/loadmoremypost",
+            url: SITE_URL+'/'+LANG+"/loadmoremypost",
             type: "POST",
             data: formData,
             success: function (response) {
@@ -502,7 +505,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
         $("#spinner").show();
         $.ajax({
-            url: SITE_URL+"/loadmoregrouppost",
+            url: SITE_URL+'/'+LANG+"/loadmoregrouppost",
             type: "POST",
             data: formData,
             success: function (response) {
@@ -532,7 +535,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL+"/loadmorepost",
+                url: SITE_URL+'/'+LANG+"/loadmorepost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
@@ -569,7 +572,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL+"/loadmoremypost",
+                url: SITE_URL+'/'+LANG+"/loadmoremypost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
@@ -603,7 +606,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL+"/loadmoregrouppost",
+                url: SITE_URL+'/'+LANG+"/loadmoregrouppost",
                 type: "POST",
                 data: formData,
                 success: function (response) {

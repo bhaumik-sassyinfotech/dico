@@ -18,7 +18,7 @@
     
 </style>
 
-<div id="page-content" class="create-user create-user-popup" style="min-height: 650px;">
+<div id="page-content" class="create-user create-user-popup package-page" style="min-height: 650px;">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
@@ -37,6 +37,7 @@
                     {!! Form::model($company, ['method' => 'POST', 'url' => ['updateCompany'],'enctype'=>'multipart/form-data', 'id' => 'company_form', 'class' => 'common-form']) !!}
                     {{ csrf_field() }}
                     <input type="hidden" value="{{$company->package_id}}" name="package_id" id="package_id">
+                    <div class="package-left">
                     <div class="form-group">
                         <label class="text-15">Language<span>*</span></label>
                         <div class="select">
@@ -64,6 +65,8 @@
                         <label class="text-15">Company Description</label>
                         <textarea name="company_description" id="company_description" placeholder="Company Description" class="form-control">{{$company->description}}</textarea>
                     </div>
+                </div>
+                    <div class="package-right">
                     <div class="form-group">
                         <p>Company Logo<span>*</span></p>
                         <div class="upload-btn-wrapper">
@@ -82,7 +85,8 @@
                         <input type="hidden" id="company_logo" name="company_logo" value="{{$company->company_logo}}">
                         <img src="{{asset($company_logo)}}" id="user-profile" height="135" width="135">
                     </div>
-                    <div class="form-group">
+                    </div>    
+                    <div class="form-group submit-package">
                         <div class="btn-wrap-div">
                             <input type="submit" name="save" id="save" class="st-btn" value="Submit" /> 
 
@@ -115,8 +119,9 @@
                                             <div class="user-limit">Upto {{$package->total_user}} Users</div>
                                         </div>
                                         <div class="bottom">
-                                            <a href="javascript:void()" class="btn btn-if <?php if ($company->package_id == $package->id) { echo 'green';} ?>">
+                                            <a href="javascript:void()" class="btn btn-{{$package->color}} ">
                                                 <?php
+                                                
                                                 //echo $company->package_id.'==='.$package->id;
                                                 if ($company->package_id == $package->id) {
                                                     echo 'CURRENT PLAN';

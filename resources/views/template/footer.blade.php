@@ -61,10 +61,31 @@
 <script type='text/javascript' src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/ckeditor/sample.js')}}"></script>
 <script type="text/javascript">
+  $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
+  $(document).ready(function () {
+       //var LANG = "{{ App::getLocale()}}";
+       //alert(LANG);
+       $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
+    });
     if($('#editor').val()){
         //console.log('dd',$('#editor').val());
        window.onload=function(){
         initSample();
    } 
    }
+</script>
+<script>
+   var changeLang = function (that) {
+        var val = $(that).val();
+        var path = window.location.href;
+        newPath = path.split('/' + LANG + '/');
+        
+        if (newPath.length > 1) {
+            window.location.href = newPath[0] + '/' + val + '/' + newPath[1];
+        } else {
+            newPath = path.split('/' + LANG);
+            window.location.href = newPath[0] + '/' + val;
+        }
+    };
+    
 </script>

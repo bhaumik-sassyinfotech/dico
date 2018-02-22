@@ -1,20 +1,21 @@
 @extends('template.default')
+<title>@lang("label.DICOGroup")</title>
 @section('content')
 
     <div id="page-content" class="group-listing">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
-                    <li><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ route('group.index') }}">Group</a></li>
-                    <li class="active">Update Group</li>
+                    <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                    <li><a href="{{ route('group.index') }}">@lang("label.adGroup")</a></li>
+                    <li class="active">@lang("label.UpdateGroup")</li>
                 </ol>
-                <h1 class="tp-bp-0">Update Group</h1>
+                <h1 class="tp-bp-0">@lang("label.UpdateGroup")</h1>
             </div>
 
             <div class="container">
                 <div class="row">
-                    @include('template.notification')
+                  
                    <?php
 /*
 <div class="col-sm-12 col-md-2">
@@ -47,7 +48,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                             <form id="upload_form" method="post">
 
                             </form>
-                            <form id="upload_form" method="post" action="{{ url('group/uploadGroupPicture') }}" enctype="multipart/form-data">
+                            <form id="upload_form" method="post" action="{{ route('group.uploadGroupPicture') }}" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <input type="hidden" value="{{ $groupData->id }}" name="group_id">
                                 <input type="hidden" id="group_id" value="{{ $groupId }}">
@@ -56,7 +57,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                 <div class="update-wrap">
                                     @if($currUserIsAdmin == '1')
                                         <input type="file" id="image" name="group_picture" class="fileinput">
-                                        <label>Upload Photo</label>
+                                        <label>@lang("label.UploadPhoto")</label>
                                     @endif
                                     <div class="preview_box">
                                         @php
@@ -68,14 +69,14 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                     </div>
                                 </div>
                                 @if($currUserIsAdmin == '1')
-                                    <input class="update-button st-btn" style="position:relative;display: block; width: 100%;" type="submit" value="Submit" name="">
+                                    <input class="update-button st-btn" style="position:relative;display: block; width: 100%;" type="submit" value="@lang('label.adSubmit')" name="">
                                 @endif
                             </form>
                         </div>
                         <div class="group-left-list grp-left">
                             <div class="panel panel-midnightblue">
                                 <div class="panel-heading">
-                                    <h4>Group Description:</h4>
+                                    <h4>@lang('label.GroupDescription'):</h4>
                                     <div class="pull-right">
                                         <a href="#"><img  src="{{ asset('assets/img/notification.png') }}" alt="notification"></a>
                                         @if($currUserIsAdmin == '1')
@@ -97,22 +98,22 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                         <div class="group-box">
                             <div class="group-item one">
                                 <h2 id="total_admin">{{ $count['admins']}}</h2>
-                                <p>Group Admins</p>
+                                <p>@lang('label.GroupAdmins')</p>
                             </div>
                             <div class="group-item two">
                                 <h2 id="total_users">{{ $count['total_users'] }}</h2>
-                                <p>Group Members</p>
+                                <p>@lang('label.GroupMembers')</p>
                             </div>
                             <div class="group-item three">
                                 <h2 id="total_posts">{{ $count['total_posts'] }}</h2>
-                                <p>Group Posts</p>
+                                <p>@lang('label.GroupPosts')</p>
                             </div>
                         </div>
                     </div>
                     <div class="group-right-list col-sm-12 col-md-3">
 
                         <div class="category">
-                            <h2>Group Admins</h2>
+                            <h2>@lang('label.GroupAdmins')</h2>
                             <div class="post-category">
                                 <?php
                                 if(!empty($groupData->groupUsers) && count($groupData->groupUsers) > 0) {
@@ -135,7 +136,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                     }
                                 }
                                 } else {
-                                    echo "<div class='member-wrap'>No group admin assign.</div>";
+                                    echo "<div class='member-wrap'>@lang('label.NoAdmin')</div>";
                                 }
                                 ?>
                             </div>
@@ -152,8 +153,8 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                             <div class="panel-heading">
                                 <h4>
                                     <ul class="nav nav-tabs">
-                                        <li class=""><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">Posts</span></a></li>
-                                        <li class="active"><a href="#users" data-toggle="tab"><i class="fa fa-comments visible-xs icon-scale"></i><span class="hidden-xs">Group Members</span></a></li>
+                                        <li class=""><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">@lang('label.Posts')</span></a></li>
+                                        <li class="active"><a href="#users" data-toggle="tab"><i class="fa fa-comments visible-xs icon-scale"></i><span class="hidden-xs">@lang('label.GroupMembers')</span></a></li>
                                     </ul>
                                 </h4>
                             </div>
@@ -162,7 +163,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                     <div tabindex="5000" style="overflow-y: hidden;" class="tab-pane" id="threads">
                                         <div  class="post-slider owl-carousel">
                                             
-                                        <?php   if (!empty($userPosts)) {
+                                        <?php   if (!empty($userPosts) && count($userPosts) > 0) {
                                             //dd($userPosts);
                                             foreach ($userPosts as $post) {
                                                     $post_type = $post['post_type'];
@@ -190,7 +191,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                                              </div>
                                                          </div>
                                                          <div class="panel-body meetings">
-                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                             <h4><a href="{{route('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">
                                                                     @if(empty($post['postUser']['profile_image']) || $post['is_anonymous'] == 1)
@@ -200,8 +201,8 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['postUser']['id']))}}" class="user-a-post">{{$post['postUser']['name']}}</a>
-                                                                    <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
+                                                                    <a href="{{route('view_profile', Helpers::encode_url($post['postUser']['id']))}}" class="user-a-post">{{$post['postUser']['name']}}</a>
+                                                                    <?php } else { echo __('label.Anonymous'); } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              </div>
 
                                                              <fieldset>
@@ -212,7 +213,7 @@ $img = asset('public/uploads/groups/'.$groupData->group_image);
                                                                 if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
                                                              ?>
                                                                 <div class="btn-wrap" id="postread{{$post['id']}}">
-                                                                   <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
+                                                                   <a href="#" onclick ="postReadMore({{$post['id']}})">@lang('label.ReadMore')</a>
                                                                 </div>
                                                              <?php
                                                                 }
@@ -257,7 +258,7 @@ if (!empty($post['post_comment'])) {
                                                                      <span><?php echo count($post['post_comment']); ?></span>
                                                                  </div>
                                                                  <div class="status pull-right">
-                                                                       <p>Status:<span>Active</span></p>
+                                                                       <p>@lang('label.Status'):<span>@lang('label.Active')</span></p>
                                                                  </div>
                                                              </div>
                                                              <?php
@@ -265,7 +266,7 @@ if (!empty($post['post_tag'])) {
 			?>
                                                              <hr>
                                                              <div class="post-circle">
-                                                                 <?php foreach ($post['post_tag'] as $post_tag) {?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?=$post_tag['tag']['tag_name'];?></a><?php }?>
+                                                                 <?php foreach ($post['post_tag'] as $post_tag) {?><a href="{{route('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?=$post_tag['tag']['tag_name'];?></a><?php }?>
                                                               </div>
                                                                  <?php }?>
                                                          </div>
@@ -274,7 +275,7 @@ if (!empty($post['post_tag'])) {
                                     <?php
                                         }
                                     } else {
-                                        echo '<p class="postlist">No post found.</p>';
+                                        echo '<p class="postlist">'.__("label.Nopostfound").'</p>';
                                     }?>
                                             </div>
                                     </div>
@@ -282,11 +283,11 @@ if (!empty($post['post_tag'])) {
                                         <table class="table table-responsive" id="group_users_edit_table">
                                             <thead>
                                             <tr>
-                                                <th>Group Users Details</th>
-                                                <th>Followings</th>
-                                                <th>Followers</th>
-                                                <th>Points</th>
-                                                <th>Action</th>
+                                                <th>@lang("label.GroupUsersDetails")</th>
+                                                <th>@lang("label.Followings")</th>
+                                                <th>@lang("label.Followers")</th>
+                                                <th>@lang("label.adPoints")</th>
+                                                <th>@lang("label.adAction")</th>
                                             </tr>
                                             </thead>
                                            @php

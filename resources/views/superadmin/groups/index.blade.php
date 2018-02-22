@@ -1,14 +1,14 @@
 @extends('template.default')
-<title>DICO - Group</title>
+<title>@lang("label.DICOGroup")</title>
 @section('content')
 <div id="page-content" class="main-user-profile user-profile point-page all-group-list  super-user-employee padding-box idea-details">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
-                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li class="active">Group</li>
+                    <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                    <li class="active">@lang("label.adGroup")</li>
                 </ol>
-                <h1 class="tp-bp-0">Group</h1>
+                <h1 class="tp-bp-0">@lang("label.adGroup")</h1>
                 <div class="options" style="display: none;">
                     <div class="btn-toolbar">
                         <div class="btn-group hidden-xs">
@@ -34,29 +34,29 @@
                                                                     data-sort="data-name"
                                                                     class="btn btn-default sort "><span class=""><i
                                                                     class="fa fa-user fa-6 visible-xs"
-                                                                    aria-hidden="true"></i><span class=" hidden-xs">All Groups</span></a>
+                                                                    aria-hidden="true"></i><span class=" hidden-xs">@lang("label.AllGroups")</span></a>
                                                     </li>
                                                     <li style="display: none;" class=""><a href="#mygroups" onclick="groupGrid(1)" data-toggle="tab" data-order="desc1" data-sort="default"
                                                             class="btn btn-default sort active "><i
                                                       class="fa fa-list visible-xs icon-scale"></i><span
-                                                      class=" hidden-xs">My groups</span></a></li>
+                                                      class=" hidden-xs">@lang("label.Mygroups")</span></a></li>
                                                 </ul>
 
                                                 <div class="btn-group top-set">
                                                     <div class="search-form">
-                                                        <input id="search_query" type="text" placeholder="Search Group"/>
+                                                        <input id="search_query" type="text" placeholder="@lang('label.SearchGroup')"/>
                                                         <input type="button" value="#" class="search-icon searchBtn searchBt"/>
                                                     </div>
                                                     <button id="GoList" class="grid-view">
-                                                        <img src="assets/img/icon/group-list.png" alt="group"
+                                                        <img src="{{asset('assets/img/icon/group-list.png')}}" alt="group"
                                                              class="block">
-                                                        <img src="assets/img/icon/group-lis-hover.png" alt="group"
+                                                        <img src="{{asset('assets/img/icon/group-lis-hover.png')}}" alt="group"
                                                              class="none" style="display:none">
                                                     </button>
                                                     <button id="GoGrid" class="grid-view active">
-                                                        <img src="assets/img/icon/grid-view.png" alt="group list"
+                                                        <img src="{{asset('assets/img/icon/grid-view.png')}}" alt="group list"
                                                              class="block">
-                                                        <img src="assets/img/icon/grid-view-hover.png" alt="group list"
+                                                        <img src="{{asset('assets/img/icon/grid-view-hover.png')}}" alt="group list"
                                                              class="none" style="display:none">
 
                                                     </button>
@@ -74,9 +74,9 @@
                                                             <div class="col-md-12">
                                                                 <div class="panel panel-info">
                                                                     <div class="panel-heading trophy">
-                                                                        <h4 class="icon">Groups Listing</h4>
+                                                                        <h4 class="icon">@lang("label.GroupsListing")</h4>
                                                                         <div class="pull-right">
-                                                                            <a href="{{url('/setting')}}"><img src="assets/img/settings-icon.png" alt="settings"></a>
+                                                                            <a href="{{route('setting')}}"><img src="{{asset('assets/img/settings-icon.png')}}" alt="settings"></a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="panel-body">
@@ -85,26 +85,26 @@
                                                                         <thead>
                                                                         <tr>
                                                                             <th><label class="check checkAll">
-                                                                                  <p>Group Name</p>
+                                                                                  <p>@lang("label.GroupName")</p>
                                                                                    <input type="checkbox" class="checkAllBox">
                                                                                     <span class="checkmark"></span>
                                                                                </label></th>
-                                                                            <th>Group Description</th>
-                                                                            <th>Total Posts</th>
-                                                                            <th>Total Members</th>
-                                                                            <th>Actions</th>
+                                                                            <th>@lang("label.GroupDescription")</th>
+                                                                            <th>@lang("label.TotalPosts")</th>
+                                                                            <th>@lang("label.TotalMembers")</th>
+                                                                            <th>@lang("label.Actions")</th>
                                                                         </tr>
                                                                         </thead>
                                                                     </table>
                                                                     <div class="notice">
-                                                                <div class="action notice-left"><p>Action</p></div>
+                                                                <div class="action notice-left"><p>@lang("label.adAction")</p></div>
                                                                 <div class="select notice-left">
                                                                     <select name="slct" id="slct">
-                                                                        <option value="delete">Delete</option>
+                                                                        <option value="delete">@lang("label.Delete")</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="action notice-left" style="padding: 0px 10px; ">
-                                                                   <input type="button" name="" class="st-btn multiple-action" value="Submit">
+                                                                   <input type="button" name="" class="st-btn multiple-action" value="@lang('label.adSubmit')">
                                                                 </div>
                                                                 </div>
                                                                 </div>
@@ -121,7 +121,7 @@
                                                     <div class="col-md-12">
                                                         <div class="panel panel-info ">
                                                             <div class="panel-heading trophy">
-                                                                <h4 class="icon">Group List</h4>
+                                                                <h4 class="icon">@lang("label.GroupList")</h4>
                                                                 <div class="pull-right">
                                                                     <a href="#"><img src="{{ asset('assets/img/settings-icon.png') }}" alt="settings"></a>
                                                                 </div>
@@ -132,25 +132,25 @@
                                                                         <thead>
                                                                         <tr>
                                                                             <th><label class="check checkAll">
-                                                                                  <p>Group Name</p>
+                                                                                  <p>@lang("label.GroupName")</p>
                                                                                    <input type="checkbox" class="checkAllBox">
                                                                                     <span class="checkmark"></span>
                                                                                </label></th>
-                                                                            <th>Group Description</th>
-                                                                            <th>Total Posts</th>
-                                                                            <th>Total Members</th>
-                                                                            <th>Actions</th>
+                                                                            <th>@lang("label.GroupDescription")</th>
+                                                                            <th>@lang("label.TotalPosts")</th>
+                                                                            <th>@lang("label.TotalMembers")</th>
+                                                                            <th>@lang("label.Actions")</th>
                                                                         </tr>
                                                                         </thead>
                                                                     </table>
                                                                     <div class="notice">
-                                                                <div class="action notice-left"><p>Action</p></div>
+                                                                <div class="action notice-left"><p>@lang("label.adAction")</p></div>
                                                                 <div class="select notice-left">
                                                                     <select name="slct" id="slct">
-                                                                      <option>Delete</option>
-                                                                      <option value="Super User">Super User</option>
-                                                                       <option value="Employee">Employee</option>
-                                                                       <option value="Admin">Admin</option>
+                                                                      <option>@lang("label.Delete")</option>
+                                                                      <option value="Super User">@lang("label.SuperUser")</option>
+                                                                       <option value="Employee">@lang("label.Employee")</option>
+                                                                       <option value="Admin">@lang("label.Admin")</option>
                                                                     </select>
                                                                 </div>
                                                                 </div>
@@ -168,19 +168,19 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button">×</button>
-                                                        <label>Add User To The Group:</label> 
+                                                        <label>@lang("label.AddUserToTheGroup"):</label> 
                                                     </div>
                                                     <form method="post" class="common-form" name="addMember" id="addMember">
                                                         <input type="hidden" id="member_group_id" name="member_group_id">
                                                         <input type="hidden" id="member_company_id" name="member_company_id">
                                                     <div class="form-group">
-                                                        <h4 class="modal-title">Add user by email address:</h4>
-                                                        <input type="text" name="user_email" id="user_email" placeholder="Type user name or email id">
+                                                        <h4 class="modal-title">@lang("label.Adduserbyemailaddress"):</h4>
+                                                        <input type="text" name="user_email" id="user_email" placeholder="@lang('label.Typeusernameoremailid')">
                                                     </div> 
                                                     <div class="form-group">
                                                         <div class="btn-wrap-div">
-                                                            <input class="st-btn" name="addGroupMember" id="addGroupMember" type="button" value="Add">
-                                                             <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                            <input class="st-btn" name="addGroupMember" id="addGroupMember" type="button" value="@lang('label.Add')">
+                                                             <input value="@lang('label.Cancel')" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
                                                         </div>     
                                                     </div>     
                                                     </form>
@@ -204,7 +204,7 @@
                                                     <div class="list-block super-user">
                                                         <div class="panel-heading">
                                                             <div class="pull-right">
-                                                                <?php $route = url('editGroup/'.Helpers::encode_url($group['id']));//route('group.edit', [Helpers::encode_url($group['id'])]);?>
+                                                                <?php $route = route('editGroup',Helpers::encode_url($group['id']));//route('group.edit', [Helpers::encode_url($group['id'])]);?>
                                                                 <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
                                                                 <?php
                                                                     if ($group['group_owner'] == Auth::user()->id || Auth::user()->role_id == 1) {
@@ -234,10 +234,10 @@
                                                             <hr>
                                                             <div class="panel-body-wrap">
                                                                 <div class="follower-text pull-left">
-                                                                    <p>Members:<span>{{ $group['group_users_count'] }}</span></p>
+                                                                    <p>@lang('label.Members'):<span>{{ $group['group_users_count'] }}</span></p>
                                                                 </div>
                                                                 <div class="follower-text pull-right">
-                                                                    <p>Posts:<span>{{ $group['group_posts_count'] }}</span></p>
+                                                                    <p>@lang('label.Posts'):<span>{{ $group['group_posts_count'] }}</span></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -246,12 +246,12 @@
                                                 @endforeach
                                                 @if($groups_count > POST_DISPLAY_LIMIT)
                                                 <div class="all_viewmore col-md-12">
-                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">View More</a>
+                                                    <a href="javascript:void(0)" id="load_post" onclick="loadMorePost()" data-id="0">@lang('label.ViewMore')</a>
                                                 </div>
                                                 @endif
                                                     @else
                                                         <div class="col-md-12">
-                                                            <p>No Data found.</p>
+                                                            <p>@lang('label.NoDatafound')</p>
                                                         </div>
                                                     @endif
                                             </ul>
@@ -271,6 +271,12 @@
 
 @push('javascripts')
     <script type="text/javascript">
+        $(document).on('click',"#GoList",function(){
+           if($('.checkbox').length > 0) {
+           } else {
+               $('.checkmark,.notice').hide();
+           }
+        });
         function loadMorePost() {
             var offSet_selector = $('#offset');
             var tab_id = offSet_selector.data('tab');
@@ -283,7 +289,7 @@
 
 
             $.ajax({
-                url: SITE_URL+new_url,
+                url: SITE_URL +'/'+LANG +new_url,
                 type: "POST",
                 data: formData,
                 async:true,
@@ -324,7 +330,7 @@
 
 
             $.ajax({
-                url: SITE_URL+new_url,
+                url: SITE_URL +'/'+LANG+new_url,
                 type: "POST",
                 data: formData,
                 async:true,

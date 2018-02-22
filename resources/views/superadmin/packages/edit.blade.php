@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - Update Package </title>
+<title>@lang("label.adDICO - Packages")</title>
 @section('content')
 
 @include('template.notification')
@@ -8,11 +8,11 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li><a href="{{ route('packages.index') }}">Packages</a></li>
-                <li class="active">Update Packages </li>
+                <li><a href="{{ url('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{ route('packages.index') }}">@lang("label.adPackages")</a></li>
+                <li class="active">@lang("label.adUpdate Packages")</li>
             </ol>
-            <h1 class="tp-bp-0">Update Packages </h1>
+            <h1 class="tp-bp-0">@lang("label.adUpdate Packages")</h1>
             <hr class="border-out-hr">
             <?php /* <div>
               <div class="col-md-6 pull-right nopadding"><p style="float:right;"><a href="{{ url('/home') }}">Dashboard</a> > <a href="{{ route('security_question.index') }}">Security Question</a> > Update Security Question</p></div>
@@ -45,8 +45,8 @@
                         </div>
                         <div class="form-group">
                             <div class="btn-wrap-div">
-                                <input type="submit" class="st-btn" value="Submit">
-                                <a href="{{ url()->previous() }}" class="st-btn">Back</a>
+                                <input type="submit" class="st-btn" value="@lang('label.adSubmit')">
+                                <a href="{{ url()->previous() }}" class="st-btn">@lang("label.adBack")</a>
                             </div>
                         </div>
                     </form>
