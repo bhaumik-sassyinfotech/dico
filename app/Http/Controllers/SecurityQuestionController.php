@@ -56,9 +56,9 @@ class SecurityQuestionController extends Controller {
         $security_question->question = $request->input('question');
         $security_question->created_at = Carbon\Carbon::now();
         if ($security_question->save()) {
-            return redirect()->route('security_question.index')->with('success', 'Security Question '.Config::get('constant.ADDED_MESSAGE'));
+            return redirect()->route('security_question.index')->with('success', __('label.adSecurity Question').' '.__('label.ADDED_MESSAGE'));
         } else {
-           return redirect()->route('security_question.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+           return redirect()->route('security_question.index')->with('err_msg', ''.__('label.TRY_MESSAGE'));
         }
     }
     
@@ -79,9 +79,9 @@ class SecurityQuestionController extends Controller {
         $res = $security_question->where('id', $id)->update($postData);
         
         if ($res) {
-            return redirect()->route('security_question.index')->with('success', 'Security Question '.Config::get('constant.UPDATE_MESSAGE'));
+            return redirect()->route('security_question.index')->with('success',  __('label.adSecurity Question').' '.__('label.UPDATE_MESSAGE'));
         } else {
-            return redirect()->route('security_question.index')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+            return redirect()->route('security_question.index')->with('err_msg', ''.__('label.TRY_MESSAGE'));
         }
     }
     

@@ -8,7 +8,7 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{  route('index') }}">@lang("label.adDashboard")</a></li>
                 <li><a href="{{ route('blog.index') }}">@lang("label.adBlog")</a></li>
                 <li class="active">@lang("label.adUpdate Blog")</li>
             </ol>
@@ -34,25 +34,25 @@
                         </div>
                         <div class="form-group">
                             <label class="text-15">Title<span>*</span></label>
-                            <input type="text" name="title" id="question"
+                            <input type="text" name="title" id="title"
                                    placeholder="Title"
                                    class="form-control required" value="{{$block->title}}">
                         </div>
                          <div class="form-group">
                             <label class="text-15">Titulo<span>*</span></label>
-                            <input type="text" name="spanish_title" id="question"
+                            <input type="text" name="spanish_title" id="spanish_title"
                                    placeholder="Titulo"
                                    class="form-control required" value="{{$block->sptitle}}">
                         </div>
                         </div>
                         <div class="form-group editor-files">
                             <label class="text-15" >Description<span>*</span></label>
-                            <textarea id="editor1" name="description">{{$block->description}}</textarea>                           
+                            <textarea id="editor" name="description">{{$block->description}}</textarea>                           
                         </div>
                        
                          <div class="form-group editor-files">
                             <label class="text-15" >Descripcion<span>*</span></label>
-                            <textarea id="editor" name="spanish_description">{{$block->spdescription}}</textarea>                           
+                            <textarea id="editor1" name="spanish_description">{{$block->spdescription}}</textarea>                           
                         </div>
                         <div class="form-group">
                             <div class="btn-wrap-div">

@@ -20,16 +20,16 @@
         <form class="common-form" method="POST" action="{{url('/forgotPasswordMail')}}" id="forgot_form">
             {{ csrf_field() }}
             <div class="form-group">
-                <label class="text-15">Email Id:</label>
+                <label class="text-15">@lang('label.adEmail Id'):</label>
                 <input type="hidden" name="usertype" value="0">
-                <input id="email" name="email" type="email" placeholder="Enter email address" required autofocus>
+                <input id="email" name="email" type="email" placeholder="@lang('label.adEmail Id')" required autofocus>
                 <div id="email_error" class="error1"></div>
             </div>
            
             <div class="form-group">
                 <div class="btn-wrap-div">                    
-                    <input type="submit" value="Send" class="st-btn loginBtn">
-                    <a href="{{url('/login')}}" class="st-btn loginBtn">Back</a>
+                    <input type="submit" value="@lang('label.adSend')" class="st-btn loginBtn">
+                    <a href="{{route('index')}}" class="st-btn loginBtn">@lang('label.adBack')</a>
                 </div>
                 
             </div>

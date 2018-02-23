@@ -1,17 +1,28 @@
 <footer role="contentinfo">
-        <div class="clearfix">
-            <ul class="list-unstyled list-inline pull-left">
-                <li>DICO &copy; <?php echo date('Y'); ?></li>
-            </ul>
-            <button class="pull-right btn btn-inverse-alt btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
-        </div>
+    <div class="clearfix">
+        <ul class="list-unstyled list-inline pull-left">
+            <li>DICO &copy; <?php echo date('Y'); ?></li>
+        </ul>
+        <button class="pull-right btn btn-inverse-alt btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
+    </div>
 </footer>
+
+
+
+<!--<script type='text/javascript' src="{{asset('public/js/pusher.min.js')}}"></script>
+<script type='text/javascript' src="{{asset('public/js/echo.js')}}"></script>-->
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery-1.10.2.min.js')}}"></script>
+<script type='text/javascript'>
+jQuery.noConflict();</script>
+<script type='text/javascript' src="{{asset('public/js/app.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jqueryui-1.10.3.min.js')}}"></script>
+
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/bootstrap.min.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/moment.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/bootstrap-datetimepicker.min.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/enquire.js')}}"></script>
+
+
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery.cookie.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery.nicescroll.min.js')}}"></script>
 <script type='text/javascript' src="{{asset('assets/js/jquery.slimscroll.js')}}"></script>
@@ -33,10 +44,10 @@
 <script type='text/javascript' src="{{asset('public/assets/js/jquery.validate.min.js')}}"></script>
 <link href="{{ asset('public/assets/fonts/glyphicons/css/glyphicons.css') }}" rel="stylesheet">
 <?php /*
-<link href="https://datatables.yajrabox.com/css/datatables.bootstrap.css" rel="stylesheet">
-<script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
-<script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
- */?>
+  <link href="https://datatables.yajrabox.com/css/datatables.bootstrap.css" rel="stylesheet">
+  <script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
+  <script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
+ */ ?>
 <link href="{{ asset('public/yajratable/css/datatables.bootstrap.css') }}" rel="stylesheet">
 <script src="{{ asset('public/yajratable/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('public/yajratable/js/datatables.bootstrap.js') }}"></script>
@@ -61,31 +72,55 @@
 <script type='text/javascript' src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/ckeditor/sample.js')}}"></script>
 <script type="text/javascript">
-  $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
-  $(document).ready(function () {
-       //var LANG = "{{ App::getLocale()}}";
-       //alert(LANG);
-       $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
-    });
-    if($('#editor').val()){
-        //console.log('dd',$('#editor').val());
-       window.onload=function(){
-        initSample();
-   } 
-   }
+                        $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
+                        $(document).ready(function () {
+                        //var LANG = "{{ App::getLocale()}}";
+                        //alert(LANG);
+                        $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
+                        });
+                        if ($('#editor').val()){
+                        //console.log('dd',$('#editor').val());
+                        window.onload = function(){
+                        initSample();
+                        }
+                        }
 </script>
 <script>
-   var changeLang = function (that) {
-        var val = $(that).val();
-        var path = window.location.href;
-        newPath = path.split('/' + LANG + '/');
-        
-        if (newPath.length > 1) {
-            window.location.href = newPath[0] + '/' + val + '/' + newPath[1];
-        } else {
-            newPath = path.split('/' + LANG);
-            window.location.href = newPath[0] + '/' + val;
-        }
-    };
-    
+                            var changeLang = function (that) {
+                            var val = $(that).val();
+                            var path = window.location.href;
+                            newPath = path.split('/' + LANG + '/');
+                            if (newPath.length > 1) {
+                            localStorage.setItem("JSLANG", val);
+                            window.location.href = newPath[0] + '/' + val + '/' + newPath[1];
+                            } else {
+                            newPath = path.split('/' + LANG);
+                            localStorage.setItem("JSLANG", val);
+                            window.location.href = newPath[0] + '/' + val;
+                            }
+                            };</script>    
+<script type='text/html' id="notificationData">
+    <li>
+        <a href="{URL}" class="notification-user active">
+            <span class="time">{TIME}</span>
+            <i class="fa fa-user"></i>
+            <span class="msg">{MSG}</span>
+        </a>
+    </li>
+</script>
+<script type='text/javascript'>
+    function getNotificationHtml(data){
+        return $('#notificationData').html().replace('{URL}', data.url).replace('{TIME}', data.time).replace('{MSG}', data.msg);
+    }
+</script>
+<script type='text/javascript'>
+            Echo.channel('activity')
+                .listen('.comment.added', (e) => {
+
+                $('#event').append('<li>' + e.comment + '</li>');
+                })
+                .listen('.message.register', (data) => {
+                    console.log(data);
+                $('.scrollthis').append(getNotificationHtml(data));
+                });
 </script>

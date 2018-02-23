@@ -59,17 +59,25 @@ class FeedbackController extends Controller
                     'SUBJECT' => $request->input('subject'),
                     'DESC' => $request->input('description')
                 ];
-
-                $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
-                $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                 if (App::isLocale('sp')){
+                    $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->spemail_body, $parse);
+                    $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                    $emailTemplate->subject = $emailTemplate->spsubject;
+                    $emailTemplate->title = $emailTemplate->sptitle;
+                }else{
+                    $emailTemplate->email_body = Helpers::parseTemplate($emailTemplate->email_body, $parse);
+                    $emailTemplate->email_body = html_entity_decode($emailTemplate->email_body);
+                    $emailTemplate->subject = $emailTemplate->subject;
+                    $emailTemplate->title = $emailTemplate->title;
+                }
                 $emailTemplate->email = Helpers::getSettings('app_features')->email1;
                 $post = array('emailTemplate' => $emailTemplate, 'request' => $request, 'message' => $emailTemplate->email_body, 'email' => $emailTemplate->email);
 //dd($post);
                 Helpers::sendEmail($post);
             }
-            return redirect()->route('feedback.create')->with('success', 'Feedback '.Config::get('constant.ADDED_MESSAGE'));
+            return redirect()->route('feedback.create')->with('success', __('label.adFeedback').' '.__('label.ADDED_MESSAGE'));
         } else {
-           return redirect()->route('feedback.create')->with('err_msg', ''.Config::get('constant.TRY_MESSAGE'));
+           return redirect()->route('feedback.create')->with('err_msg', ''.__('label.TRY_MESSAGE'));
         } 
     }
 
@@ -113,12 +121,12 @@ class FeedbackController extends Controller
     public function deleteFeedback()
     {
         if (isset($_POST['feed_id']) && $_POST['feed_id'] == '') {
-            return json_encode(array('err_msg' => 'Feedback id  is required.', 'feed_id' => $_POST['feed_id']));
+            return json_encode(array('err_msg' => __('label.Feedback id is required'), 'feed_id' => $_POST['feed_id']));
         }
         $id = $_POST['feed_id'];
         $feedback = Feedback::findOrFail($id);
         $feedback->delete();
-        return json_encode(array('msg' => 'Feedback has been deleted successfully', 'feed_id' => $_POST['feed_id']));
+        return json_encode(array('msg' => __('label.Feedback has been deleted successfully'), 'feed_id' => $_POST['feed_id']));
     }
     
     public function feedbackList(Request $request) {

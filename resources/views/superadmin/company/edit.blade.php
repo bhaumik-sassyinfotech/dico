@@ -7,7 +7,7 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{ route('index') }}">@lang("label.adDashboard")</a></li>
                 <li><a href="{{ route('company.index') }}">@lang("label.adCompany")</a></li>
                 <li class="active">@lang("label.adUpdate Company")</li>
             </ol>
@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <p>@lang("label.adCompany Logo")<span>*</span></p>
                         <div class="upload-btn-wrapper">
-                            <button class="upload-btn">@lang("label.Upload Files")</button>
+                            <button class="upload-btn">@lang("label.adUpload Files")</button>
                             <input type="file" name="file_upload" id="file_upload" class="file-upload__input" value="{{asset(UPLOAD_PATH.$company->company_logo)}}">
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                     <div class="form-group">
                         <div class="btn-wrap-div">
                             <input type="submit" name="save" id="save" class="st-btn" value="@lang('label.adSubmit')" />
-                            <a href="{{ route('company.index') }}" class="st-btn">Back</a>
+                            <a href="{{ route('company.index') }}" class="st-btn">@lang('label.adBack')</a>
                         </div>
                     </div>
                     {!! Form::close() !!}    

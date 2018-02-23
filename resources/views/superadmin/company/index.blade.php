@@ -8,7 +8,7 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{ route('index') }}">@lang("label.adDashboard")</a></li>
                 <li class="active">@lang("label.adCompany")</li>
             </ol>
             <h1>@lang('label.adCompany')</h1>

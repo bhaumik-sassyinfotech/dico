@@ -1,3 +1,5 @@
+
+
 <script type="text/javascript" src="{{asset('public/front/js/bootstrap.js')}}"></script>
 <script type="text/javascript" src="{{asset('public/front/js/owl.carousel.js')}}"></script>
 <script type="text/javascript" src="{{asset('public/front/js/select2.min.js')}}"></script>
@@ -50,6 +52,10 @@
     };
     $(document).ready(function () {
         $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
+    });
+     Echo.channel('activity')
+    .listen('.comment.added', (e) => {
+        $('.scrollthis').append('<li>' + e.comment + '</li>');
     });
 </script>
 @yield('javascript')

@@ -54,7 +54,7 @@ class FaqsController extends Controller {
             $faqs->answer = $request->get('answer', null);
 
             if ($faqs->save()) {
-                return Redirect::route('adminfaq.index')->with('success', 'FAQs ' . Config::get('constant.ADDED_MESSAGE'));
+                return Redirect::route('adminfaq.index')->with('success', __('label.FAQs') .' '.  __('label.ADDED_MESSAGE'));
             } else {
                 return Redirect::route('adminfaq.index')->with('error', '' . Config::get('constant.TRY_MESSAGE'));
             }
@@ -86,9 +86,9 @@ class FaqsController extends Controller {
             $faqs->answer = $request->get('answer', null);
 
             if ($faqs->save()) {
-                return Redirect::route('adminfaq.index')->with('success', 'FAQs ' . Config::get('constant.UPDATE_MESSAGE'));
+                return Redirect::route('adminfaq.index')->with('success', __('label.FAQs') .' '.  __('label.UPDATE_MESSAGE'));
             } else {
-                return Redirect::route('adminfaq.index')->with('error', '' . Config::get('constant.TRY_MESSAGE'));
+                return Redirect::route('adminfaq.index')->with('error', '' . __('label.TRY_MESSAGE'));
             }
         } catch (\exception $e) {
             dd($e->getMessage());
@@ -107,12 +107,12 @@ class FaqsController extends Controller {
     
      public function deleteFaqs(Request $request) {
         if (isset($_POST['faqs_id']) && $_POST['faqs_id'] == '') {
-            return json_encode(array('err_msg' => 'Faqs id  is required.', 'faqs_id' => $_POST['faqs_id']));
+            return json_encode(array('err_msg' => __('label.Faqs id is required'), 'faqs_id' => $_POST['faqs_id']));
         }
         $id = $_POST['faqs_id'];
         $faqs = Faqs::findOrFail($id);
         $faqs->delete();
-        return json_encode(array('msg' => 'Faqs has been deleted successfully', 'faqs_id' => $_POST['faqs_id']));
+        return json_encode(array('msg' => __('label.Faqs has been deleted successfully'), 'faqs_id' => $_POST['faqs_id']));
     }
 
 }
