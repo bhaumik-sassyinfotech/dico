@@ -124,7 +124,7 @@
                 $meeting                      = new Meeting;
                 $meeting->meeting_title       = $request->meeting_title;
                 $meeting->meeting_description = $request->meeting_description;
-                $meeting->date_of_meeting     = date("Y-m-d H:i",strtotime($request->date_of_meet));
+               // $meeting->date_of_meeting     = date("Y-m-d H:i",strtotime($request->date_of_meet));
                 $meeting->privacy             = $privacy;
                 $meeting->created_by          = $currUser->id;
                 $meeting->group_id            = $meeting_group;
