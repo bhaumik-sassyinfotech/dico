@@ -1,23 +1,23 @@
 @extends('template.default')
-<title>DICO - Points</title>
+<title>@lang('label.adDICO - Points')</title>
 @section('content')
 <div id="page-content" class="point-page" style="min-height: 650px;">
     <div id="wrap">
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li class="active">Points</li>
+                <li><a href="{{ url('/home') }}">@lang('label.adDashboard')</a></li>
+                <li class="active">@lang('label.adPoints')</li>
             </ol>
-            <h1 class="tp-bp-0">Points</h1>
+            <h1 class="tp-bp-0">@lang('label.adPoints')</h1>
             <div style="display: none;" class="options">
                 <div class="btn-toolbar">
                     <div class="btn-group hidden-xs">
                         <div class="btn-group color-changes">
-                            <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm">Filter</span> </a>
+                            <a data-toggle="dropdown" class="btn btn-default dropdown-toggle" href="#"><i aria-hidden="true" class="fa fa-filter fa-6"></i><span class="hidden-xs hidden-sm">@lang('label.adFilter')</span> </a>
                                  <ul class="dropdown-menu">
-                                     <li><a href="#">Notification off</a></li>
-                                     <li><a href="#">Edit Post</a></li>
-                                     <li><a href="#">Delete Post</a></li>
+                                     <li><a href="#">@lang('label.adNotification off')</a></li>
+                                     <li><a href="#">@lang('label.adEdit Post')</a></li>
+                                     <li><a href="#">@lang('label.adDelete Post')</a></li>
                                  </ul>
                          </div>
                     </div>
@@ -46,23 +46,23 @@
                                         <div class="col-md-12">
                                             <div class="panel panel-info ">
                                                 <div class="panel-heading trophy">
-                                                    <h4 class="icon">Point List</h4>
+                                                    <h4 class="icon">@lang('label.adPoint List')</h4>
                                                 </div>
                                                 <div class="panel-body">
                                                     <div class="row">
                                                     <table class="table" id="points-listing">
                                                         <thead>
                                                             <tr>
-                                                                <th class="p-font p-user"><img src="{{ asset(IMAGE_PATH.'/p-icon.png') }}" class="mr-10">User Name</th>
-                                                                <th class="p-font p-idea"><img src="{{ asset(IMAGE_PATH.'/p-light.png') }}" class="mr-10"> Idea</th>
-                                                                <th class="p-font p-question"><img src="{{ asset(IMAGE_PATH.'/p-help.png') }}" class="mr-10">Questions</th>
-                                                                <th class="p-font p-challenge"><img src="{{asset(IMAGE_PATH.'/challenge-icon.png')}}" class="mr-10">Challenges</th>
-                                                                <th class="p-font p-approve"><img src="{{ asset(IMAGE_PATH.'/p-approve.png') }}" class="mr-10">Approved</th>
-                                                                <th class="p-font p-answer"><img src="{{ asset(IMAGE_PATH.'/p-answer.png') }}" class="mr-10">Answers</th>
-                                                                <th class="p-font p-solution"><img src="{{ asset(IMAGE_PATH.'/p-solution.png') }}" class="mr-10">Solutions</th>
-                                                                <th class="p-font p-comments"><img src="{{ asset(IMAGE_PATH.'/p-comment.png') }}" class="mr-10">Comments</th>
-                                                                <th class="p-font p-like"><img src="{{ asset(IMAGE_PATH.'/p-like.png') }}" class="mr-10">Likes</th>
-                                                                <th class="p-font p-Total"><img src="{{ asset(IMAGE_PATH.'/p-total.png') }}" class="mr-10">Total</th>
+                                                                <th class="p-font p-user"><img src="{{ asset(IMAGE_PATH.'/p-icon.png') }}" class="mr-10">@lang('label.adUser Name')</th>
+                                                                <th class="p-font p-idea"><img src="{{ asset(IMAGE_PATH.'/p-light.png') }}" class="mr-10"> @lang('label.adIdea')</th>
+                                                                <th class="p-font p-question"><img src="{{ asset(IMAGE_PATH.'/p-help.png') }}" class="mr-10">@lang('label.adQuestions')</th>
+                                                                <th class="p-font p-challenge"><img src="{{asset(IMAGE_PATH.'/challenge-icon.png')}}" class="mr-10">@lang('label.adChallenges')</th>
+                                                                <th class="p-font p-approve"><img src="{{ asset(IMAGE_PATH.'/p-approve.png') }}" class="mr-10">@lang('label.adApproved')</th>
+                                                                <th class="p-font p-answer"><img src="{{ asset(IMAGE_PATH.'/p-answer.png') }}" class="mr-10">@lang('label.adAnswers')</th>
+                                                                <th class="p-font p-solution"><img src="{{ asset(IMAGE_PATH.'/p-solution.png') }}" class="mr-10">@lang('label.adSolutions')</th>
+                                                                <th class="p-font p-comments"><img src="{{ asset(IMAGE_PATH.'/p-comment.png') }}" class="mr-10">@lang('label.adComments')</th>
+                                                                <th class="p-font p-like"><img src="{{ asset(IMAGE_PATH.'/p-like.png') }}" class="mr-10">@lang('label.adLikes')</th>
+                                                                <th class="p-font p-Total"><img src="{{ asset(IMAGE_PATH.'/p-total.png') }}" class="mr-10">@lang('label.adTotal')</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody></tbody>
@@ -83,14 +83,24 @@
                                         <div class="col-md-12">
                                             <div class="panel panel-info ">
                                                 <div class="panel-heading trophy">
-                                                    <h4 class="icon">Group List</h4>
+                                                    <h4 class="icon">@lang('label.adGroup List')</h4>
                                                 </div>
                                                 <div class="panel-body">
                                                     <div class="row">
                                                     <table class="table">
                                                                 <thead>
                                                                    <tr>
-                                                                        <th class="p-font p-user"><img src="assets/img/p-icon.png" class="mr-10">User Name</th>
+                                                                        <th class="p-font p-user"><img src="{{ asset(IMAGE_PATH.'/p-icon.png') }}" class="mr-10">@lang('label.adUser Name')</th>
+                                                                <th class="p-font p-idea"><img src="{{ asset(IMAGE_PATH.'/p-light.png') }}" class="mr-10"> @lang('label.adIdea')</th>
+                                                                <th class="p-font p-question"><img src="{{ asset(IMAGE_PATH.'/p-help.png') }}" class="mr-10">@lang('label.adQuestions')</th>
+                                                                <th class="p-font p-challenge"><img src="{{asset(IMAGE_PATH.'/challenge-icon.png')}}" class="mr-10">@lang('label.adChallenges')</th>
+                                                                <th class="p-font p-approve"><img src="{{ asset(IMAGE_PATH.'/p-approve.png') }}" class="mr-10">@lang('label.adApproved')</th>
+                                                                <th class="p-font p-answer"><img src="{{ asset(IMAGE_PATH.'/p-answer.png') }}" class="mr-10">@lang('label.adAnswers')</th>
+                                                                <th class="p-font p-solution"><img src="{{ asset(IMAGE_PATH.'/p-solution.png') }}" class="mr-10">@lang('label.adSolutions')</th>
+                                                                <th class="p-font p-comments"><img src="{{ asset(IMAGE_PATH.'/p-comment.png') }}" class="mr-10">@lang('label.adComments')</th>
+                                                                <th class="p-font p-like"><img src="{{ asset(IMAGE_PATH.'/p-like.png') }}" class="mr-10">@lang('label.adLikes')</th>
+                                                                <th class="p-font p-Total"><img src="{{ asset(IMAGE_PATH.'/p-total.png') }}" class="mr-10">@lang('label.adTotal')</th>
+<!--                                                                        <th class="p-font p-user"><img src="assets/img/p-icon.png" class="mr-10">User Name</th>
                                                                         <th class="p-font p-idea"><img src="assets/img/p-light.png" class="mr-10"> Idea</th>
                                                                         <th class="p-font p-question"><img src="assets/img/p-help.png" class="mr-10">Questions</th>
                                                                         <th class="p-font p-approve"><img src="assets/img/p-approve.png" class="mr-10">Approved</th>
@@ -98,7 +108,7 @@
                                                                         <th class="p-font p-solution"><img src="assets/img/p-solution.png" class="mr-10">Solutions</th>
                                                                         <th class="p-font p-comments"><img src="assets/img/p-comment.png" class="mr-10">Comments</th>
                                                                         <th class="p-font p-like"><img src="assets/img/p-like.png" class="mr-10">Likes</th>
-                                                                        <th class="p-font p-Total"><img src="assets/img/p-total.png" class="mr-10">Total</th>
+                                                                        <th class="p-font p-Total"><img src="assets/img/p-total.png" class="mr-10">Total</th>-->
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>

@@ -60,21 +60,21 @@ class SupportController extends Controller {
 //dd($post);
                 Helpers::sendEmail($post);
             }
-            return redirect()->route('support.create')->with('success', 'Support ' . Config::get('constant.ADDED_MESSAGE'));
+            return redirect()->route('support.create')->with('success', __('label.adSupport') .' '. __('label.ADDED_MESSAGE'));
         } else {
-            return redirect()->route('support.create')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+            return redirect()->route('support.create')->with('err_msg', '' . __('label.TRY_MESSAGE'));
         }
     }
 
     public function deleteSupport()
     {
         if (isset($_POST['support_id']) && $_POST['support_id'] == '') {
-            return json_encode(array('err_msg' => 'Feedback id  is required.', 'support_id' => $_POST['support_id']));
+            return json_encode(array('err_msg' => __('label.Support id is required'), 'support_id' => $_POST['support_id']));
         }
         $id = $_POST['support_id'];
         $support = Support::findOrFail($id);
         $support->delete();
-        return json_encode(array('msg' => 'Support has been deleted successfully', 'support_id' => $_POST['support_id']));
+        return json_encode(array('msg' => __('label.Support has been deleted successfully'), 'support_id' => $_POST['support_id']));
     }
     
     public function supportList(Request $request) {

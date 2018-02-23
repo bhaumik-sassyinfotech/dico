@@ -55,9 +55,9 @@ class SettingsController extends Controller {
             $settings->phone = $request->get('phone', null);
             $settings->mobile = $request->get('mobile', null);            
             if ($settings->save()) {
-                return Redirect::route('settings.index')->with('success', 'Settings ' . Config::get('constant.UPDATE_MESSAGE'));
+                return Redirect::route('settings.index')->with('success', __('label.adSettings') .' '. __('label.UPDATE_MESSAGE'));
             } else {
-                return Redirect::route('settings.index')->with('error', '' . Config::get('constant.TRY_MESSAGE'));
+                return Redirect::route('settings.index')->with('error', '' . __('label.TRY_MESSAGE'));
             }
         } catch (\exception $e) {
             dd($e->getMessage());

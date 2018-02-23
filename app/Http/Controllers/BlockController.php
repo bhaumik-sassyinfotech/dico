@@ -69,9 +69,9 @@ class BlockController extends Controller {
             $block->description = $request->get('description', null);
             
             if ($block->save()) {
-                return Redirect::route('blog.index')->with('success', 'Blog ' . Config::get('constant.UPDATE_MESSAGE'));
+                return Redirect::route('blog.index')->with('success', __('label.adBlog') .' '. __('label.UPDATE_MESSAGE'));
             } else {
-                return Redirect::route('blog.index')->with('error', '' . Config::get('constant.TRY_MESSAGE'));
+                return Redirect::route('blog.index')->with('error', '' .  __('label.UPDATE_MESSAGE'));
             }
         } catch (\exception $e) {
             dd($e->getMessage());

@@ -283,8 +283,8 @@ class UsersController extends Controller {
                     }
                     $emailTemplate->email = $_POST['email'];
                     $post = array('emailTemplate' => $emailTemplate, 'request' => $request, 'message' => $emailTemplate->email_body, 'email' => $emailTemplate->email);
-                    Helpers::sendEmail($post);
-                }
+                    event(new \App\Events\Registration($userData));
+                }                
                 return Redirect::back()->with('success', trans("label.Registration has been successfully"));
             } else {
                 return Redirect::back()->with('err_msg', trans("label.Something went wrong"));
@@ -407,5 +407,8 @@ class UsersController extends Controller {
         Auth::guard('front')->logout();
         return redirect('/users-login');
     }
-
+    public function noti() {
+        
+        event(new \App\Events\NewComment('this is test function'));
+    }
 }

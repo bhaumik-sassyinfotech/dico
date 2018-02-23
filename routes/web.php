@@ -41,7 +41,7 @@ Route::get('index', 'HomeController@index')->name('index');
 Auth::routes();
 Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@firstLogin')->name('security.firstLogin');
 Route::match(['get', 'post'], '/saveSettings', 'DashboardController@saveSettings')->name('saveSettings');
-Route::get('/adminForgotPassword', 'Auth\ForgotPasswordController@adminForgotPassword');
+Route::get('/adminForgotPassword', 'Auth\ForgotPasswordController@adminForgotPassword')->name('adminForgotPassword');
 Route::group(['middleware' => 'admin'], function () {
 	/*Route::get('setting', function () {
 		return view('settings');
@@ -192,6 +192,6 @@ Route::group(['middleware' => 'admin'], function () {
 });
 
 // Route::get('/home', 'DashboardController@index')->name('home');
-Route::get('/home', 'HomeController@index')->name('/home');
+//Route::get('/home', 'HomeController@index')->name('/home');
 });
 ?>

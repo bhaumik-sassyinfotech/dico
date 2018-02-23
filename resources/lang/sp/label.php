@@ -278,6 +278,99 @@ return [
     'adMember Name' => 'sp Member Name',
     'adADD' => 'sp ADD',
     
+    /*====*/
+    //constant message
+    'TRY_MESSAGE' => 'Sp Please try again.',
+    'CREATED_MESSAGE' => 'Sp has been created successfully!!',
+    'ADDED_MESSAGE' => 'Sp has been added successfully!!',
+    'UPDATE_MESSAGE' => 'SP has been updated successfully!!',
+    'DELETE_MESSAGE' => 'Sp has been deleted successfully!!',
+    'NOT_DELETE' => 'Sp This role already assign to existing users.!',
+    'NOT_FOUND' => 'Spnot found.',
+    'OLD_PASSWORD_NOT_MATCH' => 'Sp old password does not match.',
+    
+    
+    //company plan upgread
+    'Your plan updated successfully' => 'SP Your plan updated successfully.',
+    //contact controller
+    'Contact has been deleted successfully' => 'SP Contact has been deleted successfully',
+    'Contact is required' => 'Sp Contact id  is required',
+    
+    //faqs controller super admin 
+    'Faqs has been deleted successfully' => 'SP Faqs has been deleted successfully',
+    
+    //feedback
+    'Feedback id is required' => 'Sp Feedback id is required.',
+    'Feedback has been deleted successfully' => 'Sp Feedback has been deleted successfully',
+    
+    
+    //support controller
+    'Support id is required' => 'Sp Support id is required',
+    'Support has been deleted successfully' => 'Sp Support has been deleted successfully',
+    
+    //company create  form
+    'adCreate Company' => 'Sp Create Company',
+    
+    //security question
+    'adCreate Security Question' => 'Sp Create Security Question',
+    'adQuestion 1' => 'Sp Question 1',
+    'adQuestion 2' => 'Sp Question 2',
+    'adQuestion 3' => 'Sp Question 3',
+    'adAnswer 1' => 'Sp Answer 1',
+    'adAnswer 2' => 'Sp Answer 2',
+    'adAnswer 3' => 'Sp Answer 3',
+    'adSecurity Question 1' => 'Sp Security Question 1',
+    'adSecurity Question 2' => 'Sp Security Question 2',
+    'adSecurity Question 3' => 'Sp Security Question 3',
+    'adUpload Photo' => 'Sp Upload Photo',
+    
+    
+    //DICO - Points
+    'adDICO - Points' => 'Sp DICO - Points',
+    'adPoints' => 'Sp Points',
+    'adActivity' => 'Sp Activity',
+    'adSearch' => 'Sp Search',
+    'adNotes' => 'Sp Notes',
+    'adCreate Points' => 'Sp Create Points',
+    'adUpdate Points' => 'Sp Update Points',
+    'adFilter' => 'Sp Filter',
+    'adNotification off' => 'Sp Notification off',
+    'adEdit Post' => 'Sp Edit Post',
+    'adDelete Post' => 'Sp Delete Post',
+    'adAll Points' => 'Sp All Points',
+    'adPoint List' => 'Sp Point List',
+    'adUser Name' => 'Sp User Name',
+    'adIdea' => 'Sp Idea',
+    'adQuestions' => 'Sp Questions',
+    'adChallenges' => 'Sp Challenges',
+    'adApproved' => 'Sp Approved',
+    'adAnswers' => 'Sp Answers',
+    'adSolutions' => 'Sp Solutions',
+    'adComments' => 'Sp Comments',
+    'adLikes' => 'Sp Likes',
+    'adTotal' => 'Sp Total',
+    'adGroup List' => 'Sp Group List',
+    
+    //js error msg
+    'Please enter proper url' => 'Please enter proper url',
+    
+     //login
+    'adDICO - Login' => 'sp DICO - Login',
+    'adEmail Id' => 'sp Email Id',
+    'adPassword' => 'sp Password',
+    'adRemember Me' => 'sp Remember Me',
+    'adForgot Password' => 'sp Forgot Password',
+    'adSend' => 'sp Send',
+    
+    //CURRENT PLAN package plan
+    'adCURRENT PLAN' => 'sp CURRENT PLAN',
+    'adDOWNGREAD PLAN' => 'sp DOWNGREAD PLAN',
+    'adUPGRAD PLAN' => 'sp UPGRAD PLAN',
+    'ad' => 'Company',
+    'ad' => 'Company',
+    'ad' => 'Company',
+    
+    
     //======== Added By Ankita 21-2-2018 ==============//
     //DICO - USER
     'DICOUser' => 'DICO - spUser',

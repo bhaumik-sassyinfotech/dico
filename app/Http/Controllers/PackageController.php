@@ -68,9 +68,9 @@ class PackageController extends Controller {
             $packages->total_user = $request->get('total_user', null);
             
             if ($packages->save()) {
-                return Redirect::route('packages.index')->with('success', 'Package ' . Config::get('constant.UPDATE_MESSAGE'));
+                return Redirect::route('packages.index')->with('success', __('label.adPackage'). __('label.UPDATE_MESSAGE'));
             } else {
-                return Redirect::route('packages.index')->with('error', '' . Config::get('constant.TRY_MESSAGE'));
+                return Redirect::route('packages.index')->with('error', '' . __('label.TRY_MESSAGE'));
             }
         } catch (\exception $e) {
             dd($e->getMessage());

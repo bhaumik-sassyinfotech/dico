@@ -73,9 +73,9 @@ class PointsController extends Controller {
 				$points->notes = $request->input('notes');
 				$points->created_at = Carbon\Carbon::now();
 				if ($points->save()) {
-					return redirect()->route('points.index')->with('success', 'Points ' . Config::get('constant.ADDED_MESSAGE'));
+					return redirect()->route('points.index')->with('success', __('label.adPoints').' '.__('label.ADDED_MESSAGE'));
 				} else {
-					return redirect()->route('points.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect()->route('points.index')->with('err_msg', '' . __('label.TRY_MESSAGE'));
 				}
 			} else {
 				return redirect('/index');
@@ -119,9 +119,9 @@ class PointsController extends Controller {
 
 				$res = $point->where($where)->update($postData);
 				if ($res) {
-					return redirect()->route('points.index')->with('success', 'Points ' . Config::get('constant.UPDATE_MESSAGE'));
+					return redirect()->route('points.index')->with('success', __('label.adPoints').' '. __('label.UPDATE_MESSAGE'));
 				} else {
-					return redirect()->route('points.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect()->route('points.index')->with('err_msg', '' . __('label.TRY_MESSAGE'));
 				}
 			} else {
 				return redirect('/index');

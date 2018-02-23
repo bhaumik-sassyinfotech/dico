@@ -105,9 +105,9 @@ class CompanyController extends Controller {
             $company_points = CompanyPoint::insert($points);
             DB::commit();
             if ($company_points) {
-                return redirect()->route('company.index')->with('success', 'Company ' . Config::get('constant.ADDED_MESSAGE'));
+                return redirect()->route('company.index')->with('success', __('label.adCompany') .' '. __('label.ADDED_MESSAGE'));
             } else {
-                return redirect()->route('company.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                return redirect()->route('company.index')->with('err_msg', '' .__('label.TRY_MESSAGE'));
             }
         } catch (\exception $e) {
             DB::rollback();
@@ -180,9 +180,9 @@ class CompanyController extends Controller {
                         unlink(UPLOAD_PATH . $request->company_logo);
                     }
                 }
-                return redirect()->route('company.index')->with('success', 'Company ' . Config::get('constant.UPDATE_MESSAGE'));
+                return redirect()->route('company.index')->with('success', __('label.adCompany') .' '. __('label.UPDATE_MESSAGE'));
             } else {
-                return redirect()->route('company.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                return redirect()->route('company.index')->with('err_msg', '' .  __('label.TRY_MESSAGE'));
             }
         } catch (\exception $e) {
             return Redirect::back()->with('err_msg', $e->getMessage());
@@ -255,9 +255,9 @@ class CompanyController extends Controller {
                 $company->company_logo = $safeName;
             }
             if ($company->save()) {
-                return Redirect::back()->with('success', 'Company ' . Config::get('constant.UPDATE_MESSAGE'));
+                return Redirect::back()->with('success', __('label.adCompany') .' '. __('label.UPDATE_MESSAGE'));
             } else {
-                return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                return Redirect::back()->with('err_msg', '' .  __('label.TRY_MESSAGE'));
             }
         } catch (Exception $e) {
             return Redirect::back()->with('err_msg', $e->getMessage());
@@ -342,7 +342,7 @@ class CompanyController extends Controller {
                 } else {
                     //upgrad plan in stripe
                     if ($company->stripe_customer_id == '' || $company->stripe_customer_id == null) {
-                        return redirect('companyEdit')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                        return redirect('companyEdit')->with('err_msg', '' . __('label.TRY_MESSAGE'));
                     }
 
                     //  $companyPaymentList = CompanyPayment::where('stripe_cust_id',$company->stripe_customer_id);
@@ -451,7 +451,7 @@ class CompanyController extends Controller {
                     $CompanyPayment->save();
                 }
             }
-            return redirect('companyEdit')->with('success', 'Your plan updated successfully.');
+            return redirect('companyEdit')->with('success', __('label.Your plan updated successfully.'));
             /* end payment chage */
         } catch (Exception $e) {
             return Redirect::back()->with('err_msg', $e->getMessage());

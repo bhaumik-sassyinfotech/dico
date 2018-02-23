@@ -1,5 +1,5 @@
 @extends('template.default')
-<title>DICO - Points</title>
+<title>@lang('label.adDICO - Points')</title>
 @section('content')
 
 @if(session()->has('success'))
@@ -25,11 +25,11 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li><a href="{{ route('points.index') }}">Points</a></li>
-                <li class="active">Create Points</li>
+                <li><a href="{{ route('index') }}">@lang('label.adDashboard')</a></li>
+                <li><a href="{{ route('points.index') }}">@lang('label.adPoints')</a></li>
+                <li class="active">@lang('label.adCreate Points')</li>
             </ol>
-            <h1>Points</h1>
+            <h1>@lang('label.adPoints')</h1>
         </div>
         <div class="container">
             <div class="panel panel-default">
@@ -40,27 +40,27 @@
                             <input type="submit" name="save" id="save" class="btn btn-primary">
                         </div>
                         <div class="pull-right extra_button">
-                                <a href="{{ route('points.index') }}" class="btn btn-default" >Back</a>
+                                <a href="{{ route('points.index') }}" class="btn btn-default" >@lang('label.adBack')</a>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Activity<span>*</span></label>
-                                <input type="text" name="activity" id="activity" placeholder="Activity" class="form-control required">
+                                <label>@lang('label.adActivity')<span>*</span></label>
+                                <input type="text" name="activity" id="activity" placeholder="@lang('label.adActivity')" class="form-control required">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Points<span>*</span></label>
-                                <input type="text" name="points" id="points" placeholder="Points" class="form-control required">
+                                <label>@lang('label.adPoints')<span>*</span></label>
+                                <input type="text" name="points" id="points" placeholder="@lang('label.adPoints')" class="form-control required">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>Notes</label>
-                                <textarea name="notes" id="notes" placeholder="Notes" class="form-control"></textarea>
+                                <label>@lang('label.adNotes')</label>
+                                <textarea name="notes" id="notes" placeholder="@lang('label.adNotes')" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>

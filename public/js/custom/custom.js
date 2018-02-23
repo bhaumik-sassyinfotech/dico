@@ -35,7 +35,7 @@ $("#company_form").validate({
     },
     messages: {
         company_name: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         }/*,
         file_upload: {
             required: 'This field is required',
@@ -62,7 +62,7 @@ $("#security_question_form").validate({
     },
     messages: {
         question: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });
@@ -103,14 +103,14 @@ $("#employee_form").validate({
     },
     messages: {
         employee_name: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         employee_email: {
-            required: 'This field is required',
-            email: 'Enter valid email',
+            required: THIS_FIELD_REQUIRED,
+            email: PLEASE_ENTER_VALID_EMAIL,
         },
         role_id: {
-            required: 'This field is required'
+            required: THIS_FIELD_REQUIRED
         }
     }
 });
@@ -293,11 +293,11 @@ $('#points_form').validate({
     },
     messages: {
         activity: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         points: {
-            required: 'This field is required',
-            number: 'Please enter numbers only',
+            required: THIS_FIELD_REQUIRED,
+            number: PLEASE_NUMERIC_VALUE,
         }
     }
 });
@@ -518,14 +518,26 @@ $("#blockEdit").validate({
         },
         description: {
             required: true,
+        },
+        spanish_title: {
+            required: true,
+        },
+        spanish_description: {
+            required: true,
         }
     },
     messages: {
         title: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         description: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
+        },
+        spanish_title: {
+            required: THIS_FIELD_REQUIRED,
+        },
+        spanish_description: {
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });
@@ -558,13 +570,13 @@ $("#packageEdit").validate({
     },
     messages: {
         name: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         amount: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         total_user: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });
@@ -584,20 +596,34 @@ $('#adminfaqList').DataTable({
     ],
 });
 $("#faqsAdd").validate({
-    rules: {
+   rules: {
         question: {
             required: true,
         },
         answer: {
+            required: true,
+        
+        },
+        spanish_question: {
+            required: true,
+        
+        },
+        spanish_answer: {
             required: true,
         }
     },
     messages: {
         question: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
-        answer: {
-            required: 'This field is required',
+        question: {
+            required: THIS_FIELD_REQUIRED,
+        },
+        spanish_question: {
+            required: THIS_FIELD_REQUIRED,
+        },
+        spanish_answer: {
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });
@@ -608,14 +634,28 @@ $("#faqsEdit").validate({
         },
         answer: {
             required: true,
+        
+        },
+        spanish_question: {
+            required: true,
+        
+        },
+        spanish_answer: {
+            required: true,
         }
     },
     messages: {
         question: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
-        answer: {
-            required: 'This field is required',
+        question: {
+            required: THIS_FIELD_REQUIRED,
+        },
+        spanish_question: {
+            required: THIS_FIELD_REQUIRED,
+        },
+        spanish_answer: {
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });
@@ -644,10 +684,10 @@ $("#faqsAdd").validate({
     },
     messages: {
         question: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         answer: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });
@@ -696,25 +736,25 @@ $("#SettingsEdit").validate({
     },
     messages: {
         email1: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         support_email: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         copyright: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         mobile: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         twitter: {
-            url: 'Please enter proper url',
+            url: PLEASE_ENTER_PROPER_URL,
         },
         facebook: {
-            url: 'Please enter proper url',
+            url: PLEASE_ENTER_PROPER_URL,
         },
         instagram: {
-            url: 'Please enter proper url',
+            url: PLEASE_ENTER_PROPER_URL,
         }
     }
 });
@@ -734,12 +774,12 @@ $("#SettingsEdit").validate({
         },
         messages: {
             password: {
-                required: 'This field is required',
+                required: THIS_FIELD_REQUIRED,
                 minlength: 'Password must be a minimum 6 characters',
             },
             confirmPassword: {
-                required: 'This field is required',
-                equalTo: 'Password not match'
+                required: THIS_FIELD_REQUIRED,
+                equalTo: PASSWORD_NOT_MATCH
             }
         }
     });
@@ -754,8 +794,8 @@ $("#SettingsEdit").validate({
         },
         messages: {
             email: {
-                required: 'This field is required',
-                email: 'Please enter a valid email address.'
+                required: THIS_FIELD_REQUIRED,
+                email: PLEASE_ENTER_VALID_EMAIL
             }
         }
     });
@@ -772,10 +812,10 @@ $("#SettingsEdit").validate({
     },
     messages: {
         subject: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         description: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });
@@ -791,10 +831,10 @@ $("#SettingsEdit").validate({
     },
     messages: {
         issue: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         },
         description: {
-            required: 'This field is required',
+            required: THIS_FIELD_REQUIRED,
         }
     }
 });

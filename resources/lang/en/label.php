@@ -89,7 +89,7 @@ return [
     /*** Admin lable **/
     //comman js message
     'adPlease try again'=>"Please try again",    
-    'adAre you sure?'=>"Are you sure?",    
+    'adAre you sure'=>"Are you sure?",    
     'adYes, delete it' => 'Yes, delete it!',
     'adPlease try again' => 'Please try again',
     'adDeleted'=>'Deleted',
@@ -150,9 +150,11 @@ return [
     
     'adLogged in as' => 'Logged in as',
     'adEdit Profile' => 'Edit Profile',
+    'adProfile' => 'Profile',
     'adSign Out' => 'Sign Out',
     
    
+    
     //super admin company index 
     'adDICO - Company' => 'DICO - Company',
     'adNew Company' => 'New Company',
@@ -266,8 +268,115 @@ return [
     'adTwitter' => 'Twitter',
     'adInstagram' => 'Instagram',
     'adAddress' => 'Address',
+    
+    //meeting DICO - Meeting
+    'adDICO - Meeting' => 'DICO - Meeting',
+    'adMeeting' => 'Meeting',
+    'adNew Meeting' => 'New Meeting',
+    'adType' => 'Type',
+    'adPrivate' => 'Private',
+    'adPublic' => 'Public',
+    'adMeeting title' => 'Meeting title',
+    'adMeeting description' => 'Meeting description',
+    'adDate Of Meet' => 'Date Of Meet',
+    'adINVITE BY' => 'INVITE BY',
+    'adGroups' => 'Groups',
+    'adMembers' => 'Members',
+    'adMember Name' => 'Member Name',
+    'adADD' => 'ADD',
+    
+    //constant message
+    'TRY_MESSAGE' => 'Please try again.',
+    'CREATED_MESSAGE' => 'has been created successfully!!',
+    'ADDED_MESSAGE' => 'has been added successfully!!',
+    'UPDATE_MESSAGE' => 'has been updated successfully!!',
+    'DELETE_MESSAGE' => 'has been deleted successfully!!',
+    'NOT_DELETE' => 'This role already assign to existing users.!',
+    'NOT_FOUND' => 'not found.',
+    'OLD_PASSWORD_NOT_MATCH' => 'old password does not match.',
+    
+    
+    //company plan upgread
+    'Your plan updated successfully' => 'Your plan updated successfully.',
+    //contact controller
+    'Contact has been deleted successfully' => 'Contact has been deleted successfully',
+    'Contact is required' => 'Contact id  is required',
+    
+    //faqs controller super admin 
+    'Faqs has been deleted successfully' => 'Faqs has been deleted successfully',
+    
+    //feedback
+    'Feedback id is required' => 'Feedback id is required.',
+    'Feedback has been deleted successfully' => 'Feedback has been deleted successfully',
+    
+    //support controller
+    'Support id is required' => 'Support id is required',
+    'Support has been deleted successfully' => 'Support has been deleted successfully',
+    
+    //company create  form
+    'adCreate Company' => 'Create Company',
+    
+    //security question
+    'adCreate Security Question' => 'Create Security Question',
+    'adQuestion 1' => 'Question 1',
+    'adQuestion 2' => 'Question 2',
+    'adQuestion 3' => 'Question 3',
+    'adAnswer 1' => 'Answer 1',
+    'adAnswer 2' => 'Answer 2',
+    'adAnswer 3' => 'Answer 3',
+    'adSecurity Question 1' => 'Security Question 1',
+    'adSecurity Question 2' => 'Security Question 2',
+    'adSecurity Question 3' => 'Security Question 3',
+    'adUpload Photo' => 'Upload Photo',
+    
+    
+    //DICO - Points
+    'adDICO - Points' => 'DICO - Points',
+    'adPoints' => 'Points',
+    'adActivity' => 'Activity',
+    'adSearch' => 'Search',
+    'adNotes' => 'Notes',
+    'adCreate Points' => 'Create Points',
+    'adUpdate Points' => 'Update Points',
+    'adFilter' => 'Filter',
+    'adNotification off' => 'Notification off',
+    'adEdit Post' => 'Edit Post',
+    'adDelete Post' => 'Delete Post',
+    'adAll Points' => 'All Points',
+    'adPoint List' => 'Point List',
+    'adUser Name' => 'User Name',
+    'adIdea' => 'Idea',
+    'adQuestions' => 'Questions',
+    'adChallenges' => 'Challenges',
+    'adApproved' => 'Approved',
+    'adAnswers' => 'Answers',
+    'adSolutions' => 'Solutions',
+    'adComments' => 'Comments',
+    'adLikes' => 'Likes',
+    'adTotal' => 'Total',
+    'adGroup List' => 'Group List',
+    
+    //js error msg
+    'Please enter proper url' => 'Please enter proper url',
+    
+    
+    //login
+    'adDICO - Login' => 'DICO - Login',
+    'adEmail Id' => 'Email Id',
+    'adPassword' => 'Password',
+    'adRemember Me' => 'Remember Me',
+    'adForgot Password' => 'Forgot Password',
+    'adSend' => 'Send',
+    
+    //CURRENT PLAN package plan
+    'adCURRENT PLAN' => 'CURRENT PLAN',
+    'adDOWNGREAD PLAN' => 'DOWNGREAD PLAN',
+    'adUPGRAD PLAN' => 'UPGRAD PLAN',
     'ad' => 'Company',
     'ad' => 'Company',
+    'ad' => 'Company',
+    
+    
     
     //======== Added By Ankita 21-2-2018 ==============//
     //DICO - USER

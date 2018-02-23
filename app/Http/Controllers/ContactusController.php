@@ -56,12 +56,12 @@ class ContactusController extends Controller {
     public function contactDelete(Request $request) {
         
         if (isset($_POST['contact_id']) && $_POST['contact_id'] == '') {
-            return json_encode(array('err_msg' => 'Contact id  is required.', 'contact_id' => $_POST['contact_id']));
+            return json_encode(array('err_msg' => __('label.Contact is required'), 'contact_id' => $_POST['contact_id']));
         }
         $id = $_POST['contact_id'];
         $contactUs = Contactus::findOrFail($id);
         $contactUs->delete();
-        return json_encode(array('msg' => 'Contact has been deleted successfully', 'contact_id' => $_POST['contact_id']));
+        return json_encode(array('msg' => __('label.Contact has been deleted successfully'), 'contact_id' => $_POST['contact_id']));
     }
 }
 

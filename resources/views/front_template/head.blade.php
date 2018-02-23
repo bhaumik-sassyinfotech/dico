@@ -1,5 +1,6 @@
 <meta charset="UTF-8">
 <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta id="lang" name="langauge" value="{{ App::getLocale()}}">
 
 <link rel="shortcut icon" href="{{asset('public/front/images/favicon.ico')}}" type="image/ico" sizes="16x16">
@@ -24,6 +25,7 @@
 <link rel="stylesheet" href="{{asset('public/front/css/devmain.css')}}" />
 
 <link rel='stylesheet' type='text/css' href="{{asset('public/css/sweetalert.css')}}" />
+<script type="text/javascript" src="{{asset('public/js/app.js')}}"></script>
 <script type="text/javascript" src="{{asset('public/front/js/jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('public/front/js/nice-scroll.js')}}"></script>
 

@@ -1,5 +1,5 @@
 @extends('layouts.login')
-<title>DICO - Login</title>    
+<title>@lang('label.adDICO - Login')</title>    
 @section('content')
     <style type="text/css">
         .error1{
@@ -19,21 +19,21 @@
         <form class="common-form" method="POST" action="{{ route('login') }}" id="login_form">
             {{ csrf_field() }}
             <div class="form-group">
-                <label class="text-15">Email Id:</label>
-                <input id="email" name="email" type="email" placeholder="Enter email address" required autofocus>
+                <label class="text-15">@lang('label.adEmail Id'):</label>
+                <input id="email" name="email" type="email" placeholder="@lang('label.adEmail Id')"  autofocus>
                 <div id="email_error" class="error1"></div>
             </div>
             <div class="form-group">
-                <label class="text-15">Password:</label>
-                <input name="password" id="password" type="password" placeholder="Enter password" required>
+                <label class="text-15">@lang('label.adPassword'):</label>
+                <input name="password" id="password" type="password" placeholder="@lang('label.adPassword')" >
                 <div id="password_error" class="error1"></div>
             </div>
             <div class="form-group">
                 <div class="btn-wrap-div">
-                    <label class="check">Remember Me<input type="checkbox" {{ old('remember') ? 'checked' : '' }}>
+                    <label class="check">@lang('label.adRemember Me')<input type="checkbox" {{ old('remember') ? 'checked' : '' }}>
                         <span class="checkmark"></span>
                     </label>
-                    <a href="{{url('/adminForgotPassword')}}">Forgot Password</a>
+                    <a href="{{route('adminForgotPassword')}}">@lang('label.adForgot Password')</a>
                     <input type="submit" value="Login" class="st-btn loginBtn">
                 </div>
             </div>

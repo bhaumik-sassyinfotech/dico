@@ -580,8 +580,7 @@ $("#meeting_table").DataTable({
 });
 
 $("#login_form").validate({
-    // errorElement: "div",
-    // errorClass: "error1 error",
+    
     rules:{
         email: {
             required: true,
@@ -591,8 +590,17 @@ $("#login_form").validate({
             required: true,
         }
     },
+    messages:{
+        email: {
+            required: THIS_FIELD_REQUIRED,
+            email: PLEASE_ENTER_VALID_EMAIL,
+        },
+        password:{
+            required: THIS_FIELD_REQUIRED,
+        }
+    },
     errorPlacement: function(error, element) {
-
+    
         if(element.attr("name") == "email")
             error.appendTo('#email_error');
         if(element.attr("name") == "password")
