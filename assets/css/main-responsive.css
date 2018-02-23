@@ -741,7 +741,10 @@ body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialo
 }
 
 @media screen and (max-width:767px){
-     
+
+.search-box {
+    float: none;
+}    
 .point-page.all-group-list .table p {
     margin: 0;
 }

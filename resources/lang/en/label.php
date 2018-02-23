@@ -543,4 +543,5 @@ return [
     'Yes' => 'Yes',
     'Allowanonymousposting' => 'Allow anonymous posting',
     'UploadNew' => 'Upload New',
+    'Submit' => 'Submit',
 ];

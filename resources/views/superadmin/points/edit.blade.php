@@ -21,54 +21,50 @@
     </ul>
 </div>
 @endif
-<div id="page-content" class="create-user create-user-popup">
+<div id="page-content">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">@lang('label.adDashboard')</a></li>
+                <li><a href="{{ route('index') }}">@lang('label.adDashboard')</a></li>
                 <li><a href="{{ route('points.index') }}">@lang('label.adPoints')</a></li>
                 <li class="active">@lang('label.adUpdate Points')</li>
             </ol>
-            <h1>@lang('label.adPoints')</h1>
+            <h1 class="tp-bp-0">@lang('label.adPoints')</h1>
+            <hr class="border-out-hr">
         </div>
         <div class="container">
-            <div class="panel panel-default">
-                {!! Form::model($point, ['method' => 'PUT', 'route' => ['points.update', $point->id],'enctype'=>'multipart/form-data', 'id' => 'points_form','class' => 'common-form']) !!}
-                    
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>@lang('label.adActivity')<span>*</span></label>
-                                <input type="text" name="activity" id="activity" value="{{$point->activity}}" placeholder="@lang('label.adActivity')" class="form-control required">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>@lang('label.adPoints')<span>*</span></label>
-                                <input type="text" name="points" id="points" value="{{$point->points}}" placeholder="@lang('label.adPoints')" class="form-control required">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 form-group">
-                                <label>@lang('label.adNotes')</label>
-                                <textarea name="notes" id="notes" placeholder="@lang('label.adNotes')" class="form-control">{{$point->notes}}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="panel-footer">
-                        <div class="row col-xs-12">
-                            <div class="btn-toolbar">
-                                <a href="{{ route('points.index') }}" class="btn btn-default" >@lang('label.adBack')</a>
-                                <input type="submit" name="save" id="save" class="btn btn-primary" value="@lang('label.adSubmit')">
-                            </div>
-                        </div>
-                        <div style="clear: both;"></div>
-                    </div>
-                
-               <!-- </form>     -->
-               {!! Form::close() !!}
-            </div>
+            <div class="row">
+                <div id="company-from">
+                    <div class="panel panel-default">
+                    {!! Form::model($point, ['method' => 'PUT','class'=>'common-form', 'route' => ['points.update', $point->id],'enctype'=>'multipart/form-data', 'id' => 'points_form']) !!}
+
+                           
+                                <div class=" form-group">
+                                    <label>@lang('label.adActivity')<span>*</span></label>
+                                    <input type="text" name="activity" id="activity" value="{{$point->activity}}" placeholder="@lang('label.adActivity')" class="form-control required">
+                                </div>
+                       
+                                <div class=" form-group">
+                                    <label>@lang('label.adPoints')<span>*</span></label>
+                                    <input type="text" name="points" id="points" value="{{$point->points}}" placeholder="@lang('label.adPoints')" class="form-control required">
+                                </div>
+                          
+                                <div class="form-group">
+                                    <label>@lang('label.adNotes')</label>
+                                    <textarea name="notes" id="notes" placeholder="@lang('label.adNotes')" class="form-control">{{$point->notes}}</textarea>
+                                </div>
+                            
+                        <div class=" form-group">
+                            <div class="btn-wrap-div">
+                        <a href="{{ route('points.index') }}" class="st-btn btn-default" >@lang('label.adBack')</a>
+                        <input type="submit" name="save" id="save" class="st-btn btn-primary" value="@lang('label.adSubmit')">
+                            </div></div>
+                                
+                   <!-- </form>     -->
+                   {!! Form::close() !!}
+                </div>
+                </div>    
+            </div>    
         </div>
     </div>
 </div>

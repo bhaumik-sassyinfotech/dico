@@ -191,7 +191,7 @@ Route::group(['middleware' => 'admin'], function () {
         
 });
 
-// Route::get('/home', 'DashboardController@index')->name('home');
-//Route::get('/home', 'HomeController@index')->name('/home');
+ //Route::get('/home', 'DashboardController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('/home');
 });
 ?>
