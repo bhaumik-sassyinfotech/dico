@@ -17,7 +17,7 @@
     <div class="verticalcenter">
         @include('template.notification')
         {{--<p>Company: <span>Agency 96</span></p>--}}
-        <form class="common-form" method="POST" action="{{url('/forgotPasswordMail')}}" id="forgot_form">
+        <form class="common-form" method="POST" action="{{route('forgotPasswordMail')}}" id="forgot_form">
             {{ csrf_field() }}
             <div class="form-group">
                 <label class="text-15">@lang('label.adEmail Id'):</label>

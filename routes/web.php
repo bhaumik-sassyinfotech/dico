@@ -1,6 +1,7 @@
 <?php
 define('FROM_EMAIL', 'devsassyinfotech@gmail.com');
 define('REPLAY_NAME', 'Dico');
+
 Route::group(['prefix' => Request::segment(1)], function () {
 //Route::get('/', function () {
 //	return redirect('/index');
@@ -24,11 +25,11 @@ Route::POST('frontLogin', 'front\UsersController@frontLogin');
 Route::POST('companyRegister', 'front\UsersController@companyRegister');
 Route::get('/registerPackage/{package}','front\HomeController@registerPackage');
 Route::get('/front-logout', 'front\UsersController@logout');
-Route::POST('/forgotPasswordMail', 'front\UsersController@forgotPasswordMail');
+Route::POST('/forgotPasswordMail', 'front\UsersController@forgotPasswordMail')->name('forgotPasswordMail');
 Route::POST('/updateForgotPassword', 'front\UsersController@updateForgotPassword');
 
-Route::get('/forgotPasswordRequest/{data}', 'front\UsersController@forgotPasswordRequest');
-
+Route::get('/forgotPasswordRequest/{data}', 'front\UsersController@forgotPasswordRequest')->name('forgotPasswordRequest');
+Route::get('/noti', 'front\UsersController@noti')->name('noti');
 Route::group(['middleware' => 'front'], function () {
     Route::get('/companyProfile', 'front\DashboardController@companyProfile');
 });
@@ -111,7 +112,11 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('savecomment/{id}', 'PostController@savecomment')->name('savecomment');
 	Route::get('deletecomment/{id}', 'PostController@deletecomment')->name('deletecomment');
 	Route::get('like_comment/{id}', 'PostController@like_comment');
-	Route::get('dislike_comment/{id}', 'PostController@dislike_comment');
+        
+        
+	Route::get('postnotification', 'PostController@postnotification')->name('postnotification');
+	
+        Route::get('dislike_comment/{id}', 'PostController@dislike_comment');
 	Route::post('comment_solution', 'PostController@comment_solution');
 	Route::post('comment_reply', 'PostController@comment_reply');
 	Route::get('deletecommentReply/{id}', 'PostController@deletecommentReply');
@@ -178,7 +183,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::resource('settings', 'SettingsController');
         /*         * * Company admin update and  upgread own package * */
         Route::GET('companyEdit', 'CompanyController@companyEdit')->name('companyEdit');
-        Route::POST('updateCompany', 'CompanyController@updateCompany');
+        Route::POST('updateCompany', 'CompanyController@updateCompany')->name('updateCompany');
         Route::POST('packageUpgrade', 'CompanyController@packageUpgrade');
 
         /* feed back */
@@ -189,9 +194,12 @@ Route::group(['middleware' => 'admin'], function () {
         Route::GET('supportList', 'SupportController@supportList');
         Route::POST('deleteSupport', 'SupportController@deleteSupport')->name('deleteSupport');
         
+        //Notification on off
+        Route::resource('notification', 'NotificationController');
+        Route::POST('notificationOnOff', 'NotificationController@notificationOnOff')->name('notificationOnOff');
+        
+        
 });
-
- //Route::get('/home', 'DashboardController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('/home');
 });
 ?>

@@ -372,6 +372,22 @@ return [
     'adCURRENT PLAN' => 'CURRENT PLAN',
     'adDOWNGREAD PLAN' => 'DOWNGREAD PLAN',
     'adUPGRAD PLAN' => 'UPGRAD PLAN',
+    
+    
+    //side menu
+    'adNotification' => 'Notification',
+    
+    //DICO - Tags
+    'adDICO - Tags' => 'DICO - Tags',
+    'adyou will not able to recover this post' => 'you will not able to recover this post.',
+    'adSuccess' => 'Success',
+    'adError' => 'Error',
+    'adTags' => 'Tags',
+    'adPosts' => 'Posts',
+    'adRead More' => 'Read More',
+    'adStatus' => 'Status',
+    'adActive' => 'Active',
+    'ad' => 'Company',
     'ad' => 'Company',
     'ad' => 'Company',
     'ad' => 'Company',
