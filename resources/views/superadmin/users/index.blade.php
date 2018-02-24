@@ -162,7 +162,7 @@
                                                                 <div class="panel-heading trophy">
                                                                     <h4 class="icon">@lang("label.UsersList")</h4>
                                                                     <div class="pull-right">
-                                                                        <a href="{{ url('setting') }}"><img
+                                                                        <a href="{{ route('setting') }}"><img
                                                                                     src="{{asset('assets/img/settings-icon.png')}}"
                                                                                     alt="settings"></a>
                                                                     </div>

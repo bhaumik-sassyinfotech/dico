@@ -146,9 +146,9 @@ class PostController extends Controller {
                             DB::commit();
                             if ($post) {
                                     Helpers::add_points('CREATE_POST', Auth::user()->id, $post->id); // add create post  points
-                                    return redirect()->route('post.index')->with('success', 'Post ' . Config::get('constant.ADDED_MESSAGE'));
+                                    return redirect()->route('post.index')->with('success', __('label.Post').' ' . __('label.ADDED_MESSAGE'));
                             } else {
-                                    return redirect()->route('post.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                                    return redirect()->route('post.index')->with('err_msg', __('label.TRY_MESSAGE'));
                             }
 
 //                    return $next($request);
@@ -250,7 +250,7 @@ class PostController extends Controller {
                             $output = array('html' => $html->render(), 'count' => $count_post);
                             return $output;
                     } else {
-                            return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                            return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
                     }
             } catch (\exception $e) {
                     DB::rollback();
@@ -288,7 +288,7 @@ class PostController extends Controller {
 				$output = array('html' => $html->render(), 'count' => $count_user_post);
 				return $output;
 			} else {
-				return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+				return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (\exception $e) {
 			DB::rollback();
@@ -336,7 +336,7 @@ class PostController extends Controller {
 				$output = array('html' => $html->render(), 'count' => $count_group_post);
 				return $output;
 			} else {
-				return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+				return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (\exception $e) {
 			DB::rollback();
@@ -413,9 +413,9 @@ class PostController extends Controller {
 
 				DB::commit();
 				if ($res) {
-					return redirect()->route('post.index')->with('success', 'Post ' . Config::get('constant.UPDATE_MESSAGE'));
+					return redirect()->route('post.index')->with('success', __('label.Post') . __('label.UPDATE_MESSAGE'));
 				} else {
-					return redirect()->route('post.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect()->route('post.index')->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			} else {
 				return redirect('/index');
@@ -472,18 +472,18 @@ class PostController extends Controller {
 						$likepost = PostLike::where(array('post_id' => $id, 'flag' => 1))->get();
 						$dislikepost = PostLike::where(array('post_id' => $id, 'flag' => 2))->get();
 						if ($deleteLike) {
-							echo json_encode(array('status' => 0, 'msg' => "Remove post liked successfully", 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.RemovePostLike'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						}
 					} else {
 						$likepost = PostLike::where(array('user_id' => $user_id, 'post_id' => $id))->update(array('flag' => 1));
 						$likepost = PostLike::where(array('post_id' => $id, 'flag' => 1))->get();
 						$dislikepost = PostLike::where(array('post_id' => $id, 'flag' => 2))->get();
 						if ($likepost) {
-							echo json_encode(array('status' => 1, 'msg' => "post liked successfully", 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 1, 'msg' => __('label.PostLike'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						}
 					}
 
@@ -492,9 +492,9 @@ class PostController extends Controller {
 					$likepost = PostLike::where(array('post_id' => $id, 'flag' => 1))->get();
 					$dislikepost = PostLike::where(array('post_id' => $id, 'flag' => 2))->get();
 					if ($likepost) {
-						echo json_encode(array('status' => 1, 'msg' => "post liked successfully", 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+						echo json_encode(array('status' => 1, 'msg' => __('label.PostLike'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 					}
 				}
 			} else {
@@ -523,18 +523,18 @@ class PostController extends Controller {
 						$likepost = PostLike::where(array('post_id' => $id, 'flag' => 1))->get();
 						$dislikepost = PostLike::where(array('post_id' => $id, 'flag' => 2))->get();
 						if ($deletedislike) {
-							echo json_encode(array('status' => 0, 'msg' => "Remove post disliked successfully", 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.RemovePostDislike'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						}
 					} else {
 						$dislikepost = PostLike::where(array('user_id' => $user_id, 'post_id' => $id))->update(array('flag' => 2));
 						$likepost = PostLike::where(array('post_id' => $id, 'flag' => 1))->get();
 						$dislikepost = PostLike::where(array('post_id' => $id, 'flag' => 2))->get();
 						if ($dislikepost) {
-							echo json_encode(array('status' => 1, 'msg' => "post disliked successfully", 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 1, 'msg' => __('label.postDislike'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 						}
 					}
 
@@ -543,9 +543,9 @@ class PostController extends Controller {
 					$likepost = PostLike::where(array('post_id' => $id, 'flag' => 1))->get();
 					$dislikepost = PostLike::where(array('post_id' => $id, 'flag' => 2))->get();
 					if ($dislikepost) {
-						echo json_encode(array('status' => 1, 'msg' => "post disliked successfully", 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+						echo json_encode(array('status' => 1, 'msg' => __('label.postDislike'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likepost), 'dislikecount' => count($dislikepost)));
 					}
 				}
 			} else {
@@ -619,7 +619,7 @@ class PostController extends Controller {
 //            dd($post);
 			return view($this->folder . '.post.' . $view_page, compact('post', 'post_group', 'currUser', 'similar_post','company_user'));
 		} else {
-			return redirect('/index')->with('err_msg', Config::get('constant.TRY_MESSAGE'));
+			return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 		}
 	}
 
@@ -666,12 +666,12 @@ class PostController extends Controller {
 				}
 				DB::commit();
 				if ($res) {
-					return Redirect::back()->with('success', 'Comment ' . Config::get('constant.ADDED_MESSAGE'));
+					return Redirect::back()->with('success', __('label.Comment').' ' . __('label.ADDED_MESSAGE'));
 				} else {
-					return Redirect::back()->with('err_msg', Config::get('constant.TRY_MESSAGE'));
+					return Redirect::back()->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			} else {
-				return redirect('/index')->with('err_msg', Config::get('constant.TRY_MESSAGE'));
+				return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (\exception $e) {
 			DB::rollback();
@@ -688,9 +688,9 @@ class PostController extends Controller {
 		$deleteComment = $commentQuery->delete();
 		if ($deleteComment) {
 			Helpers::add_points('REMOVE_COMMENT', Auth::user()->id, $comment_id); // remove comment points
-			return Redirect::back()->with('success', 'Comment deleted successfully');
+			return Redirect::back()->with('success', __('label.CommentDelete'));
 		} else {
-			return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+			return Redirect::back()->with('err_msg', __('label.TRY_MESSAGE'));
 		}
 	}
 
@@ -709,18 +709,18 @@ class PostController extends Controller {
 						$likecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 1))->get();
 						$dislikecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 2))->get();
 						if ($deletelike) {
-							echo json_encode(array('status' => 0, 'msg' => "Remove comment Liked successfully", 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.RemoveCommentLike'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						}
 					} else {
 						$likecomment = CommentLike::where(array('user_id' => $user_id, 'comment_id' => $id))->update(array('flag' => 1));
 						$likecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 1))->get();
 						$dislikecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 2))->get();
 						if ($likecomment) {
-							echo json_encode(array('status' => 1, 'msg' => "comment liked successfully", 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 1, 'msg' => __('label.commentLike'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						}
 					}
 
@@ -729,9 +729,9 @@ class PostController extends Controller {
 					$likecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 1))->get();
 					$dislikecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 2))->get();
 					if ($likecomment) {
-						echo json_encode(array('status' => 1, 'msg' => "comment liked successfully", 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+						echo json_encode(array('status' => 1, 'msg' =>  __('label.commentLike'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 					}
 				}
 			} else {
@@ -756,18 +756,18 @@ class PostController extends Controller {
 						$likecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 1))->get();
 						$dislikecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 2))->get();
 						if ($deletedislike) {
-							echo json_encode(array('status' => 0, 'msg' => "Remove comment disiked successfully", 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.RemoveCommentDisLike'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						}
 					} else {
 						$dislikecomment = CommentLike::where(array('user_id' => $user_id, 'comment_id' => $id))->update(array('flag' => 2));
 						$likecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 1))->get();
 						$dislikecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 2))->get();
 						if ($dislikecomment) {
-							echo json_encode(array('status' => 1, 'msg' => "comment disliked successfully", 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 1, 'msg' => __('label.commentDislike'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 						}
 					}
 
@@ -776,9 +776,9 @@ class PostController extends Controller {
 					$likecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 1))->get();
 					$dislikecomment = CommentLike::where(array('comment_id' => $id, 'flag' => 2))->get();
 					if ($dislikecomment) {
-						echo json_encode(array('status' => 1, 'msg' => "comment disliked successfully", 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+						echo json_encode(array('status' => 1, 'msg' => __('label.commentDislike'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'likecount' => count($likecomment), 'dislikecount' => count($dislikecomment)));
 					}
 				}
 			} else {
@@ -808,9 +808,9 @@ class PostController extends Controller {
 					$comm = Comment::find($comment_id);
 					if ($check) {
 						if ($check->user_id == $user_id) {
-							echo json_encode(array('status' => 2, 'msg' => "Solution already marked"));
+							echo json_encode(array('status' => 2, 'msg' => __('label.SolutionMarked')));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => "Solution already marked"));
+							echo json_encode(array('status' => 0, 'msg' => __('label.SolutionMarked')));
 						}
 					} else {
 						$answer = Comment::where('id', $comment_id)->update(array('is_correct' => 1, 'is_correct_by_user' => $user_id));
@@ -822,13 +822,13 @@ class PostController extends Controller {
 							}
 							Helpers::add_points($str, $comm->user_id, $comm->id);
 
-							echo json_encode(array('status' => 1, 'msg' => "answer marked successfully"));
+							echo json_encode(array('status' => 1, 'msg' => __('label.answerMarked')));
 						} else {
-							echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+							echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 						}
 					}
 				} else {
-					return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			}
 		} catch (\exception $e) {
@@ -851,13 +851,13 @@ class PostController extends Controller {
 					$comment_text = $request->get('comment');
 					$res = Comment::where('id', $comment_id)->update(['comment_text' => $comment_text]);
 					if ($res) {
-						echo json_encode(array('status' => 1, 'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+						echo json_encode(array('status' => 1, 'msg' => __('label.Comment').' ' . __('label.UPDATE_MESSAGE')));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 					}
 				}
 			} else {
-				return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+				return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (Exception $ex) {
 			echo json_encode(array('status' => 2, 'msg' => $ex->getMessage()));
@@ -879,13 +879,13 @@ class PostController extends Controller {
 					$comment_text = $request->get('comment');
 					$res = CommentReply::where('id', $comment_id)->update(['comment_reply' => $comment_text]);
 					if ($res) {
-						echo json_encode(array('status' => 1, 'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+						echo json_encode(array('status' => 1, 'msg' => __('label.Comment').' ' .__('label.UPDATE_MESSAGE')));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 					}
 				}
 			} else {
-				return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+				return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (Exception $ex) {
 			echo json_encode(array('status' => 2, 'msg' => $ex->getMessage()));
@@ -915,14 +915,14 @@ class PostController extends Controller {
 					if ($reply_id) {
 						$commentReply = CommentReply::with('commentReplyUser')->where('id', $reply_id)->first()->toArray();
 						//return view($this->folder . '.post.comment', compact('commentReply','srno'));
-						echo json_encode(array('status' => 1, 'msg' => "Reply successfully"));
+						echo json_encode(array('status' => 1, 'msg' => __('label.ReplySuccess')));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 					}
 				} else {
-					//$request->session()->flash('err_msg', Config::get('constant.TRY_MESSAGE'));
+					//$request->session()->flash('err_msg', __('label.TRY_MESSAGE'));
 					//return redirect('/index');
-					echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+					echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 				}
 			}
 		} catch (Exception $ex) {
@@ -932,9 +932,9 @@ class PostController extends Controller {
 	public function deletecommentReply($id = null) {
 		$deleteCommentReply = CommentReply::where('id', $id)->delete();
 		if ($deleteCommentReply) {
-			return Redirect::back()->with('success', 'Comment deleted successfully');
+			return Redirect::back()->with('success', __('label.CommentDelete'));
 		} else {
-			return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+			return Redirect::back()->with('err_msg', __('label.TRY_MESSAGE'));
 		}
 	}
 	public function tags() {
@@ -948,7 +948,7 @@ class PostController extends Controller {
 			//dd($tags);
 			echo json_encode(array('status' => 1, 'data' => $tags));
 		} else {
-			echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+			echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 		}
 	}
 	public function allComments(Request $request) {
@@ -976,10 +976,10 @@ class PostController extends Controller {
 						$html = view($this->folder . '.post.allComments', compact('post'));
 						echo json_encode(array('status' => 1, 'msg' => '', 'html' => $html->render()));
 					} else {
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 					}
 				} else {
-					return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			}
 		} catch (Exception $ex) {
@@ -1003,14 +1003,14 @@ class PostController extends Controller {
 			PostView::where('post_id', $post_id)->update(['deleted_at' => Carbon\Carbon::now()]);
 			if (Post::where('id', $post_id)->update(['deleted_at' => Carbon\Carbon::now()])) {
 				DB::commit();
-				echo json_encode(array('status' => 1, 'msg' => 'Post ' . Config::get('constant.DELETE_MESSAGE')));
+				echo json_encode(array('status' => 1, 'msg' => __('label.Post').' ' . __('label.DELETE_MESSAGE')));
 			} else {
 				DB::rollBack();
-				echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+				echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 			}
 		} else {
 			DB::rollBack();
-			echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+			echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 		}
 		/* if($request->ajax())
 			            {
@@ -1051,14 +1051,14 @@ class PostController extends Controller {
 					}
 					if ($res) {
 						DB::commit();
-						echo json_encode(array('status' => 1, 'msg' => 'Post flagged successfully'));
+						echo json_encode(array('status' => 1, 'msg' => __('label.PostFlag')));
 					} else {
 						DB::rollBack();
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 					}
 				} else {
 					DB::rollBack();
-					return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			}
 		} catch (Exception $ex) {
@@ -1093,14 +1093,14 @@ class PostController extends Controller {
 					//}
 					if ($res) {
 						DB::commit();
-						echo json_encode(array('status' => 1, 'msg' => 'Comment flagged successfully'));
+						echo json_encode(array('status' => 1, 'msg' => __('label.CommentFlag')));
 					} else {
 						DB::rollBack();
-						echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+						echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 					}
 				} else {
 					DB::rollBack();
-					return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			}
 		} catch (Exception $ex) {
@@ -1136,7 +1136,7 @@ class PostController extends Controller {
 					}
 				}
 			} else {
-				return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+				return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (Exception $ex) {
 			echo json_encode(array('status' => 2, 'msg' => $ex->getMessage()));
@@ -1158,7 +1158,7 @@ class PostController extends Controller {
 					$html = view($this->folder . '.post.commentReply', compact('comment'));
 					echo json_encode(array('status' => 1, 'msg' => '', 'html' => $html->render()));
 				} else {
-					echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+					echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
 				}
 			}
 		} catch (Exception $ex) {
@@ -1211,14 +1211,14 @@ class PostController extends Controller {
 
 			$res = Post::where('id', $postId)->update(['idea_status' => $status, 'idea_reason' => $reason, 'idea_status_updated_by' => $currUser->id]);
 			if ($res) {
-				return response()->json(['status' => 1, 'msg' => "Status of this idea has been set successfully."]);
+				return response()->json(['status' => 1, 'msg' => __('label.statusIdea')]);
 			} else {
-				return response()->json(['status' => 0, 'msg' => "Failed to set the status of this idea."]);
+				return response()->json(['status' => 0, 'msg' => __('label.failStatusIdea')]);
 			}
 
 		}
 
-		return response()->json(['status' => 0, 'msg' => "[C->PC->c_s] This permission is only available to Admin or manager. "]);
+		return response()->json(['status' => 0, 'msg' => __('label.permissionAdmin')]);
 	}
 	public function idea_update($id, Request $request) {
 //        dd($request->all());

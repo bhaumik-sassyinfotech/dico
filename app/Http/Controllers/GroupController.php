@@ -134,7 +134,7 @@ class GroupController extends Controller {
                 }
                     return view($this->folder . '.groups.create', compact('companies'));
                 }else {
-                    return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                    return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
                 }
 	}
 
@@ -222,7 +222,7 @@ class GroupController extends Controller {
 
 						DB::commit();
 
-						return redirect()->route('group.index')->with('success', "Group " . Config::get('constant.CREATED_MESSAGE'));
+						return redirect()->route('group.index')->with('success', __('label.Group')." " . __('label.CREATED_MESSAGE'));
 
 					}
 
@@ -348,7 +348,7 @@ class GroupController extends Controller {
 
 		if ($group->save()) {
 
-			$data['msg'] = 'Group details has been updated successfully.';
+			$data['msg'] = __('label.GroupDetailUpdateSuccess');
 
 			$data['status'] = 1;
 
@@ -522,7 +522,7 @@ class GroupController extends Controller {
 
 			if ($groupUser->save()) {
 
-				return Response::json(['msg' => 'User has been promoted to group admin', 'status' => 1]);
+				return Response::json(['msg' => __('label.PromoteGroupAdmin'), 'status' => 1]);
 
 			}
 
@@ -532,18 +532,18 @@ class GroupController extends Controller {
 
 			if ($groupUser->save()) {
 
-				return Response::json(['msg' => 'User has been relegated', 'status' => 1]);
+				return Response::json(['msg' => __('label.UserRelegated'), 'status' => 1]);
 
 			}
 
 		} else if ($request->get('removeFromGroup') == 1) {
 
 			if ($groupUser->delete()) {
-				return Response::json(['msg' => 'User has been removed from the group.', 'status' => 1]);
+				return Response::json(['msg' => __('label.UserRemovedFromGroup'), 'status' => 1]);
 
 			} else {
 
-				return Response::json(['msg' => 'There has been some error removing user.', 'status' => 1]);
+				return Response::json(['msg' => __('label.TRY_MESSAGE'), 'status' => 0]);
 
 			}
 
@@ -575,11 +575,11 @@ class GroupController extends Controller {
 
 			if ($result) {
 
-				return Response::json(['msg' => 'Users has been added to the group.', 'status' => 1]);
+				return Response::json(['msg' => __('label.UserAddedGroup'), 'status' => 1]);
 
 			} else {
 
-				return Response::json(['msg' => 'There was some error adding users to group.', 'status' => 0]);
+				return Response::json(['msg' => __('label.TRY_MESSAGE'), 'status' => 0]);
 
 			}
 
@@ -600,7 +600,7 @@ class GroupController extends Controller {
             $admin = '';
 			if ($row->user_id == $groupDetails->group_owner) {
 
-				return "<p><a class='deactive-admin'>Group Owner</a></p>";
+				return "<p><a class='deactive-admin'>".__('label.Groupowner')."</a></p>";
 
 			} else {
 
@@ -608,13 +608,13 @@ class GroupController extends Controller {
 
 					if ($row->is_admin == 1) {
 
-						$admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class="active-admin demoteToUser">Promote to admin</a>';
+						$admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class="active-admin demoteToUser">'.__('label.PromoteAdmin').'</a>';
 
 						//$admin .= ' <a data-group-user-id="' . $row->id . '" style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class="left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
 
 					} else {
 
-						$admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class=" promoteToAdmin deactive-admin">Promote to admin</a>';
+						$admin = '<p><a href="#" data-group-user-id="' . $row->id . '" class=" promoteToAdmin deactive-admin">'.__('label.PromoteAdmin').'</a>';
 
 						$admin .= ' <a data-group-user-id="' . $row->id . '" style="padding: 7px 10px; display: inline-block; line-height: 135%; text-align: left;" class=" removeUser left-10" href="#"><img src="' . asset('assets/img/icon-delete.png') . '" alt="icon delete"></a></p>';
 
@@ -660,7 +660,7 @@ class GroupController extends Controller {
 
 			} else if ($row->user_id == $groupDetails->group_owner) {
 
-				$removeBtn = '<p>Group Owner</p>';
+				$removeBtn = '<p>'.__('label.Groupowner').'</p>';
 
 			}
 
@@ -760,7 +760,7 @@ class GroupController extends Controller {
 
 			Group::where('id', $group_id)->update($updateData);
 
-			return back()->with('success', 'Group picture has been updated successfully.');
+			return back()->with('success', __('label.GroupPictureUpdate'));
 
 		} else {
 
@@ -780,11 +780,11 @@ class GroupController extends Controller {
 
 			$group_id = $request->input('group_id');
 
-			$response = ['status' => 0, 'data' => [], 'msg' => "Please try again later."];
+			$response = ['status' => 0, 'data' => [], 'msg' => __('label.TRY_MESSAGE')];
 
 			if (empty($user_email) || empty($company_id) || empty($group_id)) {
 
-				$response = ['status' => 0, 'data' => [], 'msg' => "Field cannot be left empty."];
+				$response = ['status' => 0, 'data' => [], 'msg' => __('label.FieldEmpty')];
 
 			} else {
 
@@ -794,13 +794,13 @@ class GroupController extends Controller {
 
 					if (empty($user)) {
 
-						$response = ['status' => 0, 'data' => [], 'msg' => "User with this email address doesn't exist."];
+						$response = ['status' => 0, 'data' => [], 'msg' => __('label.UserEmailExist')];
 
 					} else {
 
 						if (GroupUser::where(['user_id' => $user->id, 'group_id' => $group_id, 'company_id' => $company_id])->exists()) {
 
-							$response = ['status' => 0, 'data' => [], 'msg' => "This user is already present in this group."];
+							$response = ['status' => 0, 'data' => [], 'msg' => __('label.AlreadyPresentGroup')];
 
 						} else {
 
@@ -810,11 +810,11 @@ class GroupController extends Controller {
 
 							if (GroupUser::insert($insertData)) {
 
-								$response = ['status' => 1, 'data' => [], 'msg' => "User has been added to the group."];
+								$response = ['status' => 1, 'data' => [], 'msg' => __('label.UserAddGroup')];
 
 							} else {
 
-								$response = ['status' => 0, 'data' => [], 'msg' => "Please try again later."];
+								$response = ['status' => 0, 'data' => [], 'msg' => __('label.TRY_MESSAGE')];
 
 							}
 
@@ -824,7 +824,7 @@ class GroupController extends Controller {
 
 				} else {
 
-					$response = ['status' => 0, 'data' => [], 'msg' => "User with this email address doesn't exist."];
+					$response = ['status' => 0, 'data' => [], 'msg' => __('label.UserEmailExist')];
 
 				}
 
@@ -915,7 +915,7 @@ class GroupController extends Controller {
 	public function deleteGroup(Request $request) {
 		$groups_ids = $request->input('groups');
 		$groups_ids = explode(',', $groups_ids);
-		$data = ['status' => 0, 'msg' => "Please try again later.", 'data' => []];
+		$data = ['status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'data' => []];
 
 		if (count($groups_ids) > 0) {
 			DB::beginTransaction();
@@ -968,10 +968,10 @@ class GroupController extends Controller {
 
 				if ($status == 0) {
 					DB::commit();
-					$data = ['status' => 1, 'msg' => 'Group has been deleted successfully.', 'data' => []];
+					$data = ['status' => 1, 'msg' => __('label.GroupDeleted'), 'data' => []];
 				} else if ($status == 1) {
 					DB::rollBack();
-					$data = ['status' => 0, 'msg' => 'Deletion of group failed.', 'data' => []];
+					$data = ['status' => 0, 'msg' => __('label.DeleteGroupFail'), 'data' => []];
 				}
 				return response()->json($data);
 			} catch (Exception $ex) {
@@ -1016,7 +1016,7 @@ class GroupController extends Controller {
 		$company_id = $request->input('company');
 		$group_name = $request->input('name');
 		$group_desc = $request->input('desc');
-		$data = ['status' => 0 , 'data' => [] , 'msg' => "Please try again later."];
+		$data = ['status' => 0 , 'data' => [] , 'msg' => __('label.TRY_MESSAGE')];
 		if(!empty($company_id) && !empty($group_name))
         {
             
@@ -1029,9 +1029,9 @@ class GroupController extends Controller {
 //                $grp_user = new GroupUser;
 //                $grp_user->user_id =
                 $data['status'] = 1;
-                $data['msg'] = 'Group created successfully.';
+                $data['msg'] = __('label.GroupCreated');
             } else {
-                $data['msg'] = 'Creation of group failed.';
+                $data['msg'] = __('label.GroupFail');
             }
         }
         return Response::json($data);
@@ -1071,9 +1071,9 @@ class GroupController extends Controller {
             $description = $request->input('description');
             $res = Group::where('id',$group_id)->update(['description'=>$description]);
             if($res) {
-               echo json_encode(array('status' => 1, 'msg' => "Group updated successfully")); 
+               echo json_encode(array('status' => 1, 'msg' => __('label.GroupUpdate'))); 
             } else {
-                echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
             }
         }
 }
