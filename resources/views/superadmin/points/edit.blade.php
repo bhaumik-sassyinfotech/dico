@@ -33,7 +33,6 @@
             <hr class="border-out-hr">
         </div>
         <div class="container">
-
             <div class="row">
                 <div id="company-from">
                     <div class="panel panel-default">
@@ -66,7 +65,6 @@
                 </div>
                 </div>    
             </div>    
-
         </div>
     </div>
 </div>

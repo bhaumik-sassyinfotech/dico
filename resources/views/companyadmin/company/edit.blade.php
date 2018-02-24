@@ -23,7 +23,7 @@
         <div id="page-heading">
             <ol class="breadcrumb">
                 <li><a href="{{ route('index') }}">@lang("label.adDashboard")</a></li>
-                <li><a href="{{ route('updateCompany') }}">@lang("label.adCompany")</a></li>
+                <li><a href="{{ url('/updateCompany') }}">@lang("label.adCompany")</a></li>
                 <li class="active">@lang("label.adUpdate Company")</li>
             </ol>
             <h1 class="tp-bp-0">@lang("label.adCompany")</h1>
@@ -34,7 +34,7 @@
             <div class="row">
                 <!-- <form name="company_form" id="company_form" method="post" action="{{route('company.update',$company->company_id)}}">-->
                 <div id="company-from">
-                    {!! Form::model($company, ['method' => 'POST', 'route' => ['updateCompany'],'enctype'=>'multipart/form-data', 'id' => 'company_form', 'class' => 'common-form']) !!}
+                    {!! Form::model($company, ['method' => 'POST', 'url' => ['updateCompany'],'enctype'=>'multipart/form-data', 'id' => 'company_form', 'class' => 'common-form']) !!}
                     {{ csrf_field() }}
                     <input type="hidden" value="{{$company->package_id}}" name="package_id" id="package_id">
                     <div class="package-left">

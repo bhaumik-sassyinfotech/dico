@@ -93,11 +93,6 @@ if ($role_id == 1) {
                 
             </ul>
         </li>
-          <li><a href="javascript:;"><i class="fa fa-gear"></i> <span>@lang("label.adNotification")</span></a>
-            <ul class="acc-menu">
-                <li><a href="{{ route('notification.index') }}"><span>@lang("label.adNotification")</span></a></li>                
-            </ul>
-        </li>
         <?php
 }
 //=====end superadmin menu=====//

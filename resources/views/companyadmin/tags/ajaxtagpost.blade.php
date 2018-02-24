@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="panel-body meetings">
-                            <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                            <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                             <div class="user-wrap"> 
                                 <div class="user-img">
                                     @if(empty($post['post_user']['profile_image']) || $post['is_anonymous'] == 1)
@@ -36,7 +36,7 @@
                                     @endif
                                 </div> 
                                 <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
-                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
+                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                             </div>
                             <fieldset>
@@ -90,7 +90,7 @@
                                     <span><?php echo count($post['post_comment']); ?></span>
                                 </div>
                                 <div class="status pull-right">
-                                      <p>@lang('label.adStatus'):<span>@lang('label.adActive')</span></p>
+                                      <p>Status:<span>Active</span></p>
                                 </div>  
                             </div> 
                             <?php

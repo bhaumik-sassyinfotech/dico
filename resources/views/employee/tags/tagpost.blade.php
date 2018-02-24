@@ -1,15 +1,17 @@
 @extends('template.default')
-<title>@lang('label.adDICO - Tags')</title>
+<title>DICO - Tags</title>
 @section('content')
-
+<?php 
+    $language = App::getLocale();
+?>
 <div id="page-content" class="group-listing posts">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-               <li><a href="{{ url('/home') }}">@lang('label.adDashboard')</a></li>
-               <li class="active">@lang('label.adTags')</li>
+               <li><a href="{{ url('/home') }}">Dashboard</a></li>
+               <li class="active">Tags</li>
             </ol>
-            <h1 class="tp-bp-0">@lang('label.adTags')</h1>
+            <h1 class="tp-bp-0">Tags</h1>
             <div class="options">
                 <div class="btn-toolbar">
                 </div>
@@ -22,7 +24,7 @@
                         <div class="panel-heading">
                             <h4>
                               <ul class="nav nav-tabs">
-                                <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">{{ucfirst($tag['tag_name'])}} @lang('label.adPosts')</span></a></li>
+                                <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">{{ucfirst($tag['tag_name'])}} Posts</span></a></li>
                                 <input type="hidden" name="tag_id" id="tag_id" value="{{$tag['id']}}">
                               </ul>
                             </h4>
@@ -86,7 +88,7 @@
                                                                 if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
                                                             ?>
                                                              <div class="btn-wrap" id="postread{{$post['id']}}">
-                                                                <a href="#" onclick ="postReadMore({{$post['id']}})">Read More')</a>
+                                                                <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
                                                              </div>
                                                                 <?php } ?>
                                                              <div class="panel-body-wrap">
@@ -129,7 +131,7 @@
                                                                      <span><?php echo count($post['post_comment']); ?></span>
                                                                  </div>
                                                                  <div class="status pull-right">
-                                                                       <p>@lang('label.adStatus'):<span>@lang('label.adActive')</span></p>
+                                                                       <p>Status:<span>Active</span></p>
                                                                  </div>  
                                                              </div> 
                                                              <?php
@@ -137,7 +139,7 @@
                                                              ?>
                                                              <hr>
                                                              <div class="post-circle">
-                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{route('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
+                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url($language.'/tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
                                                               </div>
                                                                  <?php } ?>
                                                          </div>
@@ -150,7 +152,7 @@
                                     <input type="hidden" id="count_post" value="{{$count_post}}">
                                     <?php if(!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
                                     ?>
-                                    <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">@lang('label.ViewMore')</a></div>
+                                    <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a></div>
                                     <?php
                                             } ?>
                                     
@@ -169,8 +171,8 @@
 <script type="text/javascript">
     function deletepost(id) {
     swal({
-    title: "@lang('label.adAre you sure')",
-            text: "@lang('label.adyou will not able to recover this post')",
+    title: "Are you sure?",
+            text: "you will not able to recover this post.",
             type: "info",
             showCancelButton: true,
             closeOnConfirm: false,
@@ -185,11 +187,11 @@
         success: function (response) {
             var res = JSON.parse(response);
             if (res.status == 1) {
-                swal("@lang('label.adSuccess')", res.msg, "success");
+                swal("Success", res.msg, "success");
                 location.reload();
             }
             else {
-                swal("@lang('label.adError')", res.msg, "error");
+                swal("Error", res.msg, "error");
             }
         }
     });

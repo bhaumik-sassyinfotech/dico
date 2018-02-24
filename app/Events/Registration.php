@@ -40,11 +40,11 @@ class Registration implements ShouldBroadcast {
     public function broadcastAs() {
         return 'message.register';
     }
-//Carbon::now()->diffForHumans($this->user->created_at
+
     public function broadcastWith() {
         return ['msg' => $this->user->name . ' Registration Successfully',
             'username' => $this->user->name,
-            'time' => 'now',
+            'time' => Carbon::now()->diffForHumans($this->user->created_at),
             'url' => url('/'),
         ];
     }
