@@ -1298,5 +1298,19 @@ class PostController extends Controller {
 			return Redirect::back()->with('err_msg', $ex->getMessage());
 		}
 	}
+        public function postnotification() {
+            $commentUser = Comment::where('post_id',25)->groupBy('user_id')->get();
+            
+            $postDetail = Post::where('id',25)->first();
+            $postUser = User::where('id',$postDetail->user_id)->first();
+           // dd($postUser);
+           // event(new \App\Events\PostUpdate($postUser));
+           // dd($postUser);
+            foreach ($commentUser as $postMyUser)
+            {
+               // dd($postMyUser->user_id);
+                 event(new \App\Events\PostUpdate($postUser,$postMyUser->user_id));
+            }
+        }
 }
 ?>

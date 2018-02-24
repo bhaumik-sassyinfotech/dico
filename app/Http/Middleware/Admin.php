@@ -16,7 +16,7 @@ class Admin {
 	public function handle($request, Closure $next) {
 
 		if (!Auth::check()) {
-			return redirect('/');
+			return redirect('/login');
 		}
 		if (Auth::user()->is_suspended == 1) {
 			Auth::logout();
