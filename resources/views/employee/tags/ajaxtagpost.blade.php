@@ -90,7 +90,7 @@
                                     <span><?php echo count($post['post_comment']); ?></span>
                                 </div>
                                 <div class="status pull-right">
-                                      <p>Status:<span>Active</span></p>
+                                      <p>@lang('label.adStatus'):<span>@lang('label.adActive')</span></p>
                                 </div>  
                             </div> 
                             <?php
@@ -98,7 +98,7 @@
                             ?>
                             <hr>
                             <div class="post-circle">
-                                <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
+                                <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{route('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
                              </div>
                                 <?php } ?>
                         </div>

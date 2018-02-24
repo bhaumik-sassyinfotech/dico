@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\front;
 
+use Carbon\Carbon;
 use App\Http\Requests;
 use App\User;
 use App\Company;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 use Helpers;
 use Validator;
 use DB;
+use Log;
 use App;
 use Auth;
 use App\Http\Controllers\Controller;
@@ -44,7 +46,7 @@ class UsersController extends Controller {
                   return Redirect::back()->with('err_msg', 'Username and password are invalid');
                   } */
                 if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password])) {
-                    return redirect(\App::getLocale().'/index')->with('success', 'Login successfully.');
+                    return redirect(\App::getLocale() . '/index')->with('success', 'Login successfully.');
                 } else {
                     return Redirect::back()->with('err_msg', 'Username and password are invalid');
                 }
@@ -208,6 +210,7 @@ class UsersController extends Controller {
             $companyData->allow_anonymous = 0;
             $companyData->allow_add_admin = 0;
             $companyData->company_admin = 1;
+            $companyData->language = 'en';
 
             $companyData->package_id = $package->id;
             $companyData->package_name = $package->name;
@@ -284,7 +287,7 @@ class UsersController extends Controller {
                     $emailTemplate->email = $_POST['email'];
                     $post = array('emailTemplate' => $emailTemplate, 'request' => $request, 'message' => $emailTemplate->email_body, 'email' => $emailTemplate->email);
                     event(new \App\Events\Registration($userData));
-                }                
+                }
                 return Redirect::back()->with('success', trans("label.Registration has been successfully"));
             } else {
                 return Redirect::back()->with('err_msg', trans("label.Something went wrong"));
@@ -407,8 +410,15 @@ class UsersController extends Controller {
         Auth::guard('front')->logout();
         return redirect('/users-login');
     }
+
     public function noti() {
+        $a = '2018-02-22 08:35:49';
+        //dd(Carbon::now()->diffForHumans($a));
+        //$tommorow = new Carbon;
+        //
         
-        event(new \App\Events\NewComment('this is test function'));
+        //event(new \App\Events\NewComment('this is test function'));
+        //dd(Carbon::now()->format('Y-m-d'));
     }
+
 }

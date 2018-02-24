@@ -11,10 +11,10 @@
 
 <!--<script type='text/javascript' src="{{asset('public/js/pusher.min.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/echo.js')}}"></script>-->
-<script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery-1.10.2.min.js')}}"></script>
-<script type='text/javascript'>
-jQuery.noConflict();</script>
 <script type='text/javascript' src="{{asset('public/js/app.js')}}"></script>
+<script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery-1.10.2.min.js')}}"></script>
+
+
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jqueryui-1.10.3.min.js')}}"></script>
 
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/bootstrap.min.js')}}"></script>
@@ -72,33 +72,57 @@ jQuery.noConflict();</script>
 <script type='text/javascript' src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/ckeditor/sample.js')}}"></script>
 <script type="text/javascript">
-                        $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
-                        $(document).ready(function () {
-                        //var LANG = "{{ App::getLocale()}}";
-                        //alert(LANG);
-                        $('#sel1 option[value=' + LANG + ']').attr('selected', 'selected');
-                        });
-                        if ($('#editor').val()){
-                        //console.log('dd',$('#editor').val());
-                        window.onload = function(){
-                        initSample();
+                        var changeLang = function (LANG) {
+                        console.log('LANG', LANG);
+                        var val = LANG;
+                        var path = window.location.href;
+                        var langPath = path.split('/');
+                        langPath[4] = LANG;
+                        var url = langPath.join('/');
+                        console.log('url', url);
+                        if (localStorage.mylang) {
+                        localStorage.mylang = LANG;
+                        } else {
+                        localStorage.mylang = 'en';
                         }
-                        }
+                        window.location.href = url;
+                        };
+<?php
+if (Auth::user()) {
+    $companyLang = DB::table('companies')->select('language')->where('id', Auth::user()->company_id)->first();
+    //dd($companyLang);
+    if($companyLang != null){
+        
+        $companyLang = $companyLang->language;
+    }else{
+        $companyLang = 'en';    
+    }
+    
+} else {
+    $companyLang = 'en';
+}
+if (Auth::user()) {
+    ?>
+                            //localStorage.mylang= 'en';
+                            var MYLANG = '<?= $companyLang; ?>';
+                            $(document).ready(function () {
+                            var path = window.location.href;
+                            var langPath = path.split('/');
+                            langPath[4] = LANG;
+                            if (langPath[4] != MYLANG){
+                            changeLang(MYLANG);
+                            }
+                            });
+                            if ($('#editor').val()){
+                            //console.log('dd',$('#editor').val());
+                            window.onload = function(){
+                            initSample();
+                            }
+                            }
+<?php } ?>
 </script>
 <script>
-                            var changeLang = function (that) {
-                            var val = $(that).val();
-                            var path = window.location.href;
-                            newPath = path.split('/' + LANG + '/');
-                            if (newPath.length > 1) {
-                            localStorage.setItem("JSLANG", val);
-                            window.location.href = newPath[0] + '/' + val + '/' + newPath[1];
-                            } else {
-                            newPath = path.split('/' + LANG);
-                            localStorage.setItem("JSLANG", val);
-                            window.location.href = newPath[0] + '/' + val;
-                            }
-                            };</script>    
+</script>    
 <script type='text/html' id="notificationData">
     <li>
         <a href="{URL}" class="notification-user active">
@@ -109,18 +133,31 @@ jQuery.noConflict();</script>
     </li>
 </script>
 <script type='text/javascript'>
-    function getNotificationHtml(data){
-        return $('#notificationData').html().replace('{URL}', data.url).replace('{TIME}', data.time).replace('{MSG}', data.msg);
-    }
+                            function getNotificationHtml(data){
+                            return $('#notificationData').html().replace('{URL}', data.url).replace('{TIME}', data.time).replace('{MSG}', data.msg);
+                            }
 </script>
 <script type='text/javascript'>
-            Echo.channel('activity')
-                .listen('.comment.added', (e) => {
+                            Echo.channel('activity')
+                                    .listen('.comment.added', (e) => {
 
-                $('#event').append('<li>' + e.comment + '</li>');
-                })
-                .listen('.message.register', (data) => {
-                    console.log(data);
-                $('.scrollthis').append(getNotificationHtml(data));
-                });
+                                    $('#event').append('<li>' + e.comment + '</li>');
+                                    })
+                                    .listen('.message.register', (data) => {
+                                    console.log(data);
+                                    $('.scrollthis').append(getNotificationHtml(data))
+                                    })
+                                    /* .listen('.message.postUpdate', (data) => {
+                                     console.log(data);
+                                     $('.scrollthis').append(getNotificationHtml(data));
+                                     })*/;
+<?php
+if (Auth::user()) {
+    ?>
+                                Echo.channel('activity.{{ \Auth::user()->id }}')
+                                        .listen('.message.postUpdate', (data) => {
+                                        console.log(data);
+                                        $('.scrollthis').append(getNotificationHtml(data));
+                                        });
+<?php } ?>
 </script>

@@ -29,26 +29,27 @@
                 <li><a href="{{ route('points.index') }}">@lang('label.adPoints')</a></li>
                 <li class="active">@lang('label.adUpdate Points')</li>
             </ol>
-            <h1>@lang('label.adPoints')</h1>
+            <h1 class="tp-bp-0">@lang('label.adPoints')</h1>
+            <hr class="border-out-hr">
         </div>
         <div class="container">
-            <div class="panel panel-default">
+        <div class="row">
+            
+            <div class="panel panel-default" id="company-from">
                 {!! Form::model($point, ['method' => 'PUT', 'route' => ['points.update', $point->id],'enctype'=>'multipart/form-data', 'id' => 'points_form','class' => 'common-form']) !!}
                     
-                    <div class="panel-body">
-                        <div class="row">
+                    <div class="row">
+                        
                             <div class="col-xs-12 form-group">
                                 <label>@lang('label.adActivity')<span>*</span></label>
                                 <input type="text" name="activity" id="activity" value="{{$point->activity}}" placeholder="@lang('label.adActivity')" class="form-control required">
                             </div>
-                        </div>
-                        <div class="row">
+                        
+                        
                             <div class="col-xs-12 form-group">
                                 <label>@lang('label.adPoints')<span>*</span></label>
                                 <input type="text" name="points" id="points" value="{{$point->points}}" placeholder="@lang('label.adPoints')" class="form-control required">
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xs-12 form-group">
                                 <label>@lang('label.adNotes')</label>
                                 <textarea name="notes" id="notes" placeholder="@lang('label.adNotes')" class="form-control">{{$point->notes}}</textarea>
@@ -68,6 +69,7 @@
                 
                <!-- </form>     -->
                {!! Form::close() !!}
+            </div>
             </div>
         </div>
     </div>

@@ -10,8 +10,8 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Post
-{
+class InappropriatePost implements ShouldBroadcast {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**

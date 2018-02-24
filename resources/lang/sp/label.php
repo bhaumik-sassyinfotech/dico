@@ -366,10 +366,17 @@ return [
     'adCURRENT PLAN' => 'sp CURRENT PLAN',
     'adDOWNGREAD PLAN' => 'sp DOWNGREAD PLAN',
     'adUPGRAD PLAN' => 'sp UPGRAD PLAN',
-    'ad' => 'Company',
-    'ad' => 'Company',
-    'ad' => 'Company',
     
+     //DICO - Tags
+    'adDICO - Tags' => 'spDICO - Tags',
+    'adyou will not able to recover this post' => 'sp you will not able to recover this post.',
+    'adSuccess' => 'spSuccess',
+    'adError' => 'sp Error',
+    'adTags' => 'sp Tags',
+    'adPosts' => 'sp Posts',
+    'adRead More' => 'sp Read More',
+    'adStatus' => 'sp Status',
+    'adActive' => 'sp Active',
     
     //======== Added By Ankita 21-2-2018 ==============//
     //DICO - USER
