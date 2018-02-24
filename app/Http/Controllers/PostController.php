@@ -569,7 +569,7 @@ class PostController extends Controller {
 			$q->take(COMMENT_DISPLAY_LIMIT)->orderBy('is_correct', 'desc');
 			$q->withCount('commentLike')->orderBy('comment_like_count', 'desc');
 			//$q->count();
-		}, 'postComment.commentUser', 'postComment.commentAttachment', 'postComment.commentLike', 'postComment.commentDisLike', 'postComment.commentReply', 'postComment.commentReply.commentReplyUser', 'postComment.commentUserLike', 'postComment.commentUserDisLike', 'postComment.commentFlagged', 'postTag.tag', 'postFlagged'])->select('*', DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
+		}, 'postComment.commentUser.following','postComment.commentUser.followers', 'postComment.commentAttachment', 'postComment.commentLike', 'postComment.commentDisLike', 'postComment.commentReply', 'postComment.commentReply.commentReplyUser', 'postComment.commentUserLike', 'postComment.commentUserDisLike', 'postComment.commentFlagged', 'postTag.tag', 'postFlagged'])->select('*', DB::raw('CASE WHEN status = "1" THEN "Active" ELSE "Closed" END AS post_status'))
 			->whereNULL('deleted_at')->where('id', $id)->withCount('postComment')->first(); //orderBy(DB::raw('count(postComment.commentLike)', 'DESC'))->first();
 		//dd(DB::getQueryLog());
 		//dd($post);

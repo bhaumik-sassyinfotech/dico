@@ -73,8 +73,8 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('notification_update_profile', 'UserController@notification_update_profile');
 	//Route::get('follow/{id}' , 'UserController@follow');
 	//Route::get('unfollow/{id}' , 'UserController@unfollow');
-	Route::get('follow/{id}', 'DashboardController@follow');
-	Route::get('unfollow/{id}', 'DashboardController@unfollow');
+	Route::get('follow/{id}', 'DashboardController@follow')->name('follow');
+	Route::get('unfollow/{id}', 'DashboardController@unfollow')->name('unfollow');
 	Route::match(['get', 'post'], '/searchPost', 'DashboardController@searchPost'); // search post on view profile page
 	Route::get('view_profile/{id}', 'DashboardController@view_profile')->name('view_profile');
 	/*Group*/

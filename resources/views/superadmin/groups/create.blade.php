@@ -75,7 +75,7 @@
                                                 <div class="form-group">
                                                     <label class="text-15" for="group_logo">@lang("label.GroupLogo"):</label>
                                                     <div class="upload-btn-wrapper">
-                                                        <button class="upload-btn">@lang("label.adUpload")</button>
+                                                        <button class="upload-btn">@lang("label.adUpload Photo")</button>
                                                         <input type="file" name="file_upload" id="file_upload" class="file-upload__input" value="" onchange="readURL(this)">
                                                     </div>
                                                 </div>

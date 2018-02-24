@@ -29,7 +29,7 @@ if (!empty($post['postComment'])) {
                         }
                     } else if ($commentUser->id != Auth::user()->id) {
                         ?>
-                        <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
+                        <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
                         <?php
                     }
                     ?>

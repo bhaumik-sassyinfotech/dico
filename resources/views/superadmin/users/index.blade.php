@@ -73,7 +73,7 @@
                                         <!-- Employee GRID START -->
                                         <input type="hidden" name="offset" id="offset" data-tab="1" value="0">
                                         <ul class="gallery list-unstyled" id="display-grid">
-                                            @if(count($users) > 0)
+                                            <?php if(count($users) > 0) { ?>
                                                 @foreach($users as $user)
                                                 @php
                                                     $class = 'industrial';
@@ -146,7 +146,10 @@
                                                 </div>
                                                 @endif
 
-                                            @endif
+                                            <?php } else {
+                                                echo __('label.NoDatafound');
+                                            }
+?>
                                         </ul>
                                         <input type="hidden" name="role_id" id="role_id" value="3">
                                         <input type="hidden" name="superadmin_user_listing" id="page_name" value="superadmin_user_listing">

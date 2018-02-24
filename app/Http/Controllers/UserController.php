@@ -192,9 +192,10 @@ class UserController extends Controller {
 					$userId = $user->id;
 					$grp = [];
 					foreach ($request->user_groups as $data) {
-						$grp[] = ['user_id' => $userId, 'group_id' => $data, 'is_admin' => 0, 'created_at' => $now, 'updated_at' => $now];
+						$grp[] = ['user_id' => $userId, 'group_id' => $data, 'is_admin' => 1, 'created_at' => $now, 'updated_at' => $now];
 					}
 //                    dd($grp);
+                                        $group = Group::where('id',$data)->update(['group_owner'=>$userId,'created_by'=>Auth::user()->id]);
 					GroupUser::insert($grp);
 				}
 
