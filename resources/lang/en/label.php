@@ -544,4 +544,18 @@ return [
     'Allowanonymousposting' => 'Allow anonymous posting',
     'UploadNew' => 'Upload New',
     'Submit' => 'Submit',
+    
+    //validation message
+    'Meetingcreated' => 'Meeting has been created successfully.',
+    'Meetingsaved' => 'Meeting details has been saved successfully.',
+    'CommentDelete' => 'Comment has been deleted successfully.',
+    'Meetingdeleted' => 'Meeting has been deleted successfully.',
+    'MeetingWarning' => 'You are not allowed to access a private meeting as you not a part of it.',
+    'Meetingsuccess' => 'Meeting has been finalized successfully.',
+    'Replysuccess' => 'Reply has been saved successfully.',
+    'leftMeeting' => 'You have successfully left the meeting.',
+    'RemoveCommentLike' => 'Remove comment Liked successfully.',
+    'commentLike' => 'comment liked successfully.',
+    'RemoveCommentDisLike' => 'Remove comment disiked successfully.',
+    'commentDislike' => 'comment disliked successfully.',
 ];

@@ -142,14 +142,15 @@ function saveMeeting() {
         }
     });*/
         $.ajax({
-            url: "{{ URL::to('meeting')}}",
+            url: "{{ route('meeting.store')}}",
             type:"post",
             cache: false,
             contentType: false,
             processData: false,
             data: form_data,
-            success: function(res) {
+            success: function(response) {
                 //location.reload();
+                var res = JSON.parse(response);
                 ajaxResponse('success',res.msg);
                 window.location.href = SITE_URL+'/'+LANG+ '/meeting';
                 

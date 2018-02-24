@@ -40,7 +40,7 @@
                                             <a href="{{ route('meeting.edit' , Helpers::encode_url($meeting->id) ) }}"
                                                class="set-edit">@lang("label.Edit")</a>
                                             <a href="{{ route('deleteMeeting' , Helpers::encode_url($meeting->id) ) }}"
-                                               class="set-delete">@lang("label.Delete")</a>
+                                               class="set-delete" onclick="return confirm('Are you sure that you want to delete this meeting?')">@lang("label.Delete")</a>
                                         @endif
                                     </div>
                                 </div>
