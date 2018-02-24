@@ -1,16 +1,16 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>@lang("label.DICOPost")</title>
 @section('content')
 
 <div id="page-content" class="idea-details challenges post-details">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li><a href="{{ route('post.index') }}">Post</a></li>
-                <li class="active">View Post</li>
+                <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{ route('post.index') }}">@lang("label.adPost")</a></li>
+                <li class="active">@lang("label.ViewPost")</li>
             </ol>
-            <h1 class="icon-mark tp-bp-0">Challenge</h1>
+            <h1 class="icon-mark tp-bp-0">@lang("label.Challenge")</h1>
             <hr class="border-out-hr">
         </div>
         <div class="container">
@@ -29,8 +29,8 @@
                                     @endif
                                 </div>
                                 <p class="user-icon">-<?php if ($post['is_anonymous'] == 0) { ?>
-                                    <a href="{{url('view_profile', Helpers::encode_url($post->postUser->id))}}">{{$post->postUser->name}}</a>
-                                    <?php } else { echo "Anonymous"; } ?> <span>on {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>      
+                                    <a href="{{route('view_profile', Helpers::encode_url($post->postUser->id))}}">{{$post->postUser->name}}</a>
+                                    <?php } else { echo __("label.Anonymous"); } ?> <span>@lang("label.on") {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>      
                             </div>    
                         </div> 
 
@@ -61,17 +61,17 @@ if ($post['user_id'] == Auth::user()->id) {
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
-                                                    <h4 class="modal-title">Request flagged in the Post</h4>
+                                                    <h4 class="modal-title">@lang("label.RequestflaggedPost")</h4>
                                                 </div>
                                                 <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
                                                  <div class="form-group">
-                                                    <label>Message To Author:</label>
+                                                    <label>@lang("label.MessageToAuthor"):</label>
                                                     <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
                                                  </div>
                                                  <div class="form-group">
                                                      <div class="btn-wrap-div">
-                                                         <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportPostFlagged();">
-                                                          <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                         <input class="st-btn" type="button" value="@lang('label.Submit')" name="submit" id="submit" onclick="reportPostFlagged();">
+                                                          <input value="@lang('label.Cancel')" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
                                                      </div>
                                                  </div>
                                                 </form>
@@ -119,11 +119,11 @@ if (!empty($post['postUserDisLike'])) {
                         </div>
                     </div>    
                     <hr class="border-in-hr">
-                    <form class="post-form" name="post_comment_form" id="post_comment_form" method="post" action="{{url('savecomment',$post->id)}}" enctype="multipart/form-data">
+                    <form class="post-form" name="post_comment_form" id="post_comment_form" method="post" action="{{route('savecomment',$post->id)}}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="post_id" id="post_id" value="{{$post['id']}}">
                         <div class="field-group comment">
-                            <textarea name="comment_text" id="comment_text" class="form-control autosize" placeholder="Leave a comment here" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 71.9792px;"></textarea>
+                            <textarea name="comment_text" id="comment_text" class="form-control autosize" placeholder="@lang('label.Leavecommenthere')" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 71.9792px;"></textarea>
                         </div>
                         <?php /*<div class="field-group files">
                                     <input disabled="disabled" placeholder="upload file" id="uploadFile">
@@ -137,11 +137,11 @@ if (!empty($post['postUserDisLike'])) {
                                 if(count($post['company']) > 0 && $post['company']->allow_anonymous == 1) {
                             ?>
                             <div class="pull-left">
-                                <label class="check">Post as Anonymous <input type="checkbox" name="is_anonymous" id="is_anonymous"><span class="checkmark"></span></label>
+                                <label class="check">@lang('label.PostasAnonymous') <input type="checkbox" name="is_anonymous" id="is_anonymous"><span class="checkmark"></span></label>
                             </div>
                             <?php } ?>
                             <div class="pull-right">
-                                <input type="submit" name="submit" id="submit" value="Submit" class="st-btn">
+                                <input type="submit" name="submit" id="submit" value="@lang('label.Submit')" class="st-btn">
                             </div>
                         </div>
                     </form>
@@ -154,19 +154,19 @@ if (!empty($post['postUserDisLike'])) {
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
-                                        <h4 class="modal-title">Request flagged in the Comment</h4>
+                                        <h4 class="modal-title">@lang('label.RequestflaggedComment')</h4>
                                     </div>
                                     <form method="post" class="common-form" name="comment_flagged_form" id="comment_flagged_form">
                                         <input type="hidden" name="comment_flagged_id" id="comment_flagged_id">
                                         <input type="hidden" name="comment_user_id" id="comment_user_id">
                                      <div class="form-group">
-                                        <label>Message To Author:</label>
-                                        <textarea type="text" placeholder="Type here" id="comment_message_autor" name="comment_message_autor"></textarea>
+                                        <label>@lang('label.MessageToAuthor'):</label>
+                                        <textarea type="text" placeholder="@lang('label.Typehere')" id="comment_message_autor" name="comment_message_autor"></textarea>
                                      </div>
                                      <div class="form-group">
                                          <div class="btn-wrap-div">
-                                             <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportCommentFlagged();">
-                                              <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                             <input class="st-btn" type="button" value="@lang('label.Submit')" name="submit" id="submit" onclick="reportCommentFlagged();">
+                                              <input value="@lang('label.Cancel')" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
                                          </div>
                                      </div>
                                     </form>
@@ -197,16 +197,16 @@ if (!empty($post['postUserDisLike'])) {
 			if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
 				if ($commentUser['following'][0]->status == 1) {
 					?>
-                                            <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Unfollow</a>
+                                            <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Unfollow')</a>
                                             <?php
 } else {
 					?>
-                                            <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
+                                            <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
                                             <?php
 }
 			} else if ($commentUser->id != Auth::user()->id) {
 				?>
-                                        <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >Follow</a>
+                                        <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
                                         <?php
 }
 			?>
@@ -215,9 +215,9 @@ if (!empty($post['postUserDisLike'])) {
                                 <div class="post-inner-reply">
                                     <div class="pull-left post-user-nam">
                                         <h3 class="text-12"><?php if ($postComment['is_anonymous'] == 0) { ?>
-                                            <a href="{{url('view_profile', Helpers::encode_url($commentUser['id']))}}">{{$commentUser['name']}}</a>
-                                         <?php } else { echo "<b>Anonymous</b>"; } ?></h3>
-                                        <p>- on <?php echo date(DATE_FORMAT, strtotime($postComment['created_at'])); ?></p>
+                                            <a href="{{route('view_profile', Helpers::encode_url($commentUser['id']))}}">{{$commentUser['name']}}</a>
+                                         <?php } else { echo __('label.Anonymous'); } ?></h3>
+                                        <p>- @lang('label.on') <?php echo date(DATE_FORMAT, strtotime($postComment['created_at'])); ?></p>
                                     </div>
                                     <div class="pull-right post-reply-pop">
                                         <div class="options">
@@ -233,9 +233,9 @@ $active = "";
                                                 <p id="icon_{{$postComment['id']}}" class="<?php echo $active; ?>">
                                                     <?php //if ($commentUser['id'] == Auth::user()->id) {?>
                                                     <?php if ($commentUser['id'] == Auth::user()->id || $commentUser['role_id'] > Auth::user()->role_id || count(Auth::user()->group) > 0) { ?>
-                                                        <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">Correct</a>
+                                                        <a id="solution_{{$postComment['id']}}" href="javascript:void(0)" onclick="markSolution({{$postComment['id']}}, {{$commentUser['id']}}, {{$post['id']}})">@lang('label.Correct')</a>
                                                     <?php } else {?>
-                                                        Correct
+                                                        @lang('label.Correct')
                                                     <?php }?>
                                                 </p>
                                                 <?php /*if ($post['user_id'] == Auth::user()->id) { ?>
@@ -269,7 +269,7 @@ $active = "";
                                                 <?php if ($commentUser['id'] == Auth::user()->id) { ?>
 
                                                 <a class="set-edit" href="javascript:void(0)" onclick="editComment(<?=$postComment['id']?>);">e</a>
-                                                <a class="set-alarm" href="{{url('/deletecomment',$postComment['id'])}}">a</a>
+                                                <a class="set-alarm" href="{{route('deletecomment',$postComment['id'])}}">a</a>
                                                 <?php }?>
                                             </div>
                                         </div>
@@ -321,14 +321,14 @@ if (!empty($postComment['commentUserDisLike'])) {
                             } 
                                 if($post['post_comment_count'] > COMMENT_DISPLAY_LIMIT) {
                             ?>
-                            <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allComments();">View all comments</a></div>
+                            <div><a href="javascript:void(0)" data-toggle="modal" data-target="#LoadModal" onclick="allComments();">@lang('label.Viewallcomments')</a></div>
                                 <?php }
                         } ?>
                             <div class="modal fade" id="LoadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">View all comments</h5>
+                                      <h5 class="modal-title" id="exampleModalLabel">@lang('label.Viewallcomments')</h5>
                                       <button type="button" class="close-button-small" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true"></span>
                                       </button>
@@ -336,7 +336,7 @@ if (!empty($postComment['commentUserDisLike'])) {
                                       <div class="modal-body" id="allcomments_box" style="height: 280px;overflow: auto;">
                                     </div>
                                     <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('label.Close')</button>
                                       <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
                                     </div>
                                   </div>
@@ -350,25 +350,25 @@ if (!empty($postComment['commentUserDisLike'])) {
                                 <div class="modal-header">
                                     <button type="button" class="close-button-small" data-dismiss="modal"></button>
                                     <div id="commentReplyList"></div>
-                                    <h4 class="modal-title">Comment Here</h4>
+                                    <h4 class="modal-title">@lang('label.CommentHere')</h4>
                                 </div>
                                 <form name="reply_form" id="reply_form" class="form-horizontal row-border  profile-page">
                                     <div class="modal-body">
                                         <input type="hidden" id="commentId" name="commentId">
                                         <div class="row">
-                                            <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="Leave a comment here"></textarea>
+                                            <textarea name="comment_reply_text" id="comment_reply_text" class="form-control autosize" placeholder="@lang('label.Leavecommenthere')"></textarea>
                                         </div>
                                         <?php
                                             if(count($post['company']) > 0 && $post['company']->allow_anonymous == 1) {
                                         ?>
                                         <div class="row">
-                                            <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">Anonymous</label><br>
+                                            <label class="checkbox-inline"><input type="checkbox" name="is_anonymous" id="is_anonymous">@lang('label.Anonymous')</label><br>
                                         </div>
                                         <?php } ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" onclick="comment_reply()">Submit</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="comment_reply()">@lang('label.adSubmit')</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">@lang('label.Close')</button>
                                     </div>
                                 </form>    
                             </div>
@@ -381,7 +381,7 @@ if (!empty($postComment['commentUserDisLike'])) {
                     <div class="col-sm-4" id="post-detail-right">
                     <!-- START RIGHT SIDEBAR -->
                         <div class="category">
-                            <h2>Group</span></h2>
+                            <h2><span>@lang('label.adGroup')</span></h2>
                             <div class="idea-grp post-category">
                                     <?php
                                         if(!empty($post_group)) {
@@ -399,7 +399,7 @@ if (!empty($postComment['commentUserDisLike'])) {
                                         </div>
                                         <div class="member-details">
                                             <h3 class="text-12">{{$group->group_name}}</h3>
-                                            <p class="text-10">Members: <span>{{$group->groupUsersCount->cnt}}</span></p>
+                                            <p class="text-10">@lang('label.Members'): <span>{{$group->groupUsersCount->cnt}}</span></p>
                                         </div>
                                     </div>
                                     <?php
@@ -407,7 +407,7 @@ if (!empty($postComment['commentUserDisLike'])) {
 } else {
 	?>
                                         <div class="member-wrap">
-                                            <p class="text-10">No group selected.</p>
+                                            <p class="text-10">@lang('label.Nogroupselected')</p>
                                         </div>
                                     <?php
 }
@@ -415,18 +415,18 @@ if (!empty($postComment['commentUserDisLike'])) {
                             </div>
                         </div>
                         <div class="category">
-                            <h2>Tags</h2>
+                            <h2>@lang('label.Tags')</h2>
                             <div class="post-circle post-category">
                                 <?php
 if (!empty($post->postTag) && count($post->postTag) > 0) {
 	foreach ($post->postTag as $postTag) {
 		?>
-                                <a href="{{url('tag', Helpers::encode_url($postTag['tag']['id']))}}"> {{$postTag['tag']['tag_name']}}</a>
+                                <a href="{{route('tag', Helpers::encode_url($postTag['tag']['id']))}}"> {{$postTag['tag']['tag_name']}}</a>
                                 <?php 
                                         }
                                     } else { 
                                         ?>
-                                        <p class="text-10">No tags selected.</p>
+                                        <p class="text-10">@lang('label.Notagsselected')</p>
                                 <?php        
                                     }
                                 ?>    
@@ -435,18 +435,18 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
 
 
                         <div class="category">
-                            <h2>Similar Posts</h2>
+                            <h2>@lang('label.SimilarPosts')</h2>
                             <div class="post-links">
                                 <?php
                                     if(!empty($similar_post) && count($similar_post) > 0) {
                                         foreach($similar_post as $similar) {
                                 ?>
-                                <a href="{{url('viewpost', Helpers::encode_url($similar->id))}}" class="profanity">{{$similar->post_title}}</a>
+                                <a href="{{route('viewpost', Helpers::encode_url($similar->id))}}" class="profanity">{{$similar->post_title}}</a>
                                 <?php 
                                         }
                                     } else {
                                 ?>
-                                <a href="javascript:void(0)">No similar post found.</a>
+                                <a href="javascript:void(0)">@lang('label.Nosimilarpostfound')</a>
                                 <?php
                                     }
                                 ?>
@@ -456,20 +456,20 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
 // if(!empty($post->postAttachment)) {
 ?>
                         <div class="category">
-                            <h2>Uploaded Files</h2>
+                            <h2>@lang('label.UploadedFiles')</h2>
                             <div class="wrap-name-upload">
                                 <div class="select">
                                     <select id="slct" name="slct">
-                                            <option>Name</option>
-                                            <option>Admin</option>
-                                            <option value="Super User">Super User</option>
-                                            <option value="Employee">Employee</option>
+                                            <option>@lang('label.adName')</option>
+                                            <option>@lang('label.Admin')</option>
+                                            <option value="Super User">@lang('label.SuperUser')</option>
+                                            <option value="Employee">@lang('label.Employee')</option>
                                     </select>
                                 </div>
                                 <div class="upload-btn-wrapper">
                                     <form name="uploadfile" id="uploadfile" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="postId" id="postId" value="{{$post['id']}}">
-                                        <button class="btn" id="uploadBtn">Upload File</button>
+                                        <button class="btn" id="uploadBtn">@lang('label.UploadFile')</button>
                                         <input name="file_upload" id="file_upload" type="file" onchange="uploadFile();">
                                     </form>
                                 </div>
@@ -487,12 +487,12 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                                     </div>
                                     <div class="member-details">
                                         <h3 class="text-10">{{$attachment->file_name}}</h3>
-                                        <p>Uploaded By:<a href="#">{{$attachment->attachmentUser->name}}</a></p>
+                                        <p>@lang('label.UploadedBy'):<a href="#">{{$attachment->attachmentUser->name}}</a></p>
                                     </div>
                                 </div>    
                                 <?php } }
                                     else {
-                                        echo "<p>No files uploaded.</p>";
+                                        echo "<p>".__('label.Nofilesuploaded')."</p>";
                                     }
                                 ?>
                             </div> 
@@ -513,8 +513,8 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
 <script type="text/javascript">
     function deletepost(id) {
         swal({
-            title: "Are you sure?",
-            text: "you will not able to recover this post.",
+            title: "{{__('label.adAre you sure?')}}",
+            text: "{{__('label.WarningPost')}}",
             type: "info",
             showCancelButton: true,
             closeOnConfirm: false,
@@ -524,7 +524,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             var formData = {post_id : id, _token : token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
+                url: SITE_URL+'/'+LANG + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
                 type: "POST",
                 data: formData,
                 success: function (response) {
@@ -545,8 +545,8 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
     function markSolution(commentid, userid, postid)
     {
         swal({
-        title: "Are you sure?",
-                text: "This will be consider as answer and publish to post user.",
+        title: "{{__('label.adAre you sure?')}}",
+                text: "{{__('label.WarningCorrect')}}",
                 type: "info",
                 showCancelButton: true,
                 closeOnConfirm: true,
@@ -556,7 +556,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         var formData = {comment_id:commentid, user_id:userid, post_id:postid, _token};
         $("#spinner").show();
             $.ajax({
-            url: SITE_URL + '/comment_solution',
+            url: SITE_URL +'/'+LANG+ '/comment_solution',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -609,7 +609,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             var formData = {comment_id:commentid, comment_reply:comment_reply, post_id:post_id, is_anonymous:anonymous, srno:srno, _token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/comment_reply',
+                url: SITE_URL +'/'+LANG+ '/comment_reply',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -636,7 +636,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             formData = {id:id,comment:comment,_token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/comment_update',
+                url: SITE_URL +'/'+LANG+ '/comment_update',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -667,7 +667,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             formData = {id:id,comment:comment,_token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/comment_reply_update',
+                url: SITE_URL +'/'+LANG+ '/comment_reply_update',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -705,7 +705,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             formData = {post_id:post_id,user_id:user_id,reason:reason,_token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/post_flagged',
+                url: SITE_URL+'/'+LANG+ '/post_flagged',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -731,7 +731,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
         formData = {post_id:post_id,offset:0,_token};
         $("#spinner").show();
         $.ajax({
-            url: SITE_URL + '/allComments',
+            url: SITE_URL +'/'+LANG+ '/allComments',
             type: 'POST',
             data: formData,
             success: function(response) {
@@ -765,7 +765,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/comment_flagged',
+                url: SITE_URL +'/'+LANG+ '/comment_flagged',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -796,7 +796,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             formData = {comment_id:commentid,_token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/getCommentReply',
+                url: SITE_URL +'/'+LANG+ '/getCommentReply',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -818,7 +818,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
             $('#myModalComment').modal('show');
             $('#commentId').val(commentid);
         }else {
-            swal("Error", "comment not found", "error");
+            swal("Error", "{{__('label.commentnotfound')}}", "error");
         }
     }
 </script>

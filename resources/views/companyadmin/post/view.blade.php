@@ -63,7 +63,7 @@
                                                 <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
                                                  <div class="form-group">
                                                     <label>@lang("label.MessageToAuthor"):</label>
-                                                    <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
+                                                    <textarea type="text" placeholder="@lang('label.Typehere')" id="post_message_autor" name="post_message_autor"></textarea>
                                                  </div>
                                                  <div class="form-group">
                                                      <div class="btn-wrap-div">
@@ -209,7 +209,7 @@
                                                         <a href="javascript:void(0)" class="text-12"><?php if ($postComment['is_anonymous'] == 0) { ?>
                                                             <a href="{{route('view_profile', Helpers::encode_url($commentUser['id']))}}">{{$commentUser['name']}}</a>
                                                             <?php } else { echo __('label.Anonymous'); } ?></a>
-                                                        <p>- on <?php echo date(DATE_FORMAT, strtotime($postComment['created_at'])); ?></p>
+                                                        <p>- @lang('label.on') <?php echo date(DATE_FORMAT, strtotime($postComment['created_at'])); ?></p>
                                                     </div>
                                                     <div class="pull-right post-reply-pop">
                                                         <div class="options">
@@ -390,7 +390,7 @@
                     <div class="col-sm-4" id="post-detail-right">
                     <!-- START RIGHT SIDEBAR -->
                         <div class="category">
-                            <h2>@lang('label.adGroup')</span></h2>
+                            <h2><span>@lang('label.adGroup')</span></h2>
                             <div class="idea-grp post-category">
                                 <?php
                                     if(!empty($post_group)) {
@@ -422,7 +422,7 @@
 
                         </div>
                         <div class="category">
-                            <h2>Tags</h2>
+                            <h2>@lang('label.Tags')</h2>
                             <div class="post-circle post-category">
                                 <?php
                                 if (!empty($post->postTag) && count($post->postTag) > 0) {
@@ -499,7 +499,7 @@ if (!empty($post->postAttachment)) {
                                 </div>    
                                     <?php } }
                                         else {
-                                            echo "<p class='text-12'>".@lang('label.Nofilesuploaded')."</p>";
+                                            echo "<p class='text-12'>".__('label.Nofilesuploaded')."</p>";
                                         }
                                     ?>
                             </div> 

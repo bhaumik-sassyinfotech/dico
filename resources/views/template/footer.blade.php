@@ -11,6 +11,7 @@
 
 <!--<script type='text/javascript' src="{{asset('public/js/pusher.min.js')}}"></script>
 <script type='text/javascript' src="{{asset('public/js/echo.js')}}"></script>-->
+
 <script type='text/javascript' src="{{asset('public/js/app.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery-1.10.2.min.js')}}"></script>
 
@@ -138,6 +139,7 @@ if (Auth::user()) {
                             }
 </script>
 <script type='text/javascript'>
+
                             Echo.channel('activity')
                                     .listen('.comment.added', (e) => {
 

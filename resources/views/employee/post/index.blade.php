@@ -324,7 +324,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                 ?>
                                                                     <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                                                 <?php } else { ?>
-                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                    <a href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
                                                                 <?php } ?>
                                                                 </div>
                                                             </div>

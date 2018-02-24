@@ -25,7 +25,7 @@
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ route('index') }}">@lang('label.adDashboard')</a></li>
+                <li><a href="{{ url('/home') }}">@lang('label.adDashboard')</a></li>
                 <li><a href="{{ route('points.index') }}">@lang('label.adPoints')</a></li>
                 <li class="active">@lang('label.adCreate Points')</li>
             </ol>
@@ -37,7 +37,7 @@
                      {{ csrf_field() }}
                     <div class="new_button">
                         <div class="pull-right extra_button">
-                            <input type="submit" name="save" id="save" class="btn btn-primary">
+                            <input type="submit" name="save" id="save" class="btn btn-primary" value="@lang('label.adSubmit')">
                         </div>
                         <div class="pull-right extra_button">
                                 <a href="{{ route('points.index') }}" class="btn btn-default" >@lang('label.adBack')</a>
@@ -47,7 +47,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 form-group">
-                                <label>@lang('label.adActivity')<span>*</span></label>
+                                <label>@lang('label.adActivity<span>*</span></label>
                                 <input type="text" name="activity" id="activity" placeholder="@lang('label.adActivity')" class="form-control required">
                             </div>
                         </div>

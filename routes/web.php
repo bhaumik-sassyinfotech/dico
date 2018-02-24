@@ -41,7 +41,7 @@ Route::get('index', 'HomeController@index')->name('index');
 
 Auth::routes();
 Route::match(['get', 'post'], '/first_login', 'UserSecurityQuestionController@firstLogin')->name('security.firstLogin');
-Route::match(['get', 'post'], '/saveSettings', 'DashboardController@saveSettings');
+Route::match(['get', 'post'], '/saveSettings', 'DashboardController@saveSettings')->name('saveSettings');
 Route::get('/adminForgotPassword', 'Auth\ForgotPasswordController@adminForgotPassword')->name('adminForgotPassword');
 Route::group(['middleware' => 'admin'], function () {
 	/*Route::get('setting', function () {
@@ -126,7 +126,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('meeting/deleteMeeting/{id}', 'MeetingController@deleteMeeting')->name('deleteMeeting');
 	Route::get('meeting/deleteIdeaPost/{id}', 'MeetingController@deleteIdeaPost');
 	Route::match(['get', 'post'], 'meeting/finalizeMeeting', 'MeetingController@finalizeMeeting')->name('finalizeMeeting');
-	Route::post('meeting/saveComment/{id}', 'MeetingController@savecomment');
+	Route::post('meeting/saveComment/{id}', 'MeetingController@savecomment')->name('meeting.saveComment');
 	Route::match(['get', 'post'], 'meeting/deleteComment', 'MeetingController@deletecomment')->name('deleteMeetingComment');
 	Route::match(['get', 'post'], 'meeting/UpdateComment', 'MeetingController@updateComment')->name('updateMeetingComment');
 	Route::match(['get', 'post'], 'meeting/commentReply', 'MeetingController@replyToComment')->name('replyToMeetingComment');
@@ -151,7 +151,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::post('meeting_comment_update', 'MeetingController@meeting_comment_update');
 	Route::get('like_attachment_comment/{id}', 'MeetingController@like_attachment_comment');
 	Route::get('dislike_attachment_comment/{id}', 'MeetingController@dislike_attachment_comment');
-	Route::get('deleteMeetingComment/{id}', 'MeetingController@deleteMeetingComment');
+	Route::get('deleteMeetingComment/{id}', 'MeetingController@deleteMeetingComment')->name('meeting.deleteMeetingComment');
 	Route::post('loadmoreallmeeting', 'MeetingController@loadmoreallmeeting');
 	Route::post('loadmoremymeeting', 'MeetingController@loadmoremymeeting');
         Route::post('allMeetingComments','MeetingController@allMeetingComments');
@@ -200,8 +200,6 @@ Route::group(['middleware' => 'admin'], function () {
         
         
 });
-    Route::get('/home', 'HomeController@index')->name('/home');
-// Route::get('/home', 'DashboardController@index')->name('home');
-//Route::get('/home', 'HomeController@index')->name('/home');
+Route::get('/home', 'HomeController@index')->name('/home');
 });
 ?>

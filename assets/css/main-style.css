@@ -1188,19 +1188,23 @@ body .text-12 {
   text-decoration: none;
 }
 .point-page .table a {
-  color: #006dc7;
-  font-family: Open Sans;
-  font-size: 12px;
-  font-weight: 100;
-  line-height: 100%;
-  text-decoration: none;
-  font-weight: 500;    
+    color: #006dc7;
+    font-family: Open Sans;
+    font-size: 12px;
+    font-weight: 100;
+    line-height: 160%;
+    text-decoration: none;
+    font-weight: 500;
+    word-wrap: break-word;
+    width: 140px;
+    display: inline-block;
 }
 .point-page .table > thead > tr > th {
     border-bottom: 1px solid #ddd;
-    padding: 14px;
+    padding: 13px;
+    vertical-align: top;
+    line-height: 170%;
 }
-
 .point-page .table > tbody + tbody{
   border-top: 1px solid #ddd;
 }
@@ -4494,7 +4498,7 @@ nav#page-leftbar {
 }
 .idea-details #post-detail-left .modal-body .user-image { width: 12%; } .idea-details #post-detail-left .user-rply { width: 87%; } body .idea-details .modal-dialog .modal-content, body .idea-details .modal-dialog { width: 760px; } 
 
-.textarea-width { width: 100%; height: 150px; resize: none; padding: 0px; border: none; text-align: justify; background-color: transparent; } 
+.textarea-width { width: 100%; resize: none; padding: 0px; border: none; text-align: justify; background-color: transparent; } 
 
 /*close 08-01-2018*/
 
@@ -5325,3 +5329,56 @@ body .group-listing .group-tabs .tab-content #threads {
     cursor: pointer;
 }
 /*close 16-02-2018*/
+
+/*search box*/
+
+.search-box .form-control {
+    width: 100% !important;
+    display: block !important;
+    height: 35px !important;
+}
+.search-box label {
+    display: block;
+}
+.search-box .btn.btn-primary {
+    width: auto;
+    float: none;
+    margin: 30px 0 0;
+}
+.search-box .form-group {
+    margin: 0px;
+    display: block;
+    float: left;
+    width: 70%;
+    padding-right: 2%;
+}
+.search-box .btn.btn-primary:hover {
+    background-color: #ccc;
+    color: #333;
+}
+.search-box {
+    float: right;
+    position: relative;
+    z-index: 999;
+    width: auto;
+}
+.mp-20 {
+    margin-top: 20px;
+}
+
+/*close search box*/
+
+.point-page #group_table_wrapper .table a {
+    width: auto;
+}
+.navbar-nav .dropdown-toggle {
+    padding-bottom: 20px;
+}
+.post-details.create-post .post-category .member-wrap.files-upload {
+    border-left: none;
+    border-right: none;
+}
+
+.post-details.create-post #post_form .category:last-child {
+    border: 1px solid #a3a3a3;
+}

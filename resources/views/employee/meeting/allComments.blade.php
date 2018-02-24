@@ -23,18 +23,18 @@ if(!empty($meeting->meetingComment)) {
             {
                 if ($commentUser['following'][0]->status == 1)
                 { ?>
-                    <a href="{{ url('/view_profile/'.$comment_id) }}">Unfollow</a>
+                    <a href="{{ route('view_profile',$comment_id) }}">@lang("label.Unfollow")</a>
                     <?php
                 } else
                 { ?>
-                    <a href="{{ url('/view_profile/'.$comment_id) }}"
-                    >Follow</a>
+                    <a href="{{ route('view_profile',$comment_id) }}"
+                    >@lang("label.Follow")</a>
                   <?php
                 }
             } else if ($commentUser->id != Auth::user()->id)
             { ?>
-                    <a href="{{ url('/view_profile/'.$comment_id) }}"
-                    >Follow</a>
+                    <a href="{{ route('view_profile',$comment_id) }}"
+                    >@lang("label.Follow")</a>
                 <?php
             }
             ?>
@@ -45,7 +45,7 @@ if(!empty($meeting->meetingComment)) {
             <div class="post-inner-reply">
                 <div class="pull-left post-user-nam">
                     <a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}">{{ $comment->commentUser->name }}</a>
-                    <p>- on {{ date(DATE_FORMAT,strtotime($comment->created_at)) }}</p>
+                    <p>- @lang("label.on") {{ date(DATE_FORMAT,strtotime($comment->created_at)) }}</p>
                 </div>
                 <div class="pull-right post-reply-pop">
                     <div class="options">
@@ -61,8 +61,8 @@ if(!empty($meeting->meetingComment)) {
             <p class="profanity" id="comment_disp_popup_<?=$comment['id']?>"><?php echo $comment->comment_reply; ?></p>
                 <textarea name="comment_text" id="comment_text_popup_<?=$comment['id']?>" readonly="" class="text-12 textarea-width" style="display: none;"><?php echo  $comment->comment_reply; ?></textarea>
                 <div class="btn-wrap-div">
-                    <input type="button" name="update_comment" id="update_comment_popup_<?=$comment['id']?>" value="Save" class="st-btn" onclick="updateComment(<?=$comment['id']?>,'<?= 'popup_'.$comment['id'] ?>')" style="display: none;"/>
-                    <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$comment['id']?>" value="Cancel" class="btn btn-secondary btn-st" onClick="this.form.reset();closeComment('<?= 'popup_'.$comment['id'] ?>')" style="display: none;"/>
+                    <input type="button" name="update_comment" id="update_comment_popup_<?=$comment['id']?>" value="@lang('label.Save')" class="st-btn" onclick="updateComment(<?=$comment['id']?>,'<?= 'popup_'.$comment['id'] ?>')" style="display: none;"/>
+                    <input type="button" name="cancel_comment" id="cancel_comment_popup_<?=$comment['id']?>" value="@lang('label.Cancel')" class="btn btn-secondary btn-st" onClick="this.form.reset();closeComment('<?= 'popup_'.$comment['id'] ?>')" style="display: none;"/>
                 </div>    
             <div class="rply-box">
                 <div class="rply-count like">
