@@ -109,10 +109,11 @@
                 $validator = Validator::make($request->all(),
                 [
                         'privacy' => 'required',
-                        'meeting_title' => 'required|max:' . POST_TITLE_LIMIT,
+                        'meeting_title' => 'required',
                 ]);
                 if ($validator->fails()) {
-                        return Redirect::back()->withErrors($validator)->withInput();
+                    echo json_encode(array('status' => 0, 'msg' => $validator->errors()->all()));
+                       // return Redirect::back()->withErrors($validator)->withInput();
                 }
                 $company_id = $request->company_id;
                 $privacy    = ($request->privacy == 'public') ? 0 : 1;
@@ -124,11 +125,11 @@
                 $meeting                      = new Meeting;
                 $meeting->meeting_title       = $request->meeting_title;
                 $meeting->meeting_description = $request->meeting_description;
-                $meeting->date_of_meeting     = date("Y-m-d H:i",strtotime($request->date_of_meet));
+               // $meeting->date_of_meeting     = date("Y-m-d H:i",strtotime($request->date_of_meet));
                 $meeting->privacy             = $privacy;
                 $meeting->created_by          = $currUser->id;
                 $meeting->group_id            = $meeting_group;
-                //dd($meeting);
+                
                 if ( $meeting->save() ) {
 //                    dd("abc");
                     $file = $request->file('file_upload');
@@ -207,14 +208,14 @@
                     
                     if ( MeetingUser::insert($meetingUsers) ) {
                         DB::commit();
-                        echo json_encode(array('status' => 1, 'msg' => 'Meeting has been created successfully.'));
+                        echo json_encode(array('status' => 1, 'msg' => __('label.Meetingcreated')));
                         //return redirect()->route('meeting.index')->with('success', 'Meeting has been created successfully.');
                     } else {
                         DB::rollBack();
                     }
                 } else {
                     DB::rollBack();
-                    echo json_encode(array('status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE')));
+                    echo json_encode(array('status' => 0, 'msg' => __('label.TRY_MESSAGE')));
                     //return redirect()->back()->with('err_msg', 'Some error occurred.')->withInput();
                 }
             }
@@ -254,7 +255,7 @@
                 if($meeting->privacy == '1')
                 {
                     if( !in_array( Auth::user()->id , $meeting_user_ids ) )
-                        return Redirect::route('meeting.index')->with('err_msg' , 'You are not allowed to access a private meeting as you not a part of it.');
+                        return Redirect::route('meeting.index')->with('err_msg' , __('label.MeetingWarning'));
                 }
                 //dd($meeting);
     //            return $uploadedFiles = MeetingAttachment::with(['attachmentUser'])->whereIn('user_id',$meeting_user_ids)->get();
@@ -265,10 +266,10 @@
                 return view($this->folder . '.meeting.detail', compact('meeting', 'meeting_users', 'meeting_user_ids' , 'comments','uploadedFiles'));
             }
             else {
-                return redirect()->back()->with('err_msg', Config::get('constant.TRY_MESSAGE'))->withInput();
+                return redirect()->back()->with('err_msg', __('label.TRY_MESSAGE'))->withInput();
             }
             }else {
-                return redirect()->back()->with('err_msg', Config::get('constant.TRY_MESSAGE'))->withInput();
+                return redirect()->back()->with('err_msg', __('label.TRY_MESSAGE'))->withInput();
             }
         }
         
@@ -431,7 +432,7 @@
                     
                 if ( MeetingUser::insert($meetingUsers) ) {
                     DB::commit();
-                    return Redirect::route('meeting.index')->with('success','Meeting details has been saved successfully.');
+                    return Redirect::route('meeting.index')->with('success',__('label.Meetingsaved'));
                         //return redirect()->route('meeting.index')->with('success', 'Meeting has been created successfully.');
                     } else {
                         DB::rollBack();
@@ -521,7 +522,7 @@
                         $res = $meetingComment->id;
                     } else {
                         
-                        return back()->with('error', 'Some error occurred. Please try again later.');
+                        return back()->with('error', __('label.TRY_MESSAGE'));
                     }
                     $file = $request->file('file_upload');
                     
@@ -547,9 +548,9 @@
                     }
                     DB::commit();
                     if ( $res ) {
-                        return Redirect::back()->with('success', 'Comment ' . Config::get('constant.ADDED_MESSAGE'));
+                        return Redirect::back()->with('success', __('label.Comment').' ' . __('label.ADDED_MESSAGE'));
                     } else {
-                        return Redirect::back()->with('err_msg', 'Please try again.');
+                        return Redirect::back()->with('err_msg', __('label.TRY_MESSAGE'));
                     }
                 } else {
                     return redirect('/index');
@@ -569,7 +570,7 @@
             if(!empty($id))
             {
                 $currUser= Auth::user();
-                $response_data = [ 'status' => 0, 'msg' => 'Please try again later.', 'data' => [] ];
+                $response_data = [ 'status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'data' => [] ];
                 $comment       = MeetingComment::find($id);
                 if ( (!empty($comment)) && ($comment->user_id == $currUser->id))
                 {
@@ -582,7 +583,7 @@
                     if ( $deleteComment )
                     {
                         DB::commit();
-                        $response_data = ['status' => 1 , 'msg' => 'Comment has been deleted successfully.', 'data'=>[] ];
+                        $response_data = ['status' => 1 , 'msg' => __('label.CommentDelete'), 'data'=>[] ];
                     } else
                     {
                         DB::rollBack();
@@ -635,11 +636,11 @@
                 MeetingUser::where('meeting_id', $meeting_id)->delete();
                 if($meeting->delete())
                 {
-                    return Redirect::route('meeting.index')->with('success','Meeting has been deleted successfully.');
+                    return Redirect::route('meeting.index')->with('success',__('label.Meetingdeleted'));
                 }
-                return Redirect::route('meeting.index')->with('error_msg','Please try again later.');
+                return Redirect::route('meeting.index')->with('error_msg',__('label.TRY_MESSAGE'));
             }
-            return Redirect::route('meeting.index')->with('error_msg','Please try again later.');
+            return Redirect::route('meeting.index')->with('error_msg',__('label.TRY_MESSAGE'));
         }
         
         public function finalizeMeeting( Request $request )
@@ -652,10 +653,10 @@
             if($meeting->created_by == Auth::user()->id)
             {
                 Meeting::where('id', $meeting_id)->update([ 'meeting_comment' => $comment, 'meeting_summary' => $summary, 'is_finalized' => '1' ]);
-                return back()->with('success',"Meeting has been finalized successfully.");
+                return back()->with('success',__('label.Meetingsuccess'));
             }
             
-            return back()->with('error',"Please try again later.");
+            return back()->with('error',__('label.TRY_MESSAGE'));
         }
         
         public function updateComment( Request $request )
@@ -670,10 +671,10 @@
                 $res          = MeetingComment::where('id', $comment_id)->update([ 'comment_reply' => $comment_text ]);
                 if ( $res )
                 {
-                    echo json_encode(array( 'status' => 1, 'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE') ));
+                    echo json_encode(array( 'status' => 1, 'msg' => __('label.Comment').' ' . __('label.UPDATE_MESSAGE') ));
                 } else
                 {
-                    echo json_encode(array( 'status' => 0, 'msg' => Config::get('constant.TRY_MESSAGE') ));
+                    echo json_encode(array( 'status' => 0, 'msg' => __('label.TRY_MESSAGE') ));
                 }
             }
             catch (Exception $ex) {
@@ -685,7 +686,7 @@
         {
             $comment_id = $request->input('comment_id');
             $reply = $request->input('reply_text');
-            $response_data = ['status' => 0 , 'msg' => 'Please try again later.' ,'data' => []];
+            $response_data = ['status' => 0 , 'msg' => __('label.TRY_MESSAGE') ,'data' => []];
             $currUser = Auth::user();
             if(!empty($comment_id) && !empty($reply))
             {
@@ -696,7 +697,7 @@
                 if($meeting_reply->save())
                 {
                     $replyCount    = MeetingCommentReply::where('comment_id', $comment_id)->get()->count();
-                    $response_data = [ 'status' => 1, 'msg' => 'Reply has been saved successfully.', 'data' => [ 'count' => $replyCount ] ];
+                    $response_data = [ 'status' => 1, 'msg' => __('label.Replysuccess'), 'data' => [ 'count' => $replyCount ] ];
                 }
             }
             return Response::json($response_data);
@@ -707,7 +708,7 @@
             $currUser   = Auth::user();
             $meeting_id = $request->input('meeting_id');
             
-            $response_data = ['status' => 0 , 'msg' => 'Please try again later.' ,'data' => []];
+            $response_data = ['status' => 0 , 'msg' =>__('label.TRY_MESSAGE') ,'data' => []];
             if(Auth::check() && !empty($meeting_id))
             {
                 DB::beginTransaction();
@@ -721,12 +722,12 @@
                     $meeting_comments->delete();
                     $delete = $meeting_users->delete();
                     DB::commit();
-                    $response_data = [ 'status' => 1, 'msg' => 'You have successfully left the meeting.', 'data' => [] ];
+                    $response_data = [ 'status' => 1, 'msg' => __('label.leftMeeting'), 'data' => [] ];
                 }
                 catch (Exception $ex)
                 {
                     DB::rollBack();
-                    $response_data = [ 'status' => 0, 'msg' => 'Please try again later.', 'data' => $ex ];
+                    $response_data = [ 'status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'data' => $ex ];
                 }
             }
             return Response::json($response_data);
@@ -767,7 +768,7 @@
                         }
                     }
                 }else {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                    return redirect('/index')->with('err_msg' , __('label.TRY_MESSAGE')); 
                 }
             }catch (Exception $ex) {
                 echo json_encode(array('status' => 2,'msg' => $ex->getMessage()));
@@ -789,13 +790,13 @@
                         $comment_reply = $request->get('comment');
                         $res = MeetingComment::where('id',$comment_id)->update(['comment_reply'=>$comment_reply]);
                         if($res) {
-                            echo json_encode(array('status' => 1,'msg' => 'Comment ' . Config::get('constant.UPDATE_MESSAGE')));
+                            echo json_encode(array('status' => 1,'msg' => __('label.Comment').' ' . __('label.UPDATE_MESSAGE')));
                         }else {
-                            echo json_encode(array('status' => 0,'msg' => Config::get('constant.TRY_MESSAGE')));
+                            echo json_encode(array('status' => 0,'msg' =>__('label.TRY_MESSAGE')));
                         }
                     }
                 } else {
-                    return redirect('/index')->with('err_msg' , '' . Config::get('constant.TRY_MESSAGE')); 
+                    return redirect('/index')->with('err_msg' , __('label.TRY_MESSAGE')); 
                 }
             }
             catch (Exception $ex) {
@@ -819,10 +820,10 @@
                             $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
                             if ( $deletelike )
                             {
-                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove comment Liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 0 , 'msg' => __('label.RemoveCommentLike') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             } else
                             {
-                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 0 , 'msg' => __('label.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             }
                         } else
                         {
@@ -831,10 +832,10 @@
                             $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
                             if ( $likecomment )
                             {
-                                echo json_encode(array( 'status' => 1 , 'msg' => "comment liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 1 , 'msg' => __('label.commentLike') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             } else
                             {
-                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 0 , 'msg' => __('label.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             }
                         }
                         
@@ -845,10 +846,10 @@
                         $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
                         if ( $likecomment )
                         {
-                            echo json_encode(array( 'status' => 1 , 'msg' => "comment liked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            echo json_encode(array( 'status' => 1 , 'msg' => __('label.commentLike') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                         } else
                         {
-                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            echo json_encode(array( 'status' => 0 , 'msg' => __('label.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                         }
                     }
                     
@@ -880,10 +881,10 @@
                             $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
                             if ( $deletedislike )
                             {
-                                echo json_encode(array( 'status' => 0 , 'msg' => "Remove comment disiked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 0 , 'msg' => __('label.RemoveCommentDisLike') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             } else
                             {
-                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 0 , 'msg' => __('label.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             }
                         } else
                         {
@@ -892,10 +893,10 @@
                             $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
                             if ( $dislikecomment )
                             {
-                                echo json_encode(array( 'status' => 1 , 'msg' => "comment disliked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 1 , 'msg' => __('label.commentDislike') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             } else
                             {
-                                echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                                echo json_encode(array( 'status' => 0 , 'msg' => __('label.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                             }
                         }
                         
@@ -906,10 +907,10 @@
                         $dislikecomment = MeetingCommentLikes::where(array( 'meeting_comment_id' => $id , 'flag' => 2 ))->get();
                         if ( $dislikecomment )
                         {
-                            echo json_encode(array( 'status' => 1 , 'msg' => "comment disliked successfully" , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            echo json_encode(array( 'status' => 1 , 'msg' => __('label.commentDislike') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                         } else
                         {
-                            echo json_encode(array( 'status' => 0 , 'msg' => Config::get('constant.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
+                            echo json_encode(array( 'status' => 0 , 'msg' => __('label.TRY_MESSAGE') , 'likecount' => count($likecomment) , 'dislikecount' => count($dislikecomment) ));
                         }
                     }
                 } else
@@ -946,7 +947,7 @@
                             $output = array('html' => $html->render(), 'count' => $count_allMeetings);
                             return $output;
                     } else {
-                            return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                            return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
                     }
             } catch (\exception $e) {
                     DB::rollback();
@@ -975,7 +976,7 @@
                             $output = array('html' => $html->render(), 'count' => $count_myMeetings);
                             return $output;
                     } else {
-                            return redirect('/index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+                            return redirect('/index')->with('err_msg', __('label.TRY_MESSAGE'));
                     }
             } catch (\exception $e) {
                     DB::rollback();

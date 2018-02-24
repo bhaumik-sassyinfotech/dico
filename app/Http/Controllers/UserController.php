@@ -132,7 +132,7 @@ class UserController extends Controller {
 			}
                // }
 		} else {
-			return redirect('/index')->with('error_msg', "You don't have rights to create a user.");
+			return redirect('/index')->with('error_msg', __('label.NoRights'));
 		}
 	}
 
@@ -198,9 +198,9 @@ class UserController extends Controller {
 					GroupUser::insert($grp);
 				}
 
-				return redirect()->route('user.index')->with('success', 'User ' . Config::get('constant.ADDED_MESSAGE'));
+				return redirect()->route('user.index')->with('success', __('label.User').' ' . __('label.ADDED_MESSAGE'));
 			} else {
-				return redirect()->route('user.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+				return redirect()->route('user.index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (\exception $e) {
 			return Redirect::back()->with('err_msg', $e->getMessage());
@@ -381,10 +381,10 @@ class UserController extends Controller {
                         $res = User::where('id', $id)->update($postData);
 			if ($res) {
 				DB::commit();
-				return redirect()->route('user.index')->with('success', 'User ' . Config::get('constant.UPDATE_MESSAGE'));
+				return redirect()->route('user.index')->with('success', __('label.User').' ' . __('label.UPDATE_MESSAGE'));
 			} else {
 				DB::rollBack();
-				return redirect()->route('user.index')->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+				return redirect()->route('user.index')->with('err_msg', __('label.TRY_MESSAGE'));
 			}
 		} catch (\exception $e) {
 //            dd($e);
@@ -428,9 +428,9 @@ class UserController extends Controller {
 				];
 				$result = UserSecurityQuestion::insert($data);
 				if ($result) {
-					return Redirect::back()->with('success', 'Profile ' . Config::get('constant.UPDATE_MESSAGE'));
+					return Redirect::back()->with('success', __('label.adProfile').' ' . __('label.UPDATE_MESSAGE'));
 				} else {
-					return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return Redirect::back()->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			} else {
 				return redirect('/index');
@@ -462,12 +462,12 @@ class UserController extends Controller {
 					//Your update here
 					$data['password'] = Hash::make($new_password);
 					if ($user->update($data)) {
-						return Redirect::back()->with('success', 'Password ' . Config::get('constant.UPDATE_MESSAGE'));
+						return Redirect::back()->with('success', __('label.adPassword').' ' . __('label.UPDATE_MESSAGE'));
 					} else {
-						return Redirect::back()->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+						return Redirect::back()->with('err_msg', __('label.TRY_MESSAGE'));
 					}
 				} else {
-					return Redirect::back()->with('err_msg', Config::get('constant.OLD_PASSWORD_NOT_MATCH'));
+					return Redirect::back()->with('err_msg', __('label.OLD_PASSWORD_NOT_MATCH'));
 				}
 			} else {
 				return redirect('/index');
@@ -491,9 +491,9 @@ class UserController extends Controller {
 					$where = array("sender_user_id" => $user_id, "receiver_user_id" => $id);
 					$follow = FollowUser::where($where)->update($data);
 					if ($follow) {
-						return redirect()->route('user.edit', $id)->with('success', 'Follow successfully.');
+						return redirect()->route('user.edit', $id)->with('success', __('label.FollowSuccess'));
 					} else {
-						return redirect()->route('user.edit', $id)->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+						return redirect()->route('user.edit', $id)->with('err_msg', __('label.TRY_MESSAGE'));
 					}
 				} else {
 					$follow = new FollowUser;
@@ -502,9 +502,9 @@ class UserController extends Controller {
 					$follow->status = 1;
 					$follow->created_at = Carbon\Carbon::now();
 					if ($follow->save()) {
-						return redirect()->route('user.edit', $id)->with('success', 'Follow successfully.');
+						return redirect()->route('user.edit', $id)->with('success', __('label.FollowSuccess'));
 					} else {
-						return redirect()->route('user.edit', $id)->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+						return redirect()->route('user.edit', $id)->with('err_msg', __('label.TRY_MESSAGE'));
 					}
 				}
 			} else {
@@ -524,9 +524,9 @@ class UserController extends Controller {
 				$where = array("sender_user_id" => $user_id, "receiver_user_id" => $id);
 				$follow = FollowUser::where($where)->update($data);
 				if ($follow) {
-					return redirect()->route('user.edit', $id)->with('success', 'Unfollow successfully.');
+					return redirect()->route('user.edit', $id)->with('success', __('label.UnfollowSuccess'));
 				} else {
-					return redirect()->route('user.edit', $id)->with('err_msg', '' . Config::get('constant.TRY_MESSAGE'));
+					return redirect()->route('user.edit', $id)->with('err_msg', __('label.TRY_MESSAGE'));
 				}
 			} else {
 				return redirect('/index');
@@ -544,7 +544,7 @@ class UserController extends Controller {
 		if ($request->ajax()) {
 			$companyId = $request->get('companyId');
 			$groups = Group::where('company_id', $companyId)->orderByDesc('id')->get();
-			$data = ['status' => 1, 'msg' => 'Group listing successfull.', 'data' => $groups];
+			$data = ['status' => 1, 'msg' => 'Group listing successfully.', 'data' => $groups];
 		}
 
 		return response()->json($data, '200');
@@ -823,7 +823,7 @@ class UserController extends Controller {
 					$data = ['status' => 1, 'msg' => 'Users has been ' . $str . ' successfully.', 'data' => []];
 				} else if ($status == 1) {
 					DB::rollBack();
-					$data = ['status' => 0, 'msg' => 'Please try again later..', 'data' => []];
+					$data = ['status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'data' => []];
 				}
 				return response()->json($data);
 			} catch (Exception $ex) {

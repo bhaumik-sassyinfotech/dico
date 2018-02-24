@@ -33,7 +33,7 @@
                         <div class="panel-heading">
                               <h4>
                                 <ul class="nav nav-tabs">
-                                  <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">All Points</span></a></li>
+                                  <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">@lang('label.adAll Points')</span></a></li>
                                 </ul>
                               </h4>
                        </div>
@@ -64,6 +64,7 @@
                                                                 <th class="p-font p-like"><img src="{{ asset(IMAGE_PATH.'/p-like.png') }}" class="mr-10">@lang('label.adLikes')</th>
                                                                 <th class="p-font p-Total"><img src="{{ asset(IMAGE_PATH.'/p-total.png') }}" class="mr-10">@lang('label.adTotal')</th>
                                                             </tr>
+                                                              
                                                         </thead>
                                                         <tbody></tbody>
                                                             </table>
@@ -90,7 +91,7 @@
                                                     <table class="table">
                                                                 <thead>
                                                                    <tr>
-                                                                        <th class="p-font p-user"><img src="{{ asset(IMAGE_PATH.'/p-icon.png') }}" class="mr-10">@lang('label.adUser Name')</th>
+                                                                       <th class="p-font p-user"><img src="{{ asset(IMAGE_PATH.'/p-icon.png') }}" class="mr-10">@lang('label.adUser Name')</th>
                                                                 <th class="p-font p-idea"><img src="{{ asset(IMAGE_PATH.'/p-light.png') }}" class="mr-10"> @lang('label.adIdea')</th>
                                                                 <th class="p-font p-question"><img src="{{ asset(IMAGE_PATH.'/p-help.png') }}" class="mr-10">@lang('label.adQuestions')</th>
                                                                 <th class="p-font p-challenge"><img src="{{asset(IMAGE_PATH.'/challenge-icon.png')}}" class="mr-10">@lang('label.adChallenges')</th>
@@ -100,15 +101,6 @@
                                                                 <th class="p-font p-comments"><img src="{{ asset(IMAGE_PATH.'/p-comment.png') }}" class="mr-10">@lang('label.adComments')</th>
                                                                 <th class="p-font p-like"><img src="{{ asset(IMAGE_PATH.'/p-like.png') }}" class="mr-10">@lang('label.adLikes')</th>
                                                                 <th class="p-font p-Total"><img src="{{ asset(IMAGE_PATH.'/p-total.png') }}" class="mr-10">@lang('label.adTotal')</th>
-<!--                                                                        <th class="p-font p-user"><img src="assets/img/p-icon.png" class="mr-10">User Name</th>
-                                                                        <th class="p-font p-idea"><img src="assets/img/p-light.png" class="mr-10"> Idea</th>
-                                                                        <th class="p-font p-question"><img src="assets/img/p-help.png" class="mr-10">Questions</th>
-                                                                        <th class="p-font p-approve"><img src="assets/img/p-approve.png" class="mr-10">Approved</th>
-                                                                        <th class="p-font p-answer"><img src="assets/img/p-answer.png" class="mr-10">Answers</th>
-                                                                        <th class="p-font p-solution"><img src="assets/img/p-solution.png" class="mr-10">Solutions</th>
-                                                                        <th class="p-font p-comments"><img src="assets/img/p-comment.png" class="mr-10">Comments</th>
-                                                                        <th class="p-font p-like"><img src="assets/img/p-like.png" class="mr-10">Likes</th>
-                                                                        <th class="p-font p-Total"><img src="assets/img/p-total.png" class="mr-10">Total</th>-->
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>

@@ -1,15 +1,15 @@
 @extends('template.default')
-<title>DICO - Meeting</title>
+<title>@lang("label.DICOMeeting")</title>
 @section('content')
 <div id="page-content" class="new-meeting-details">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-                <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                <li><a href="{{ route('meeting.index') }}">Meeting</a></li>
-                <li class="active">Edit Meeting</li>
+                <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                <li><a href="{{ route('meeting.index') }}">@lang("label.adMeetings")</a></li>
+                <li class="active">@lang("label.EditMeeting")</li>
             </ol>
-            <h1 class="tp-bp-0">Edit Meeting</h1>
+            <h1 class="tp-bp-0">@lang("label.EditMeeting")</h1>
             <hr class="border-out-hr">
         </div>
         <div class="container">
@@ -18,13 +18,13 @@
                 {!! Form::open(['method' => 'PUT', 'route' => ['meeting.update', Helpers::encode_url($meeting->id)],'enctype'=>'multipart/form-data', 'id' => 'meeting_edit_form' , 'class' => 'common-form']) !!}
                 <div class="col-sm-8" id="post-detail-left">    
                     <div class="form-group">
-                        <label>Type*</label>
+                        <label>@lang("label.Type")*</label>
                         <div class="check-wrap">
-                            <label class="check">Private
+                            <label class="check">@lang("label.Private")
                                 <input class="privacy_type post_type" type="checkbox" {{ ($meeting->privacy == '1') ? 'checked':'' }} name="privacy" id="private" value="private">
                                 <span class="checkmark"></span>
                             </label>
-                            <label class="check">Public
+                            <label class="check">@lang("label.Public")
                                 <input class="privacy_type post_type" type="checkbox" {{ ($meeting->privacy == '0') ? 'checked':'' }} name="privacy" id="public" value="public">
                                 <span class="checkmark"></span>
                             </label>
@@ -32,16 +32,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="text-15">Meeting Title<span>*</span></label>
-                        <input type="text" name="meeting_title" id="meeting_title" value="{{$meeting->meeting_title}}" placeholder="Meeting title" class="form-control required">
+                        <label class="text-15">@lang("label.Meetingtitle")<span>*</span></label>
+                        <input type="text" name="meeting_title" id="meeting_title" value="{{$meeting->meeting_title}}" placeholder="@lang('label.Meetingtitle')" class="form-control required">
                     </div>
 
                     <div class="form-group">
-                        <label class="text-15">Meeting Description</label>
-                        <textarea name="meeting_description" id="meeting_description" placeholder="Meeting Description" class="form-control">{{ nl2br($meeting->meeting_description) }}</textarea>
+                        <label class="text-15">@lang("label.Meetingdescription")</label>
+                        <textarea name="meeting_description" id="meeting_description" placeholder="@lang('label.Meetingdescription')" class="form-control">{{ nl2br($meeting->meeting_description) }}</textarea>
                     </div>
                 
-                    <div class="form-group calendar">
+                    <?php /*<div class="form-group calendar">
                         <label>Date Of Meet:</label>   
                         <div class='input-group date' id='datetimepicker1'>
                             <?php
@@ -52,10 +52,10 @@
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
-                    </div>
+                    </div>*/?>
 
                     <div class="btn-wrap-div">
-                    <input type="submit" class="st-btn" value="Submit">
+                    <input type="submit" class="st-btn" value="@lang('label.adSubmit')">
                     <?php /*<div class="upload-btn-wrapper">
                         <button class="upload-btn">Upload Files</button>
                         <input type="file" name="file_upload" id="file_upload" class="file-upload__input">
@@ -63,18 +63,18 @@
                 </div>
                </div>
                <div class="col-sm-4" id="post-detail-right">
-                    <h3 class="heading-title">INVITE BY:</h3>
+                    <h3 class="heading-title">@lang('label.INVITEBY'):</h3>
                         <div class="category-meeting">
                             <div class="tab-container tab-success new-meeting-tab">
                                 <ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#home1">Groups </a></li>
-                                    <li class=""><a data-toggle="tab" href="#profile1">Members</a></li>
+                                    <li class="active"><a data-toggle="tab" href="#home1">@lang('label.Groups') </a></li>
+                                    <li class=""><a data-toggle="tab" href="#profile1">@lang('label.Members')</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane clearfix active" id="home1">
                                         <div class="main-group-wrap">
                                           <div class="category-tab"> 
-                                            <label class="check">Groups<input type="checkbox">
+                                            <label class="check">@lang('label.Groups')<input type="checkbox">
                                                 <span class="checkmark"></span>
                                             </label>
                                           </div>
@@ -106,22 +106,23 @@
                                                 }
                                             ?>
                                                 <select name="employees[]" id="employees_listing" class="form-control" style="width: 84%">
-                                                <option value="-1">---Select---</option>
+                                                <option value="-1">---@lang('label.Select')---</option>
                                                     @foreach($employees as $employee)
                                                         <option value="{{ $employee->id }}" <?php if(in_array($employee->id,$meetingUsers)) { echo "disabled";} ?>>{{ $employee->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <input type="submit" name="add_employee" id="add_employee" value="ADD" class="st-btn">
+                                                <input type="submit" name="add_employee" id="add_employee" value="@lang('label.ADD')" class="st-btn">
                                                 <input type="hidden" id="selected_members" name="selected_members">
                                           </div> 
                                         <div class="post-category" id="meeting_users_list">
                                             <?php
+                                                //dd($meeting->meetingUsers);
                                                 if(!empty($meeting->meetingUsers) && count($meeting->meetingUsers) > 0) {
                                                     foreach ($meeting->meetingUsers as $meetingUsers) {
                                                         $userDetail = $meetingUsers->UserDetail;
                                                         if($meetingUsers->group_id != 0) {
                                             ?>
-                                            <div class="member-wrap" id="user_{{$userDetail->id}}">
+                                            <div class="member-wrap" id="user_<?php echo $userDetail->id;?>">
                                                 <div class="member-img">
                                                     <?php
                                                         if (!empty($userDetail->profile_image)) {
@@ -147,21 +148,21 @@
                                 </div>
                                 </div>  
                                 <div class="category files">
-                  <h2>Uploaded Files</h2>
+                  <h2>@lang('label.UploadedFiles')</h2>
                   <div class="wrap-name-upload">
                         <div class="select">
                             <select id="slct" name="slct">
-                                    <option>Name</option>
-                                    <option>Admin</option>
-                                    <option value="Super User">Super User</option>
-                                    <option value="Employee">Employee</option>
+                                    <option>@lang('label.adName')</option>
+                                    <option>@lang('label.Admin')</option>
+                                    <option value="Super User">@lang('label.SuperUser')</option>
+                                    <option value="Employee">@lang('label.Employee')</option>
                             </select>
                         </div>
                         <input type="hidden" name="company_id" value="{{ $company_id }}">
                         <div class="upload-btn-wrapper">
                                     <form name="uploadfile" id="uploadfile" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="meetingId" id="meetingId" value="{{$meeting['id']}}">
-                                        <button class="btn" id="uploadBtn">Upload File</button>
+                                        <button class="btn" id="uploadBtn">@lang('label.UploadFile')</button>
                                         <input name="file_upload" id="file_upload" type="file" onchange="uploadFileMeeting();">
                                     </form>
                                 </div>
@@ -178,12 +179,12 @@
                             </div>
                             <div class="member-details">
                                 <h3 class="text-10">{{$attachment->file_name}}</h3>
-                                <p>Uploaded By:<a href="#">{{$attachment->attachmentUser->name}}</a></p>
+                                <p>@lang('label.UploadedBy'):<a href="#">{{$attachment->attachmentUser->name}}</a></p>
                             </div>
                         </div>    
                             <?php } }
                                 else {
-                                    echo "<p class='text-12'>No files uploaded.</p>";
+                                    echo "<p class='text-12'>".__('label.Nofilesuploaded')."</p>";
                                 }
                             ?>
                     </div>  

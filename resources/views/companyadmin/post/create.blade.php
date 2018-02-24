@@ -88,7 +88,7 @@
                             </label> 
                             <?php } ?>
                                 <a href="{{ route('post.index') }}" class="st-btn btn-default">@lang("label.adBack")</a>
-                                <input type="submit" name="save" id="save" value="@lang('label.Submit')" class="st-btn">
+                                <input type="submit" name="save" id="save" value="@lang('label.adSubmit')" class="st-btn">
                                 <div class="upload-btn-wrapper">
                                     <button class="upload-btn">@lang("label.adUpload Files")</button>
                                     <input type="file" name="file_upload" id="file_upload" class="file-upload__input">

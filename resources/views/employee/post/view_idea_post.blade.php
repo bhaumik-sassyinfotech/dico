@@ -1,16 +1,16 @@
 @extends('template.default')
-<title>DICO - Post</title>
+<title>@lang("label.DICOPost")</title>
 @section('content')
     
     <div id="page-content" class="idea-details post-details">
         <div id='wrap'>
             <div id="page-heading">
                 <ol class="breadcrumb">
-                    <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li><a href="{{ route('post.index') }}">Post</a></li>
-                    <li class="active">View Post</li>
+                    <li><a href="{{ route('/home') }}">@lang("label.adDashboard")</a></li>
+                    <li><a href="{{ route('post.index') }}">@lang("label.adPost")</a></li>
+                    <li class="active">@lang("label.ViewPost")</li>
                 </ol>
-                <h1 class="icon-mark tp-bp-0">Idea Post</h1>
+                <h1 class="icon-mark tp-bp-0">@lang("label.IdeaPost")</h1>
                 <hr class="border-out-hr">
             
             </div>
@@ -29,8 +29,8 @@
                                         @endif
                                     </div>
                                     <p class="user-icon">-
-                                        <a href="{{url('view_profile', Helpers::encode_url($post->postUser->id))}}">{{$post->postUser->name}}</a>
-                                        <span>on {{date('d/m/Y',strtotime($post->created_at))}}</span></p>
+                                        <a href="{{route('view_profile', Helpers::encode_url($post->postUser->id))}}">{{$post->postUser->name}}</a>
+                                        <span>@lang("label.on") {{date(DATE_FORMAT,strtotime($post->created_at))}}</span></p>
                                 </div>
                             </div>
                             <div class="pull-right">
@@ -61,17 +61,17 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button aria-hidden="true" data-dismiss="modal" class="desktop-close" type="button"></button>
-                                                        <h4 class="modal-title">Request flagged in the Post</h4>
+                                                        <h4 class="modal-title">@lang("label.RequestflaggedPost")</h4>
                                                     </div>
                                                     <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
                                                         <div class="form-group">
-                                                           <label>Message To Author:</label> 
+                                                           <label>@lang("label.MessageToAuthor"):</label> 
                                                            <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
                                                         </div> 
                                                         <div class="form-group">
                                                             <div class="btn-wrap-div">
-                                                                <input class="st-btn" type="button" value="Submit" name="submit" id="submit" onclick="reportPostFlagged();">
-                                                                 <input value="Cancel" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
+                                                                <input class="st-btn" type="button" value="@lang('label.Submit')" name="submit" id="submit" onclick="reportPostFlagged();">
+                                                                 <input value="@lang('label.Cancel')" class="st-btn" aria-hidden="true" data-dismiss="modal" type="reset">
                                                             </div>     
                                                         </div>     
                                                     </form>
@@ -117,33 +117,33 @@
                             @if($post->idea_status == null && $currUser->role_id < 3)
                             <div class="post-btn-wrap">
                                 <div class="post-btn approve">
-                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="approve">Approve</a>
+                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="approve">@lang('label.Approve')</a>
                                 </div>
                                 <div class="post-btn deny">
-                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="deny">Denied</a>
+                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="deny">@lang('label.Denied')</a>
                                 </div>
                                 <div class="post-btn ammend">
-                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="amend">Modify</a>
+                                    <a href="javascript:void(0)" class="ideaStatus" data-post-status="amend">@lang('label.Modify')</a>
                                 </div>
                             </div>
                             @else
                             
                                 @if($post->idea_status == null)
                                     <div class="approved">
-                                        <p><span>Action Pending</span></p>
+                                        <p><span>@lang('label.ActionPending')</span></p>
                                     </div>
                                 @else
                                     @php
                                         $ideaStatus = '';
                                         if($post->idea_status === 'approve')
-                                            $ideaStatus = 'Approved';
+                                            $ideaStatus = __('label.Approved');
                                         else if($post->idea_status === 'deny')
-                                            $ideaStatus = 'Denied';
+                                            $ideaStatus = __('label.Denied');
                                         else if($post->idea_status === 'amend')
-                                            $ideaStatus = 'Modified';
+                                            $ideaStatus = __('label.Modified');
                                     @endphp
                                     <div class="approved">
-                                        <p>{{ $ideaStatus }} By:<span>{{ $post->ideaUser->name }}</span></p>
+                                        <p>{{ $ideaStatus }} @lang('label.By'):<span>{{ $post->ideaUser->name }}</span></p>
                                     </div>
                                 @endif
                             @endif
@@ -304,7 +304,7 @@
                     </div>
                     <div class="col-sm-4" id="post-detail-right">
                         <div class="category">
-                            <h2>Group</h2>
+                            <h2>@lang('label.adGroup')</h2>
                             <div class="idea-grp post-category">
                                 @if(count($post_group) > 0)
                                     @foreach($post_group as $grp)
@@ -321,43 +321,43 @@
                                             </div>
                                             <div class="member-details">
                                                 <h3 class="text-12">{{ $grp->group_name }}</h3>
-                                                <p class="text-10">Members: <span>{{ $grp->groupUsersCount->cnt }}</span></p>
+                                                <p class="text-10">@lang('label.Members'): <span>{{ $grp->groupUsersCount->cnt }}</span></p>
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
                                     <div class="member-wrap">
-                                            <p class="text-12">No group selected.</p>
+                                            <p class="text-12">@lang('label.Nogroupselected')</p>
                                     </div>
                                 @endif
                             </div>
                         </div>
                         <div class="category">
-                            <h2>Tags</h2>
+                            <h2>@lang('label.Tags')</h2>
                             <div class="post-circle post-category">
                                  @if(count($post->postTag) > 0)
                                 @foreach($post->postTag as $tag)
-                                    <a href="{{ url('tag/'.Helpers::encode_url($tag->tag_id)) }}"> {{ $tag->tag->tag_name }}</a>
+                                    <a href="{{ route('tag',Helpers::encode_url($tag->tag_id)) }}"> {{ $tag->tag->tag_name }}</a>
                                 @endforeach
                                 @else
-                                    <p class="text-12">No group selected.</p>
+                                    <p class="text-12">@lang('label.Notagsselected')</p>
                                 @endif
                             </div>
                         </div>
                         
                         <div class="category">
-                            <h2>Similar Posts</h2>
+                            <h2>@lang('label.SimilarPosts')</h2>
                             <div class="post-links">
                                 <?php
                                     if(!empty($similar_post) && count($similar_post) > 0) {
                                         foreach($similar_post as $similar) {
                                 ?>
-                                <a href="{{url('viewpost', Helpers::encode_url($similar->id))}}" class="profanity">{{$similar->post_title}}</a>
+                                <a href="{{route('viewpost', Helpers::encode_url($similar->id))}}" class="profanity">{{$similar->post_title}}</a>
                                 <?php 
                                         }
                                     } else {
                                 ?>
-                                <a href="javascript:void(0)">No similar post found.</a>
+                                <a href="javascript:void(0)">@lang('label.Nosimilarpostfound')</a>
                                 <?php
                                     }
                                 ?>
@@ -419,8 +419,8 @@
 <script type="text/javascript">
     function deletepost(id) {
         swal({
-            title: "Are you sure?",
-            text: "you will not able to recover this post.",
+            title: "{{__('label.adAre you sure?')}}",
+            text: "{{__('label.WarningPost')}}",
             type: "info",
             showCancelButton: true,
             closeOnConfirm: false,
@@ -429,7 +429,7 @@
             var token = '<?php echo csrf_token() ?>';
             var formData = {post_id : id, _token : token};
             $.ajax({
-                url: SITE_URL + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
+                url: SITE_URL+'/'+LANG  + '/deletepost',//"{{ route('post.destroy'," + id + ") }}",
                 type: "POST",
                 data: formData,
                 success: function (response) {
@@ -455,7 +455,7 @@
             formData = {post_id:post_id,user_id:user_id,reason:reason,_token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/post_flagged',
+                url: SITE_URL+'/'+LANG  + '/post_flagged',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -490,7 +490,7 @@
             formData = {comment_id:comment_id,user_id:user_id,reason:comment_message_autor,flag_by:flag_by,_token};
             $("#spinner").show();
             $.ajax({
-                url: SITE_URL + '/comment_flagged',
+                url: SITE_URL+'/'+LANG  + '/comment_flagged',
                 type: 'POST',
                 data: formData,
                 success: function(response) {

@@ -14,7 +14,6 @@
 <script type='text/javascript' src="{{asset('public/js/app.js')}}"></script>
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jquery-1.10.2.min.js')}}"></script>
 
-
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/jqueryui-1.10.3.min.js')}}"></script>
 
 <script type='text/javascript' src="{{asset(ASSETS_URL.'js/bootstrap.min.js')}}"></script>
@@ -91,13 +90,11 @@
 if (Auth::user()) {
     $companyLang = DB::table('companies')->select('language')->where('id', Auth::user()->company_id)->first();
     //dd($companyLang);
-    if($companyLang != null){
-        
+    if ($companyLang != null) {
         $companyLang = $companyLang->language;
-    }else{
-        $companyLang = 'en';    
+    } else {
+        $companyLang = 'en';
     }
-    
 } else {
     $companyLang = 'en';
 }
@@ -105,13 +102,19 @@ if (Auth::user()) {
     ?>
                             //localStorage.mylang= 'en';
                             var MYLANG = '<?= $companyLang; ?>';
-                            $(document).ready(function () {
                             var path = window.location.href;
                             var langPath = path.split('/');
                             langPath[4] = LANG;
                             if (langPath[4] != MYLANG){
                             changeLang(MYLANG);
                             }
+                            $(document).ready(function () {
+    //                            var path = window.location.href;
+    //                            var langPath = path.split('/');
+    //                            langPath[4] = LANG;
+    //                            if (langPath[4] != MYLANG){
+    //                            changeLang(MYLANG);
+    //                            }
                             });
                             if ($('#editor').val()){
                             //console.log('dd',$('#editor').val());
@@ -138,26 +141,28 @@ if (Auth::user()) {
                             }
 </script>
 <script type='text/javascript'>
-                            Echo.channel('activity')
-                                    .listen('.comment.added', (e) => {
+                        
+Echo.channel('activity')
+  .listen('.comment.added', (e) => {
 
                                     $('#event').append('<li>' + e.comment + '</li>');
-                                    })
-                                    .listen('.message.register', (data) => {
+    }    )
+    .listen('.message.register', (data) => {
                                     console.log(data);
-                                    $('.scrollthis').append(getNotificationHtml(data))
-                                    })
-                                    /* .listen('.message.postUpdate', (data) => {
-                                     console.log(data);
-                                     $('.scrollthis').append(getNotificationHtml(data));
-                                     })*/;
-<?php
-if (Auth::user()) {
-    ?>
-                                Echo.channel('activity.{{ \Auth::user()->id }}')
-                                        .listen('.message.postUpdate', (data) => {
+                            $('.scrollthis').append(getNotificationHtml(data))
+})
+/* .listen('.message.postUpdate', (data) => {
+                                    console.log(data);
+                            $('.scrollthis').append(getNotificationHtml(data));
+})*/;
+    <?php
+    if (Auth::user()) {
+        ?>
+    Echo.channel('activity.{{ \Auth::user() - > id }}')
+    .listen('.message.postUpdate', (data) => {
                                         console.log(data);
-                                        $('.scrollthis').append(getNotificationHtml(data));
-                                        });
-<?php } ?>
+                                $('.scrollthis').append(getNotificationHtml(data));
+    });
+    <?php } ?>
+
 </script>
