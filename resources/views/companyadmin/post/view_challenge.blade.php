@@ -2,7 +2,7 @@
 <title>@lang("label.DICOPost")</title>
 @section('content')
 
-<div id="page-content" class="idea-details challenges post-details">
+<div id="page-content" class="idea-details challenges idea-page">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
