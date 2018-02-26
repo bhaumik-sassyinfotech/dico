@@ -1,17 +1,15 @@
 @extends('template.default')
-<title>DICO - Tags</title>
+<title>@lang('label.adDICO - Tags')</title>
 @section('content')
-<?php 
-    $language = App::getLocale();
-?>
+
 <div id="page-content" class="group-listing posts">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">
-               <li><a href="{{ url('/home') }}">Dashboard</a></li>
-               <li class="active">Tags</li>
+               <li><a href="{{ url('/home') }}">@lang('label.adDashboard')</a></li>
+               <li class="active">@lang('label.adTags')</li>
             </ol>
-            <h1 class="tp-bp-0">Tags</h1>
+            <h1 class="tp-bp-0">@lang('label.adTags')</h1>
             <div class="options">
                 <div class="btn-toolbar">
                 </div>
@@ -24,7 +22,7 @@
                         <div class="panel-heading">
                             <h4>
                               <ul class="nav nav-tabs">
-                                <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">{{ucfirst($tag['tag_name'])}} Posts</span></a></li>
+                                <li class="active"><a href="#threads" data-toggle="tab"><i class="fa fa-list visible-xs icon-scale"></i><span class="hidden-xs">{{ucfirst($tag['tag_name'])}} @lang('label.adPosts')</span></a></li>
                                 <input type="hidden" name="tag_id" id="tag_id" value="{{$tag['id']}}">
                               </ul>
                             </h4>
@@ -67,7 +65,7 @@
                                                              </div>
                                                          </div>
                                                          <div class="panel-body meetings">
-                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity post-title">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
+                                                             <h4><a href="{{url('viewpost', Helpers::encode_url($post['id']))}}" class="profanity">{{ str_limit($post['post_title'], $limit = POST_TITLE_LIMIT, $end = '...') }}</a></h4>
                                                              <div class="user-wrap"> 
                                                                 <div class="user-img">
                                                                     @if(empty($post['post_user']['profile_image']) || $post['is_anonymous'] == 1)
@@ -77,7 +75,7 @@
                                                                     @endif
                                                                 </div> 
                                                                 <p class="user-icon">-<?php if($post['is_anonymous'] == 0) { ?>
-                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}" class="user-a-post">{{$post['post_user']['name']}}</a>
+                                                                    <a href="{{url('view_profile', Helpers::encode_url($post['post_user']['id']))}}">{{$post['post_user']['name']}}</a>
                                                                     <?php } else { echo "Anonymous"; } ?><span>on {{date(DATE_FORMAT,strtotime($post['created_at']))}}</span></p>
                                                              </div>
                                                              <fieldset>
@@ -88,7 +86,7 @@
                                                                 if(strlen($post['post_description']) > POST_DESCRIPTION_LIMIT) {
                                                             ?>
                                                              <div class="btn-wrap" id="postread{{$post['id']}}">
-                                                                <a href="#" onclick ="postReadMore({{$post['id']}})">Read More</a>
+                                                                <a href="#" onclick ="postReadMore({{$post['id']}})">Read More')</a>
                                                              </div>
                                                                 <?php } ?>
                                                              <div class="panel-body-wrap">
@@ -131,7 +129,7 @@
                                                                      <span><?php echo count($post['post_comment']); ?></span>
                                                                  </div>
                                                                  <div class="status pull-right">
-                                                                       <p>Status:<span>Active</span></p>
+                                                                       <p>@lang('label.adStatus'):<span>@lang('label.adActive')</span></p>
                                                                  </div>  
                                                              </div> 
                                                              <?php
@@ -139,7 +137,7 @@
                                                              ?>
                                                              <hr>
                                                              <div class="post-circle">
-                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url($language.'/tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
+                                                                 <?php foreach($post['post_tag'] as $post_tag) { ?><a href="{{url('tag', Helpers::encode_url($post_tag['tag']['id']))}}"><?= $post_tag['tag']['tag_name'];?></a><?php } ?>
                                                               </div>
                                                                  <?php } ?>
                                                          </div>
@@ -152,7 +150,7 @@
                                     <input type="hidden" id="count_post" value="{{$count_post}}">
                                     <?php if(!empty($count_post) && $count_post > POST_DISPLAY_LIMIT) {
                                     ?>
-                                    <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">View More</a></div>
+                                    <div class="all_viewmore col-md-12"><a href="javascript:void(0)" id="load_post" onclick="loadMorePost();" data-id="0">@lang('label.ViewMore')</a></div>
                                     <?php
                                             } ?>
                                     
@@ -171,8 +169,8 @@
 <script type="text/javascript">
     function deletepost(id) {
     swal({
-    title: "Are you sure?",
-            text: "you will not able to recover this post.",
+    title: "@lang('label.adAre you sure')",
+            text: "@lang('label.adyou will not able to recover this post')",
             type: "info",
             showCancelButton: true,
             closeOnConfirm: false,
@@ -187,11 +185,11 @@
         success: function (response) {
             var res = JSON.parse(response);
             if (res.status == 1) {
-                swal("Success", res.msg, "success");
+                swal("@lang('label.adSuccess')", res.msg, "success");
                 location.reload();
             }
             else {
-                swal("Error", res.msg, "error");
+                swal("@lang('label.adError')", res.msg, "error");
             }
         }
     });
@@ -207,7 +205,7 @@
         var tag_id = $('#tag_id').val();
         var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText,tag_id:tag_id};
         $.ajax({
-            url: SITE_URL+'/'+LANG+'/loadmoretagpost',
+            url: SITE_URL+"/loadmoretagpost",
             type: "POST",
             data: formData,
             success: function (response) {
@@ -233,7 +231,7 @@
             var tag_id = $('#tag_id').val();
             var formData = {offset:offset,_token : CSRF_TOKEN,search_text:searchText,tag_id:tag_id};
             $.ajax({
-                url: SITE_URL+'/'+LANG+"/loadmoretagpost",
+                url: SITE_URL+"/loadmoretagpost",
                 type: "POST",
                 data: formData,
                 success: function (response) {
