@@ -167,6 +167,8 @@ Echo.channel('activity')
                                         })
                                         .listen('.message.meetingUpdate', (data) => {
                                         $('.scrollthis').append(getNotificationHtml(data));
+                                        }).listen('.message.meetingDelete', (data) => {
+                                        $('.scrollthis').append(getNotificationHtml(data));
                                         });
 <?php } ?>
 

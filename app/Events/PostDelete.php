@@ -52,7 +52,7 @@ class PostDelete implements ShouldBroadcast {
         $notification->notification_description = $msg;
         $notification->is_read = 0;
         $notification->send_to = $this->sender_id;
-        $notification->redirect_url = route('post');
+        $notification->redirect_url = route('post.index');
         $notification->save();
         return [
             'msg' => $msg,
