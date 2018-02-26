@@ -278,7 +278,7 @@
                                             @endif
                                         </div>
                                         <div class="member-details">
-                                            <h3 class="text-12"><a href="{{url('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}">{{ $user->name }}</a></h3>
+                                            <h3 class="text-12"><a href="{{route('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}">{{ $user->name }}</a></h3>
                                             <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                         </div>
                                     </div>

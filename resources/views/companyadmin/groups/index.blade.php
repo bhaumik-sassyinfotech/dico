@@ -200,6 +200,9 @@
                                                     else if($loop->index % 3 == 2)
                                                         $class = 'architecture';
                                                 @endphp
+                                                <?php
+                                                   // dd($group);
+                                                ?>
                                                 <li data-name="{{ $group['group_name'] }}" class="mix {{ $class }} mix_all userList" style="display: inline-block;  opacity: 1;">
                                                     <div class="list-block super-user">
                                                         <div class="panel-heading">

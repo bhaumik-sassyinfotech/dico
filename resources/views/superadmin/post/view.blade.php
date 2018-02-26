@@ -63,7 +63,7 @@
                                                 <form method="post" class="common-form" name="post_flagged_form" id="post_flagged_form">
                                                  <div class="form-group">
                                                     <label>@lang("label.MessageToAuthor"):</label>
-                                                    <textarea type="text" placeholder="Type here" id="post_message_autor" name="post_message_autor"></textarea>
+                                                    <textarea type="text" placeholder="@lang('label.Typehere')" id="post_message_autor" name="post_message_autor"></textarea>
                                                  </div>
                                                  <div class="form-group">
                                                      <div class="btn-wrap-div">
@@ -186,8 +186,8 @@
                                                 </div>
                                                 <?php
                                                     $comment_id = Helpers::encode_url($commentUser->id);
-                                                        if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
-                                                            if ($commentUser['following'][0]->status == 1) {
+                                                        if (!empty($commentUser['followers']) && count($commentUser['followers']) > 0 && $commentUser->id != Auth::user()->id) {
+                                                            if ($commentUser['followers'][0]->status == 1) {
                                                         ?>
                                                             <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Unfollow')</a>
                                                             <?php
@@ -209,7 +209,7 @@
                                                         <a href="javascript:void(0)" class="text-12"><?php if ($postComment['is_anonymous'] == 0) { ?>
                                                             <a href="{{route('view_profile', Helpers::encode_url($commentUser['id']))}}">{{$commentUser['name']}}</a>
                                                             <?php } else { echo __('label.Anonymous'); } ?></a>
-                                                        <p>- on <?php echo date(DATE_FORMAT, strtotime($postComment['created_at'])); ?></p>
+                                                        <p>- @lang('label.on') <?php echo date(DATE_FORMAT, strtotime($postComment['created_at'])); ?></p>
                                                     </div>
                                                     <div class="pull-right post-reply-pop">
                                                         <div class="options">
@@ -390,7 +390,7 @@
                     <div class="col-sm-4" id="post-detail-right">
                     <!-- START RIGHT SIDEBAR -->
                         <div class="category">
-                            <h2>@lang('label.adGroup')</span></h2>
+                            <h2><span>@lang('label.adGroup')</span></h2>
                             <div class="idea-grp post-category">
                                 <?php
                                     if(!empty($post_group)) {
@@ -406,7 +406,14 @@
                                         <img src="{{ asset($group_image) }}" alt="no">
                                     </div>
                                     <div class="member-details">
-                                        <h3 class="text-12">{{$group->group_name}}</h3>
+                                        <?php
+                                            if ($group->group_owner == Auth::user()->id || Auth::user()->role_id == 1) {
+                                                $group_link = route('group.edit',Helpers::encode_url($group->id));
+                                            } else {
+                                                $group_link = route('editGroup',Helpers::encode_url($group->id));
+                                            }
+                                        ?>
+                                        <a href="{{$group_link}}"><h3 class="text-12">{{$group->group_name}}</h3></a>
                                         <p class="text-10">@lang('label.Members'): <span>{{$group->groupUsersCount->cnt}}</span></p>
                                     </div>
                                 </div>               
@@ -422,7 +429,7 @@
 
                         </div>
                         <div class="category">
-                            <h2>Tags</h2>
+                            <h2>@lang('label.Tags')</h2>
                             <div class="post-circle post-category">
                                 <?php
                                 if (!empty($post->postTag) && count($post->postTag) > 0) {
@@ -494,7 +501,7 @@ if (!empty($post->postAttachment)) {
                                     </div>
                                     <div class="member-details">
                                         <h3 class="text-10">{{$attachment->file_name}}</h3>
-                                        <p>@lang('label.UploadedBy'):<a href="#">{{$attachment->attachmentUser->name}}</a></p>
+                                        <p>@lang('label.UploadedBy'):<a href="{{route('view_profile', Helpers::encode_url($attachment->attachmentUser->id))}}">{{$attachment->attachmentUser->name}}</a></p>
                                     </div>
                                 </div>    
                                     <?php } }
@@ -520,7 +527,7 @@ if (!empty($post->postAttachment)) {
 <script type="text/javascript">
     function deletepost(id) {
         swal({
-            title: "{{__('label.adAre you sure?')}}",
+            title: "{{__('label.adAre you sure')}}",
             text: "{{__('label.WarningPost')}}",
             type: "info",
             showCancelButton: true,
@@ -537,8 +544,7 @@ if (!empty($post->postAttachment)) {
                     var res = JSON.parse(response);
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
-                        //location.reload();
-                        window.location.href = SITE_URL +'/'+LANG+ '/post';
+                        window.location.href = SITE_URL+'/'+LANG + '/post';
                     }
                     else {
                         ajaxResponse('error',res.msg);
@@ -550,7 +556,7 @@ if (!empty($post->postAttachment)) {
     function markSolution(commentid, userid, postid)
     {
         swal({
-        title: "{{__('label.adAre you sure?')}}",
+        title: "{{__('label.adAre you sure')}}",
                 text: "{{__('label.WarningCorrect')}}",
                 type: "info",
                 showCancelButton: true,

@@ -17,8 +17,8 @@ if (!empty($post['postComment'])) {
                     </div>
                     <?php
                     $comment_id = Helpers::encode_url($commentUser->id);
-                    if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
-                        if ($commentUser['following'][0]->status == 1) {
+                    if (!empty($commentUser['followers']) && count($commentUser['followers']) > 0 && $commentUser->id != Auth::user()->id) {
+                        if ($commentUser['followers'][0]->status == 1) {
                             ?>
                             <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Unfollow')</a>
                             <?php
@@ -29,7 +29,7 @@ if (!empty($post['postComment'])) {
                         }
                     } else if ($commentUser->id != Auth::user()->id) {
                         ?>
-                        <a href="{{ url('/view_profile/'.$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
+                        <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Follow')</a>
                         <?php
                     }
                     ?>

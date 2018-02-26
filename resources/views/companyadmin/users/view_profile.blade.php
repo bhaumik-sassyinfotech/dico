@@ -22,11 +22,11 @@
                             <?php
                                 if(!empty($follow->followers) && count($follow->followers) > 0) {
                             ?>
-                            <a href="{{ url('/unfollow/'.$user->id) }}">@lang("label.Unfollow")</a>
+                            <a href="{{ route('unfollow',$user->id) }}">@lang("label.Unfollow")</a>
                             <?php
                                 } else {
                             ?>
-                            <a href="{{ url('/follow/'.$user->id) }}"> @lang("label.Follow")</a>
+                            <a href="{{ route('follow',$user->id) }}"> @lang("label.Follow")</a>
                             <?php } ?>
                             <?php /*if(Auth::user()->id != $user->id) {
                                  ?>@if(!empty($user->followers) && count($user->followers) > 0 && in_array(Auth::user()->id, array_pluck($user->followers,'sender_user_id')))

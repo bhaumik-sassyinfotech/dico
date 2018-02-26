@@ -84,7 +84,7 @@
         <div class="list-block super-user">
             <div class="panel-heading">
                 <div class="pull-right">
-                    <?php $route = route('editGroup',Helpers::encode_url($group['id']));//route('group.edit', [Helpers::encode_url($group['id'])]);?>
+                    <?php $route = route('group.edit',Helpers::encode_url($group['id']));//route('group.edit', [Helpers::encode_url($group['id'])]);?>
                     <a href="#"><i aria-hidden="true" class="fa fa-bell-o"></i></a>
                     <?php
                         if ($group['group_owner'] == Auth::user()->id || Auth::user()->role_id == 1) {

@@ -142,18 +142,21 @@ if (Auth::user()) {
 </script>
 <script type='text/javascript'>
 
-                            Echo.channel('activity')
-                                    .listen('.comment.added', (e) => {
+   <?php
+    if (Auth::user()) {
+        ?>                       
+Echo.channel('activity')
+  .listen('.comment.added', (e) => {
+
 
                                     $('#event').append('<li>' + e.comment + '</li>');
                                     })
                                     .listen('.message.register', (data) => {
                                     console.log(data);
+
                                     $('.scrollthis').append(getNotificationHtml(data))
                                     });
-<?php
-if (Auth::user()) {
-    ?>
+
                                 Echo.channel('activity.{{ \Auth::user()->id }}')
                                         .listen('.message.postUpdate', (data) => {
                                         $('.scrollthis').append(getNotificationHtml(data));

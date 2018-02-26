@@ -102,7 +102,7 @@ return [
     'adLanguage' => 'Language',
     'adCompany Name' => 'Company Name',
     'adUpload Files' => 'Upload Files',
-    'adBack' => 'Back',
+    'adBack' => 'Cancel',
     'adAdd New' => 'Add New',
     'adDescription' => 'Description',
     'adSubmit' => 'Submit',
@@ -609,4 +609,8 @@ return [
     'GroupCreated' => 'Group created successfully.',
     'GroupFail' => 'Creation of group failed.',
     'GroupUpdate' => 'Group updated successfully.',
+    'UserHasBeen' => 'Users has been ',
+    'successfully' => ' successfully.',
+    'UserRemoved' => 'User cannot be removed from ',
+    'UserGroupOwner' => ' as the user is the group owner.',
 ];
