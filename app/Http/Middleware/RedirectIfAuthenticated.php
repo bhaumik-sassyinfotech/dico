@@ -17,9 +17,12 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+<<<<<<< HEAD
         /*if (Auth::guard($guard)->check()) {
             return redirect('/home');
         }*/
+=======
+>>>>>>> 97831573c32ebc66af0c2a1dcbba864a0c0c8464
         if (Auth::check()) {
             return redirect()->route('index');
         }

@@ -246,12 +246,13 @@
             $meeting = Meeting::with(['meetingCreator' , 'meetingUser', 'meetingUser.following', 'meetingAttachment', 'meetingAttachment.attachmentUser', 'meetingComment' => function ($q) {
                 $q->take(COMMENT_DISPLAY_LIMIT);
             }, 'meetingComment.commentUser', 'meetingComment.commentAttachment', 'meetingComment.commentReply', 'meetingComment.commentReply.commentReplyUser','meetingComment.commentLike','meetingComment.commentUserLike','meetingComment.commentDisLike','meetingComment.commentUserDisLike' ])->withCount('meetingComment')->where('id', $id)->first();
+          //  dd($meeting);
             if($meeting) {
                 $type_ids = MeetingComment::where('meeting_id',$meeting->id)->pluck('id')->toArray();
                 $uploadedFiles = MeetingAttachment::with('attachmentUser')->whereIn('type_id',$type_ids)->orderBy('created_at','ASC')->get();
                 $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
                 $meeting_users    = User::whereIn('id', $meeting_user_ids)->get();
-            
+              
                 if($meeting->privacy == '1')
                 {
                     if( !in_array( Auth::user()->id , $meeting_user_ids ) )
@@ -432,6 +433,14 @@
                     
                 if ( MeetingUser::insert($meetingUsers) ) {
                     DB::commit();
+                    $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
+                    $meeting_users    = User::whereIn('id', $meeting_user_ids)->where('id','!=',Auth::user()->id)->get();
+                    if (count($meeting_users) > 0) {
+                         foreach ($meeting_users as $meetingUser) {
+                             
+                            event(new \App\Events\MeetingUpdate(Auth::user(), $meetingUser,$meeting->id));
+                        }
+                    }
                     return Redirect::route('meeting.index')->with('success',__('label.Meetingsaved'));
                         //return redirect()->route('meeting.index')->with('success', 'Meeting has been created successfully.');
                     } else {

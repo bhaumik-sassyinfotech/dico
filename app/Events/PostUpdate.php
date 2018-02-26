@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Notification;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -23,10 +24,13 @@ class PostUpdate implements ShouldBroadcast {
      */
     public $user;
     public $sender_id;
+    public $post_id;
 
-    public function __construct($user = null,$sender_id) {
+    public function __construct($user = null,$sender_detail) {
+       // dd($sender_detail);
         $this->user = $user;
-        $this->sender_id = $sender_id;
+        $this->sender_id = $sender_detail->user_id;
+        $this->post_id = $sender_detail->post_id;
     }
 
     /**
@@ -38,23 +42,25 @@ class PostUpdate implements ShouldBroadcast {
         return new Channel('activity.'.$this->sender_id);
     }
 
-    
-     
-    /*Broadcast::channel('App.User.*', function ($user, $user_id) {
-        return (int)$user->id === (int)$user_id;
-    });*/
-    
-    
     public function broadcastAs() {
         return 'message.postUpdate';
     }
 
     public function broadcastWith() {
+        
+        $msg = $this->user->name . ' post has been updated successfully';
+        $notification = new Notification;
+        $notification->user_id = $this->user->id;
+        $notification->notification_description = $msg;
+        $notification->is_read = 0;
+        $notification->send_to = $this->sender_id;
+        $notification->redirect_url = route('viewpost', \Helpers::encode_url($this->post_id));
+        $notification->save();
         return [
-            'msg' => $this->user->name . ' post updated successfully',
+            'msg' => $msg,
             'username' => $this->user->name,
             'time' => 'now',
-            'url' => url('/'),
+            'url' =>  $notification->redirect_url
         ];
     }
 }
