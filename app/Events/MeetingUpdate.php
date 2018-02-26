@@ -11,8 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class InappropriatePost implements ShouldBroadcast {
-
+class MeetingUpdate implements ShouldBroadcast {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
@@ -22,13 +21,13 @@ class InappropriatePost implements ShouldBroadcast {
      */
     public $user;
     public $sender_id;
-    public $post_id;
+    public $meeting_id;
 
-    public function __construct($user = null,$sender_detail) {
+    public function __construct($user = null,$sender_detail =null,$meeting_id=null) {
        // dd($sender_detail);
         $this->user = $user;
-        $this->sender_id = $sender_detail->user_id;
-        $this->post_id = $sender_detail->post_id;
+        $this->sender_id = $sender_detail->id;
+        $this->meeting_id = $meeting_id;
     }
 
     /**
@@ -41,18 +40,18 @@ class InappropriatePost implements ShouldBroadcast {
     }
 
     public function broadcastAs() {
-        return 'message.InappropriatePost';
+        return 'message.meetingUpdate';
     }
 
     public function broadcastWith() {
-        
-        $msg = $this->user->name . ' in appropriate post flagged';
+       
+        $msg = $this->user->name . ' meeting has been updated successfully';
         $notification = new Notification;
         $notification->user_id = $this->user->id;
         $notification->notification_description = $msg;
         $notification->is_read = 0;
         $notification->send_to = $this->sender_id;
-        $notification->redirect_url = route('viewpost', \Helpers::encode_url($this->post_id));
+        $notification->redirect_url = route('meeting.show', \Helpers::encode_url($this->meeting_id));
         $notification->save();
         return [
             'msg' => $msg,

@@ -11,8 +11,8 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class InappropriatePost implements ShouldBroadcast {
-
+class MeetingDelete
+{
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
@@ -20,7 +20,7 @@ class InappropriatePost implements ShouldBroadcast {
      *
      * @return void
      */
-    public $user;
+   public $user;
     public $sender_id;
     public $post_id;
 
@@ -41,18 +41,18 @@ class InappropriatePost implements ShouldBroadcast {
     }
 
     public function broadcastAs() {
-        return 'message.InappropriatePost';
+        return 'message.meetingDelete';
     }
 
     public function broadcastWith() {
         
-        $msg = $this->user->name . ' in appropriate post flagged';
+        $msg = $this->user->name . ' meeting has been delete successfully';
         $notification = new Notification;
         $notification->user_id = $this->user->id;
         $notification->notification_description = $msg;
         $notification->is_read = 0;
         $notification->send_to = $this->sender_id;
-        $notification->redirect_url = route('viewpost', \Helpers::encode_url($this->post_id));
+        $notification->redirect_url = route('meeting');
         $notification->save();
         return [
             'msg' => $msg,

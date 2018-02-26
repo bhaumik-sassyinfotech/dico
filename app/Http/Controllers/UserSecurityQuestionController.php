@@ -110,6 +110,7 @@
         
         public function firstLogin(Request $request)
         {
+          
             if ( $request->isMethod('POST') )
             {
                 $auth = Auth::user();
@@ -143,8 +144,8 @@
                     return redirect()->route('company.index');
                 }
             }
+              
             $questions = SecurityQuestion::all();
-            
             return view($this->folder.'.security_question.add' , compact('questions'));
         }
     }

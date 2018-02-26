@@ -109,12 +109,12 @@ if (Auth::user()) {
                             changeLang(MYLANG);
                             }
                             $(document).ready(function () {
-    //                            var path = window.location.href;
-    //                            var langPath = path.split('/');
-    //                            langPath[4] = LANG;
-    //                            if (langPath[4] != MYLANG){
-    //                            changeLang(MYLANG);
-    //                            }
+                            //                            var path = window.location.href;
+                            //                            var langPath = path.split('/');
+                            //                            langPath[4] = LANG;
+                            //                            if (langPath[4] != MYLANG){
+                            //                            changeLang(MYLANG);
+                            //                            }
                             });
                             if ($('#editor').val()){
                             //console.log('dd',$('#editor').val());
@@ -141,28 +141,32 @@ if (Auth::user()) {
                             }
 </script>
 <script type='text/javascript'>
-                        
-Echo.channel('activity')
-  .listen('.comment.added', (e) => {
+
+                            Echo.channel('activity')
+                                    .listen('.comment.added', (e) => {
 
                                     $('#event').append('<li>' + e.comment + '</li>');
-    }    )
-    .listen('.message.register', (data) => {
+                                    })
+                                    .listen('.message.register', (data) => {
                                     console.log(data);
-                            $('.scrollthis').append(getNotificationHtml(data))
-})
-/* .listen('.message.postUpdate', (data) => {
-                                    console.log(data);
-                            $('.scrollthis').append(getNotificationHtml(data));
-})*/;
-    <?php
-    if (Auth::user()) {
-        ?>
-    Echo.channel('activity.{{ \Auth::user() - > id }}')
-    .listen('.message.postUpdate', (data) => {
-                                        console.log(data);
-                                $('.scrollthis').append(getNotificationHtml(data));
-    });
-    <?php } ?>
+                                    $('.scrollthis').append(getNotificationHtml(data))
+                                    });
+<?php
+if (Auth::user()) {
+    ?>
+                                Echo.channel('activity.{{ \Auth::user()->id }}')
+                                        .listen('.message.postUpdate', (data) => {
+                                        $('.scrollthis').append(getNotificationHtml(data));
+                                        })
+                                        .listen('.message.postDelete', (data) => {
+                                        $('.scrollthis').append(getNotificationHtml(data));
+                                        })
+                                        .listen('.message.InappropriatePost', (data) => {
+                                        $('.scrollthis').append(getNotificationHtml(data));
+                                        })
+                                        .listen('.message.meetingUpdate', (data) => {
+                                        $('.scrollthis').append(getNotificationHtml(data));
+                                        });
+<?php } ?>
 
 </script>

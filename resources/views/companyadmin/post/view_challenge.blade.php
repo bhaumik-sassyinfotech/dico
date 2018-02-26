@@ -533,7 +533,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
                         //location.reload();
-                        window.location.href = SITE_URL + '/post';
+                        window.location.href = SITE_URL +'/'+LANG+ '/post';
                     }
                     else {
                         ajaxResponse('error',res.msg);
@@ -713,7 +713,7 @@ if (!empty($post->postTag) && count($post->postTag) > 0) {
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
-                        window.location.href = SITE_URL + '/post';
+                        window.location.href = SITE_URL +'/'+LANG+ '/post';
                     } else {
                         ajaxResponse('error',res.msg);
                     }

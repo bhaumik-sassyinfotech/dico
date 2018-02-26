@@ -78,14 +78,23 @@ class CompanyController extends Controller {
             } else {
                 $allow_add_admin = 0;
             }
+            
             DB::beginTransaction();
+            $package = Packages::findOrFail($request->package_id);
+           
+           // dd($package);
             $company = new Company;
             $company->company_name = $request->input('company_name');
+            $company->slug_name = $this->slugify($request->input('company_name'));
             $company->language = $request->input('language');
             $company->description = $request->input('company_description');
             $company->allow_anonymous = $allow_anonymous;
             $company->allow_add_admin = $allow_add_admin;
             $company->company_admin = 1; //$request->input('company_admin');
+            $company->package_id = $package->id;
+            $company->package_name = $package->name;
+            $company->package_amount = $package->amount;
+            $company->package_total_user = $package->total_user;
             $company->created_at = Carbon\Carbon::now();
             $file = $request->file('file_upload');
             if ($file != "") {
@@ -484,7 +493,33 @@ class CompanyController extends Controller {
             return Redirect::back()->with('err_msg', $e->getMessage())->withInput(); // Something else happened, completely unrelated to Stripe
         }
     }
+    
+     static public function slugify($text) {
+        // replace non letter or digits by -
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
 
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // remove duplicate -
+        $text = preg_replace('~-+~', '-', $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
+    }
+    
 }
 
 ?>

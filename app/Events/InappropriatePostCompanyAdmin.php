@@ -11,9 +11,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class InappropriatePost implements ShouldBroadcast {
+class InappropriatePostCompanyAdmin implements ShouldBroadcast {
 
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable,
+        InteractsWithSockets,
+        SerializesModels;
 
     /**
      * Create a new event instance.
@@ -24,11 +26,11 @@ class InappropriatePost implements ShouldBroadcast {
     public $sender_id;
     public $post_id;
 
-    public function __construct($user = null,$sender_detail) {
-       // dd($sender_detail);
+    public function __construct($user = null, $company_admin_detail,$post_id) {
+        // dd($company_admin_detail);
         $this->user = $user;
-        $this->sender_id = $sender_detail->user_id;
-        $this->post_id = $sender_detail->post_id;
+        $this->sender_id = $company_admin_detail->id;
+        $this->post_id = $post_id;
     }
 
     /**
@@ -37,7 +39,7 @@ class InappropriatePost implements ShouldBroadcast {
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn() {
-        return new Channel('activity.'.$this->sender_id);
+        return new Channel('activity.' . $this->sender_id);
     }
 
     public function broadcastAs() {
@@ -45,7 +47,7 @@ class InappropriatePost implements ShouldBroadcast {
     }
 
     public function broadcastWith() {
-        
+
         $msg = $this->user->name . ' in appropriate post flagged';
         $notification = new Notification;
         $notification->user_id = $this->user->id;
@@ -58,7 +60,8 @@ class InappropriatePost implements ShouldBroadcast {
             'msg' => $msg,
             'username' => $this->user->name,
             'time' => 'now',
-            'url' =>  $notification->redirect_url
+            'url' => $notification->redirect_url
         ];
     }
+
 }

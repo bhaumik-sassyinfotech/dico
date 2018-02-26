@@ -499,7 +499,7 @@ if (!empty($post->postAttachment)) {
                                 </div>    
                                     <?php } }
                                         else {
-                                            echo "<p class='text-12'>".@lang('label.Nofilesuploaded')."</p>";
+                                            echo "<p class='text-12'>".__('label.Nofilesuploaded')."</p>";
                                         }
                                     ?>
                             </div> 
@@ -538,7 +538,7 @@ if (!empty($post->postAttachment)) {
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
                         //location.reload();
-                        window.location.href = SITE_URL + '/post';
+                        window.location.href = SITE_URL +'/'+LANG+ '/post';
                     }
                     else {
                         ajaxResponse('error',res.msg);
@@ -721,7 +721,7 @@ if (!empty($post->postAttachment)) {
                     res = JSON.parse(response);
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
-                        window.location.href = SITE_URL + '/post';
+                        window.location.href = SITE_URL +'/'+LANG+ '/post';
                     } else {
                         ajaxResponse('error',res.msg);
                     }
