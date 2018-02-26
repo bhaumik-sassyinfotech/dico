@@ -11,8 +11,8 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class MeetingDelete
-{
+class MeetingDelete implements ShouldBroadcast {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
@@ -22,13 +22,13 @@ class MeetingDelete
      */
    public $user;
     public $sender_id;
-    public $post_id;
+    public $meeting_id;
 
-    public function __construct($user = null,$sender_detail) {
+    public function __construct($user = null,$sender_detail,$meeting_id=null) {
        // dd($sender_detail);
         $this->user = $user;
-        $this->sender_id = $sender_detail->user_id;
-        $this->post_id = $sender_detail->post_id;
+        $this->sender_id = $sender_detail->id;
+        $this->meeting_id = $meeting_id;
     }
 
     /**

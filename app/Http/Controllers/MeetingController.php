@@ -436,8 +436,7 @@
                     $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting->id)->pluck('user_id')->toArray()));
                     $meeting_users    = User::whereIn('id', $meeting_user_ids)->where('id','!=',Auth::user()->id)->get();
                     if (count($meeting_users) > 0) {
-                         foreach ($meeting_users as $meetingUser) {
-                             
+                         foreach ($meeting_users as $meetingUser) {                             
                             event(new \App\Events\MeetingUpdate(Auth::user(), $meetingUser,$meeting->id));
                         }
                     }
@@ -645,6 +644,13 @@
                 MeetingUser::where('meeting_id', $meeting_id)->delete();
                 if($meeting->delete())
                 {
+                    $meeting_user_ids = array_values(array_unique(MeetingUser::where('meeting_id', $meeting_id)->pluck('user_id')->toArray()));
+                    $meeting_users    = User::whereIn('id', $meeting_user_ids)->where('id','!=',Auth::user()->id)->get();
+                    if (count($meeting_users) > 0) {
+                         foreach ($meeting_users as $meetingUser) {                             
+                            event(new \App\Events\MeetingUpdate(Auth::user(), $meetingUser,$meeting_id));
+                        }
+                    }
                     return Redirect::route('meeting.index')->with('success',__('label.Meetingdeleted'));
                 }
                 return Redirect::route('meeting.index')->with('error_msg',__('label.TRY_MESSAGE'));
