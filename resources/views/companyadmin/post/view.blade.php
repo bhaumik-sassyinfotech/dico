@@ -1,7 +1,7 @@
 @extends('template.default')
 <title>@lang("label.DICOPost")</title>
 @section('content')
-<div id="page-content" class="post-details idea-details">
+<div id="page-content" class="question padding-box idea-details">
     <div id='wrap'>
         <div id="page-heading">
             <ol class="breadcrumb">

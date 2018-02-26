@@ -20,9 +20,18 @@
                     <!-- <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>-->
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="panel-body meetings">
                 <h4><a href="{{ route('meeting.show',[Helpers::encode_url($meeting->id)]) }}" class="profanity post-title">{{ $meeting->meeting_title }}</a></h4>
-                <p class="user-icon"> - <a href="{{route('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}" class="user-a-post">{{ $meeting->meetingCreator->name }}</a><span>@lang("label.on") {{ date(DATE_FORMAT,strtotime($meeting->created_at)) }}</span></p>
+                <div class="user-wrap">
+                    <div class="user-img"> 
+                        @if(empty($meeting->meetingCreator->profile_image))
+                            <img src="{{ asset(DEFAULT_PROFILE_IMAGE) }}">
+                        @else
+                        <img src="{{ asset(PROFILE_PATH.$meeting->meetingCreator->profile_image) }}">
+                        @endif
+                    </div>
+                    <p class="user-icon"> - <a href="{{route('view_profile', Helpers::encode_url($meeting->meetingCreator->id))}}" class="user-a-post">{{ $meeting->meetingCreator->name }}</a><span>@lang("label.on") {{ date(DATE_FORMAT,strtotime($meeting->created_at)) }}</span></p>
+                </div>
                 <fieldset>
                     <p class="text-12 desc-content" id="desc_content_{{$meeting->id}}">{{ nl2br($meeting->meeting_description) }}</p>
                 </fieldset>

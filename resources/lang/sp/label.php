@@ -593,4 +593,8 @@ return [
     'GroupCreated' => 'spGroup created successfully.',
     'GroupFail' => 'spCreation of group failed.',
     'GroupUpdate' => 'spGroup updated successfully.',
+    'UserHasBeen' => 'spUsers has been ',
+    'successfully' => ' spsuccessfully.',
+    'UserRemoved' => 'spUser cannot be removed from ',
+    'UserGroupOwner' => ' spas the user is the group owner.',
 ];
