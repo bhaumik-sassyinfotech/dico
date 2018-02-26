@@ -8,11 +8,11 @@
     </div>
     <div class="member-details">
         <h3 class="text-10"><?php echo $attachment->file_name; ?></h3>
-        <p>@lang('label.UploadedBy'):<a href="#"><?php echo $attachment->attachmentUser->name; ?></a></p>
+        <p><?= __('label.UploadedBy')?>:<a href="#"><?php echo $attachment->attachmentUser->name; ?></a></p>
     </div>
 </div>
 <?php } }
     else {
-        echo "<p class='text-12'>".@lang('label.Nofilesuploaded')."</p>";
+        echo "<p class='text-12'>".__('label.Nofilesuploaded')."</p>";
     }
 ?>

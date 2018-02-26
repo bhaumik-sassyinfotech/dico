@@ -320,7 +320,14 @@
                                                 <img src="{{ asset($group_image) }}" alt="no">
                                             </div>
                                             <div class="member-details">
-                                                <h3 class="text-12">{{ $grp->group_name }}</h3>
+                                                <?php
+                                                    if ($grp->group_owner == Auth::user()->id || Auth::user()->role_id == 1) {
+                                                        $group_link = route('group.edit',Helpers::encode_url($grp->id));
+                                                    } else {
+                                                        $group_link = route('editGroup',Helpers::encode_url($grp->id));
+                                                    }
+                                                ?>
+                                                <a href="{{$group_link}}"><h3 class="text-12">{{ $grp->group_name }}</h3></a>
                                                 <p class="text-10">@lang('label.Members'): <span>{{ $grp->groupUsersCount->cnt }}</span></p>
                                             </div>
                                         </div>
@@ -419,7 +426,7 @@
 <script type="text/javascript">
     function deletepost(id) {
         swal({
-            title: "{{__('label.adAre you sure?')}}",
+            title: "{{__('label.adAre you sure')}}",
             text: "{{__('label.WarningPost')}}",
             type: "info",
             showCancelButton: true,
@@ -437,7 +444,7 @@
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
                         //location.reload();
-                        window.location.href = SITE_URL + '/post';
+                        window.location.href = SITE_URL +'/'+LANG+ '/post';
                     }
                     else {
                         ajaxResponse('error',res.msg);

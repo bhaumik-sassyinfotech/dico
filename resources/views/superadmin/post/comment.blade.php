@@ -12,7 +12,7 @@
                     ?>
 
                     <br>
-                    <small><?php echo " - ".__('label.Anonymous')." " . date('d/m/Y', strtotime($commentReply['created_at'])); ?></small>
+                    <small><?php echo " - ".__('label.Anonymous')." " . date(DATE_FORMAT, strtotime($commentReply['created_at'])); ?></small>
                 </span>  <br>
                 <div class="col-md-12">    
                     <?php echo $commentReply['comment_reply']; ?></div>

@@ -359,7 +359,7 @@ class UserController extends Controller {
 							$group_name = $group->group_name;
 							DB::rollBack();
 
-							return back()->with('err_msg', 'User cannot be removed from ' . $group_name . ' as the user is the group owner.');
+							return back()->with('err_msg', __('label.UserRemoved') . $group_name . __('label.UserGroupOwner'));
 						} else {
 							GroupUser::where(['user_id' => $user->id, 'group_id' => $group->id])->delete();
 						}
@@ -793,7 +793,7 @@ class UserController extends Controller {
 
 		$users_ids = $request->input('users');
 		$users_ids = explode(',', $users_ids);
-		$data = ['status' => 0, 'msg' => "Please try again later.", 'data' => []];
+		$data = ['status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'data' => []];
 
 		if (count($users_ids) > 0) {
 			DB::beginTransaction();
@@ -821,7 +821,7 @@ class UserController extends Controller {
 				if ($status == 0) {
 					DB::commit();
 
-					$data = ['status' => 1, 'msg' => 'Users has been ' . $str . ' successfully.', 'data' => []];
+					$data = ['status' => 1, 'msg' => __('label.UserHasBeen') . $str . __('label.successfully'), 'data' => []];
 				} else if ($status == 1) {
 					DB::rollBack();
 					$data = ['status' => 0, 'msg' => __('label.TRY_MESSAGE'), 'data' => []];

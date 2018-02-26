@@ -286,7 +286,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                     <?php
                                         }
                                         } else {
-                                            echo '<p class="postlist">'.__("label.Nopostfound").'</p>';
+                                            echo '<p class="grouppostlist">'.__("label.Nopostfound").'</p>';
                                                 //echo "No post found.";
                                         }
                                         ?>
@@ -324,7 +324,7 @@ if (!empty($grouppost['post_user_dis_like'])) {
                                                                 ?>
                                                                     <a href="javascript:void(0)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                                                                 <?php } else { ?>
-                                                                    <a href="javascript:void(0)"><img src="assets/img/warning-icon.png"></a>
+                                                                    <a href="javascript:void(0)"><img src="{{asset('assets/img/warning-icon.png')}}"></a>
                                                                 <?php } ?>
                                                                 </div>
                                                             </div>
@@ -411,7 +411,7 @@ if (!empty($mypost['post_tag'])) {
                                     <?php
                                     }
                                     } else {
-                                        echo '<p class="postlist">'.__('label.Nopostfound').'</p>';
+                                        echo '<p class="userpostlist">'.__('label.Nopostfound').'</p>';
                                             //echo "No post found.";
                                     }
                                     ?>
@@ -556,7 +556,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                             }
                         } else {
                             $('#threads .postlist').remove();
-                            $('#threads').append("<p class='postlist'>No post found.</p>");
+                            $('#threads').append("<p class='postlist'>{{__('label.Nopostfound')}}</p>");
                             $('#load_post').hide();
 
                         }
@@ -590,7 +590,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                             }
                         } else {
                             $('#users .userpostlist').remove();
-                            $('#users').append("<p class='userpostlist'>No post found.</p>");
+                            $('#users').append("<p class='userpostlist'>{{__('label.Nopostfound')}}</p>");
                             $('#load_mypost').hide();
 
                         }
@@ -624,7 +624,7 @@ if (!empty($count_user_post) && $count_user_post > POST_DISPLAY_LIMIT) {
                             }
                         } else {
                             $('#groups .grouppostlist').remove();
-                            $('#groups').append("<p class='grouppostlist'>No post found.</p>");
+                            $('#groups').append("<p class='grouppostlist'>{{__('label.Nopostfound')}}</p>");
                             $('#load_grouppost').hide();
 
                         }

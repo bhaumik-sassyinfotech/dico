@@ -186,8 +186,8 @@
                                                 </div>
                                                 <?php
                                                     $comment_id = Helpers::encode_url($commentUser->id);
-                                                        if (!empty($commentUser['following']) && count($commentUser['following']) > 0 && $commentUser->id != Auth::user()->id) {
-                                                            if ($commentUser['following'][0]->status == 1) {
+                                                        if (!empty($commentUser['followers']) && count($commentUser['followers']) > 0 && $commentUser->id != Auth::user()->id) {
+                                                            if ($commentUser['followers'][0]->status == 1) {
                                                         ?>
                                                             <a href="{{ route('view_profile',$comment_id) }}" class="btn btn-primary" >@lang('label.Unfollow')</a>
                                                             <?php
@@ -406,7 +406,14 @@
                                         <img src="{{ asset($group_image) }}" alt="no">
                                     </div>
                                     <div class="member-details">
-                                        <h3 class="text-12">{{$group->group_name}}</h3>
+                                        <?php
+                                            if ($group->group_owner == Auth::user()->id || Auth::user()->role_id == 1) {
+                                                $group_link = route('group.edit',Helpers::encode_url($group->id));
+                                            } else {
+                                                $group_link = route('editGroup',Helpers::encode_url($group->id));
+                                            }
+                                        ?>
+                                        <a href="{{$group_link}}"><h3 class="text-12">{{$group->group_name}}</h3></a>
                                         <p class="text-10">@lang('label.Members'): <span>{{$group->groupUsersCount->cnt}}</span></p>
                                     </div>
                                 </div>               
@@ -494,7 +501,7 @@ if (!empty($post->postAttachment)) {
                                     </div>
                                     <div class="member-details">
                                         <h3 class="text-10">{{$attachment->file_name}}</h3>
-                                        <p>@lang('label.UploadedBy'):<a href="#">{{$attachment->attachmentUser->name}}</a></p>
+                                        <p>@lang('label.UploadedBy'):<a href="{{route('view_profile', Helpers::encode_url($attachment->attachmentUser->id))}}">{{$attachment->attachmentUser->name}}</a></p>
                                     </div>
                                 </div>    
                                     <?php } }
@@ -520,7 +527,7 @@ if (!empty($post->postAttachment)) {
 <script type="text/javascript">
     function deletepost(id) {
         swal({
-            title: "{{__('label.adAre you sure?')}}",
+            title: "{{__('label.adAre you sure')}}",
             text: "{{__('label.WarningPost')}}",
             type: "info",
             showCancelButton: true,
@@ -538,7 +545,7 @@ if (!empty($post->postAttachment)) {
                     if (res.status == 1) {
                         ajaxResponse('success',res.msg);
                         //location.reload();
-                        window.location.href = SITE_URL + '/post';
+                        window.location.href = SITE_URL+'/'+LANG + '/post';
                     }
                     else {
                         ajaxResponse('error',res.msg);
@@ -550,7 +557,7 @@ if (!empty($post->postAttachment)) {
     function markSolution(commentid, userid, postid)
     {
         swal({
-        title: "{{__('label.adAre you sure?')}}",
+        title: "{{__('label.adAre you sure')}}",
                 text: "{{__('label.WarningCorrect')}}",
                 type: "info",
                 showCancelButton: true,

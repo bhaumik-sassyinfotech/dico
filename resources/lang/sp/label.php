@@ -99,7 +99,7 @@ return [
     'adLanguage' => 'sp Language',
     'adCompany Name' => 'sp Company Name',
     'adUpload Files' => 'sp Upload Files',
-    'adBack' => 'sp Back',
+    'adBack' => 'sp Cancel',
     'adAdd New' => 'sp Add New',
     'adDescription' => 'sp Description',
     'adSubmit' => 'sp Submit',
