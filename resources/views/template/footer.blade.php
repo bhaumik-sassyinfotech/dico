@@ -141,7 +141,9 @@ if (Auth::user()) {
                             }
 </script>
 <script type='text/javascript'>
-                        
+   <?php
+    if (Auth::user()) {
+        ?>                       
 Echo.channel('activity')
   .listen('.comment.added', (e) => {
 
@@ -155,9 +157,7 @@ Echo.channel('activity')
                                     console.log(data);
                             $('.scrollthis').append(getNotificationHtml(data));
 })*/;
-    <?php
-    if (Auth::user()) {
-        ?>
+  
     Echo.channel('activity.{{ \Auth::user() - > id }}')
     .listen('.message.postUpdate', (data) => {
                                         console.log(data);
